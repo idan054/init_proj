@@ -1,0 +1,4 @@
+# 1. Replace  "MomsNumberHere" with the password.
+# 2. change this file to name to key.properties
+# 3. delete this lines!
+MomsPass=MomsNumberHere

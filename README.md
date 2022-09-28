@@ -1,8 +1,15 @@
 # init_proj
 
-A new Flutter project.
+My Flutter init project
 
-## Getting Started
+## To start use (Setup)
+
+### ReName app Name & package:
+##### 1) flutter pub global activate rename
+##### 2) flutter pub global run rename --appname "Your App Name"
+##### 3) flutter pub global run rename --bundleId com.biton.example // (CTRL + R needed for AndroidManifest.xml)
+##### 4) Replace the icon on - assets/Default-Icon.png
+##### 5) flutter pub pub run flutter_launcher_icons:main
 
 This project is a starting point for a Flutter application.
 
