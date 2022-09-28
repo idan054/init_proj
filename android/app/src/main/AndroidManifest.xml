@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.biton.example.init_proj">
+    package="com.biton.example">
    <application
         android:label="init_proj"
         android:name="${applicationName}"

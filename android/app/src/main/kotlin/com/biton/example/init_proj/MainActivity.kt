@@ -1,4 +1,4 @@
-package com.biton.example.init_proj
+package com.biton.example
 
 import io.flutter.embedding.android.FlutterActivity
 
