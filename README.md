@@ -1,4 +1,4 @@
-# init_proj
+# init_messaging - com.biton.messaging
 
 My Flutter init project
 
