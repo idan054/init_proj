@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "751941760525",
+    "project_id": "biton-messanger",
+    "storage_bucket": "biton-messanger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:751941760525:android:85ff7d910e6e63b00d0744",
+        "android_client_info": {
+          "package_name": "com.biton.messaging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "751941760525-bevg596i7s9t12ol49fkr4pfavl1jj91.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.biton.messaging",
+            "certificate_hash": "d087f0616fb1139bc19edc18f549f3dd3a1c1eb1"
+          }
+        },
+        {
+          "client_id": "751941760525-d0sho5vts4p6v7c48ramvuemdso1psvp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.biton.messaging",
+            "certificate_hash": "29e244cce8dfdccdc051e6b780a460460fdbcf70"
+          }
+        },
+        {
+          "client_id": "751941760525-naslfgl1mq4k43jumvrjllcvd96ttmq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAuG-vZF9NcsnuwFu_UM7OZX28IssbFyTI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "751941760525-naslfgl1mq4k43jumvrjllcvd96ttmq1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "751941760525-c36e2n06atejirfn2l1vg4rmino205o8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.biton.messaging"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
