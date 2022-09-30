@@ -1,6 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/universalModel.dart';
+
+
 
 extension ContextX on BuildContext {
+  // Smart navigation shortcuts
+  Future navigateTo(screen, {bool replace = false}) {
+    final navigator = Navigator.of(this);
+    return replace
+        ? navigator.pushReplacement(MaterialPageRoute(builder: (context) => screen))
+        : navigator.push(MaterialPageRoute(builder: (context) => screen));
+  }
+
+  // My Models
+  UniModel get uniModel => Provider.of<UniModel>(this, listen: false);
+  UniModel get listenUniModel => Provider.of<UniModel>(this);
+
   //width & height
   double get width => MediaQuery.of(this).size.width;
 

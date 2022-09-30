@@ -15,6 +15,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    print('START: HomePage()');
+
     return Scaffold(
       body: InkWell(
         onTap: (){},

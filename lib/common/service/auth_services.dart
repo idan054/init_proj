@@ -1,33 +1,25 @@
-/*
 import 'dart:convert';
 
+import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/profile/user_model.dart';
+import 'package:example/screens/home/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:flutter_login_facebook/flutter_login_facebook.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
-import 'package:example/common/classes/profile.dart';
-import 'package:example/common/models/userModel.dart';
-import 'package:example/common/models/userModel.dart';
-import 'package:example/common/models/userModel.dart';
-import 'package:example/common/models/userModel.dart';
-import 'package:example/common/models/userModel.dart';
-import 'package:example/common/theme/constants.dart';
-import 'package:example/common/classes/rilUser.dart';
-
+import 'package:firebase_core/firebase_core.dart';
 import 'package:http/http.dart' as http;
-import 'package:example/screens/feedScreen/feed_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io' show Platform;
-
+import '../extensions/universal_extensions.dart';
 import 'location_service.dart';
 
-
 class AuthService {
-
   final _auth = FirebaseAuth.instance;
 
-  Future signInWithFacebook(context) async {
+  /// Facebook LOGIN
+
+  /*  Future signInWithFacebook(context) async {
     await FirebaseAuth.instance.signOut();
 
     // Trigger the sign-in flow
@@ -47,28 +39,31 @@ class AuthService {
     var fireCurrentUser = FirebaseAuth.instance.currentUser;
     await updateUserModel(context, fireCurrentUser, 'Facebook');
 
-  }
+  }*/
 
   /// Google LOGIN
-  Future signInWithGoogle(context) async {
+  Future signInWithGoogle(BuildContext context) async {
     await FirebaseAuth.instance.signOut();
-    // await GoogleSignIn().signOut();
-
-  // Future<UserCredential?> signInWithGoogle(BuildContext context) async {
-  // Future<User?> signInWithGoogle(context) async {
+    await GoogleSignIn().signOut();
     final googleUser = await GoogleSignIn().signIn();
 
     // Sign in & Create user on firebase console
     final googleAuth = await googleUser!.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken );
-    await FirebaseAuth.instance.signInWithCredential(credential);
-    var fireCurrentUser = FirebaseAuth.instance.currentUser;
+    await FirebaseAuth.instance.signInWithCredential(
+        GoogleAuthProvider.credential(
+            accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
 
-    await updateUserModel(context, fireCurrentUser, 'Google');
+    var fireUser = FirebaseAuth.instance.currentUser;
+    var user = UserModel(
+      uid: fireUser?.uid,
+      email: fireUser?.email,
+      name: fireUser?.displayName,
+      photoUrl: fireUser?.photoURL,
+    );
 
-    // await getCountry(context); // also set in Provider
+    context.uniModel.updateUser(user);
+    // await getLocation(); // also set in Provider
+    context.navigateTo(const HomePage());
   }
 
   Future<void> addUser(String email, String pass, context) async {
@@ -88,14 +83,13 @@ class AuthService {
       //       })
       //     });
       // await prefs.setString('authToken', uid.toString());
-
     } catch (e) {
       print('error creating account');
     }
   }
 
   /// Email LOGIN
-  Future<String> signInWithEmail(
+/*  Future<String> signInWithEmail(
     context, {
     required GlobalKey<FormState> key,
     required String email,
@@ -121,37 +115,13 @@ class AuthService {
         print(e.toString());
       return e.toString();
     }
-  }
+  }*/
 
   Future<void> signOut() async {
     await _auth.signOut();
   }
 
   Future<void> resetPassword(String email) async {
-
     await _auth.sendPasswordResetEmail(email: email);
   }
-
-
-  Future<void> updateUserModel(
-      context, User? fireCurrentUser,
-      String loginType) async {
-
-    var _profile = Profile(
-          name: fireCurrentUser?.displayName,
-          email: fireCurrentUser?.email,
-          uid: fireCurrentUser?.uid,
-          photoUrl: fireCurrentUser?.photoURL,
-    );
-    kUserModel(context).updateProfile(_profile);
-
-    var _user = RilUser(
-              loggedIn: true,
-              loginType: loginType
-        );
-    kUserModel(context).updateUser(_user);
-
-    await getLocation(context); // also update location in Provider
-    kPushNavigator(context, const FeedScreen(), replace: true);
-  }
-}*/
+}

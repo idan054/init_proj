@@ -26,6 +26,8 @@ dependencies:
   equatable: ^2.0.3
   firebase_storage: ^10.3.7
   provider: ^6.0.3
+  firebase_auth: ^3.10.0
+  google_sign_in: ^5.4.2
 
 dev_dependencies:
   flutter_test:
@@ -42,7 +44,7 @@ dev_dependencies:
 flutter_icons:
   ios: true
   android: "ic_launcher"
-  image_path: "assets/Default-Icon.png"
+  image_path: "assets/messages_icon.png"
 
 flutter_gen:
   output: lib/common/mixins/

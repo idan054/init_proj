@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> with AfterLayout {
   void afterFirstLayout(BuildContext context) {
     Future.delayed(
       const Duration(milliseconds: 500),
-      () => context.router.replaceAll([const HomeRoute()]),
+      () => context.router.replaceAll([const LoginScreen()]),
     );
   }
 }

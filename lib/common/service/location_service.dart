@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 
 
 // source: https://stackoverflow.com/questions/57977167/device-country-in-flutter
-Future<Map<String, dynamic>> getLocation(context) async {
+Future<Map<String, dynamic>> getLocation() async {
   var response = await http.post(Uri.parse('http://ip-api.com/json'));
   if (response.statusCode == 200) {
     var respBody = jsonDecode(response.body);

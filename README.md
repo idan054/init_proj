@@ -7,17 +7,12 @@ My Flutter init project
 ### ReName app Name & package:
 ##### 1) flutter pub global activate rename
 ##### 2) flutter pub global run rename --appname "Your App Name"
-##### 3) flutter pub global run rename --bundleId com.biton.example // (CTRL + R needed for AndroidManifest.xml)
-##### 4) Replace the icon on - assets/Default-Icon.png
+##### 3) flutter pub global run rename --bundleId com.biton.messaging // (CTRL + R needed for AndroidManifest.xml)
+##### 3.1) Make sure bundleId & App name with (CTRL + R)
+##### 4) Replace the icon on - assets/messages_icon.png
 ##### 5) flutter pub pub run flutter_launcher_icons:main
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/Contents/Home" (Run this before if needed)
+./gradlew signingReport of Debug.jks:
+SHA1:   D0:87:F0:61:6F:B1:13:9B:C1:9E:DC:18:F5:49:F3:DD:3A:1C:1E:B1
+SHA256: 5B:67:14:C9:6E:A5:59:C4:00:22:77:46:49:ED:E3:45:B3:B1:21:38:9F:D1:1E:CC:FB:8E:33:4D:46:70:F0:DD
