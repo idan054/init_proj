@@ -3,17 +3,12 @@ import 'package:flutter/foundation.dart';
 
 class UniModel with ChangeNotifier {
   var user = const UserModel();
+  updateUser(UserModel data){ user = data; notifyListeners(); }
 
-  updateUser(UserModel data) => _notifyAction(user, data);
-  //     String? name,
-  //     String? email,
-  //     String? uid,
-  //     String? photoUrl,
-
-  void _notifyAction(value, data) {
-    value = data;
-    notifyListeners();
-  }
+//     String? name,
+//     String? email,
+//     String? uid,
+//     String? photoUrl,
 
 // bool fromBoarding = false; // Does the user goToProfile from boarding?
 //

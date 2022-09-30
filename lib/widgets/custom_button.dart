@@ -16,7 +16,7 @@ class CustomButton extends StatelessWidget {
     this.width = 140,
     this.height = 45,
     this.loading = false,
-    this.isDisabled = true,
+    this.isDisabled = false,
     this.icon,
     this.elevation = 0,
     this.gap = 17,

@@ -11,6 +11,7 @@ My Flutter init project
 ##### 3.1) Make sure bundleId & App name with (CTRL + R)
 ##### 4) Replace the icon on - assets/messages_icon.png
 ##### 5) flutter pub pub run flutter_launcher_icons:main
+##### 6) flutterfire configure
 
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jre/Contents/Home" (Run this before if needed)
 ./gradlew signingReport of Debug.jks:

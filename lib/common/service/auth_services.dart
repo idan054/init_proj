@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/profile/user_model.dart';
-import 'package:example/screens/home/home_page.dart';
+import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/screens/home/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -11,7 +13,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io' show Platform;
-import '../extensions/universal_extensions.dart';
 import 'location_service.dart';
 
 class AuthService {
@@ -61,9 +62,9 @@ class AuthService {
       photoUrl: fireUser?.photoURL,
     );
 
-    context.uniModel.updateUser(user);
     // await getLocation(); // also set in Provider
-    context.navigateTo(const HomePage());
+    context.uniModel.updateUser(user);
+    context.router.replace(const HomeChatsRoute());
   }
 
   Future<void> addUser(String email, String pass, context) async {

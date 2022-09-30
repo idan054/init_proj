@@ -5,13 +5,9 @@ import '../models/universalModel.dart';
 
 
 extension ContextX on BuildContext {
-  // Smart navigation shortcuts
-  Future navigateTo(screen, {bool replace = false}) {
-    final navigator = Navigator.of(this);
-    return replace
-        ? navigator.pushReplacement(MaterialPageRoute(builder: (context) => screen))
-        : navigator.push(MaterialPageRoute(builder: (context) => screen));
-  }
+  // Smart navigation shortcuts (Based auto_route)
+  // context.router.replace(route) //   pushReplacement
+  // context.router.push(route)   //   push
 
   // My Models
   UniModel get uniModel => Provider.of<UniModel>(this, listen: false);

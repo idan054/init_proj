@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
@@ -8,7 +9,9 @@ import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'common/models/universalModel.dart';
 import 'common/providers/firebase_options.dart';
+import 'package:example/common/splash_page.dart' as click;
 
+/// Add More Pre-Actions At [click.SplashPage]
 void main() async {
   // Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,8 +20,6 @@ void main() async {
     MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => UniModel()),
-          // ChangeNotifierProvider(create: (_) => StreamModel()),
-          // ChangeNotifierProvider(create: (_) => UserModel()),
           // Provider.value(value: StreamModel().serverClient),
           // FutureProvider<List<Activity>?>.value(
           //     value: StreamModel().getFeedActivities(), initialData: const []),
@@ -67,7 +68,6 @@ class _AppState extends State<App> {
             theme: ThemeData(
               // colorSchemeSeed: AppColors.primaryColor,
               // scaffoldBackgroundColor: AppColors.primaryColor,
-              useMaterial3: true,
             ),
             builder: (context, child) {
               return Directionality(
