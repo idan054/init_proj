@@ -8,7 +8,7 @@ import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../widgets/custom_button.dart';
+import '../widgets/custom_button.dart';
 
 class HomeChatsScreen extends StatefulWidget {
   const HomeChatsScreen({Key? key}) : super(key: key);
@@ -39,20 +39,21 @@ class _HomeChatsScreenState extends State<HomeChatsScreen> {
                 ),
                 onPressed: () => context.router.replace(const LoginRoute())),
         actions: [
-          CustomButton(
-                  onPressed: () {},
-                  title: 'Add',
-                  backgroundColor: AppColors.primary)
-              .px(12)
-              .py(8)
+          // CustomButton(
+          //         onPressed: () {},
+          //         title: 'Add',
+          //         backgroundColor: AppColors.primary)
+          //     .px(12)
+          //     .py(8)
+          IconButton(
+              icon: const Icon(
+                Icons.people,
+                color: Colors.black,
+              ),
+              onPressed: () => context.router.replace(const LoginRoute()))
         ],
       ),
-      body: InkWell(
-        onTap: () {},
-        child: FlutterLogo(
-          size: 100.w,
-        ).center,
-      ),
+      body: const Text('Chats with this user will be show here').center,
     ).ltr;
   }
 }

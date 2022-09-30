@@ -4,7 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/profile/user_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
-import 'package:example/screens/home/home_screen.dart';
+import 'package:example/screens/home_chats_screen.dart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';

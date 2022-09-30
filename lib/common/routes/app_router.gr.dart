@@ -11,28 +11,29 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i4;
-import 'package:example/common/splash_page.dart' as _i1;
-import 'package:example/screens/home/home_screen.dart' as _i2;
-import 'package:example/screens/loginScreen.dart' as _i3;
-import 'package:flutter/material.dart' as _i5;
+import 'package:auto_route/auto_route.dart' as _i5;
+import 'package:example/common/splash_screen.dart' as _i1;
+import 'package:example/screens/home_chats_screen.dart.dart' as _i2;
+import 'package:example/screens/login_screen.dart' as _i3;
+import 'package:example/screens/members_screen.dart' as _i4;
+import 'package:flutter/material.dart' as _i6;
 
-class AppRouter extends _i4.RootStackRouter {
-  AppRouter([_i5.GlobalKey<_i5.NavigatorState>? navigatorKey])
+class AppRouter extends _i5.RootStackRouter {
+  AppRouter([_i6.GlobalKey<_i6.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i4.PageFactory> pagesMap = {
-    SplashPage.name: (routeData) {
-      return _i4.CustomPage<dynamic>(
+  final Map<String, _i5.PageFactory> pagesMap = {
+    SplashRoute.name: (routeData) {
+      return _i5.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i1.SplashPage(),
+        child: const _i1.SplashScreen(),
         opaque: true,
         barrierDismissible: false,
       );
     },
     HomeChatsRoute.name: (routeData) {
-      return _i4.CustomPage<dynamic>(
+      return _i5.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i2.HomeChatsScreen(),
         opaque: true,
@@ -40,9 +41,17 @@ class AppRouter extends _i4.RootStackRouter {
       );
     },
     LoginRoute.name: (routeData) {
-      return _i4.CustomPage<dynamic>(
+      return _i5.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i3.LoginScreen(),
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
+    MembersRoute.name: (routeData) {
+      return _i5.CustomPage<dynamic>(
+        routeData: routeData,
+        child: const _i4.MembersScreen(),
         opaque: true,
         barrierDismissible: false,
       );
@@ -50,37 +59,41 @@ class AppRouter extends _i4.RootStackRouter {
   };
 
   @override
-  List<_i4.RouteConfig> get routes => [
-        _i4.RouteConfig(
-          SplashPage.name,
+  List<_i5.RouteConfig> get routes => [
+        _i5.RouteConfig(
+          SplashRoute.name,
           path: '/',
         ),
-        _i4.RouteConfig(
+        _i5.RouteConfig(
           HomeChatsRoute.name,
           path: '/home-chats-screen',
         ),
-        _i4.RouteConfig(
+        _i5.RouteConfig(
           LoginRoute.name,
           path: '/login-screen',
+        ),
+        _i5.RouteConfig(
+          MembersRoute.name,
+          path: '/members-screen',
         ),
       ];
 }
 
 /// generated route for
-/// [_i1.SplashPage]
-class SplashPage extends _i4.PageRouteInfo<void> {
-  const SplashPage()
+/// [_i1.SplashScreen]
+class SplashRoute extends _i5.PageRouteInfo<void> {
+  const SplashRoute()
       : super(
-          SplashPage.name,
+          SplashRoute.name,
           path: '/',
         );
 
-  static const String name = 'SplashPage';
+  static const String name = 'SplashRoute';
 }
 
 /// generated route for
 /// [_i2.HomeChatsScreen]
-class HomeChatsRoute extends _i4.PageRouteInfo<void> {
+class HomeChatsRoute extends _i5.PageRouteInfo<void> {
   const HomeChatsRoute()
       : super(
           HomeChatsRoute.name,
@@ -92,7 +105,7 @@ class HomeChatsRoute extends _i4.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.LoginScreen]
-class LoginRoute extends _i4.PageRouteInfo<void> {
+class LoginRoute extends _i5.PageRouteInfo<void> {
   const LoginRoute()
       : super(
           LoginRoute.name,
@@ -100,4 +113,16 @@ class LoginRoute extends _i4.PageRouteInfo<void> {
         );
 
   static const String name = 'LoginRoute';
+}
+
+/// generated route for
+/// [_i4.MembersScreen]
+class MembersRoute extends _i5.PageRouteInfo<void> {
+  const MembersRoute()
+      : super(
+          MembersRoute.name,
+          path: '/members-screen',
+        );
+
+  static const String name = 'MembersRoute';
 }

@@ -1,8 +1,9 @@
 
 
-import '../../common/splash_page.dart';
-import '../../screens/home/home_screen.dart';
-import '../../screens/loginScreen.dart';
+import '../../common/splash_screen.dart';
+import '../../screens/home_chats_screen.dart.dart';
+import '../../screens/login_screen.dart';
+import '../../screens/members_screen.dart';
 import 'app_router.dart';
 
 export 'package:auto_route/auto_route.dart';
@@ -12,9 +13,10 @@ export 'package:auto_route/auto_route.dart';
   replaceInRouteName: 'Screen,Route', // <-----
   routes: [
     // CustomRoute(page: HomePage, path: 'HomePage/:id'),
-    CustomRoute(page: SplashPage, initial: true),
+    CustomRoute(page: SplashScreen, initial: true),
     CustomRoute(page: HomeChatsScreen),
-    CustomRoute(page: LoginScreen,),
+    CustomRoute(page: LoginScreen),
+    CustomRoute(page: MembersScreen),
 
   ],
 )

@@ -5,17 +5,17 @@ import 'package:example/common/routes/app_router.gr.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/loginScreen.dart';
+import '../screens/login_screen.dart';
 import 'mixins/after_layout_mixin.dart';
 
-class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<SplashPage> createState() => _SplashPageState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashPageState extends State<SplashPage> with AfterLayout {
+class _SplashScreenState extends State<SplashScreen> with AfterLayout {
   @override
   Widget build(BuildContext context) {
     return const Scaffold();
