@@ -4,6 +4,8 @@ import '../../common/themes/themes.dart';
 
 extension WidgetX on Widget {
 
+  Container get testContainer => Container(color: Colors.green, child: this);
+
   Directionality get rtl => Directionality(textDirection: TextDirection.rtl, child: this);
   Directionality get ltr => Directionality(textDirection: TextDirection.ltr, child: this);
 
@@ -52,10 +54,11 @@ extension WidgetX on Widget {
         alignment: Alignment.centerRight,
       );
 
+
   SizedBox sizedBox(w, h) => SizedBox(
-        child: this,
         width: w,
         height: h,
+        child: this,
       );
 
   SliverToBoxAdapter get toSliverBox => SliverToBoxAdapter(child: this);

@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'dart:math';
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/routes/app_router.dart';
+import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -23,17 +25,26 @@ class _HomeChatsScreenState extends State<HomeChatsScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 3,
+        titleSpacing: 0.0,
+        backgroundColor: Colors.white,
         title: Text(
           '${user.email}',
           style: AppStyles.text14PxBold.black,
         ),
+        leading: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios,
+                  color: Colors.black,
+                ),
+                onPressed: () => context.router.replace(const LoginRoute())),
         actions: [
           CustomButton(
                   onPressed: () {},
                   title: 'Add',
-                  backgroundColor: AppColors.primary).px(12).py(8)
+                  backgroundColor: AppColors.primary)
+              .px(12)
+              .py(8)
         ],
       ),
       body: InkWell(
