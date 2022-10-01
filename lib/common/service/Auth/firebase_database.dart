@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/models/user/user_model.dart';
 
@@ -6,17 +7,16 @@ class Database {
   static final _db = FirebaseFirestore.instance;
 
   static Stream<List<UserModel>>? streamUsers() {
-    _db
-        .collection('users')
-        .snapshots()
-        .map((QuerySnapshot list) => list.docs.map((DocumentSnapshot snap) {
-              // User.fromMap(snap.data)
-              UserModel.fromJson(snap.data() as Map<String, dynamic>);
-            }).toList())
-        .handleError((dynamic e) {
-      print(e);
+    print('START: streamUsers()');
+    return _db.collection('users').snapshots().map((QuerySnapshot list) {
+      return list.docs.map((DocumentSnapshot snap) {
+        print('DOC ID: ${snap.id}');
+        // print(snap.data());
+        return UserModel.fromJson(snap.data() as Map<String, dynamic>);
+      }).toList();
+    }).handleError((dynamic e) {
+      print('EEE $e');
     });
-    return null;
   }
 
   void updateFirestore(

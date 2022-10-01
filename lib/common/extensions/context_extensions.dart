@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../models/universalModel.dart';
-
-
+import '../models/user/user_model.dart';
 
 extension ContextX on BuildContext {
   // Smart navigation shortcuts (Based auto_route)
@@ -12,6 +12,7 @@ extension ContextX on BuildContext {
   // My Models
   UniModel get uniModel => Provider.of<UniModel>(this, listen: false);
   UniModel get listenUniModel => Provider.of<UniModel>(this);
+  List<UserModel> get listenUserModelList => Provider.of<List<UserModel>>(this);
 
   //width & height
   double get width => MediaQuery.of(this).size.width;

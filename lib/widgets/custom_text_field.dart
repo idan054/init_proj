@@ -22,7 +22,7 @@ class AppTextField extends StatelessWidget {
       borderRadius: BorderRadius.circular(4),
     );
 
-    return Container(
+    return SizedBox(
       height: height ?? 30.h,
       child: TextField(
         cursorHeight: 12,

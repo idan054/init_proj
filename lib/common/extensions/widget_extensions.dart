@@ -16,8 +16,8 @@ extension WidgetX on Widget {
 
   Padding py(double padding, {Key? key}) => Padding(
         padding: EdgeInsets.symmetric(vertical: padding),
-        child: this,
         key: key,
+        child: this,
       );
 
   Padding pOnly(
@@ -45,13 +45,13 @@ extension WidgetX on Widget {
       );
 
   Align get centerLeft => Align(
-        child: this,
         alignment: Alignment.centerLeft,
+        child: this,
       );
 
   Align get centerRight => Align(
-        child: this,
         alignment: Alignment.centerRight,
+        child: this,
       );
 
 
@@ -64,8 +64,8 @@ extension WidgetX on Widget {
   SliverToBoxAdapter get toSliverBox => SliverToBoxAdapter(child: this);
 
   Expanded expanded({int flex = 1}) => Expanded(
-        child: this,
         flex: flex,
+        child: this,
       );
 
   Transform scale({required double scale}) => Transform.scale(

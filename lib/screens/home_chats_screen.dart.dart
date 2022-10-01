@@ -50,7 +50,7 @@ class _HomeChatsScreenState extends State<HomeChatsScreen> {
                 Icons.people,
                 color: Colors.black,
               ),
-              onPressed: () => context.router.replace(const LoginRoute()))
+              onPressed: () => context.router.replace(const MembersRoute()))
         ],
       ),
       body: const Text('Chats with this user will be show here').center,
