@@ -1,28 +1,44 @@
-import 'dart:convert';
-
 import 'package:auto_route/auto_route.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
-import 'package:example/screens/home_chats_screen.dart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:http/http.dart' as http;
-import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:io' show Platform;
+
 import '../../models/user/user_model.dart';
 import 'firebase_database.dart';
 
 class AuthService {
   final _auth = FirebaseAuth.instance;
 
-  /// Facebook LOGIN
+  /// Google LOGIN
+  Future signInWithGoogle(BuildContext context) async {
+    await _auth.signOut();
+    await GoogleSignIn().signOut();
+    final googleUser = await GoogleSignIn().signIn();
 
-  /*  Future signInWithFacebook(context) async {
+    // Sign in & Create user on firebase console
+    final googleAuth = await googleUser!.authentication;
+    await _auth.signInWithCredential(GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
+
+    var fireUser = _auth.currentUser;
+    var user = UserModel(
+      uid: fireUser?.uid,
+      email: fireUser?.email,
+      name: fireUser?.displayName,
+      photoUrl: fireUser?.photoURL,
+    );
+    context.uniModel.updateUser(user);
+    Database().updateFirestore(
+        collection: 'users', docName: '${user.email}', toJson: user.toJson());
+    context.router.replace(const HomeChatsRoute());
+  }
+}
+
+/// Facebook LOGIN
+
+/*  Future signInWithFacebook(context) async {
     await FirebaseAuth.instance.signOut();
 
     // Trigger the sign-in flow
@@ -44,31 +60,7 @@ class AuthService {
 
   }*/
 
-  /// Google LOGIN
-  Future signInWithGoogle(BuildContext context) async {
-    await FirebaseAuth.instance.signOut();
-    await GoogleSignIn().signOut();
-    final googleUser = await GoogleSignIn().signIn();
-
-    // Sign in & Create user on firebase console
-    final googleAuth = await googleUser!.authentication;
-    await FirebaseAuth.instance.signInWithCredential(
-        GoogleAuthProvider.credential(
-            accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
-
-    var fireUser = FirebaseAuth.instance.currentUser;
-    var user = UserModel(
-      uid: fireUser?.uid,
-      email: fireUser?.email,
-      name: fireUser?.displayName,
-      photoUrl: fireUser?.photoURL,
-    );
-    context.uniModel.updateUser(user);
-    Database().updateFirestore(
-        collection: 'users', docName: '${user.email}', toJson: user.toJson());
-    context.router.replace(const HomeChatsRoute());
-  }
-
+/*
   Future<void> addUser(String email, String pass, context) async {
     try {
       // var time = DateTime.now();
@@ -90,8 +82,9 @@ class AuthService {
       print('error creating account');
     }
   }
+*/
 
-  /// Email LOGIN
+/// Email LOGIN
 /*  Future<String> signInWithEmail(
     context, {
     required GlobalKey<FormState> key,
@@ -120,11 +113,10 @@ class AuthService {
     }
   }*/
 
-  Future<void> signOut() async {
+/*  Future<void> signOut() async {
     await _auth.signOut();
   }
 
   Future<void> resetPassword(String email) async {
     await _auth.sendPasswordResetEmail(email: email);
-  }
-}
+  }*/

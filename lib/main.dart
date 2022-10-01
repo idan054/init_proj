@@ -1,15 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/common/splash_screen.dart' as click;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:example/common/routes/app_router.gr.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+
 import 'common/models/universalModel.dart';
 import 'common/service/Auth/firebase_options.dart';
-import 'package:example/common/splash_screen.dart' as click;
 
 /// Add More Pre-Actions At [click.SplashScreen]
 void main() async {
@@ -19,7 +17,7 @@ void main() async {
   runApp(
     MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => UniModel()),
+          ChangeNotifierProvider(create: (_) => UniProvider()),
           // Provider.value(value: StreamModel().serverClient),
           // FutureProvider<List<Activity>?>.value(
           //     value: StreamModel().getFeedActivities(), initialData: const []),
@@ -28,7 +26,6 @@ void main() async {
         child: const App()),
   );
 }
-
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -66,9 +63,9 @@ class _AppState extends State<App> {
             title: 'Example',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-              // colorSchemeSeed: AppColors.primaryColor,
-              // scaffoldBackgroundColor: AppColors.primaryColor,
-            ),
+                // colorSchemeSeed: AppColors.primaryColor,
+                // scaffoldBackgroundColor: AppColors.primaryColor,
+                ),
             builder: (context, child) {
               return Directionality(
                 textDirection: TextDirection.rtl,
@@ -86,4 +83,3 @@ class _AppState extends State<App> {
     }
   }
 }
-

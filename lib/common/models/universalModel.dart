@@ -1,9 +1,20 @@
 import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/foundation.dart';
 
-class UniModel with ChangeNotifier {
+class UniProvider with ChangeNotifier {
   var user = const UserModel();
-  updateUser(UserModel data){ user = data; notifyListeners(); }
+
+  updateUser(UserModel data) {
+    user = data;
+    notifyListeners();
+  }
+
+/*  var message = MessageModel(
+      fromId: '',
+      sendAt: DateTime.now(),
+      textContent: '',
+      toId: '',
+      read: false);*/
 
 //     String? name,
 //     String? email,

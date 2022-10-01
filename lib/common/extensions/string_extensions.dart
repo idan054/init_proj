@@ -36,4 +36,39 @@ extension StringX on String {
       length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
 
   DateTime get toDate => DateTime.parse(this).toLocal();
+
+  bool get isHebrew {
+    var heb = [
+      'א',
+      'ב',
+      'ג',
+      'ד',
+      'ה',
+      'ו',
+      'ז',
+      'ח',
+      'ט',
+      'י',
+      'כ',
+      'ל',
+      'מ',
+      'נ',
+      'ס',
+      'ע',
+      'פ',
+      'צ',
+      'ק',
+      'ר',
+      'ש',
+      'ת',
+      'ם',
+      'ך',
+      'ץ',
+    ];
+    // actually needs to be map.
+    for (var l in heb) {
+      if (contains(l)) return true;
+    }
+    return false;
+  }
 }

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../common/models/user/user_model.dart';
 import '../common/service/Auth/firebase_database.dart';
+import '../common/service/Chat/chat_services.dart';
 
 class MembersScreen extends StatefulWidget {
   const MembersScreen({Key? key}) : super(key: key);
@@ -19,10 +20,20 @@ class _MembersScreenState extends State<MembersScreen> {
       value: Database.streamUsers(),
       initialData: const [],
       builder: (context, child) {
-        var list = context.listenUserModelList;
-        print(list.length);
+        var users = context.listenUserModelList;
         return Scaffold(
           backgroundColor: Colors.grey[100]!,
+          body: ListView.builder(
+            itemCount: users.length,
+            itemBuilder: (context, i) {
+              return Card(
+                  child: ListTile(
+                onTap: () =>
+                    ChatService().newChat(context, otherUser: users[i]),
+                title: Text(users[i].email ?? ''),
+              ));
+            },
+          ),
         );
       },
     );
