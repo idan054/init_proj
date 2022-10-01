@@ -1,4 +1,4 @@
-import 'package:example/common/models/profile/user_model.dart';
+import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/foundation.dart';
 
 class UniModel with ChangeNotifier {

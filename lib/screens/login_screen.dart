@@ -7,8 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart' /*as provider*/;
 
-import '../common/mixins/assets.gen.dart';
-import '../common/service/auth_services.dart';
+import '../common/service/Auth/auth_services.dart';
+import '../common/service/mixins/assets.gen.dart';
 import '../widgets/widgets.dart';
 
 

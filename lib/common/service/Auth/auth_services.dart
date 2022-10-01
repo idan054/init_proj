@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/models/profile/user_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/screens/home_chats_screen.dart.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +14,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:io' show Platform;
-import 'location_service.dart';
+import '../../models/user/user_model.dart';
+import 'firebase_database.dart';
 
 class AuthService {
   final _auth = FirebaseAuth.instance;
@@ -61,9 +63,9 @@ class AuthService {
       name: fireUser?.displayName,
       photoUrl: fireUser?.photoURL,
     );
-
-    // await getLocation(); // also set in Provider
     context.uniModel.updateUser(user);
+    Database().updateFirestore(
+        collection: 'users', docName: '${user.email}', toJson: user.toJson());
     context.router.replace(const HomeChatsRoute());
   }
 

@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'common/models/universalModel.dart';
-import 'common/providers/firebase_options.dart';
+import 'common/service/Auth/firebase_options.dart';
 import 'package:example/common/splash_screen.dart' as click;
 
 /// Add More Pre-Actions At [click.SplashScreen]

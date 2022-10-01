@@ -1,12 +1,13 @@
+import 'dart:convert';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/models/profile/user_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/common/service/mixins/after_layout_mixin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../screens/login_screen.dart';
-import 'mixins/after_layout_mixin.dart';
+import 'models/user/user_model.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
