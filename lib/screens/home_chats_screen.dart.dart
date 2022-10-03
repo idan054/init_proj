@@ -4,7 +4,7 @@ import 'package:example/common/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../common/models/user/user_model.dart';
+import '../common/models/chat/chat_model.dart';
 import '../common/service/Auth/firebase_database.dart';
 import '../common/service/Chat/chat_services.dart';
 import '../widgets/app_bar.dart';
@@ -19,7 +19,7 @@ class HomeChatsScreen extends StatefulWidget {
 class _HomeChatsScreenState extends State<HomeChatsScreen> {
   @override
   Widget build(BuildContext context) {
-    print('START: HomeChatsScreen()');
+    print('START: HomeChatsScreen');
     var currUser = context.uniModel.currUser;
 
     return Scaffold(
@@ -34,31 +34,33 @@ class _HomeChatsScreenState extends State<HomeChatsScreen> {
                   ),
                   onPressed: () => context.router.push(const MembersRoute()))
             ]),
-        body: StreamProvider<List<UserModel>>.value(
+        body: StreamProvider<List<ChatModel>>.value(
           value: Database.streamChats(currUser.uid!),
           initialData: const [],
           builder: (context, child) {
-            var users = context.listenUserModelList;
+            var chats = context.listenChatsModelList;
+            print('chats.length: ${chats.length}');
+
             return Scaffold(
               backgroundColor: Colors.grey[100]!,
               body: ListView.builder(
-                itemCount: users.length,
+                itemCount: chats.length,
                 itemBuilder: (context, i) {
-                  if (users.isEmpty) {
+                  var chat = chats[i];
+                  var otherUser = chat.users!
+                      .firstWhere((user) => user.uid != currUser.uid);
+
+                  if (chats.isEmpty) {
                     return const Text(
                             'Chats with this currUser will be show here')
                         .center;
                   }
 
-                  if (users[i].uid == context.uniModel.currUser.uid) {
-                    return const Offstage();
-                  }
-
                   return Card(
                       child: ListTile(
                     onTap: () =>
-                        ChatService().newChat(context, otherUser: users[i]),
-                    title: Text(users[i].email ?? ''),
+                        ChatService().newChat(context, otherUser: otherUser),
+                    title: Text(chat.lastMessage?.textContent ?? ''),
                   ));
                 },
               ),

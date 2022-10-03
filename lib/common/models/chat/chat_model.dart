@@ -12,6 +12,7 @@ class ChatModel with _$ChatModel {
   @JsonSerializable(explicitToJson: true) // This needed for sub classes only
   const factory ChatModel({
     MessageModel? lastMessage,
+    List<String>? usersIds,
     List<UserModel>? users,
     List<MessageModel>? messages,
   }) = _ChatModel;

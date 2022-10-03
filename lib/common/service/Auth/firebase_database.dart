@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/user/user_model.dart';
 
@@ -13,17 +14,17 @@ import '../Chat/chat_services.dart' as chat;
 class Database {
   static final db = FirebaseFirestore.instance;
 
-  static Stream<List<UserModel>>? streamChats(String currUserId) {
+  static Stream<List<ChatModel>>? streamChats(String currUserId) {
     print('START: streamChats()');
     return db
         .collection('chats')
-        .where('users', arrayContains: currUserId)
+        .where('usersIds', arrayContains: currUserId)
         .snapshots()
         .map((QuerySnapshot list) {
       return list.docs.map((DocumentSnapshot snap) {
-        //> print('CHAT_DOC_ID: ${snap.id}');
-        // print(snap.data());
-        return UserModel.fromJson(snap.data() as Map<String, dynamic>);
+        print('CHAT_DOC_ID: ${snap.id}');
+        print(snap.data());
+        return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
       }).toList();
     }).handleError((dynamic e) {
       print('EEE $e');

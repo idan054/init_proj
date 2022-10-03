@@ -17,6 +17,7 @@ import '../Auth/firebase_database.dart' as click;
 /// streamMessages() Available At [click.Database] // <<---
 
 class ChatService {
+  // This do nothing on firestore.
   void newChat(BuildContext context, {required UserModel otherUser}) {
     var currUser = context.uniModel.currUser;
     var chatId = '${currUser.email}-${otherUser.email}';
@@ -59,10 +60,10 @@ class ChatService {
     var chatData = ChatModel(
       lastMessage: messageData,
       users: [context.uniModel.currUser, otherUser],
+      usersIds: [context.uniModel.currUser.uid!, otherUser.uid!],
     );
-    print('chatData.toJson() ${chatData.toJson()}');
 
-    // Update Chat collection
+    // Start a Batch requests.
     var sendMessageBatch = Database.db.batch();
 
     Database().addToBatch(
