@@ -26,6 +26,10 @@ class _MembersScreenState extends State<MembersScreen> {
           body: ListView.builder(
             itemCount: users.length,
             itemBuilder: (context, i) {
+              if (users[i].uid == context.uniModel.currUser.uid) {
+                return const Offstage();
+              }
+
               return Card(
                   child: ListTile(
                 onTap: () =>

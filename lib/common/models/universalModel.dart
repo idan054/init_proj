@@ -2,10 +2,10 @@ import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/foundation.dart';
 
 class UniProvider with ChangeNotifier {
-  var user = const UserModel();
+  var currUser = const UserModel();
 
   updateUser(UserModel data) {
-    user = data;
+    currUser = data;
     notifyListeners();
   }
 

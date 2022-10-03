@@ -1,11 +1,13 @@
+// ignore_for_file: invalid_annotation_target
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:flutter/foundation.dart';
-part 'user_model.g.dart';
+
 part 'user_model.freezed.dart';
+part 'user_model.g.dart';
 
 // flutter pub run build_runner build --delete-conflicting-outputs
 @freezed
 class UserModel with _$UserModel {
+  // @JsonSerializable(explicitToJson: true) // This needed for sub classes Only
   const factory UserModel({
     String? name,
     String? email,
@@ -15,8 +17,4 @@ class UserModel with _$UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>
       _$UserModelFromJson(json);
-
 }
-
-
-

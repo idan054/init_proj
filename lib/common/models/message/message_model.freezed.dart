@@ -23,7 +23,10 @@ mixin _$MessageModel {
   String get textContent => throw _privateConstructorUsedError;
   String get fromId => throw _privateConstructorUsedError;
   String get toId => throw _privateConstructorUsedError;
-  DateTime get createdAt => throw _privateConstructorUsedError;
+  String get createdAt => throw _privateConstructorUsedError;
+  DateTime get timestamp => throw _privateConstructorUsedError;
+  String? get messageId =>
+      throw _privateConstructorUsedError; // Cuz new field, was not exist at begging
   bool? get read => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +44,9 @@ abstract class $MessageModelCopyWith<$Res> {
       {String textContent,
       String fromId,
       String toId,
-      DateTime createdAt,
+      String createdAt,
+      DateTime timestamp,
+      String? messageId,
       bool? read});
 }
 
@@ -59,6 +64,8 @@ class _$MessageModelCopyWithImpl<$Res> implements $MessageModelCopyWith<$Res> {
     Object? fromId = freezed,
     Object? toId = freezed,
     Object? createdAt = freezed,
+    Object? timestamp = freezed,
+    Object? messageId = freezed,
     Object? read = freezed,
   }) {
     return _then(_value.copyWith(
@@ -77,7 +84,15 @@ class _$MessageModelCopyWithImpl<$Res> implements $MessageModelCopyWith<$Res> {
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      messageId: messageId == freezed
+          ? _value.messageId
+          : messageId // ignore: cast_nullable_to_non_nullable
+              as String?,
       read: read == freezed
           ? _value.read
           : read // ignore: cast_nullable_to_non_nullable
@@ -97,7 +112,9 @@ abstract class _$$_MessageModelCopyWith<$Res>
       {String textContent,
       String fromId,
       String toId,
-      DateTime createdAt,
+      String createdAt,
+      DateTime timestamp,
+      String? messageId,
       bool? read});
 }
 
@@ -118,6 +135,8 @@ class __$$_MessageModelCopyWithImpl<$Res>
     Object? fromId = freezed,
     Object? toId = freezed,
     Object? createdAt = freezed,
+    Object? timestamp = freezed,
+    Object? messageId = freezed,
     Object? read = freezed,
   }) {
     return _then(_$_MessageModel(
@@ -136,7 +155,15 @@ class __$$_MessageModelCopyWithImpl<$Res>
       createdAt: createdAt == freezed
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
+              as String,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      messageId: messageId == freezed
+          ? _value.messageId
+          : messageId // ignore: cast_nullable_to_non_nullable
+              as String?,
       read: read == freezed
           ? _value.read
           : read // ignore: cast_nullable_to_non_nullable
@@ -153,6 +180,8 @@ class _$_MessageModel implements _MessageModel {
       required this.fromId,
       required this.toId,
       required this.createdAt,
+      required this.timestamp,
+      this.messageId,
       this.read});
 
   factory _$_MessageModel.fromJson(Map<String, dynamic> json) =>
@@ -165,13 +194,18 @@ class _$_MessageModel implements _MessageModel {
   @override
   final String toId;
   @override
-  final DateTime createdAt;
+  final String createdAt;
+  @override
+  final DateTime timestamp;
+  @override
+  final String? messageId;
+// Cuz new field, was not exist at begging
   @override
   final bool? read;
 
   @override
   String toString() {
-    return 'MessageModel(textContent: $textContent, fromId: $fromId, toId: $toId, createdAt: $createdAt, read: $read)';
+    return 'MessageModel(textContent: $textContent, fromId: $fromId, toId: $toId, createdAt: $createdAt, timestamp: $timestamp, messageId: $messageId, read: $read)';
   }
 
   @override
@@ -184,6 +218,8 @@ class _$_MessageModel implements _MessageModel {
             const DeepCollectionEquality().equals(other.fromId, fromId) &&
             const DeepCollectionEquality().equals(other.toId, toId) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
+            const DeepCollectionEquality().equals(other.timestamp, timestamp) &&
+            const DeepCollectionEquality().equals(other.messageId, messageId) &&
             const DeepCollectionEquality().equals(other.read, read));
   }
 
@@ -195,6 +231,8 @@ class _$_MessageModel implements _MessageModel {
       const DeepCollectionEquality().hash(fromId),
       const DeepCollectionEquality().hash(toId),
       const DeepCollectionEquality().hash(createdAt),
+      const DeepCollectionEquality().hash(timestamp),
+      const DeepCollectionEquality().hash(messageId),
       const DeepCollectionEquality().hash(read));
 
   @JsonKey(ignore: true)
@@ -215,7 +253,9 @@ abstract class _MessageModel implements MessageModel {
       {required final String textContent,
       required final String fromId,
       required final String toId,
-      required final DateTime createdAt,
+      required final String createdAt,
+      required final DateTime timestamp,
+      final String? messageId,
       final bool? read}) = _$_MessageModel;
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
@@ -228,8 +268,12 @@ abstract class _MessageModel implements MessageModel {
   @override
   String get toId;
   @override
-  DateTime get createdAt;
+  String get createdAt;
   @override
+  DateTime get timestamp;
+  @override
+  String? get messageId;
+  @override // Cuz new field, was not exist at begging
   bool? get read;
   @override
   @JsonKey(ignore: true)
