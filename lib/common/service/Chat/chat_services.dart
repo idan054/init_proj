@@ -17,10 +17,13 @@ import '../Auth/firebase_database.dart' as click;
 /// streamMessages() Available At [click.Database] // <<---
 
 class ChatService {
-  // This do nothing on firestore.
-  void newChat(BuildContext context, {required UserModel otherUser}) {
-    var currUser = context.uniModel.currUser;
-    var chatId = '${currUser.email}-${otherUser.email}';
+  //> This do nothing on Firestore.
+  void openChat(BuildContext context,
+      {required UserModel otherUser, String? chatId}) {
+    if (chatId == null) {
+      var currUser = context.uniProvider.currUser;
+      chatId = '${currUser.email}-${otherUser.email}';
+    }
     context.router.push(ChatRoute(otherUser: otherUser, chatId: chatId));
   }
 
@@ -41,7 +44,7 @@ class ChatService {
       required UserModel otherUser}) {
     print('START: sendMessage()');
 
-    var fromId = context.uniModel.currUser.uid;
+    var fromId = context.uniProvider.currUser.uid;
     var toId = otherUser.uid;
     var timeStamp = DateTime.now();
     String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);
@@ -58,9 +61,10 @@ class ChatService {
     );
 
     var chatData = ChatModel(
+      id: chatId,
       lastMessage: messageData,
-      users: [context.uniModel.currUser, otherUser],
-      usersIds: [context.uniModel.currUser.uid!, otherUser.uid!],
+      users: [context.uniProvider.currUser, otherUser],
+      usersIds: [context.uniProvider.currUser.uid!, otherUser.uid!],
     );
 
     // Start a Batch requests.

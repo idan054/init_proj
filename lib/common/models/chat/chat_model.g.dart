@@ -7,6 +7,7 @@ part of 'chat_model.dart';
 // **************************************************************************
 
 _$_ChatModel _$$_ChatModelFromJson(Map<String, dynamic> json) => _$_ChatModel(
+      id: json['id'] as String?,
       lastMessage: json['lastMessage'] == null
           ? null
           : MessageModel.fromJson(json['lastMessage'] as Map<String, dynamic>),
@@ -23,6 +24,7 @@ _$_ChatModel _$$_ChatModelFromJson(Map<String, dynamic> json) => _$_ChatModel(
 
 Map<String, dynamic> _$$_ChatModelToJson(_$_ChatModel instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'lastMessage': instance.lastMessage?.toJson(),
       'usersIds': instance.usersIds,
       'users': instance.users?.map((e) => e.toJson()).toList(),

@@ -12,20 +12,27 @@ extension ContextX on BuildContext {
   //> context.router.push(route)   //   push
 
   // My Models
-  UniProvider get uniModel => Provider.of<UniProvider>(this, listen: false);
-  UniProvider get listenUniModel => Provider.of<UniProvider>(this);
+  UniProvider get uniProvider => Provider.of<UniProvider>(this, listen: false);
+
+  UniProvider get listenUniProvider => Provider.of<UniProvider>(this);
+
 //
   List<UserModel> get userModelList =>
       Provider.of<List<UserModel>>(this, listen: false);
+
   List<UserModel> get listenUserModelList => Provider.of<List<UserModel>>(this);
+
 //
   List<MessageModel> get messagesModelList =>
       Provider.of<List<MessageModel>>(this, listen: false);
+
   List<MessageModel> get listenMessagesModelList =>
       Provider.of<List<MessageModel>>(this);
+
 //
   List<ChatModel> get chatsModelList =>
       Provider.of<List<ChatModel>>(this, listen: false);
+
   List<ChatModel> get listenChatsModelList =>
       Provider.of<List<ChatModel>>(this);
 

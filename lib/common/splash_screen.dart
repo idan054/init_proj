@@ -1,12 +1,10 @@
-import 'dart:convert';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/mixins/after_layout_mixin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../screens/login_screen.dart';
+
 import 'models/user/user_model.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -27,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
     bool userLogged = FirebaseAuth.instance.currentUser?.uid != null;
     if (userLogged) {
       var user = FirebaseAuth.instance.currentUser;
-      context.uniModel.updateUser(UserModel(
+      context.uniProvider.updateUser(UserModel(
         name: user?.displayName,
         photoUrl: user?.photoURL,
         email: user?.email,

@@ -44,7 +44,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
               WriteBatch messagesBatch = Database.db.batch();
               for (var message in messages) {
-                if (message.toId == context.uniModel.currUser.uid) {
+                if (message.toId == context.uniProvider.currUser.uid) {
                   // Todo make sure this works!
                   ChatService()
                       .setMessageRead(message, widget.chatId, messagesBatch);
@@ -101,7 +101,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget buildBubble(MessageModel message, bool isLastMessage) {
     print('START: buildBubble()');
 
-    bool currUser = message.fromId == context.uniModel.currUser.uid;
+    bool currUser = message.fromId == context.uniProvider.currUser.uid;
     return Row(
       mainAxisAlignment:
           currUser ? MainAxisAlignment.start : MainAxisAlignment.end,

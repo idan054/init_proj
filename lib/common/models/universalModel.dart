@@ -1,11 +1,22 @@
 import 'package:example/common/models/user/user_model.dart';
+import 'package:example/screens/home_chats_screen.dart.dart' as click;
 import 'package:flutter/foundation.dart';
 
-class UniProvider with ChangeNotifier {
-  var currUser = const UserModel();
+import 'chat/chat_model.dart';
 
-  updateUser(UserModel data) {
+class UniProvider with ChangeNotifier {
+  UserModel currUser = const UserModel();
+  List<ChatModel>? chatList;
+
+  /// on [click.HomeChatsScreen]
+
+  void updateUser(UserModel data) {
     currUser = data;
+    notifyListeners();
+  }
+
+  void updateChatList(List<ChatModel> data) {
+    chatList = data;
     notifyListeners();
   }
 

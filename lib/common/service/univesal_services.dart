@@ -1,8 +1,8 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:dio_http_formatter/dio_http_formatter.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 
 // source: https://stackoverflow.com/questions/57977167/device-country-in-flutter
 Future<Map<String, dynamic>> getLocation() async {
@@ -24,8 +24,7 @@ Future<Map<String, dynamic>> getLocation() async {
 
 final dioProvider = Dio(
   BaseOptions(
-    baseUrl:
-    'http://services1-env.eba-wbrmgstr.us-east-2.elasticbeanstalk.com',
+    baseUrl: 'http://services1-env.eba-wbrmgstr.us-east-2.elasticbeanstalk.com',
     receiveTimeout: 60000,
     connectTimeout: 60000,
     responseType: ResponseType.json,
@@ -35,17 +34,19 @@ final dioProvider = Dio(
     },
   ),
 )..interceptors.addAll([
-  HttpFormatter(),
-  LogInterceptor(),
-]);
+    HttpFormatter(),
+    LogInterceptor(),
+  ]);
 
-void getUrlParams(){
+void getUrlParams() {
   String? url = Uri.base.toString(); //get complete url
   print('url: $url');
 
   final uriParams = Uri.parse(url.replaceAll('/#/', '/')).queryParameters;
-  var companyIdParam = uriParams['CompanyID'] ?? uriParams['companyID'] ?? '3417818890';
-  var employeeIdParam = uriParams['EmployeeId'] ?? uriParams['employeeId'] ?? '557';
+  var companyIdParam =
+      uriParams['CompanyID'] ?? uriParams['companyID'] ?? '3417818890';
+  var employeeIdParam =
+      uriParams['EmployeeId'] ?? uriParams['employeeId'] ?? '557';
   var dateParam = uriParams['date'] ?? uriParams['Date'] ?? '1661240852';
 
   print('companyIdParam: $companyIdParam');

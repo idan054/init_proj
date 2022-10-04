@@ -32,7 +32,7 @@ class AuthService {
       name: fireUser?.displayName,
       photoUrl: fireUser?.photoURL,
     );
-    context.uniModel.updateUser(user);
+    context.uniProvider.updateUser(user);
     Database().updateFirestore(
         collection: 'users', docName: '${user.email}', toJson: user.toJson());
     context.router.replace(const HomeChatsRoute());

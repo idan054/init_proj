@@ -1,6 +1,7 @@
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/common/themes/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,7 +21,7 @@ class _HomeChatsScreenState extends State<HomeChatsScreen> {
   @override
   Widget build(BuildContext context) {
     print('START: HomeChatsScreen');
-    var currUser = context.uniModel.currUser;
+    var currUser = context.uniProvider.currUser;
 
     return Scaffold(
         appBar: classicAppBar(context,
@@ -39,29 +40,34 @@ class _HomeChatsScreenState extends State<HomeChatsScreen> {
           initialData: const [],
           builder: (context, child) {
             var chats = context.listenChatsModelList;
-            print('chats.length: ${chats.length}');
+            WidgetsBinding.instance.addPostFrameCallback(
+                (_) => context.uniProvider.updateChatList(chats));
 
             return Scaffold(
               backgroundColor: Colors.grey[100]!,
               body: ListView.builder(
                 itemCount: chats.length,
                 itemBuilder: (context, i) {
+                  if (chats.isEmpty) {
+                    return const Text('Chats with this user will be show here')
+                        .center;
+                  }
+
                   var chat = chats[i];
                   var otherUser = chat.users!
                       .firstWhere((user) => user.uid != currUser.uid);
 
-                  if (chats.isEmpty) {
-                    return const Text(
-                            'Chats with this currUser will be show here')
-                        .center;
-                  }
-
                   return Card(
                       child: ListTile(
-                    onTap: () =>
-                        ChatService().newChat(context, otherUser: otherUser),
+                    leading: CircleAvatar(
+                        backgroundColor: Colors.grey,
+                        backgroundImage: NetworkImage(otherUser.photoUrl ??
+                            AppStrings.monkeyPlaceHolder)),
+                    onTap: () => ChatService().openChat(context,
+                        otherUser: otherUser, chatId: chat.id),
                     title: Text(chat.lastMessage?.textContent ?? ''),
-                  ));
+                    subtitle: chat.lastMessage?.createdAt.substring(9, 14).text,
+                  )).rtl;
                 },
               ),
             );

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import '../../common/themes/themes.dart';
 
 extension WidgetX on Widget {
-
   Container get testContainer => Container(color: Colors.green, child: this);
 
-  Directionality get rtl => Directionality(textDirection: TextDirection.rtl, child: this);
-  Directionality get ltr => Directionality(textDirection: TextDirection.ltr, child: this);
+  Directionality get rtl =>
+      Directionality(textDirection: TextDirection.rtl, child: this);
+  Directionality get ltr =>
+      Directionality(textDirection: TextDirection.ltr, child: this);
 
   Padding px(double padding) => Padding(
         padding: EdgeInsets.symmetric(horizontal: padding),
@@ -53,7 +54,6 @@ extension WidgetX on Widget {
         alignment: Alignment.centerRight,
         child: this,
       );
-
 
   SizedBox sizedBox(w, h) => SizedBox(
         width: w,

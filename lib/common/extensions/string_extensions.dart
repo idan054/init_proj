@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 extension StringNullX on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
 
@@ -36,6 +38,9 @@ extension StringX on String {
       length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
 
   DateTime get toDate => DateTime.parse(this).toLocal();
+
+  // My:
+  Text get text => Text(this);
 
   bool get isHebrew {
     var heb = [
