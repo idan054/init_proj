@@ -19,7 +19,7 @@ class _MembersScreenState extends State<MembersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: classicAppBar(context, title: 'Members page'),
+      appBar: darkAppBar(context, title: 'Members page'),
       backgroundColor: Colors.grey[100]!,
       body: StreamProvider<List<UserModel>>.value(
           value: Database.streamUsers(),

@@ -1,6 +1,6 @@
-import 'package:example/common/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../common/themes/app_colors.dart';
 import '../common/themes/app_styles.dart';
 
@@ -68,7 +68,7 @@ class CustomButton extends StatelessWidget {
     return Material(
       type: MaterialType.card,
       clipBehavior: Clip.antiAlias,
-      color: isDisabled ? AppColors.greyColor : backgroundColor,
+      color: isDisabled ? AppColors.greyUnavailable : backgroundColor,
       shape: _shape,
       elevation: elevation,
       child: InkWell(
@@ -79,7 +79,7 @@ class CustomButton extends StatelessWidget {
           child: Ink(
             decoration: ShapeDecoration(
               shape: _shape,
-              color: isDisabled ? AppColors.greyColor : backgroundColor,
+              color: isDisabled ? AppColors.greyUnavailable : backgroundColor,
             ),
             child: loading
                 ? Center(

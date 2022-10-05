@@ -2,7 +2,9 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/themes/app_strings.dart';
+import 'package:example/common/themes/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/models/chat/chat_model.dart';
@@ -24,8 +26,8 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     var currUser = context.uniProvider.currUser;
 
     return Scaffold(
-        appBar: classicAppBar(context,
-            title: currUser.email.toString(),
+        appBar: darkAppBar(context,
+            title: 'Messages', // STR
             leadingReplaceRoute: const LoginRoute(),
             actions: [
               IconButton(
@@ -43,9 +45,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
             WidgetsBinding.instance.addPostFrameCallback(
                 (_) => context.uniProvider.updateChatList(chats));
 
-            return Scaffold(
-              backgroundColor: Colors.grey[100]!,
-              body: ListView.builder(
+            return Container(
+              color: AppColors.darkBlack,
+              child: ListView.builder(
                 itemCount: chats.length,
                 itemBuilder: (context, i) {
                   if (chats.isEmpty) {
@@ -57,17 +59,32 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                   var otherUser = chat.users!
                       .firstWhere((user) => user.uid != currUser.uid);
 
-                  return Card(
-                      child: ListTile(
+                  return ListTile(
+                    trailing: Column(
+                      children: [
+                        10.verticalSpace,
+                        Text(
+                          chat.lastMessage?.createdAt.substring(9, 14) ?? '',
+                          style: AppStyles.text12PxRegular.greyLight,
+                        )
+                      ],
+                    ),
                     leading: CircleAvatar(
+                        radius: 28,
                         backgroundColor: Colors.grey,
                         backgroundImage: NetworkImage(otherUser.photoUrl ??
                             AppStrings.monkeyPlaceHolder)),
                     onTap: () => ChatService().openChat(context,
                         otherUser: otherUser, chatId: chat.id),
-                    title: Text(chat.lastMessage?.textContent ?? ''),
-                    subtitle: chat.lastMessage?.createdAt.substring(9, 14).text,
-                  )).rtl.appearOffset;
+                    title: Text(
+                      otherUser.name ?? '',
+                      style: AppStyles.text20PxSemiBold.white,
+                    ),
+                    subtitle: Text(
+                      chat.lastMessage?.textContent ?? '',
+                      style: AppStyles.text16PxRegular.greyLight,
+                    ),
+                  ).ltr.appearOffset;
                 },
               ),
             );

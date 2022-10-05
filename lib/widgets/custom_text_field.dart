@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:example/common/extensions/extensions.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../common/themes/app_colors.dart';
 import '../common/themes/app_styles.dart';
 
@@ -16,8 +14,8 @@ class AppTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _borderStyle = OutlineInputBorder(
-      borderSide: BorderSide(
-        color: AppColors.greys300,
+      borderSide: const BorderSide(
+        color: AppColors.greyLight,
       ),
       borderRadius: BorderRadius.circular(4),
     );

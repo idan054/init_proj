@@ -3,26 +3,30 @@ import 'package:flutter/material.dart';
 class AppColors {
   const AppColors._();
 
-  static const Color primary = Color(0xff583DFF);
-  static const Color primaryDark = Color(0xff21225B);
+  static const Color primary = Color(0xff621BEE);
+  static const Color primaryDark = Color(0xff4914B2);
+  static const Color primaryShiny = Color(0xff8027CF);
+  static const Color darkBlack = Color(0xff0F0F0F);
+  static const Color greyUnavailable = Color(0xff5C5C5C);
+  static const Color greyLight = Color(0xffCACACA);
   static const Color white = Colors.white;
   static const Color green = Color(0xff41BE7B);
-  static const Color lightWhite = Color(0xffF6F6F6);
-  static const Color greyColor = Color(0xffECECF2);
-  static const Color solidGrey = Color(0xffA6A6A6);
-  static const Color midGreyColor = Color(0xffF8F8FA);
-  static const Color greenColor = Color(0xff41BE7B);
-  static const Color redColor = Color(0xffF61919);
-  static const Color darkBlack = Color(0xff403F44);
-  static const Color black = Colors.black;
-  static const Color lightGrey = Color(0xffE1E1EA);
-  static const Color light100White = Color(0xffF7F7FC);
-  static const Color grey = Color(0xffDADAE7);
-  static const Color lightBlue = Color(0xffEDEAFF);
-  static const Color grey100 = Color(0xffFBFBFD);
-  static const Color grey200 = Color(0xff90909B);
-  static Color detailsGrey = Colors.grey[700]!;
   static const Color transparent = Colors.transparent;
+}
 
-  static Color greys300 = Colors.grey[300]!;
+extension TextStyleX on TextStyle {
+  //colors
+  TextStyle get primary => copyWith(color: AppColors.primary);
+  TextStyle get primaryDark => copyWith(color: AppColors.primaryDark);
+  TextStyle get primaryShiny => copyWith(color: AppColors.primaryShiny);
+  TextStyle get darkBlack => copyWith(color: AppColors.darkBlack);
+  TextStyle get greyUnavailable => copyWith(color: AppColors.greyUnavailable);
+  TextStyle get greyLight => copyWith(color: AppColors.greyLight);
+  TextStyle get white => copyWith(color: AppColors.white);
+  TextStyle get green => copyWith(color: AppColors.green);
+
+  TextStyle lineHeight(double value) => copyWith(height: value / fontSize!);
+
+// TextStyle spacing(double value) =>
+//     copyWith(letterSpacing: calculateSpacing(value));
 }

@@ -2,8 +2,6 @@ import 'package:entry/entry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import '../../common/themes/themes.dart';
-
 var appearDuration = kDebugMode ? 750 : 250;
 
 extension WidgetX on Widget {
@@ -99,31 +97,4 @@ extension WidgetX on Widget {
         scale: scale,
         child: this,
       );
-}
-
-extension TextStyleX on TextStyle {
-  //colors
-
-  // TextStyle get darkGrey => copyWith(color: AppColors.darkGreyColor);
-
-  TextStyle get red => copyWith(color: AppColors.redColor);
-
-  TextStyle get primary => copyWith(color: AppColors.primary);
-
-  TextStyle get black => copyWith(color: AppColors.darkBlack);
-
-  TextStyle get darkBlack => copyWith(color: AppColors.black);
-
-  TextStyle get white => copyWith(color: AppColors.white);
-
-  TextStyle get green => copyWith(color: AppColors.green);
-
-  TextStyle get solidGrey => copyWith(color: AppColors.solidGrey);
-
-  TextStyle get grey200Color => copyWith(color: AppColors.grey200);
-
-  TextStyle lineHeight(double value) => copyWith(height: value / fontSize!);
-
-// TextStyle spacing(double value) =>
-//     copyWith(letterSpacing: calculateSpacing(value));
 }

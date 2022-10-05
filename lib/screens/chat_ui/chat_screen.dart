@@ -2,6 +2,7 @@ import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/models.dart';
+import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -32,7 +33,7 @@ class _ChatScreenState extends State<ChatScreen> {
     print('chatId ${chatId}');
 
     return Scaffold(
-      appBar: classicAppBar(context, title: otherUser.email.toString()),
+      appBar: darkAppBar(context, title: otherUser.email.toString()),
       body: Column(
         children: [
           StreamProvider<List<MessageModel>>.value(
