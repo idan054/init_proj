@@ -2,7 +2,17 @@ import 'package:entry/entry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../themes/app_colors.dart';
+
 var appearDuration = kDebugMode ? 750 : 250;
+
+extension IconDataX on IconData {
+  Icon icon({Color color = AppColors.white, double size = 20}) => Icon(
+        this,
+        color: color,
+        size: size,
+      );
+}
 
 extension WidgetX on Widget {
   // My extension:
@@ -83,6 +93,11 @@ extension WidgetX on Widget {
   SizedBox sizedBox(double w, double h) => SizedBox(
         width: w,
         height: h,
+        child: this,
+      );
+
+  Widget offset(double x, double y) => Transform.translate(
+        offset: Offset(x, y),
         child: this,
       );
 

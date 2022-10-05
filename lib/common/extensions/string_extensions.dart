@@ -1,3 +1,5 @@
+import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 
 extension StringNullX on String? {
@@ -40,7 +42,10 @@ extension StringX on String {
   DateTime get toDate => DateTime.parse(this).toLocal();
 
   // My:
-  Text get text => Text(this);
+  Text get text => Text(
+        this,
+        style: AppStyles.text10PxSemiBold.white,
+      );
 
   bool get isHebrew {
     var heb = [

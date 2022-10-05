@@ -100,7 +100,7 @@ class ChatScreen extends StatelessWidget {
                   size: 25,
                   color: sendController.text.isNotEmpty
                       ? AppColors.primary
-                      : AppColors.primary.withOpacity(0.50),
+                      : AppColors.primaryDisable,
                 ),
                 onPressed: sendController.text.isNotEmpty
                     ? () {

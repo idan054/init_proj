@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -16,6 +17,10 @@ class AuthService {
 
   /// Google LOGIN
   Future signInWithGoogle(BuildContext context) async {
+    print('START: signInWithGoogle()');
+    if (_auth.currentUser != null && kDebugMode) {
+      return context.router.replace(const CreateUserRoute());
+    }
     await _auth.signOut();
     await GoogleSignIn().signOut();
     final googleUser = await GoogleSignIn().signIn();
@@ -35,7 +40,7 @@ class AuthService {
     context.uniProvider.updateUser(user);
     Database().updateFirestore(
         collection: 'users', docName: '${user.email}', toJson: user.toJson());
-    context.router.replace(const ChatsListRoute());
+    context.router.replace(const CreateUserRoute());
   }
 }
 

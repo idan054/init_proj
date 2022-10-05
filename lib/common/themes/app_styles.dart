@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppStyles {
   const AppStyles._();
-  static TextStyle get heeboFont =>  GoogleFonts.heebo();
+  static TextStyle get heeboFont => GoogleFonts.palanquin();
 
   static TextStyle get text8PxRegular => heeboFont.copyWith(
         fontSize: 8.sp,

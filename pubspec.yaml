@@ -58,8 +58,15 @@ flutter_gen:
   integrations:
     flutter_svg: true
 
+
 flutter:
+  fonts:
+    - family: RilTopia # BAHNSCHRIFT
+      fonts:
+        - asset: assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF
+
   assets:
+    - assets/fonts/
     - assets/images/
     - assets/svg/
     - assets/svg/icons/

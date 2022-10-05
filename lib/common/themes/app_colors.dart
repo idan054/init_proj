@@ -6,6 +6,7 @@ class AppColors {
   static const Color primary = Color(0xff621BEE);
   static const Color primaryDark = Color(0xff4914B2);
   static const Color primaryShiny = Color(0xff8027CF);
+  static Color primaryDisable = AppColors.primary.withOpacity(0.50);
   static const Color darkBlack = Color(0xff0F0F0F);
   static const Color greyDark = Color(0xff232323);
   static const Color greyUnavailable = Color(0xff5C5C5C);
@@ -20,12 +21,14 @@ extension TextStyleX on TextStyle {
   TextStyle get primary => copyWith(color: AppColors.primary);
   TextStyle get primaryDark => copyWith(color: AppColors.primaryDark);
   TextStyle get primaryShiny => copyWith(color: AppColors.primaryShiny);
+  TextStyle get primaryDisable => copyWith(color: AppColors.primaryDisable);
   TextStyle get darkBlack => copyWith(color: AppColors.darkBlack);
   TextStyle get greyDark => copyWith(color: AppColors.greyDark);
   TextStyle get greyUnavailable => copyWith(color: AppColors.greyUnavailable);
   TextStyle get greyLight => copyWith(color: AppColors.greyLight);
   TextStyle get white => copyWith(color: AppColors.white);
   TextStyle get green => copyWith(color: AppColors.green);
+  TextStyle get rilTopiaFont => copyWith(fontFamily: 'RilTopia');
 
   TextStyle lineHeight(double value) => copyWith(height: value / fontSize!);
 
