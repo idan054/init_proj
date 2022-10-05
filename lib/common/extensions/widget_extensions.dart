@@ -80,7 +80,7 @@ extension WidgetX on Widget {
         child: this,
       );
 
-  SizedBox sizedBox(w, h) => SizedBox(
+  SizedBox sizedBox(double w, double h) => SizedBox(
         width: w,
         height: h,
         child: this,

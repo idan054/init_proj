@@ -68,7 +68,7 @@ class _AppState extends State<App> {
                 ),
             builder: (context, child) {
               return Directionality(
-                textDirection: TextDirection.rtl,
+                textDirection: TextDirection.ltr,
                 child: Builder(
                   builder: (context) => child!,
                 ),

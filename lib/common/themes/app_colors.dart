@@ -7,6 +7,7 @@ class AppColors {
   static const Color primaryDark = Color(0xff4914B2);
   static const Color primaryShiny = Color(0xff8027CF);
   static const Color darkBlack = Color(0xff0F0F0F);
+  static const Color greyDark = Color(0xff232323);
   static const Color greyUnavailable = Color(0xff5C5C5C);
   static const Color greyLight = Color(0xffCACACA);
   static const Color white = Colors.white;
@@ -20,6 +21,7 @@ extension TextStyleX on TextStyle {
   TextStyle get primaryDark => copyWith(color: AppColors.primaryDark);
   TextStyle get primaryShiny => copyWith(color: AppColors.primaryShiny);
   TextStyle get darkBlack => copyWith(color: AppColors.darkBlack);
+  TextStyle get greyDark => copyWith(color: AppColors.greyDark);
   TextStyle get greyUnavailable => copyWith(color: AppColors.greyUnavailable);
   TextStyle get greyLight => copyWith(color: AppColors.greyLight);
   TextStyle get white => copyWith(color: AppColors.white);
