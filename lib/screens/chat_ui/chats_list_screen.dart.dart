@@ -67,7 +67,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                         otherUser: otherUser, chatId: chat.id),
                     title: Text(chat.lastMessage?.textContent ?? ''),
                     subtitle: chat.lastMessage?.createdAt.substring(9, 14).text,
-                  )).rtl;
+                  )).rtl.appearOffset;
                 },
               ),
             );

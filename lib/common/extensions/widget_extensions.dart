@@ -1,15 +1,42 @@
+import 'package:entry/entry.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/themes/themes.dart';
 
+var appearDuration = kDebugMode ? 750 : 250;
+
 extension WidgetX on Widget {
+  // My extension:
   Container get testContainer => Container(color: Colors.green, child: this);
 
   Directionality get rtl =>
       Directionality(textDirection: TextDirection.rtl, child: this);
+
   Directionality get ltr =>
       Directionality(textDirection: TextDirection.ltr, child: this);
 
+  Entry get appearAll => Entry.all(
+        duration: Duration(milliseconds: appearDuration),
+        child: this,
+      );
+
+  Entry get appearScale => Entry.scale(
+        duration: Duration(milliseconds: appearDuration),
+        child: this,
+      );
+
+  Entry get appearOffset => Entry.offset(
+        duration: Duration(milliseconds: appearDuration),
+        child: this,
+      );
+
+  Entry get appearOpacity => Entry.opacity(
+        duration: Duration(milliseconds: appearDuration),
+        child: this,
+      );
+
+  // rest extension:
   Padding px(double padding) => Padding(
         padding: EdgeInsets.symmetric(horizontal: padding),
         child: this,

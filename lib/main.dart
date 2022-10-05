@@ -1,5 +1,5 @@
 import 'package:example/common/routes/app_router.gr.dart';
-import 'package:example/common/splash_screen.dart' as click;
+import 'package:example/screens/main_ui/splash_screen.dart' as click;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
