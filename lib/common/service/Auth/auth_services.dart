@@ -35,7 +35,7 @@ class AuthService {
     context.uniProvider.updateUser(user);
     Database().updateFirestore(
         collection: 'users', docName: '${user.email}', toJson: user.toJson());
-    context.router.replace(const HomeChatsRoute());
+    context.router.replace(const ChatsListRoute());
   }
 }
 

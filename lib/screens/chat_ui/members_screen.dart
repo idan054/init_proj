@@ -2,11 +2,11 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../common/models/chat/chat_model.dart';
-import '../common/models/user/user_model.dart';
-import '../common/service/Auth/firebase_database.dart';
-import '../common/service/Chat/chat_services.dart';
-import '../widgets/app_bar.dart';
+import '../../common/models/chat/chat_model.dart';
+import '../../common/models/user/user_model.dart';
+import '../../common/service/Auth/firebase_database.dart';
+import '../../common/service/Chat/chat_services.dart';
+import '../../widgets/app_bar.dart';
 
 class MembersScreen extends StatefulWidget {
   const MembersScreen({Key? key}) : super(key: key);

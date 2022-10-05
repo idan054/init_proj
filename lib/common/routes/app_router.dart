@@ -1,25 +1,35 @@
+import 'package:example/common/routes/app_router.gr.dart' as gen;
+import 'package:example/screens/feed_ui/create_post_screen.dart';
+import 'package:example/screens/feed_ui/main_feed_screen.dart';
+
 import '../../common/splash_screen.dart';
-import '../../screens/chat_screen.dart';
-import '../../screens/home_chats_screen.dart.dart';
+import '../../screens/chat_ui/chat_screen.dart';
+import '../../screens/chat_ui/chats_list_screen.dart.dart';
+import '../../screens/chat_ui/members_screen.dart';
+import '../../screens/feed_ui/post_screen.dart';
 import '../../screens/login_screen.dart';
-import '../../screens/members_screen.dart';
 import 'app_router.dart';
 
 export 'package:auto_route/auto_route.dart';
 
-// context.router.replace(route) //   pushReplacement
-// context.router.push(route)   //   push
+//> context.router.replace(route) //   pushReplacement
+//> context.router.push(route)   //   push
+
+/// Full routes available in [gen.AppRouter]
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Screen,Route', // <-----
   routes: [
-    // CustomRoute(page: HomePage, path: 'HomePage/:id'),
+    //~ Main Screens:
     CustomRoute(page: SplashScreen, initial: true),
-    CustomRoute(page: HomeChatsScreen),
     CustomRoute(page: LoginScreen),
+    //~ Chat Screens:
+    CustomRoute(page: ChatsListScreen),
     CustomRoute(page: MembersScreen),
-    CustomRoute(
-      page: ChatScreen,
-    ),
+    CustomRoute(page: ChatScreen),
+    //~ Feed Screens:
+    CustomRoute(page: MainFeedScreen),
+    CustomRoute(page: PostScreen),
+    CustomRoute(page: CreatePostScreen),
   ],
 )
 class $AppRouter {}

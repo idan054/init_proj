@@ -5,19 +5,19 @@ import 'package:example/common/themes/app_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../common/models/chat/chat_model.dart';
-import '../common/service/Auth/firebase_database.dart';
-import '../common/service/Chat/chat_services.dart';
-import '../widgets/app_bar.dart';
+import '../../common/models/chat/chat_model.dart';
+import '../../common/service/Auth/firebase_database.dart';
+import '../../common/service/Chat/chat_services.dart';
+import '../../widgets/app_bar.dart';
 
-class HomeChatsScreen extends StatefulWidget {
-  const HomeChatsScreen({Key? key}) : super(key: key);
+class ChatsListScreen extends StatefulWidget {
+  const ChatsListScreen({Key? key}) : super(key: key);
 
   @override
-  State<HomeChatsScreen> createState() => _HomeChatsScreenState();
+  State<ChatsListScreen> createState() => _ChatsListScreenState();
 }
 
-class _HomeChatsScreenState extends State<HomeChatsScreen> {
+class _ChatsListScreenState extends State<ChatsListScreen> {
   @override
   Widget build(BuildContext context) {
     print('START: HomeChatsScreen');

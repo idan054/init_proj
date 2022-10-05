@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../screens/chat_screen.dart' as screen;
+import '../../../screens/chat_ui/chat_screen.dart' as screen;
 import '../../models/user/user_model.dart';
 import '../Auth/firebase_database.dart';
 import '../Auth/firebase_database.dart' as click;

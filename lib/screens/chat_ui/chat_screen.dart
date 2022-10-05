@@ -6,10 +6,10 @@ import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../common/models/message/message_model.dart';
-import '../common/service/Auth/firebase_database.dart';
-import '../common/service/Chat/chat_services.dart';
-import '../widgets/app_bar.dart';
+import '../../common/models/message/message_model.dart';
+import '../../common/service/Auth/firebase_database.dart';
+import '../../common/service/Chat/chat_services.dart';
+import '../../widgets/app_bar.dart';
 
 class ChatScreen extends StatefulWidget {
   final UserModel otherUser;

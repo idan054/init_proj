@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
     Future.delayed(
       const Duration(milliseconds: 500),
       () => context.router.replaceAll(
-          [userLogged ? const HomeChatsRoute() : const LoginRoute()]),
+          [userLogged ? const ChatsListRoute() : const LoginRoute()]),
     );
   }
 }
