@@ -17,23 +17,30 @@ BoxDecoration borderDeco(
 Widget wMainTextField(
   BuildContext context,
   TextEditingController controller, {
-  TextInputType? keyboardType,
+  TextInputType keyboardType = TextInputType.multiline,
+  Function(String)? onChanged,
   String? topLabel,
+  TextStyle? topLabelStyle,
+  int? maxLength,
   String? hintText,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       if (topLabel != null)
-        Text(topLabel, style: AppStyles.text16PxBold.white).pOnly(bottom: 5),
+        Text(topLabel, style: topLabelStyle ?? AppStyles.text16PxBold.white)
+            .pOnly(bottom: 5),
       TextField(
+        maxLength: maxLength,
         controller: controller,
+        keyboardType: keyboardType,
+        onChanged: onChanged,
         style: AppStyles.text20PxBold.white,
-        keyboardType: TextInputType.multiline,
         minLines: 1,
         textAlign: TextAlign.center,
         cursorColor: AppColors.primary,
         decoration: InputDecoration(
+          counter: const Offstage(),
           contentPadding:
               const EdgeInsets.symmetric(vertical: 12.5, horizontal: 5),
           filled: true,

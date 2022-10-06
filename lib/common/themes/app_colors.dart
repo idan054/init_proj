@@ -12,6 +12,7 @@ class AppColors {
   static const Color greyUnavailable = Color(0xff5C5C5C);
   static const Color greyLight = Color(0xffCACACA);
   static const Color white = Colors.white;
+  static const Color errRed = Color(0xffc22f2f);
   static const Color green = Color(0xff41BE7B);
   static const Color transparent = Colors.transparent;
 }
@@ -27,6 +28,7 @@ extension TextStyleX on TextStyle {
   TextStyle get greyUnavailable => copyWith(color: AppColors.greyUnavailable);
   TextStyle get greyLight => copyWith(color: AppColors.greyLight);
   TextStyle get white => copyWith(color: AppColors.white);
+  TextStyle get errRed => copyWith(color: AppColors.errRed);
   TextStyle get green => copyWith(color: AppColors.green);
   TextStyle get rilTopiaFont => copyWith(fontFamily: 'RilTopia');
 

@@ -1,10 +1,11 @@
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/routes/app_router.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/routes/app_router.gr.dart';
 import '../../common/themes/app_colors.dart';
-import '../../common/themes/app_styles.dart';
 import '../../widgets/app_bar.dart';
+import '../../widgets/components/genderAgeView_sts.dart';
 import '../../widgets/my_widgets.dart';
 
 class CreateUserScreen extends StatefulWidget {
@@ -14,10 +15,14 @@ class CreateUserScreen extends StatefulWidget {
   State<CreateUserScreen> createState() => _CreateUserScreenState();
 }
 
+enum GenderTypes { boy, girl, lgbt }
+
 class _CreateUserScreenState extends State<CreateUserScreen> {
+  var editPageController = PageController(initialPage: 0);
   var nameController = TextEditingController();
   var ageController = TextEditingController();
-  var genderController = TextEditingController();
+  int? userAge;
+  GenderTypes? selectedGender;
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +32,18 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         backgroundColor: AppColors.darkBlack,
-        appBar: darkAppBar(context,
-            title: 'Create Account', leadingReplaceRoute: const LoginRoute()),
+        appBar: darkAppBar(
+          context,
+          title: 'Create Account',
+          backAction: () => editPageController.page == 0
+              ? context.router.replace(const LoginRoute())
+              : editPageController.jumpToPage(0),
+        ),
         body: PageView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: editPageController,
           children: [
+            // 1St view
             Column(
               children: [
                 const Spacer(flex: 3),
@@ -43,8 +56,11 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                         hintText: '${context.uniProvider.currUser.name}')
                     .py(30)
                     .appearAll,
-                wMainButton(context, title: 'Continue', onPressed: () {})
-                    .appearAll,
+                wMainButton(context, title: 'Continue', onPressed: () {
+                  print(
+                      'editPageController.positions ${editPageController.positions}');
+                  editPageController.jumpToPage(1);
+                }).appearAll,
                 const Spacer(
                   flex: 7,
                 ),
@@ -52,54 +68,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             ).center,
 
             ///
-            Column(
-              children: [
-                const Spacer(flex: 45),
-                Text('What is your gender?',
-                        style: AppStyles.text16PxBold.white)
-                    .pOnly(bottom: 5)
-                    .px(55)
-                    .centerLeft,
-                ListView(
-                  // mainAxisAlignment: MainAxisAlignment.start,
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  children: [
-                    const SizedBox(width: 55),
-                    wMainButton(context,
-                            title: 'Boy',
-                            onPressed: () {},
-                            width: 100,
-                            color: AppColors.greyDark)
-                        .appearAll,
-                    wMainButton(context,
-                            title: 'Girl',
-                            onPressed: () {},
-                            width: 100,
-                            color: AppColors.greyDark)
-                        .px(10)
-                        .appearAll,
-                    wMainButton(context,
-                            title: 'LGBTQ+',
-                            onPressed: () {},
-                            width: 100,
-                            color: AppColors.greyDark)
-                        .appearAll,
-                    const SizedBox(width: 25),
-                  ],
-                ).sizedBox(context.width, 55),
-                wMainTextField(context, ageController,
-                        keyboardType: TextInputType.number,
-                        topLabel: 'When is your birthday?',
-                        hintText: '01/01/2001')
-                    .pOnly(bottom: 15, top: 20)
-                    .appearAll,
-                wMainButton(context, title: 'Done', onPressed: () {}).appearAll,
-                const Spacer(
-                  flex: 70,
-                ),
-              ],
-            ).center
+            const GenderAgeView()
           ],
         ),
       ),

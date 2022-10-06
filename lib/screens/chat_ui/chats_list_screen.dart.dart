@@ -28,7 +28,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     return Scaffold(
         appBar: darkAppBar(context,
             title: 'Messages', // STR
-            leadingReplaceRoute: const LoginRoute(),
+            backAction: () => context.router.replace(const LoginRoute()),
             actions: [
               IconButton(
                   icon: const Icon(
