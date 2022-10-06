@@ -2,45 +2,49 @@ import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import '../../models/user/user_model.dart';
 import '../Auth/firebase_database.dart' as click;
 import 'firebase_database.dart';
 
 class AuthService {
   /// streamUsers() Available At [click.Database] // <<---
 
-  final _auth = FirebaseAuth.instance;
+  static final auth = FirebaseAuth.instance;
 
   /// Google LOGIN
   Future signInWithGoogle(BuildContext context) async {
     print('START: signInWithGoogle()');
-    if (_auth.currentUser != null && kDebugMode) {
-      return context.router.replace(const CreateUserRoute());
-    }
-    await _auth.signOut();
+    // if (_auth.currentUser != null && kDebugMode) {
+    //   return context.router.replace(const CreateUserRoute());
+    // }
+    await auth.signOut();
     await GoogleSignIn().signOut();
     final googleUser = await GoogleSignIn().signIn();
 
     // Sign in & Create user on firebase console
     final googleAuth = await googleUser!.authentication;
-    await _auth.signInWithCredential(GoogleAuthProvider.credential(
+    await auth.signInWithCredential(GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
 
-    var fireUser = _auth.currentUser;
-    var user = UserModel(
+    var fireUser = auth.currentUser;
+    var user = context.uniProvider.currUser.copyWith(
       uid: fireUser?.uid,
       email: fireUser?.email,
       name: fireUser?.displayName,
       photoUrl: fireUser?.photoURL,
     );
     context.uniProvider.updateUser(user);
-    Database().updateFirestore(
-        collection: 'users', docName: '${user.email}', toJson: user.toJson());
-    context.router.replace(const CreateUserRoute());
+
+    var userFsData = await Database.docData('users/${user.email}');
+    userFsData == null ||
+            userFsData['age'] == null ||
+            userFsData['birthdayStr'] == null
+        ? context.router.replace(const CreateUserRoute())
+        : context.router.replace(const ChatsListRoute());
+
+    print('userFsData $userFsData');
   }
 }
 

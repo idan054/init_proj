@@ -36,6 +36,8 @@ dependencies:
   uuid: ^3.0.6 # Generate token
   entry: ^0.0.7 # Widgets Appear
   age_calculator: ^1.0.0
+  file: ^6.1.4
+  image_picker: ^0.8.6
 
 dev_dependencies:
   flutter_test:

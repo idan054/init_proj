@@ -1,5 +1,4 @@
 import 'package:example/common/models/user/user_model.dart';
-import 'package:example/screens/chat_ui/chats_list_screen.dart.dart' as click;
 import 'package:flutter/foundation.dart';
 
 import 'chat/chat_model.dart';
@@ -7,8 +6,6 @@ import 'chat/chat_model.dart';
 class UniProvider with ChangeNotifier {
   UserModel currUser = const UserModel();
   List<ChatModel>? chatList;
-
-  /// on [click.ChatsListScreen]
 
   void updateUser(UserModel data) {
     currUser = data;

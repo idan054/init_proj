@@ -12,7 +12,13 @@ import '../Chat/chat_services.dart' as chat;
 /// newChat() & sendMessage() Available At [chat.ChatService] // <<---
 
 class Database {
+  //> .get() = READ.
+  //> .set() / .update() = WRITE.
+
   static final db = FirebaseFirestore.instance;
+
+  static Future<Map<String, dynamic>?> docData(String documentPath) =>
+      db.doc(documentPath).get().then((doc) => doc.data());
 
   static Stream<List<ChatModel>>? streamChats(String currUserId) {
     print('START: streamChats()');
@@ -23,7 +29,7 @@ class Database {
         .map((QuerySnapshot list) {
       return list.docs.map((DocumentSnapshot snap) {
         print('CHAT_DOC_ID: ${snap.id}');
-        print(snap.data());
+        // print(snap.data());
         return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
       }).toList();
     }).handleError((dynamic e) {

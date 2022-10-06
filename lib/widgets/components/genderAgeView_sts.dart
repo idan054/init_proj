@@ -4,6 +4,7 @@ import 'package:example/common/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../common/models/user/user_model.dart';
 import '../../common/routes/app_router.gr.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
@@ -15,8 +16,6 @@ class GenderAgeView extends StatefulWidget {
   @override
   State<GenderAgeView> createState() => _GenderAgeViewState();
 }
-
-enum GenderTypes { boy, girl, lgbt }
 
 class _GenderAgeViewState extends State<GenderAgeView> {
   var ageController = TextEditingController();
@@ -130,17 +129,21 @@ class _GenderAgeViewState extends State<GenderAgeView> {
     ).center;
   }
 
-  Widget buildSubmitButton() =>
-      wMainButton(context, title: 'Done', onPressed: () {
-        selectedGender == null ? isGenderErr = true : isGenderErr = false;
-        userAge == null ? isAgeErr = true : isAgeErr = false;
-        if (userAge != null && userAge! < 0 || userAge! > 100) isAgeErr = true;
-        setState(() {});
+  bool get isValidate {
+    selectedGender == null ? isGenderErr = true : isGenderErr = false;
+    userAge == null || ageController.text.length != 10
+        ? isAgeErr = true
+        : isAgeErr = false;
+    if (userAge != null && userAge! < 0 || userAge! > 100) isAgeErr = true;
+    if (isAgeErr || isGenderErr) return false;
+    return true;
+  }
 
-        if (selectedGender != null &&
-            ageController.text.length == 10 &&
-            userAge != null) {
-          context.router.replace(const ChatsListRoute());
-        }
-      }).appearAll;
+  Widget buildSubmitButton() {
+    return wMainButton(context, title: 'Done', onPressed: () {
+      isValidate
+          ? context.router.replace(const ChatsListRoute())
+          : setState(() {});
+    }).appearAll;
+  }
 }

@@ -11,6 +11,13 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF
+  String get bahnschriftRiltopia => 'assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF';
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
@@ -184,6 +191,7 @@ class $AssetsSvgIconsGen {
 class Assets {
   Assets._();
 
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
 }

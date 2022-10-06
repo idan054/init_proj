@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
+import 'package:example/common/service/Auth/auth_services.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../common/routes/app_router.gr.dart';
 import '../../common/themes/app_colors.dart';
 import '../../widgets/app_bar.dart';
+import '../../widgets/clean_snackbar.dart';
 import '../../widgets/components/genderAgeView_sts.dart';
 import '../../widgets/my_widgets.dart';
 
@@ -27,6 +33,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   @override
   Widget build(BuildContext context) {
     print('START: CreateUserScreen()');
+    var currUser = context.uniProvider.currUser;
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -47,16 +54,46 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
             Column(
               children: [
                 const Spacer(flex: 3),
-                CircleAvatar(
-                  backgroundColor: AppColors.primary,
-                  radius: 60,
-                  child: Icons.collections.icon(size: 35),
-                ).appearAll,
+                InkWell(
+                  borderRadius: BorderRadius.circular(40),
+                  onTap: () async {
+                    print('START: Icons.collections()');
+                    // region A commented
+                    var imagePath = await ImagePicker()
+                        .pickImage(source: ImageSource.gallery)
+                        .then((image) => image?.path);
+                    var imageFile = File(imagePath!);
+                    cleanSnack(context,
+                        text: 'Update profile photo...', sec: 2, showSnackAction: false);
+
+                    var refFile = FirebaseStorage.instance.ref().child(
+                        '${AuthService.auth.currentUser?.displayName}_Profile_${DateTime.now()}');
+                    await refFile
+                        .putFile(imageFile)
+                        .then((_) => cleanSnack(context,
+                            text: 'Updated successfully!', sec: 3))
+                        .catchError((e) => print('putFile $e'));
+                    var imageUrl = await refFile.getDownloadURL();
+                    context.uniProvider
+                        .updateUser(currUser.copyWith(photoUrl: imageUrl));
+
+                    setState(() {});
+                    // endregion A commented
+                  },
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage('${currUser.photoUrl}'),
+                    backgroundColor: AppColors.primary,
+                    radius: 60,
+                    child: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: AppColors.darkBlack.withOpacity(0.33),
+                        child: Icons.collections.icon(size: 30)),
+                  ).appearAll,
+                ),
                 wMainTextField(context, nameController,
                         hintText: '${context.uniProvider.currUser.name}')
                     .py(30)
                     .appearAll,
-
                 wMainButton(context, title: 'Continue', onPressed: () {
                   print(
                       'editPageController.positions ${editPageController.positions}');

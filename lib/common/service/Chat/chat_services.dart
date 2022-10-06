@@ -6,7 +6,6 @@ import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../screens/chat_ui/chat_screen.dart' as screen;
 import '../../models/user/user_model.dart';
@@ -48,8 +47,11 @@ class ChatService {
     var toId = otherUser.uid;
     var timeStamp = DateTime.now();
     String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);
-    var messageId =
-        const Uuid().v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
+    // var messageIdA = const Uuid().v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
+    // docName result example: [idanb] מה קורה [#b4918]
+    String messageId = '[${fromId?.substring(0, 5)}] '
+        '${content.length < 15 ? content : content.substring(0, 15)}'
+        ' ${UniqueKey()}';
 
     var messageData = MessageModel(
       textContent: content,
