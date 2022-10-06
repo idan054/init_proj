@@ -56,6 +56,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                         hintText: '${context.uniProvider.currUser.name}')
                     .py(30)
                     .appearAll,
+
                 wMainButton(context, title: 'Continue', onPressed: () {
                   print(
                       'editPageController.positions ${editPageController.positions}');
