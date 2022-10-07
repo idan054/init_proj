@@ -77,7 +77,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-
   void showPickerDialog() {
     print('simplePicker ${simplePicker}');
     showDialog(
