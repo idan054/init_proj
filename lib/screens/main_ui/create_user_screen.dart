@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/models.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/service/Auth/auth_services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,30 +58,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                 const Spacer(flex: 3),
                 InkWell(
                   borderRadius: BorderRadius.circular(40),
-                  onTap: () async {
-                    print('START: Icons.collections()');
-                    // region A commented
-                    var imagePath = await ImagePicker()
-                        .pickImage(source: ImageSource.gallery)
-                        .then((image) => image?.path);
-                    var imageFile = File(imagePath!);
-                    cleanSnack(context,
-                        text: 'Update profile photo...', sec: 2, showSnackAction: false);
-
-                    var refFile = FirebaseStorage.instance.ref().child(
-                        '${AuthService.auth.currentUser?.displayName}_Profile_${DateTime.now()}');
-                    await refFile
-                        .putFile(imageFile)
-                        .then((_) => cleanSnack(context,
-                            text: 'Updated successfully!', sec: 3))
-                        .catchError((e) => print('putFile $e'));
-                    var imageUrl = await refFile.getDownloadURL();
-                    context.uniProvider
-                        .updateUser(currUser.copyWith(photoUrl: imageUrl));
-
-                    setState(() {});
-                    // endregion A commented
-                  },
+                  onTap: () async => await updateProfilePhoto(currUser),
                   child: CircleAvatar(
                     backgroundImage: NetworkImage('${currUser.photoUrl}'),
                     backgroundColor: AppColors.primary,
@@ -91,13 +70,22 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                   ).appearAll,
                 ),
                 wMainTextField(context, nameController,
-                        hintText: '${context.uniProvider.currUser.name}')
-                    .py(30)
+                        hintText: '${currUser.name}',
+                        topLabel: 'What is your name?')
+                    .py(20)
                     .appearAll,
+
+                //~ Continue Button:
                 wMainButton(context, title: 'Continue', onPressed: () {
-                  print(
-                      'editPageController.positions ${editPageController.positions}');
-                  editPageController.jumpToPage(1);
+                  if ((currUser.name != null ||
+                          nameController.text.isNotEmpty) &&
+                      currUser.photoUrl != null) {
+                    FirebaseAuth.instance.currentUser
+                        ?.updateDisplayName(nameController.text);
+                    context.uniProvider.updateUser(
+                        currUser.copyWith(name: nameController.text));
+                    editPageController.jumpToPage(1);
+                  }
                 }).appearAll,
                 const Spacer(
                   flex: 7,
@@ -111,5 +99,27 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
         ),
       ),
     );
+  }
+
+  Future updateProfilePhoto(UserModel currUser) async {
+    print('START: Icons.collections()');
+    var imagePath = await ImagePicker()
+        .pickImage(source: ImageSource.gallery)
+        .then((image) => image?.path);
+    var imageFile = File(imagePath!);
+    cleanSnack(context,
+        text: 'Update profile photo...', sec: 2, showSnackAction: false);
+
+    var refFile = FirebaseStorage.instance.ref().child(
+        '${AuthService.auth.currentUser?.displayName}_Profile_${DateTime.now()}');
+    await refFile
+        .putFile(imageFile)
+        .then((_) => cleanSnack(context, text: 'Updated successfully!', sec: 3))
+        .catchError((e) => print('putFile $e'));
+    var imageUrl = await refFile.getDownloadURL();
+    FirebaseAuth.instance.currentUser?.updatePhotoURL(imageUrl);
+    context.uniProvider.updateUser(currUser.copyWith(photoUrl: imageUrl));
+
+    setState(() {});
   }
 }

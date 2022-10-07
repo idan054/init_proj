@@ -16,7 +16,7 @@ cleanSnack(
     duration: sec.seconds,
     behavior: SnackBarBehavior.floating,
     backgroundColor: color ?? AppColors.greyDark,
-    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     content: Text(
       text,
       textAlign: TextAlign.center,

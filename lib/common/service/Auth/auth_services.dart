@@ -45,6 +45,8 @@ class AuthService {
         : context.router.replace(const ChatsListRoute());
 
     print('userFsData $userFsData');
+    print(
+        'context.uniProvider.currUser.photoUrl ${context.uniProvider.currUser.photoUrl}');
   }
 }
 

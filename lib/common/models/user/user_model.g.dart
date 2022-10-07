@@ -15,8 +15,7 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
       birthday: json['birthday'] == null
           ? null
           : DateTime.parse(json['birthday'] as String),
-      birthdayStr: json['birthdayStr'] as String?,
-      age: (json['age'] as num?)?.toDouble(),
+      age: json['age'] as int?,
     );
 
 Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
@@ -27,7 +26,6 @@ Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
       'photoUrl': instance.photoUrl,
       'gender': _$GenderTypesEnumMap[instance.gender],
       'birthday': instance.birthday?.toIso8601String(),
-      'birthdayStr': instance.birthdayStr,
       'age': instance.age,
     };
 

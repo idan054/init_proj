@@ -26,8 +26,7 @@ mixin _$UserModel {
   String? get photoUrl => throw _privateConstructorUsedError;
   GenderTypes? get gender => throw _privateConstructorUsedError;
   DateTime? get birthday => throw _privateConstructorUsedError;
-  String? get birthdayStr => throw _privateConstructorUsedError;
-  double? get age => throw _privateConstructorUsedError;
+  int? get age => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,8 +45,7 @@ abstract class $UserModelCopyWith<$Res> {
       String? photoUrl,
       GenderTypes? gender,
       DateTime? birthday,
-      String? birthdayStr,
-      double? age});
+      int? age});
 }
 
 /// @nodoc
@@ -66,7 +64,6 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
     Object? photoUrl = freezed,
     Object? gender = freezed,
     Object? birthday = freezed,
-    Object? birthdayStr = freezed,
     Object? age = freezed,
   }) {
     return _then(_value.copyWith(
@@ -94,14 +91,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _value.birthday
           : birthday // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      birthdayStr: birthdayStr == freezed
-          ? _value.birthdayStr
-          : birthdayStr // ignore: cast_nullable_to_non_nullable
-              as String?,
       age: age == freezed
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as int?,
     ));
   }
 }
@@ -119,8 +112,7 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       String? photoUrl,
       GenderTypes? gender,
       DateTime? birthday,
-      String? birthdayStr,
-      double? age});
+      int? age});
 }
 
 /// @nodoc
@@ -141,7 +133,6 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
     Object? photoUrl = freezed,
     Object? gender = freezed,
     Object? birthday = freezed,
-    Object? birthdayStr = freezed,
     Object? age = freezed,
   }) {
     return _then(_$_UserModel(
@@ -169,14 +160,10 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
           ? _value.birthday
           : birthday // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      birthdayStr: birthdayStr == freezed
-          ? _value.birthdayStr
-          : birthdayStr // ignore: cast_nullable_to_non_nullable
-              as String?,
       age: age == freezed
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as int?,
     ));
   }
 }
@@ -191,7 +178,6 @@ class _$_UserModel implements _UserModel {
       this.photoUrl,
       this.gender,
       this.birthday,
-      this.birthdayStr,
       this.age});
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
@@ -210,13 +196,11 @@ class _$_UserModel implements _UserModel {
   @override
   final DateTime? birthday;
   @override
-  final String? birthdayStr;
-  @override
-  final double? age;
+  final int? age;
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email, uid: $uid, photoUrl: $photoUrl, gender: $gender, birthday: $birthday, birthdayStr: $birthdayStr, age: $age)';
+    return 'UserModel(name: $name, email: $email, uid: $uid, photoUrl: $photoUrl, gender: $gender, birthday: $birthday, age: $age)';
   }
 
   @override
@@ -230,8 +214,6 @@ class _$_UserModel implements _UserModel {
             const DeepCollectionEquality().equals(other.photoUrl, photoUrl) &&
             const DeepCollectionEquality().equals(other.gender, gender) &&
             const DeepCollectionEquality().equals(other.birthday, birthday) &&
-            const DeepCollectionEquality()
-                .equals(other.birthdayStr, birthdayStr) &&
             const DeepCollectionEquality().equals(other.age, age));
   }
 
@@ -245,7 +227,6 @@ class _$_UserModel implements _UserModel {
       const DeepCollectionEquality().hash(photoUrl),
       const DeepCollectionEquality().hash(gender),
       const DeepCollectionEquality().hash(birthday),
-      const DeepCollectionEquality().hash(birthdayStr),
       const DeepCollectionEquality().hash(age));
 
   @JsonKey(ignore: true)
@@ -269,8 +250,7 @@ abstract class _UserModel implements UserModel {
       final String? photoUrl,
       final GenderTypes? gender,
       final DateTime? birthday,
-      final String? birthdayStr,
-      final double? age}) = _$_UserModel;
+      final int? age}) = _$_UserModel;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$_UserModel.fromJson;
@@ -288,9 +268,7 @@ abstract class _UserModel implements UserModel {
   @override
   DateTime? get birthday;
   @override
-  String? get birthdayStr;
-  @override
-  double? get age;
+  int? get age;
   @override
   @JsonKey(ignore: true)
   _$$_UserModelCopyWith<_$_UserModel> get copyWith =>

@@ -1,6 +1,7 @@
 import 'package:age_calculator/age_calculator.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
+import 'package:example/common/service/Auth/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -20,6 +21,8 @@ class GenderAgeView extends StatefulWidget {
 class _GenderAgeViewState extends State<GenderAgeView> {
   var ageController = TextEditingController();
   int? userAge;
+  DateTime? bDay;
+  String? bDayStr;
   GenderTypes? selectedGender;
   bool isGenderErr = false;
   bool isAgeErr = false;
@@ -71,9 +74,9 @@ class _GenderAgeViewState extends State<GenderAgeView> {
           DateDuration? nextBirthdayIn;
           if (ageController.text.length == 10) {
             DateFormat dateFormat = DateFormat("dd/MM/yyyy");
-            DateTime bDay = dateFormat.parse(ageController.text);
-            userAge = AgeCalculator.age(bDay).years;
-            nextBirthdayIn = AgeCalculator.timeToNextBirthday(bDay);
+            bDay = dateFormat.parse(ageController.text);
+            userAge = AgeCalculator.age(bDay!).years;
+            nextBirthdayIn = AgeCalculator.timeToNextBirthday(bDay!);
             print('nextBirthdayIn $nextBirthdayIn');
           }
 
@@ -129,21 +132,31 @@ class _GenderAgeViewState extends State<GenderAgeView> {
     ).center;
   }
 
-  bool get isValidate {
+  bool get genderAgeValid {
     selectedGender == null ? isGenderErr = true : isGenderErr = false;
     userAge == null || ageController.text.length != 10
         ? isAgeErr = true
         : isAgeErr = false;
-    if (userAge != null && userAge! < 0 || userAge! > 100) isAgeErr = true;
+    if ((userAge != null && userAge! < 0) ||
+        (userAge != null && userAge! > 100)) isAgeErr = true;
     if (isAgeErr || isGenderErr) return false;
     return true;
   }
 
   Widget buildSubmitButton() {
     return wMainButton(context, title: 'Done', onPressed: () {
-      isValidate
-          ? context.router.replace(const ChatsListRoute())
-          : setState(() {});
+      if (genderAgeValid) {
+        var currUser = context.uniProvider.currUser;
+        context.uniProvider.updateUser(currUser.copyWith(
+            birthday: bDay, age: userAge, gender: selectedGender));
+        Database().updateFirestore(
+            collection: 'users',
+            docName: '${currUser.email}',
+            toJson: context.uniProvider.currUser.toJson());
+        context.router.replace(const ChatsListRoute());
+      } else {
+        setState(() {});
+      }
     }).appearAll;
   }
 }
