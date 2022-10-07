@@ -44,7 +44,7 @@ Widget wMainTextField(
           contentPadding:
               const EdgeInsets.symmetric(vertical: 12.5, horizontal: 5),
           filled: true,
-          fillColor: AppColors.greyDark,
+          fillColor: AppColors.darkGrey,
           hintText: hintText ?? '',
           hintStyle: AppStyles.text20PxBold.greyLight,
           focusedBorder: OutlineInputBorder(
@@ -66,12 +66,17 @@ Widget wMainButton(BuildContext context,
     Widget? icon,
     double? width,
     Color color = AppColors.primary,
+    Color borderColor = AppColors.transparent,
     Color textColor = AppColors.white,
     required VoidCallback onPressed}) {
   return TextButton.icon(
           style: TextButton.styleFrom(
               backgroundColor: color,
               shape: RoundedRectangleBorder(
+                side: BorderSide(
+                  width: 2,
+                  color: borderColor,
+                ),
                 borderRadius: BorderRadius.circular(radius), // <-- Radius
               )),
           onPressed: onPressed,
@@ -84,7 +89,7 @@ Widget wMainButton(BuildContext context,
       .px(width == null ? (isWide ? 55 : 85) : 0);
 }
 
-Widget riltopiaLogo({double fontSize = 52}) {
+Widget riltopiaLogo({double fontSize = 52, bool rilPostTxt = false}) {
   TextStyle rilTopiaStyle(Color color) => TextStyle(
         color: color,
         fontSize: fontSize,
@@ -94,7 +99,7 @@ Widget riltopiaLogo({double fontSize = 52}) {
           Shadow(
             offset: const Offset(2.0, 2.0),
             blurRadius: 10.0,
-            color: AppColors.greyDark.withOpacity(0.99),
+            color: AppColors.darkGrey.withOpacity(0.99),
           ),
         ],
       );
@@ -105,7 +110,7 @@ Widget riltopiaLogo({double fontSize = 52}) {
       style: rilTopiaStyle(AppColors.primary),
     ),
     TextSpan(
-      text: 'Topia',
+      text: rilPostTxt ? 'Post' : 'Topia',
       style: rilTopiaStyle(AppColors.white),
     ),
   ]));

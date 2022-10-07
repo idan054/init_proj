@@ -15,7 +15,7 @@ cleanSnack(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
     duration: sec.seconds,
     behavior: SnackBarBehavior.floating,
-    backgroundColor: color ?? AppColors.greyDark,
+    backgroundColor: color ?? AppColors.darkGrey,
     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
     content: Text(
       text,

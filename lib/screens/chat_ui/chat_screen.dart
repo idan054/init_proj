@@ -85,7 +85,7 @@ class ChatScreen extends StatelessWidget {
         decoration: InputDecoration(
           hintStyle: AppStyles.text18PxRegular.white,
           filled: true,
-          fillColor: AppColors.greyDark,
+          fillColor: AppColors.darkGrey,
           hintText: '',
           focusedBorder: InputBorder.none,
           suffixIcon: Padding(
@@ -93,7 +93,7 @@ class ChatScreen extends StatelessWidget {
             child: CircleAvatar(
               backgroundColor: sendController.text.isNotEmpty
                   ? AppColors.white
-                  : AppColors.greyDark,
+                  : AppColors.darkGrey,
               child: IconButton(
                 icon: Icon(
                   Icons.send_rounded,
@@ -132,7 +132,7 @@ class ChatScreen extends StatelessWidget {
         ConstrainedBox(
             constraints: BoxConstraints(maxWidth: context.width * 0.8),
             child: Bubble(
-                color: currUser ? AppColors.primary : AppColors.greyDark,
+                color: currUser ? AppColors.primary : AppColors.darkGrey,
                 elevation: 0,
                 padding: const BubbleEdges.all(6.0),
                 nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,

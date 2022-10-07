@@ -43,7 +43,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
                 : AppColors.white,
             color: selectedGender == currGender
                 ? AppColors.greyLight
-                : AppColors.greyDark);
+                : AppColors.darkGrey);
 
     return Column(
       children: [

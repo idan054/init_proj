@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../common/config.dart';
+import '../../common/routes/app_router.gr.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -34,7 +36,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     bool chatSelected = sItem == TabItems.chat;
 
     return Scaffold(
-      backgroundColor: AppColors.greyDark,
+      backgroundColor: AppColors.darkGrey,
       body: PageView(
         onPageChanged: _handleIndexChanged,
         controller: _pageController,
@@ -42,7 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       extendBody: true, //<------like this
       bottomNavigationBar: DotNavigationBar(
-        backgroundColor: AppColors.greyDark,
+        backgroundColor: AppColors.darkGrey,
         unselectedItemColor: AppColors.white,
         selectedItemColor: AppColors.primary,
         dotIndicatorColor: boldPrimaryDesignConfig
@@ -78,8 +80,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
           if (sItem == TabItems.home)
             DotNavigationBarItem(
-              icon: FontAwesomeIcons.circlePlus
-                  .iconAwesome(color: AppColors.primary, size: 40),
+              icon: InkWell(
+                onTap: () => context.router.push(const CreatePostRoute()),
+                child: FontAwesomeIcons.circlePlus
+                    .iconAwesome(color: AppColors.primary, size: 40),
+              ),
               selectedColor: AppColors.primary,
             ),
         ],

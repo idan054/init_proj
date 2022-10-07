@@ -24,7 +24,8 @@ extension IconDataX on IconData {
 
 extension WidgetX on Widget {
   // My extension:
-  Container get testContainer => Container(color: Colors.green, child: this);
+  Container get testContainer =>
+      Container(color: AppColors.testGreen, child: this);
 
   Directionality get rtl =>
       Directionality(textDirection: TextDirection.rtl, child: this);
@@ -90,6 +91,11 @@ extension WidgetX on Widget {
 
   Align get top => Align(
         alignment: Alignment.topCenter,
+        child: this,
+      );
+
+  Align get bottom => Align(
+        alignment: Alignment.bottomCenter,
         child: this,
       );
 

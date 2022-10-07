@@ -1,6 +1,7 @@
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 extension StringNullX on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
@@ -42,6 +43,17 @@ extension StringX on String {
   DateTime get toDate => DateTime.parse(this).toLocal();
 
   // My:
+  Text toText(
+          {Color color = AppColors.white,
+          double? fontSize,
+          bool bold = false}) =>
+      Text(this,
+          style: bold
+              ? AppStyles.text18PxBold
+                  .copyWith(color: color, fontSize: fontSize ?? 18.sp)
+              : AppStyles.text18PxRegular
+                  .copyWith(color: color, fontSize: fontSize ?? 18.sp));
+
   Text get testText => Text(
         this,
         style: AppStyles.text18PxSemiBold.white,
