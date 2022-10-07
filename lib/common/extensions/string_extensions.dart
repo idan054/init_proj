@@ -42,9 +42,9 @@ extension StringX on String {
   DateTime get toDate => DateTime.parse(this).toLocal();
 
   // My:
-  Text get text => Text(
+  Text get testText => Text(
         this,
-        style: AppStyles.text10PxSemiBold.white,
+        style: AppStyles.text18PxSemiBold.white,
       );
 
   bool get isHebrew {
