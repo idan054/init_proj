@@ -90,6 +90,13 @@ Widget riltopiaLogo({double fontSize = 52}) {
         fontSize: fontSize,
         fontFamily: 'RilTopia',
         fontWeight: FontWeight.bold,
+        shadows: <Shadow>[
+          Shadow(
+            offset: const Offset(2.0, 2.0),
+            blurRadius: 10.0,
+            color: AppColors.greyDark.withOpacity(0.99),
+          ),
+        ],
       );
 
   return Text.rich(TextSpan(children: <InlineSpan>[

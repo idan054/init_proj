@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../common/mixins/assets.gen.dart';
+import '../../common/mixins/fonts.gen.dart';
 import '../../common/service/Auth/auth_services.dart';
 import '../../widgets/my_widgets.dart';
 
@@ -29,32 +30,59 @@ class _LoginScreenState extends State<LoginScreen> {
       Timer(250.milliseconds, () => AuthService().signInWithGoogle(context));
     }
 
-    return Scaffold(
-      backgroundColor: AppColors.darkBlack,
-      body: Column(
-        children: [
-          const Spacer(flex: 4),
-          riltopiaLogo(),
-          Text(
-            'Social Chat App', // STR
-            style: AppStyles.text20PxRegular.white,
-          ).offset(0, -5),
-          35.verticalSpace,
-          // googleLoginButton(),
-          wMainButton(context,
-              radius: 8,
-              isWide: false,
-              title: 'Google login',
-              icon: Assets.svg.gLogoIcon.svg(height: 25),
-              color: AppColors.white,
-              textColor: AppColors.darkBlack,
-              onPressed: () async =>
-                  AuthService().signInWithGoogle(context)).appearAll,
-          const Spacer(
-            flex: 7,
-          ),
-        ],
-      ).center,
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          stops: [0.1, 0.5],
+          colors: [
+            AppColors.primary,
+            AppColors.darkBlack,
+          ],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: AppColors.transparent,
+        body: Column(
+          children: [
+            150.verticalSpace,
+            riltopiaLogo(),
+            Text(
+              'A Social Chat App', // STR
+              textAlign: TextAlign.center,
+              style: AppStyles.text20PxRegular.copyWith(
+                  color: AppColors.white, fontFamily: FontFamily.rilTopia),
+            ),
+            250.verticalSpace,
+            // googleLoginButton(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Start Share & Chat', // STR
+                  textAlign: TextAlign.center,
+                  style: AppStyles.text20PxRegular.copyWith(
+                      color: AppColors.white, fontFamily: FontFamily.rilTopia),
+                ).px(55),
+                10.verticalSpace,
+                wMainButton(context,
+                    radius: 8,
+                    isWide: true,
+                    title: 'join with Google',
+                    icon: Assets.svg.gLogoIcon.svg(height: 25),
+                    color: AppColors.white,
+                    textColor: AppColors.darkBlack,
+                    onPressed: () async =>
+                        AuthService().signInWithGoogle(context)).appearAll,
+              ],
+            ),
+            const Spacer(
+              flex: 7,
+            ),
+          ],
+        ).center,
+      ),
     );
   }
 

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
+import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
 
 class MainFeedScreen extends StatefulWidget {
@@ -23,51 +24,68 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.darkBlack,
-      body: SingleChildScrollView(
-        child: Row(
-          children: <Widget>[
-            SizedBox(
-              height: listHeight, //ratio
-              width: context.width * 0.5,
-              child: ListView.builder(
-                  itemCount: aList.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int i) {
-                    if (i.isEven) {
-                      return const Offstage();
-                    } else {
-                      var color = Colors
-                          .primaries[Random().nextInt(Colors.primaries.length)];
-                      return Container(
-                        height: postSize * postRatio,
-                        color: color,
-                        child: '${aList[i]}'.testText.center,
-                      );
-                    }
-                  }),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Row(
+              children: <Widget>[
+                SizedBox(
+                  height: listHeight, //ratio
+                  width: context.width * 0.5,
+                  child: ListView.builder(
+                      itemCount: aList.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int i) {
+                        if (i.isEven) {
+                          return const Offstage();
+                        } else {
+                          var color = Colors.primaries[
+                              Random().nextInt(Colors.primaries.length)];
+                          return Container(
+                            height: postSize * postRatio,
+                            color: color,
+                            child: '${aList[i]}'.testText.center,
+                          );
+                        }
+                      }),
+                ),
+                SizedBox(
+                  height: listHeight, //ratio
+                  width: context.width * 0.5,
+                  child: ListView.builder(
+                      itemCount: aList.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemBuilder: (BuildContext context, int i) {
+                        if (i.isOdd) {
+                          return const Offstage();
+                        } else {
+                          var color = Colors.primaries[
+                              Random().nextInt(Colors.primaries.length)];
+                          return Container(
+                            height: postSize * postRatio,
+                            color: color,
+                            child: 'לא משנה איפה גדלת,'
+                                    ' כי בל שכונה יש אחד שמכניס תצבע לתמונה.'
+                                    ' כבר שנים אני מכיר אותו לא השתנה - זה נבסו.'
+                                .testText
+                                .center,
+                          );
+                        }
+                      }),
+                ),
+              ],
             ),
-            SizedBox(
-              height: listHeight, //ratio
-              width: context.width * 0.5,
-              child: ListView.builder(
-                  itemCount: aList.length,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemBuilder: (BuildContext context, int i) {
-                    if (i.isOdd) {
-                      return const Offstage();
-                    } else {
-                      var color = Colors
-                          .primaries[Random().nextInt(Colors.primaries.length)];
-                      return Container(
-                        height: postSize * postRatio,
-                        color: color,
-                        child: '${aList[i]}'.testText.center,
-                      );
-                    }
-                  }),
-            ),
-          ],
-        ),
+          ),
+          Container(
+              decoration: const BoxDecoration(
+                color: AppColors.darkBlack,
+                borderRadius:
+                    BorderRadius.only(bottomRight: Radius.circular(5)),
+              ),
+              padding: const EdgeInsets.only(
+                  left: 15, right: 17.5, top: 35, bottom: 12.5),
+              child: riltopiaLogo(fontSize: 31)),
+        ],
       ),
     );
   }

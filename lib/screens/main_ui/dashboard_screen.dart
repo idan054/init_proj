@@ -23,7 +23,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _handleIndexChanged(int i) {
     sItem = TabItems.values[i];
-    _pageController.jumpToPage(i);
+    _pageController.animateToPage(i,
+        duration: 200.milliseconds, curve: Curves.easeIn);
     setState(() {});
   }
 

@@ -88,6 +88,11 @@ extension WidgetX on Widget {
         child: this,
       );
 
+  Align get top => Align(
+        alignment: Alignment.topCenter,
+        child: this,
+      );
+
   Align get centerLeft => Align(
         alignment: Alignment.centerLeft,
         child: this,
@@ -112,6 +117,11 @@ extension WidgetX on Widget {
   SliverToBoxAdapter get toSliverBox => SliverToBoxAdapter(child: this);
 
   Expanded expanded({int flex = 1}) => Expanded(
+        flex: flex,
+        child: this,
+      );
+
+  Flexible flexible({int flex = 1}) => Flexible(
         flex: flex,
         child: this,
       );
