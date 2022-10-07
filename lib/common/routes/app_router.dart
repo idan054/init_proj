@@ -7,6 +7,7 @@ import '../../screens/chat_ui/chats_list_screen.dart.dart';
 import '../../screens/chat_ui/members_screen.dart';
 import '../../screens/feed_ui/post_screen.dart';
 import '../../screens/main_ui/create_user_screen.dart';
+import '../../screens/main_ui/dashboard_screen.dart';
 import '../../screens/main_ui/login_screen.dart';
 import '../../screens/main_ui/splash_screen.dart';
 import 'app_router.dart';
@@ -22,6 +23,7 @@ export 'package:auto_route/auto_route.dart';
   routes: [
     //~ Main Screens:
     CustomRoute(page: SplashScreen, initial: true),
+    CustomRoute(page: DashboardScreen),
     CustomRoute(page: LoginScreen),
     CustomRoute(page: CreateUserScreen),
     //~ Chat Screens:

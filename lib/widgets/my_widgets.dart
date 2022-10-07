@@ -83,3 +83,23 @@ Widget wMainButton(BuildContext context,
       .sizedBox(width ?? context.width, 55)
       .px(width == null ? (isWide ? 55 : 85) : 0);
 }
+
+Widget riltopiaLogo({double fontSize = 52}) {
+  TextStyle rilTopiaStyle(Color color) => TextStyle(
+        color: color,
+        fontSize: fontSize,
+        fontFamily: 'RilTopia',
+        fontWeight: FontWeight.bold,
+      );
+
+  return Text.rich(TextSpan(children: <InlineSpan>[
+    TextSpan(
+      text: 'Ril',
+      style: rilTopiaStyle(AppColors.primary),
+    ),
+    TextSpan(
+      text: 'Topia',
+      style: rilTopiaStyle(AppColors.white),
+    ),
+  ]));
+}

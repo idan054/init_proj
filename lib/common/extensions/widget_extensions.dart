@@ -1,6 +1,7 @@
 import 'package:entry/entry.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../themes/app_colors.dart';
 
@@ -8,6 +9,13 @@ var appearDuration = kDebugMode ? 750 : 250;
 
 extension IconDataX on IconData {
   Icon icon({Color color = AppColors.white, double size = 20}) => Icon(
+        this,
+        color: color,
+        size: size,
+      );
+
+  FaIcon iconAwesome({Color color = AppColors.white, double size = 20}) =>
+      FaIcon(
         this,
         color: color,
         size: size,

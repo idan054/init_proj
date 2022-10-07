@@ -34,20 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Column(
         children: [
           const Spacer(flex: 4),
-          const Text.rich(TextSpan(children: <InlineSpan>[
-            TextSpan(
-              text: 'Ril',
-              style: TextStyle(
-                  fontFamily: 'RilTopia',
-                  fontSize: 52,
-                  color: AppColors.primary),
-            ),
-            TextSpan(
-              text: 'Topia',
-              style: TextStyle(
-                  fontFamily: 'RilTopia', fontSize: 52, color: AppColors.white),
-            ),
-          ])),
+          riltopiaLogo(),
           Text(
             'Social Chat App', // STR
             style: AppStyles.text20PxRegular.white,

@@ -14,18 +14,12 @@ const kStreamApiKey = 'ah48ckptkjvm';
 int cpAgeFilter = 3; // +-3, so 17 will meet 14 - 20.
 bool cpIsLoading = false; // setState to hide
 
-/// Design (c)onfig
-bool cShowTabBarTitles = false; // in Use - AppBar
-bool cMinimizeIndicator = true; // in Use - AppBar
-bool cShowChatsSearch = true; // Not embedded yet
-bool cShowGroups = true; // Not embedded yet
-bool cShowAgeAndPostLen = false;
+//~ Design config:
+// BottomNavigation: true = make main BOLD, false = More logic Ui
+bool boldPrimaryDesignConfig = false;
 
 /// Dev (debug)
-bool devLogin = true; // auto set gender & bDay when סיום button clicked
 bool showDebugPrints = true;
-bool genderDebug = true; // false: fake New user mode.
-bool cleanOnExitDebug = true; // true: exit button will erase user extraData
 bool alwaysNewUserDebug = false && kDebugMode;
 
 // ? CTRL + F: Outside Lib folder:

@@ -1,4 +1,7 @@
+import 'package:example/common/extensions/extensions.dart';
 import 'package:flutter/material.dart';
+
+import '../../common/themes/app_colors.dart';
 
 class MainFeedScreen extends StatefulWidget {
   const MainFeedScreen({Key? key}) : super(key: key);
@@ -13,10 +16,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     print('START: MainFeedScreen()');
 
     return Scaffold(
+      backgroundColor: AppColors.primaryDark,
       body: Column(
-        children: const [
-          Spacer(),
-        ],
+        children: [Icons.home.icon().center],
       ),
     );
   }
