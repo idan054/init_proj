@@ -40,9 +40,9 @@ class AuthService {
     var userFsData = await Database.docData('users/${user.email}');
     userFsData == null ||
             userFsData['age'] == null ||
-            userFsData['birthdayStr'] == null
+            userFsData['birthday'] == null
         ? context.router.replace(const CreateUserRoute())
-        : context.router.replace(const ChatsListRoute());
+        : context.router.replace(const DashboardRoute());
 
     print('userFsData $userFsData');
     print(

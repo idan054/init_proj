@@ -80,10 +80,12 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                   if ((currUser.name != null ||
                           nameController.text.isNotEmpty) &&
                       currUser.photoUrl != null) {
-                    FirebaseAuth.instance.currentUser
-                        ?.updateDisplayName(nameController.text);
                     context.uniProvider.updateUser(
                         currUser.copyWith(name: nameController.text));
+                    nameController.text.isEmpty
+                        ? null
+                        : FirebaseAuth.instance.currentUser
+                            ?.updateDisplayName(nameController.text);
                     editPageController.jumpToPage(1);
                   }
                 }).appearAll,

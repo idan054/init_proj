@@ -15,11 +15,11 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-enum TabItems { chat, home, addButton }
+enum TabItems { chat, home }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final _pageController = PageController();
-  var sItem = TabItems.home;
+  final _pageController = PageController(initialPage: TabItems.home.index);
+  var sItem = TabItems.home; // initial
 
   void _handleIndexChanged(int i) {
     sItem = TabItems.values[i];

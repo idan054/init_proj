@@ -153,7 +153,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
             collection: 'users',
             docName: '${currUser.email}',
             toJson: context.uniProvider.currUser.toJson());
-        context.router.replace(const ChatsListRoute());
+        context.router.replace(const DashboardRoute());
       } else {
         setState(() {});
       }
