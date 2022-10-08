@@ -89,19 +89,21 @@ Widget wMainButton(BuildContext context,
       .px(width == null ? (isWide ? 55 : 85) : 0);
 }
 
-Widget riltopiaLogo({double fontSize = 52, bool rilPostTxt = false}) {
+Widget riltopiaLogo({double fontSize = 52, bool shadowActive = true}) {
   TextStyle rilTopiaStyle(Color color) => TextStyle(
         color: color,
         fontSize: fontSize,
         fontFamily: 'RilTopia',
         fontWeight: FontWeight.bold,
-        shadows: <Shadow>[
-          Shadow(
-            offset: const Offset(2.0, 2.0),
-            blurRadius: 10.0,
-            color: AppColors.darkGrey.withOpacity(0.99),
-          ),
-        ],
+        shadows: shadowActive
+            ? <Shadow>[
+                Shadow(
+                  offset: const Offset(2.0, 2.0),
+                  blurRadius: 10.0,
+                  color: AppColors.darkGrey.withOpacity(0.99),
+                ),
+              ]
+            : null,
       );
 
   return Text.rich(TextSpan(children: <InlineSpan>[
@@ -110,7 +112,7 @@ Widget riltopiaLogo({double fontSize = 52, bool rilPostTxt = false}) {
       style: rilTopiaStyle(AppColors.primary),
     ),
     TextSpan(
-      text: rilPostTxt ? 'Post' : 'Topia',
+      text: 'Topia',
       style: rilTopiaStyle(AppColors.white),
     ),
   ]));

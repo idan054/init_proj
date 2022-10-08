@@ -48,6 +48,7 @@ extension StringX on String {
           double? fontSize,
           bool bold = false}) =>
       Text(this,
+          overflow: TextOverflow.ellipsis,
           style: bold
               ? AppStyles.text18PxBold
                   .copyWith(color: color, fontSize: fontSize ?? 18.sp)

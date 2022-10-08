@@ -4,6 +4,7 @@ import 'package:example/common/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
+import '../../common/themes/app_styles.dart';
 import '../../widgets/my_widgets.dart';
 
 class CreatePostScreen extends StatefulWidget {
@@ -14,43 +15,86 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
-  Color postColor = AppColors.darkGrey;
+  var postTextController = TextEditingController();
+  Color postColor = AppColors.primary;
+  bool isDarkText = true;
   bool simplePicker = true;
 
   @override
   Widget build(BuildContext context) {
     print('START: CreatePostScreen()');
+    bool isKeyboardVisible =
+        WidgetsBinding.instance.window.viewInsets.bottom > 0.0;
+    print('isKeyboardVisible ${isKeyboardVisible}');
+    var textColor = isDarkText ? AppColors.darkBlack : AppColors.white;
+    var textDir = postTextController.text.isHebrew
+        ? TextDirection.rtl
+        : TextDirection.ltr;
 
     return Scaffold(
       backgroundColor: postColor,
       body: Stack(
         children: [
           Column(
-            children: const [
-              Spacer(),
-            ],
-          ),
-          Container(
-              decoration: const BoxDecoration(
-                borderRadius:
-                    BorderRadius.only(bottomRight: Radius.circular(5)),
+            children: [
+              const Spacer(),
+              TextField(
+                maxLength: 255,
+                maxLines: 3,
+                autofocus: true,
+                cursorColor: textColor,
+                textDirection: textDir,
+                controller: postTextController,
+                onChanged: (val) {
+                  setState(() {});
+                },
+                textAlign: TextAlign.center,
+                style: AppStyles.text18PxBold.copyWith(color: textColor),
+                decoration: InputDecoration(
+                    counter: const Offstage(),
+                    border: InputBorder.none,
+                    hintText: 'Type your message...',
+                    hintStyle:
+                        AppStyles.text18PxBold.copyWith(color: textColor)),
               ),
-              alignment: Alignment.bottomCenter,
-              padding: const EdgeInsets.only(
-                  left: 15, right: 17.5, top: 35, bottom: 12.5),
-              child: Row(
-                children: [
-                  Icons.border_color.icon(size: 30),
-                  IconButton(
-                      onPressed: () {
-                        // postColor = Colors.primaries[
-                        //     Random().nextInt(Colors.primaries.length)];
-                        // setState(() {});
-                        showPickerDialog();
-                      },
-                      icon: Icons.palette.icon(size: 30)),
-                ],
-              )),
+              if (!isKeyboardVisible) const Spacer(),
+            ],
+          ).px(15).py(60).center,
+          Positioned(
+            bottom: 0,
+            child: Container(
+                height: 100,
+                width: context.width,
+                alignment: Alignment.bottomCenter,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
+                    stops: [0.01, 0.99],
+                    colors: [
+                      AppColors.darkBlack.withOpacity(0.40),
+                      AppColors.transparent,
+                    ],
+                  ),
+                ),
+                padding: const EdgeInsets.only(
+                    left: 15, right: 17.5, top: 35, bottom: 12.5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                        onPressed: () =>
+                            setState(() => isDarkText = !isDarkText),
+                        icon: Icons.invert_colors.icon(size: 30)),
+                    //
+                    riltopiaLogo(fontSize: 25, shadowActive: false),
+                    //
+                    IconButton(
+                        onPressed: () => showPickerDialog(),
+                        icon: Icons.palette.icon(size: 30)),
+                  ],
+                )).bottom,
+          ),
           InkWell(
             onTap: () => context.router.pop(),
             child: Container(
@@ -65,13 +109,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 )),
           ),
           Container(
-              decoration: const BoxDecoration(
-                borderRadius:
-                    BorderRadius.only(bottomRight: Radius.circular(5)),
-              ),
-              padding: const EdgeInsets.only(
-                  left: 15, right: 17.5, top: 35, bottom: 12.5),
-              child: riltopiaLogo(fontSize: 35, rilPostTxt: true)),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(bottomRight: Radius.circular(5)),
+            ),
+            padding: const EdgeInsets.only(
+                left: 15, right: 17.5, top: 35, bottom: 12.5),
+            child: Builder(builder: (context) {
+              var counter = postTextController.text.length;
+              return '$counter/255'.toText(
+                  color: counter == 255 ? AppColors.errRed : AppColors.white);
+            }),
+          ),
         ],
       ),
     );
