@@ -1,4 +1,5 @@
 import 'package:entry/entry.dart';
+import 'package:example/common/extensions/extensions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,6 +27,10 @@ extension WidgetX on Widget {
   // My extension:
   InkWell onTap(GestureTapCallback? onTap, {double radius = 99}) => InkWell(
       borderRadius: BorderRadius.circular(radius), onTap: onTap, child: this);
+
+  Directionality isHebrewDirectionality(String text) => Directionality(
+      textDirection: text.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+      child: this);
 
   Container get testContainer =>
       Container(color: AppColors.testGreen, child: this);

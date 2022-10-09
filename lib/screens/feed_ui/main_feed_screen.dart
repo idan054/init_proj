@@ -1,12 +1,12 @@
-import 'dart:math';
-
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
+// import 'package:example/common/service/Auth/firebase_database.dart';
 import 'package:example/widgets/components/postView_sts.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/models/post/post_model.dart';
+import '../../common/service/Auth/firebase_database.dart';
 
 class MainFeedScreen extends StatefulWidget {
   const MainFeedScreen({Key? key}) : super(key: key);
@@ -16,13 +16,10 @@ class MainFeedScreen extends StatefulWidget {
 }
 
 class _MainFeedScreenState extends State<MainFeedScreen> {
-  List aList = [1, 2, 3, 4, 5, 6, 7];
-
   @override
   Widget build(BuildContext context) {
     print('START: MainFeedScreen()');
     double postRatio = 3;
-    var listHeight = 100 * aList.length * postRatio / 2;
 
     return RefreshIndicator(
       backgroundColor: AppColors.darkGrey,
@@ -32,14 +29,21 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
         backgroundColor: AppColors.darkBlack,
         body: Stack(
           children: [
-            FutureBuilder<String>(
-                future: Future.delayed(2.seconds).then((value) => 'A'),
+            FutureBuilder<List<PostModel>?>(
+                future: Database.getPosts(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData == false) {
                     return const CircularProgressIndicator(
                             color: AppColors.primary, strokeWidth: 7)
                         .center;
                   }
+                  if (snapshot.data == null || snapshot.data!.isEmpty) {
+                    return 'Sorry, no post found... \nTry again later!'
+                        .toText()
+                        .center;
+                  }
+                  var postList = snapshot.data!;
+                  var listHeight = 100 * postList.length * postRatio / 2;
                   return SingleChildScrollView(
                     child: Row(
                       children: <Widget>[
@@ -47,49 +51,23 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                           height: listHeight, //ratio
                           width: context.width * 0.5,
                           child: ListView.builder(
-                              itemCount: aList.length,
+                              itemCount: postList.length,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (BuildContext context, int i) {
-                                if (i.isEven) {
-                                  return const Offstage();
-                                } else {
-                                  var color = Colors.primaries[Random()
-                                      .nextInt(Colors.primaries.length)];
-                                  return Container(
-                                    height: 100 * postRatio,
-                                    color: color,
-                                    child: '${aList[i]}'.testText.center,
-                                  ).appearAll;
-                                }
-                              }),
+                              itemBuilder: (BuildContext context, int i) =>
+                                  i.isEven
+                                      ? const Offstage()
+                                      : PostView(postList[i])),
                         ).offset(0, 100),
                         SizedBox(
                           height: listHeight, //ratio
                           width: context.width * 0.5,
                           child: ListView.builder(
-                              itemCount: aList.length,
+                              itemCount: postList.length,
                               physics: const NeverScrollableScrollPhysics(),
-                              itemBuilder: (BuildContext context, int i) {
-                                if (i.isOdd) {
-                                  return const Offstage();
-                                } else {
-                                  var color = Colors.primaries[Random()
-                                      .nextInt(Colors.primaries.length)];
-                                  var post = PostModel(
-                                      textContent: 'Sample text short content',
-                                      textAlign: TextAlign.center,
-                                      creatorUser: context.uniProvider.currUser,
-                                      enableComments: false,
-                                      enableLikes: true,
-                                      isDarkText: false,
-                                      isSubPost: false,
-                                      postId: 'Sample${UniqueKey()}',
-                                      timestamp: DateTime.now(),
-                                      likeCounter: 12,
-                                      colorCover: color);
-                                  return PostView(post);
-                                }
-                              }).appearAll,
+                              itemBuilder: (BuildContext context, int i) =>
+                                  i.isOdd
+                                      ? const Offstage()
+                                      : PostView(postList[i])).appearAll,
                         ),
                       ],
                     ),

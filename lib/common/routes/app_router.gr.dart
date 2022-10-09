@@ -12,7 +12,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i11;
-import 'package:example/common/models/models.dart' as _i13;
+import 'package:example/common/models/user/user_model.dart' as _i13;
 import 'package:example/screens/chat_ui/chat_screen.dart' as _i7;
 import 'package:example/screens/chat_ui/chats_list_screen.dart.dart' as _i5;
 import 'package:example/screens/chat_ui/members_screen.dart' as _i6;

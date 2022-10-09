@@ -22,7 +22,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   var postTextController = TextEditingController();
   var postAlign = TextAlign.center;
   Color postColor = AppColors.primary;
-  bool isDarkText = true;
+  bool isDarkText = false;
   bool simplePicker = true;
 
   @override
@@ -163,7 +163,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   );
                   context.uniProvider.updatePostUploaded(post);
                   FeedService().uploadPost(context, post);
-                  context.router.pop();
+                  // context.router.pop();
                 }, radius: 10),
               ],
             ),

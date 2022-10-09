@@ -24,12 +24,12 @@ mixin _$PostModel {
   String get textContent => throw _privateConstructorUsedError;
   String get postId => throw _privateConstructorUsedError;
   UserModel get creatorUser => throw _privateConstructorUsedError;
-  TextAlign get textAlign => throw _privateConstructorUsedError;
   bool get isDarkText => throw _privateConstructorUsedError;
   bool get isSubPost => throw _privateConstructorUsedError;
   bool get enableLikes => throw _privateConstructorUsedError;
   bool get enableComments => throw _privateConstructorUsedError;
   DateTime get timestamp => throw _privateConstructorUsedError;
+  TextAlign get textAlign => throw _privateConstructorUsedError;
   int? get likeCounter => throw _privateConstructorUsedError;
   String? get photoCover => throw _privateConstructorUsedError;
   @MyColorOrNullConverter()
@@ -49,12 +49,12 @@ abstract class $PostModelCopyWith<$Res> {
       {String textContent,
       String postId,
       UserModel creatorUser,
-      TextAlign textAlign,
       bool isDarkText,
       bool isSubPost,
       bool enableLikes,
       bool enableComments,
       DateTime timestamp,
+      TextAlign textAlign,
       int? likeCounter,
       String? photoCover,
       @MyColorOrNullConverter() Color? colorCover});
@@ -75,12 +75,12 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
     Object? textContent = freezed,
     Object? postId = freezed,
     Object? creatorUser = freezed,
-    Object? textAlign = freezed,
     Object? isDarkText = freezed,
     Object? isSubPost = freezed,
     Object? enableLikes = freezed,
     Object? enableComments = freezed,
     Object? timestamp = freezed,
+    Object? textAlign = freezed,
     Object? likeCounter = freezed,
     Object? photoCover = freezed,
     Object? colorCover = freezed,
@@ -98,10 +98,6 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
           ? _value.creatorUser
           : creatorUser // ignore: cast_nullable_to_non_nullable
               as UserModel,
-      textAlign: textAlign == freezed
-          ? _value.textAlign
-          : textAlign // ignore: cast_nullable_to_non_nullable
-              as TextAlign,
       isDarkText: isDarkText == freezed
           ? _value.isDarkText
           : isDarkText // ignore: cast_nullable_to_non_nullable
@@ -122,6 +118,10 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      textAlign: textAlign == freezed
+          ? _value.textAlign
+          : textAlign // ignore: cast_nullable_to_non_nullable
+              as TextAlign,
       likeCounter: likeCounter == freezed
           ? _value.likeCounter
           : likeCounter // ignore: cast_nullable_to_non_nullable
@@ -155,12 +155,12 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
       {String textContent,
       String postId,
       UserModel creatorUser,
-      TextAlign textAlign,
       bool isDarkText,
       bool isSubPost,
       bool enableLikes,
       bool enableComments,
       DateTime timestamp,
+      TextAlign textAlign,
       int? likeCounter,
       String? photoCover,
       @MyColorOrNullConverter() Color? colorCover});
@@ -184,12 +184,12 @@ class __$$_PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
     Object? textContent = freezed,
     Object? postId = freezed,
     Object? creatorUser = freezed,
-    Object? textAlign = freezed,
     Object? isDarkText = freezed,
     Object? isSubPost = freezed,
     Object? enableLikes = freezed,
     Object? enableComments = freezed,
     Object? timestamp = freezed,
+    Object? textAlign = freezed,
     Object? likeCounter = freezed,
     Object? photoCover = freezed,
     Object? colorCover = freezed,
@@ -207,10 +207,6 @@ class __$$_PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
           ? _value.creatorUser
           : creatorUser // ignore: cast_nullable_to_non_nullable
               as UserModel,
-      textAlign: textAlign == freezed
-          ? _value.textAlign
-          : textAlign // ignore: cast_nullable_to_non_nullable
-              as TextAlign,
       isDarkText: isDarkText == freezed
           ? _value.isDarkText
           : isDarkText // ignore: cast_nullable_to_non_nullable
@@ -231,6 +227,10 @@ class __$$_PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime,
+      textAlign: textAlign == freezed
+          ? _value.textAlign
+          : textAlign // ignore: cast_nullable_to_non_nullable
+              as TextAlign,
       likeCounter: likeCounter == freezed
           ? _value.likeCounter
           : likeCounter // ignore: cast_nullable_to_non_nullable
@@ -255,12 +255,12 @@ class _$_PostModel implements _PostModel {
       {required this.textContent,
       required this.postId,
       required this.creatorUser,
-      required this.textAlign,
       required this.isDarkText,
       required this.isSubPost,
       required this.enableLikes,
       required this.enableComments,
       required this.timestamp,
+      this.textAlign = TextAlign.center,
       this.likeCounter,
       this.photoCover,
       @MyColorOrNullConverter() this.colorCover});
@@ -276,8 +276,6 @@ class _$_PostModel implements _PostModel {
   @override
   final UserModel creatorUser;
   @override
-  final TextAlign textAlign;
-  @override
   final bool isDarkText;
   @override
   final bool isSubPost;
@@ -288,6 +286,9 @@ class _$_PostModel implements _PostModel {
   @override
   final DateTime timestamp;
   @override
+  @JsonKey()
+  final TextAlign textAlign;
+  @override
   final int? likeCounter;
   @override
   final String? photoCover;
@@ -297,7 +298,7 @@ class _$_PostModel implements _PostModel {
 
   @override
   String toString() {
-    return 'PostModel(textContent: $textContent, postId: $postId, creatorUser: $creatorUser, textAlign: $textAlign, isDarkText: $isDarkText, isSubPost: $isSubPost, enableLikes: $enableLikes, enableComments: $enableComments, timestamp: $timestamp, likeCounter: $likeCounter, photoCover: $photoCover, colorCover: $colorCover)';
+    return 'PostModel(textContent: $textContent, postId: $postId, creatorUser: $creatorUser, isDarkText: $isDarkText, isSubPost: $isSubPost, enableLikes: $enableLikes, enableComments: $enableComments, timestamp: $timestamp, textAlign: $textAlign, likeCounter: $likeCounter, photoCover: $photoCover, colorCover: $colorCover)';
   }
 
   @override
@@ -310,7 +311,6 @@ class _$_PostModel implements _PostModel {
             const DeepCollectionEquality().equals(other.postId, postId) &&
             const DeepCollectionEquality()
                 .equals(other.creatorUser, creatorUser) &&
-            const DeepCollectionEquality().equals(other.textAlign, textAlign) &&
             const DeepCollectionEquality()
                 .equals(other.isDarkText, isDarkText) &&
             const DeepCollectionEquality().equals(other.isSubPost, isSubPost) &&
@@ -319,6 +319,7 @@ class _$_PostModel implements _PostModel {
             const DeepCollectionEquality()
                 .equals(other.enableComments, enableComments) &&
             const DeepCollectionEquality().equals(other.timestamp, timestamp) &&
+            const DeepCollectionEquality().equals(other.textAlign, textAlign) &&
             const DeepCollectionEquality()
                 .equals(other.likeCounter, likeCounter) &&
             const DeepCollectionEquality()
@@ -334,12 +335,12 @@ class _$_PostModel implements _PostModel {
       const DeepCollectionEquality().hash(textContent),
       const DeepCollectionEquality().hash(postId),
       const DeepCollectionEquality().hash(creatorUser),
-      const DeepCollectionEquality().hash(textAlign),
       const DeepCollectionEquality().hash(isDarkText),
       const DeepCollectionEquality().hash(isSubPost),
       const DeepCollectionEquality().hash(enableLikes),
       const DeepCollectionEquality().hash(enableComments),
       const DeepCollectionEquality().hash(timestamp),
+      const DeepCollectionEquality().hash(textAlign),
       const DeepCollectionEquality().hash(likeCounter),
       const DeepCollectionEquality().hash(photoCover),
       const DeepCollectionEquality().hash(colorCover));
@@ -362,12 +363,12 @@ abstract class _PostModel implements PostModel {
       {required final String textContent,
       required final String postId,
       required final UserModel creatorUser,
-      required final TextAlign textAlign,
       required final bool isDarkText,
       required final bool isSubPost,
       required final bool enableLikes,
       required final bool enableComments,
       required final DateTime timestamp,
+      final TextAlign textAlign,
       final int? likeCounter,
       final String? photoCover,
       @MyColorOrNullConverter() final Color? colorCover}) = _$_PostModel;
@@ -382,8 +383,6 @@ abstract class _PostModel implements PostModel {
   @override
   UserModel get creatorUser;
   @override
-  TextAlign get textAlign;
-  @override
   bool get isDarkText;
   @override
   bool get isSubPost;
@@ -393,6 +392,8 @@ abstract class _PostModel implements PostModel {
   bool get enableComments;
   @override
   DateTime get timestamp;
+  @override
+  TextAlign get textAlign;
   @override
   int? get likeCounter;
   @override

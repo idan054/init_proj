@@ -34,6 +34,7 @@ class PostView extends StatelessWidget {
                           color: post.isDarkText
                               ? AppColors.darkBlack
                               : AppColors.white))
+                  .isHebrewDirectionality(post.textContent)
                   .pOnly(right: 5, left: 5)
                   .center,
             ),
