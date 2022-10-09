@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -26,24 +27,34 @@ class PostModel with _$PostModel {
     @Default(TextAlign.center) TextAlign textAlign,
     int? likeCounter,
     String? photoCover,
-    @MyColorOrNullConverter() Color? colorCover,
+    @ColorIntConv() Color? colorCover,
   }) = _PostModel;
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
 }
 
-// Todo create a DateTime convertor.
-class MyColorOrNullConverter implements JsonConverter<Color?, String?> {
-  const MyColorOrNullConverter();
+class DateTimeStampConv implements JsonConverter<DateTime, Timestamp> {
+  const DateTimeStampConv();
 
-  @override
-  Color? fromJson(String? colorStr) {
-    if (colorStr == null) return null;
-    int value = int.parse(colorStr, radix: 16);
-    return Color(value);
+  @override // return DateTime from Timestamp
+  DateTime fromJson(Timestamp json) => json.toDate();
+
+  @override // return Timestamp from DateTime
+  Timestamp toJson(DateTime dateTime) => Timestamp.fromDate(dateTime);
+}
+
+class ColorIntConv implements JsonConverter<Color, String> {
+  const ColorIntConv();
+
+  @override // return color from String
+  Color fromJson(String json) {
+    return Color(int.parse(json));
   }
 
-  @override
-  String? toJson(Color? color) => color?.value.toString();
+  @override // return String from color
+  String toJson(Color color) {
+    var colorX = '0x${'$color'.split('0x')[1]}'.replaceAll(')', '');
+    return colorX;
+  }
 }

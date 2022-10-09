@@ -174,7 +174,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   }
 
   void showPickerDialog() {
-    print('simplePicker ${simplePicker}');
+    print('simplePicker $simplePicker');
     showDialog(
       context: context,
       barrierColor: Colors.transparent,

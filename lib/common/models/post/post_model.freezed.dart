@@ -32,7 +32,7 @@ mixin _$PostModel {
   TextAlign get textAlign => throw _privateConstructorUsedError;
   int? get likeCounter => throw _privateConstructorUsedError;
   String? get photoCover => throw _privateConstructorUsedError;
-  @MyColorOrNullConverter()
+  @ColorIntConv()
   Color? get colorCover => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -57,7 +57,7 @@ abstract class $PostModelCopyWith<$Res> {
       TextAlign textAlign,
       int? likeCounter,
       String? photoCover,
-      @MyColorOrNullConverter() Color? colorCover});
+      @ColorIntConv() Color? colorCover});
 
   $UserModelCopyWith<$Res> get creatorUser;
 }
@@ -163,7 +163,7 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
       TextAlign textAlign,
       int? likeCounter,
       String? photoCover,
-      @MyColorOrNullConverter() Color? colorCover});
+      @ColorIntConv() Color? colorCover});
 
   @override
   $UserModelCopyWith<$Res> get creatorUser;
@@ -263,7 +263,7 @@ class _$_PostModel implements _PostModel {
       this.textAlign = TextAlign.center,
       this.likeCounter,
       this.photoCover,
-      @MyColorOrNullConverter() this.colorCover});
+      @ColorIntConv() this.colorCover});
 
   factory _$_PostModel.fromJson(Map<String, dynamic> json) =>
       _$$_PostModelFromJson(json);
@@ -293,7 +293,7 @@ class _$_PostModel implements _PostModel {
   @override
   final String? photoCover;
   @override
-  @MyColorOrNullConverter()
+  @ColorIntConv()
   final Color? colorCover;
 
   @override
@@ -371,7 +371,7 @@ abstract class _PostModel implements PostModel {
       final TextAlign textAlign,
       final int? likeCounter,
       final String? photoCover,
-      @MyColorOrNullConverter() final Color? colorCover}) = _$_PostModel;
+      @ColorIntConv() final Color? colorCover}) = _$_PostModel;
 
   factory _PostModel.fromJson(Map<String, dynamic> json) =
       _$_PostModel.fromJson;
@@ -399,7 +399,7 @@ abstract class _PostModel implements PostModel {
   @override
   String? get photoCover;
   @override
-  @MyColorOrNullConverter()
+  @ColorIntConv()
   Color? get colorCover;
   @override
   @JsonKey(ignore: true)

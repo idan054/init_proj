@@ -43,6 +43,7 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   hive: ^2.2.3
   path_provider: ^2.0.11
+  string_to_hex: ^0.2.2
 
 dev_dependencies:
   flutter_test:

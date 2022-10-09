@@ -20,10 +20,8 @@ class FeedService {
 
   void uploadPost(BuildContext context, PostModel post) {
     print('START: uploadPost()');
-
     // var timeStamp = DateTime.now();
     // String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);
-
     Database().updateFirestore(
       collection: 'posts',
       docName: post.postId,

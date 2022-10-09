@@ -20,8 +20,8 @@ _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
           TextAlign.center,
       likeCounter: json['likeCounter'] as int?,
       photoCover: json['photoCover'] as String?,
-      colorCover: const MyColorOrNullConverter()
-          .fromJson(json['colorCover'] as String?),
+      colorCover: _$JsonConverterFromJson<String, Color>(
+          json['colorCover'], const ColorIntConv().fromJson),
     );
 
 Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
@@ -37,7 +37,8 @@ Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
       'textAlign': _$TextAlignEnumMap[instance.textAlign]!,
       'likeCounter': instance.likeCounter,
       'photoCover': instance.photoCover,
-      'colorCover': const MyColorOrNullConverter().toJson(instance.colorCover),
+      'colorCover': _$JsonConverterToJson<String, Color>(
+          instance.colorCover, const ColorIntConv().toJson),
     };
 
 const _$TextAlignEnumMap = {
@@ -48,3 +49,15 @@ const _$TextAlignEnumMap = {
   TextAlign.start: 'start',
   TextAlign.end: 'end',
 };
+
+Value? _$JsonConverterFromJson<Json, Value>(
+  Object? json,
+  Value? Function(Json json) fromJson,
+) =>
+    json == null ? null : fromJson(json as Json);
+
+Json? _$JsonConverterToJson<Json, Value>(
+  Value? value,
+  Json? Function(Value value) toJson,
+) =>
+    value == null ? null : toJson(value);
