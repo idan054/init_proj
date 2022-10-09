@@ -4,6 +4,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'common/models/universalModel.dart';
@@ -14,6 +16,8 @@ void main() async {
   // Provider.debugCheckInvalidValueType = null;
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  final dbDir = await getApplicationDocumentsDirectory();
+  Hive.init(dbDir.path);
   runApp(
     MultiProvider(
         providers: [
@@ -44,7 +48,7 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    print('Build app.dart');
+    print('BUILD: App.dart');
 
     try {
       return AnnotatedRegion<SystemUiOverlayStyle>(

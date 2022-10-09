@@ -24,6 +24,9 @@ extension IconDataX on IconData {
 
 extension WidgetX on Widget {
   // My extension:
+  InkWell onTap(GestureTapCallback? onTap, {double radius = 99}) => InkWell(
+      borderRadius: BorderRadius.circular(radius), onTap: onTap, child: this);
+
   Container get testContainer =>
       Container(color: AppColors.testGreen, child: this);
 
@@ -32,6 +35,9 @@ extension WidgetX on Widget {
 
   Directionality get ltr =>
       Directionality(textDirection: TextDirection.ltr, child: this);
+
+  ClipRRect get rounded =>
+      ClipRRect(borderRadius: BorderRadius.circular(99), child: this);
 
   Entry get appearAll => Entry.all(
         duration: Duration(milliseconds: appearDuration),
@@ -127,7 +133,7 @@ extension WidgetX on Widget {
         child: this,
       );
 
-  Flexible flexible({int flex = 1}) => Flexible(
+  Flexible flexible({required int flex}) => Flexible(
         flex: flex,
         child: this,
       );

@@ -77,15 +77,14 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
 
                 //~ Continue Button:
                 wMainButton(context, title: 'Continue', onPressed: () {
-                  if ((currUser.name != null ||
-                          nameController.text.isNotEmpty) &&
-                      currUser.photoUrl != null) {
-                    context.uniProvider.updateUser(
-                        currUser.copyWith(name: nameController.text));
-                    nameController.text.isEmpty
-                        ? null
-                        : FirebaseAuth.instance.currentUser
-                            ?.updateDisplayName(nameController.text);
+                  if (nameController.text.isNotEmpty) {
+                    FirebaseAuth.instance.currentUser
+                        ?.updateDisplayName(nameController.text);
+                    currUser = currUser.copyWith(name: nameController.text);
+                    context.uniProvider.updateUser(currUser);
+                  }
+
+                  if ((currUser.name != null) && currUser.photoUrl != null) {
                     editPageController.jumpToPage(1);
                   }
                 }).appearAll,

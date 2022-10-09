@@ -97,10 +97,10 @@ Widget riltopiaLogo({double fontSize = 52, bool shadowActive = true}) {
         fontWeight: FontWeight.bold,
         shadows: shadowActive
             ? <Shadow>[
-                Shadow(
-                  offset: const Offset(2.0, 2.0),
+                const Shadow(
+                  offset: Offset(1.0, 1.0),
                   blurRadius: 10.0,
-                  color: AppColors.darkGrey.withOpacity(0.99),
+                  color: AppColors.darkBlack,
                 ),
               ]
             : null,

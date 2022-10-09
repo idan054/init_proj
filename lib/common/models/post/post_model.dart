@@ -18,6 +18,7 @@ class PostModel with _$PostModel {
     required String textContent,
     required String postId,
     required UserModel creatorUser,
+    required TextAlign textAlign,
     required bool isDarkText,
     required bool isSubPost,
     required bool enableLikes,
@@ -32,43 +33,17 @@ class PostModel with _$PostModel {
       _$PostModelFromJson(json);
 }
 
-// class ColorOrNullIntConvert implements JsonConverter<Color?, int?> {
-//   const ColorOrNullIntConvert();
-//
-//   @override
-//   Color? fromJson(int? json) => json == null ? null : Color(json);
-//
-//   @override
-//   int? toJson(Color? color) => color?.value;
-// }
-
+// Todo create a DateTime convertor.
 class MyColorOrNullConverter implements JsonConverter<Color?, String?> {
   const MyColorOrNullConverter();
 
   @override
   Color? fromJson(String? colorStr) {
     if (colorStr == null) return null;
-    String valueString =
-        colorStr.split('(0x')[1].split(')')[0]; // kind of hacky..
-    int value = int.parse(valueString, radix: 16);
+    int value = int.parse(colorStr, radix: 16);
     return Color(value);
   }
 
   @override
-  String? toJson(Color? color) => color.toString();
-}
-
-class ColorOrNullConverter implements JsonConverter<String?, Color?> {
-  const ColorOrNullConverter();
-
-  @override
-  String? fromJson(Color? color) => color.toString();
-
-  @override
-  Color? toJson(String? color) {
-    if (color == null) return null;
-    String valueString = color.split('(0x')[1].split(')')[0]; // kind of hacky..
-    int value = int.parse(valueString, radix: 16);
-    return Color(value);
-  }
+  String? toJson(Color? color) => color?.value.toString();
 }

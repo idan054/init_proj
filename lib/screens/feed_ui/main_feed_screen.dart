@@ -32,59 +32,69 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
         backgroundColor: AppColors.darkBlack,
         body: Stack(
           children: [
-            SingleChildScrollView(
-              child: Row(
-                children: <Widget>[
-                  SizedBox(
-                    height: listHeight, //ratio
-                    width: context.width * 0.5,
-                    child: ListView.builder(
-                        itemCount: aList.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int i) {
-                          if (i.isEven) {
-                            return const Offstage();
-                          } else {
-                            var color = Colors.primaries[
-                                Random().nextInt(Colors.primaries.length)];
-                            return Container(
-                              height: 100 * postRatio,
-                              color: color,
-                              child: '${aList[i]}'.testText.center,
-                            ).appearAll;
-                          }
-                        }),
-                  ).offset(0, 100),
-                  SizedBox(
-                    height: listHeight, //ratio
-                    width: context.width * 0.5,
-                    child: ListView.builder(
-                        itemCount: aList.length,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (BuildContext context, int i) {
-                          if (i.isOdd) {
-                            return const Offstage();
-                          } else {
-                            var color = Colors.primaries[
-                                Random().nextInt(Colors.primaries.length)];
-                            var post = PostModel(
-                                textContent: 'Sample text short content',
-                                creatorUser: context.uniProvider.currUser,
-                                enableComments: false,
-                                enableLikes: true,
-                                isDarkText: false,
-                                isSubPost: false,
-                                postId: 'Sample${UniqueKey()}',
-                                timestamp: DateTime.now(),
-                                likeCounter: 12,
-                                colorCover: color);
-                            return PostView(post);
-                          }
-                        }).appearAll,
-                  ),
-                ],
-              ),
-            ),
+            FutureBuilder<String>(
+                future: Future.delayed(2.seconds).then((value) => 'A'),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData == false) {
+                    return const CircularProgressIndicator(
+                            color: AppColors.primary, strokeWidth: 7)
+                        .center;
+                  }
+                  return SingleChildScrollView(
+                    child: Row(
+                      children: <Widget>[
+                        SizedBox(
+                          height: listHeight, //ratio
+                          width: context.width * 0.5,
+                          child: ListView.builder(
+                              itemCount: aList.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context, int i) {
+                                if (i.isEven) {
+                                  return const Offstage();
+                                } else {
+                                  var color = Colors.primaries[Random()
+                                      .nextInt(Colors.primaries.length)];
+                                  return Container(
+                                    height: 100 * postRatio,
+                                    color: color,
+                                    child: '${aList[i]}'.testText.center,
+                                  ).appearAll;
+                                }
+                              }),
+                        ).offset(0, 100),
+                        SizedBox(
+                          height: listHeight, //ratio
+                          width: context.width * 0.5,
+                          child: ListView.builder(
+                              itemCount: aList.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (BuildContext context, int i) {
+                                if (i.isOdd) {
+                                  return const Offstage();
+                                } else {
+                                  var color = Colors.primaries[Random()
+                                      .nextInt(Colors.primaries.length)];
+                                  var post = PostModel(
+                                      textContent: 'Sample text short content',
+                                      textAlign: TextAlign.center,
+                                      creatorUser: context.uniProvider.currUser,
+                                      enableComments: false,
+                                      enableLikes: true,
+                                      isDarkText: false,
+                                      isSubPost: false,
+                                      postId: 'Sample${UniqueKey()}',
+                                      timestamp: DateTime.now(),
+                                      likeCounter: 12,
+                                      colorCover: color);
+                                  return PostView(post);
+                                }
+                              }).appearAll,
+                        ),
+                      ],
+                    ),
+                  );
+                }),
             Container(
                 decoration: const BoxDecoration(
                   color: AppColors.darkBlack,

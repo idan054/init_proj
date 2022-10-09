@@ -39,6 +39,7 @@ class AuthService {
 
     var userFsData = await Database.docData('users/${user.email}');
     userFsData == null ||
+            userFsData['gender'] == null ||
             userFsData['age'] == null ||
             userFsData['birthday'] == null
         ? context.router.replace(const CreateUserRoute())
