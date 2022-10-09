@@ -15,7 +15,8 @@ _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
       isSubPost: json['isSubPost'] as bool,
       enableLikes: json['enableLikes'] as bool,
       enableComments: json['enableComments'] as bool,
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      timestamp:
+          const DateTimeStampConv().fromJson(json['timestamp'] as Timestamp),
       textAlign: $enumDecodeNullable(_$TextAlignEnumMap, json['textAlign']) ??
           TextAlign.center,
       likeCounter: json['likeCounter'] as int?,
@@ -33,7 +34,7 @@ Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
       'isSubPost': instance.isSubPost,
       'enableLikes': instance.enableLikes,
       'enableComments': instance.enableComments,
-      'timestamp': instance.timestamp.toIso8601String(),
+      'timestamp': const DateTimeStampConv().toJson(instance.timestamp),
       'textAlign': _$TextAlignEnumMap[instance.textAlign]!,
       'likeCounter': instance.likeCounter,
       'photoCover': instance.photoCover,

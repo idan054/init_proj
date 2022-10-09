@@ -1,6 +1,8 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../convertors.dart';
+
 part 'message_model.freezed.dart';
 part 'message_model.g.dart';
 
@@ -13,7 +15,7 @@ class MessageModel with _$MessageModel {
     required String fromId,
     required String toId,
     required String createdAt,
-    required DateTime timestamp,
+    @DateTimeStampConv() required DateTime timestamp,
     String? messageId, // Cuz new field, was not exist at begging
     bool? read,
   }) = _MessageModel;

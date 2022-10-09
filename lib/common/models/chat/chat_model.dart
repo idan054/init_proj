@@ -1,7 +1,8 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:example/common/models/message/message_model.dart';
-import 'package:example/common/models/models.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import '../user/user_model.dart';
 
 part 'chat_model.freezed.dart';
 part 'chat_model.g.dart';

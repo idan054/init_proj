@@ -9,12 +9,18 @@ import '../../common/themes/app_styles.dart';
 
 class PostView extends StatelessWidget {
   final PostModel post;
+
   PostView(this.post, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double postRatio = 3;
     bool isLiked = false;
+    MainAxisAlignment?
+        rowAlign; // Todo: Frontend so Hebrew will be only center || right Based .isHebrew
+    if (post.textAlign == TextAlign.right) rowAlign = MainAxisAlignment.end;
+    if (post.textAlign == TextAlign.center) rowAlign = MainAxisAlignment.center;
+    if (post.textAlign == TextAlign.right) rowAlign = MainAxisAlignment.end;
 
     return StatefulBuilder(builder: (context, setState) {
       return GestureDetector(
@@ -24,20 +30,25 @@ class PostView extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              height: 100 * postRatio,
-              color: post.colorCover,
-              child: Text(post.textContent,
-                      textAlign: TextAlign.center,
-                      style: AppStyles.text18PxBold.copyWith(
-                          fontSize: 14,
-                          fontFamily: FontFamily.rilTopia,
-                          color: post.isDarkText
-                              ? AppColors.darkBlack
-                              : AppColors.white))
-                  .isHebrewDirectionality(post.textContent)
-                  .pOnly(right: 5, left: 5)
-                  .center,
-            ),
+                height: 100 * postRatio,
+                color: post.colorCover,
+                child: Row(
+                  mainAxisAlignment: rowAlign!,
+                  children: [
+                    Text(post.textContent,
+                            textAlign: TextAlign.right,
+                            style: AppStyles.text18PxBold.copyWith(
+                                fontSize: 14,
+                                fontFamily: FontFamily.rilTopia,
+                                color: post.isDarkText
+                                    ? AppColors.darkBlack
+                                    : AppColors.white))
+                        // .sizedBox(context.width, 100 * postRatio)
+                        .isHebrewDirectionality(post.textContent)
+                        .pOnly(right: 20, left: 20)
+                        .center,
+                  ],
+                )).center,
             buildBottomPost(postRatio, isLiked).offset(0, 10),
           ],
         ),
@@ -85,10 +96,8 @@ class PostView extends StatelessWidget {
                     .toText(
                         bold: true, fontSize: 10, color: AppColors.greyLight),
                 const Spacer(),
-                if (post.enableLikes &&
-                    post.likeCounter != null &&
-                    post.likeCounter != 0)
-                  '${isLiked ? post.likeCounter! + 1 : post.likeCounter}  '
+                if (post.enableLikes && post.likeCounter != null)
+                  '${isLiked ? post.likeCounter! + 1 : post.likeCounter == 0 ? '' : post.likeCounter}  '
                       .toText(
                           bold: true,
                           fontSize: isLiked ? 11 : 10,

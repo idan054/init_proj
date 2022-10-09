@@ -92,13 +92,16 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         icon: Icons.invert_colors.icon(size: 30)),
                     //
                     // riltopiaLogo(fontSize: 25),
-                    if (postAlign == TextAlign.center)
+                    if (postAlign == TextAlign.center &&
+                        postTextController.text.isHebrew)
                       Icons.format_align_center.icon(size: 30).onTap(
-                          () => setState(() => postAlign = TextAlign.left)),
-                    if (postAlign == TextAlign.left)
-                      Icons.format_align_left.icon(size: 30).onTap(
                           () => setState(() => postAlign = TextAlign.right)),
-                    if (postAlign == TextAlign.right)
+                    if (postAlign == TextAlign.center &&
+                        !postTextController.text.isHebrew)
+                      Icons.format_align_left.icon(size: 30).onTap(
+                          () => setState(() => postAlign = TextAlign.left)),
+                    if (postAlign == TextAlign.right ||
+                        postAlign == TextAlign.left)
                       Icons.format_align_right.icon(size: 30).onTap(
                           () => setState(() => postAlign = TextAlign.center)),
                     //

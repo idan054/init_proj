@@ -1,6 +1,8 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import '../convertors.dart';
+
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
@@ -16,7 +18,7 @@ class UserModel with _$UserModel {
     String? uid,
     String? photoUrl,
     GenderTypes? gender,
-    DateTime? birthday,
+    @DateTimeStampConv() DateTime? birthday,
     int? age,
   }) = _UserModel;
 

@@ -28,6 +28,7 @@ mixin _$PostModel {
   bool get isSubPost => throw _privateConstructorUsedError;
   bool get enableLikes => throw _privateConstructorUsedError;
   bool get enableComments => throw _privateConstructorUsedError;
+  @DateTimeStampConv()
   DateTime get timestamp => throw _privateConstructorUsedError;
   TextAlign get textAlign => throw _privateConstructorUsedError;
   int? get likeCounter => throw _privateConstructorUsedError;
@@ -53,7 +54,7 @@ abstract class $PostModelCopyWith<$Res> {
       bool isSubPost,
       bool enableLikes,
       bool enableComments,
-      DateTime timestamp,
+      @DateTimeStampConv() DateTime timestamp,
       TextAlign textAlign,
       int? likeCounter,
       String? photoCover,
@@ -159,7 +160,7 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
       bool isSubPost,
       bool enableLikes,
       bool enableComments,
-      DateTime timestamp,
+      @DateTimeStampConv() DateTime timestamp,
       TextAlign textAlign,
       int? likeCounter,
       String? photoCover,
@@ -259,7 +260,7 @@ class _$_PostModel implements _PostModel {
       required this.isSubPost,
       required this.enableLikes,
       required this.enableComments,
-      required this.timestamp,
+      @DateTimeStampConv() required this.timestamp,
       this.textAlign = TextAlign.center,
       this.likeCounter,
       this.photoCover,
@@ -284,6 +285,7 @@ class _$_PostModel implements _PostModel {
   @override
   final bool enableComments;
   @override
+  @DateTimeStampConv()
   final DateTime timestamp;
   @override
   @JsonKey()
@@ -367,7 +369,7 @@ abstract class _PostModel implements PostModel {
       required final bool isSubPost,
       required final bool enableLikes,
       required final bool enableComments,
-      required final DateTime timestamp,
+      @DateTimeStampConv() required final DateTime timestamp,
       final TextAlign textAlign,
       final int? likeCounter,
       final String? photoCover,
@@ -391,6 +393,7 @@ abstract class _PostModel implements PostModel {
   @override
   bool get enableComments;
   @override
+  @DateTimeStampConv()
   DateTime get timestamp;
   @override
   TextAlign get textAlign;
