@@ -30,3 +30,19 @@ class ColorIntConv implements JsonConverter<Color, String> {
     return colorX;
   }
 }
+
+// DateTime int Convert:
+// class DateTimeIntConv implements JsonConverter<DateTime, int> {
+//   const DateTimeIntConv();
+//
+//   @override // return DateTime from Timestamp
+//   DateTime fromJson(int json) {
+//     var timeStamp = Timestamp.fromMillisecondsSinceEpoch(json);
+//     print('timeStamp ${timeStamp}');
+//     return timeStamp.toDate();
+//   }
+//
+//   @override // return Timestamp from DateTime
+//   int toJson(DateTime dateTime) =>
+//       Timestamp.fromDate(dateTime).millisecondsSinceEpoch;
+// }

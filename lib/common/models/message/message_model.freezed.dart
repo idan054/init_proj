@@ -24,6 +24,7 @@ mixin _$MessageModel {
   String get fromId => throw _privateConstructorUsedError;
   String get toId => throw _privateConstructorUsedError;
   String get createdAt => throw _privateConstructorUsedError;
+  @DateTimeStampConv()
   DateTime get timestamp => throw _privateConstructorUsedError;
   String? get messageId =>
       throw _privateConstructorUsedError; // Cuz new field, was not exist at begging
@@ -45,7 +46,7 @@ abstract class $MessageModelCopyWith<$Res> {
       String fromId,
       String toId,
       String createdAt,
-      DateTime timestamp,
+      @DateTimeStampConv() DateTime timestamp,
       String? messageId,
       bool? read});
 }
@@ -113,7 +114,7 @@ abstract class _$$_MessageModelCopyWith<$Res>
       String fromId,
       String toId,
       String createdAt,
-      DateTime timestamp,
+      @DateTimeStampConv() DateTime timestamp,
       String? messageId,
       bool? read});
 }
@@ -180,7 +181,7 @@ class _$_MessageModel implements _MessageModel {
       required this.fromId,
       required this.toId,
       required this.createdAt,
-      required this.timestamp,
+      @DateTimeStampConv() required this.timestamp,
       this.messageId,
       this.read});
 
@@ -196,6 +197,7 @@ class _$_MessageModel implements _MessageModel {
   @override
   final String createdAt;
   @override
+  @DateTimeStampConv()
   final DateTime timestamp;
   @override
   final String? messageId;
@@ -254,7 +256,7 @@ abstract class _MessageModel implements MessageModel {
       required final String fromId,
       required final String toId,
       required final String createdAt,
-      required final DateTime timestamp,
+      @DateTimeStampConv() required final DateTime timestamp,
       final String? messageId,
       final bool? read}) = _$_MessageModel;
 
@@ -270,6 +272,7 @@ abstract class _MessageModel implements MessageModel {
   @override
   String get createdAt;
   @override
+  @DateTimeStampConv()
   DateTime get timestamp;
   @override
   String? get messageId;

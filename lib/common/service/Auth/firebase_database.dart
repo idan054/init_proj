@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, prefer_typing_uninitialized_variables
+
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,9 +7,12 @@ import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../Auth/auth_services.dart' as auth;
 import '../Chat/chat_services.dart' as chat;
+import '../Hive/hive_services.dart';
+import '../Hive/timestamp_convert.dart';
 
 /// ChatService Available At [auth.AuthService] // <<---
 /// newChat() & sendMessage() Available At [chat.ChatService] // <<---
@@ -68,17 +73,65 @@ class Database {
 
   //~ Made for specific scenario:
   //~ =========================
+  Future<List<PostModel>?> handleGetPost(BuildContext context) async {
+    print('START: handleGetPost()');
+    //> Get All posts from cache
+    List<Map<String, dynamic>> jsonPostsList =
+        HiveServices.postsBox.get('jsonPostsList') ?? [];
+    var postList =
+        jsonPostsList.map((json) => PostModel.fromJson(json)).toList();
+    print('postList ${postList.length}');
+    //> Get lasted cached post
+    var startAtDoc = await startAtDocBasedCache(
+        postList.isEmpty ? null : postList.last.postId);
 
-  static Future<List<PostModel>?> getPosts() {
+    //> Get new posts after that from server
+    var newPosts = await getPosts(context, startAtDoc) ?? [];
+    return [...postList, ...newPosts];
+  }
+
+  Future<List<PostModel>?> getPosts(
+      BuildContext context, DocumentSnapshot? startAtDoc) async {
     print('START: getPosts()');
-    return db.collection('posts').get().then((snap) {
+
+    return db
+        .collection('posts')
+        .orderBy('timestamp', descending: true)
+        // .startAtDocument(startAtDoc)
+        .limit(10)
+        .get()
+        .then((snap) async {
       var posts =
           snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+
+      var jsonPostsList = posts.map((post) => post.toJson()).toList();
+      var jsonReadyToHiveList =
+          jsonPostsList.map((json) => jsonWithTimestampToHive(json)).toList();
+      HiveServices.postsBox.put('jsonPostsList', jsonReadyToHiveList);
+      print('posts len ${posts.length}');
       return posts;
     }).onError((e, stackTrace) {
       print('ERROR: getPosts() E:  $e');
       return [];
     });
+  }
+
+  Future<DocumentSnapshot> startAtDocBasedCache(String? docId) async {
+    print('START: startAtDocBasedCache()');
+    if (docId != null) {
+      print('Start doc based oldest Seen');
+      var oldestSeenPostDoc = await db.collection("posts").doc(docId).get();
+      return oldestSeenPostDoc;
+    } else {
+      print('Start doc based most Recent');
+      var mostRecentPostDoc = await db
+          .collection("posts")
+          .orderBy('timestamp', descending: true)
+          .limit(1)
+          .get()
+          .then((snapshot) => snapshot.docs.first);
+      return mostRecentPostDoc;
+    }
   }
 
   static Stream<List<UserModel>>? streamUsers() {

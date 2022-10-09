@@ -1,4 +1,5 @@
 // ignore_for_file: invalid_annotation_target
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../convertors.dart';
@@ -16,10 +17,10 @@ class UserModel with _$UserModel {
     String? name,
     String? email,
     String? uid,
+    int? age,
     String? photoUrl,
     GenderTypes? gender,
     @DateTimeStampConv() DateTime? birthday,
-    int? age,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

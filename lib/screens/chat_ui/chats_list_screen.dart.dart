@@ -31,9 +31,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
             backAction: () => context.router.replace(const LoginRoute()),
             actions: [
               IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.people,
-                    color: Colors.white,
+                    color: AppColors.testGreen,
                   ),
                   onPressed: () => context.router.push(const MembersRoute()))
             ]),

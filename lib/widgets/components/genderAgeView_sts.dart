@@ -3,11 +3,11 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/service/Auth/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
 import '../../common/models/user/user_model.dart';
 import '../../common/routes/app_router.gr.dart';
+import '../../common/service/Hive/hive_services.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
 import '../../widgets/my_widgets.dart';
@@ -150,7 +150,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
         var currUser = context.uniProvider.currUser;
         currUser = currUser.copyWith(
             birthday: bDay, age: userAge, gender: selectedGender);
-        saveCurrUserLocally(currUser);
+        HiveServices().saveCurrUserLocally(context, currUser);
         Database().updateFirestore(
             collection: 'users',
             docName: '${currUser.email}',
@@ -160,11 +160,5 @@ class _GenderAgeViewState extends State<GenderAgeView> {
         setState(() {});
       }
     }).appearAll;
-  }
-
-  void saveCurrUserLocally(UserModel currUser) async {
-    context.uniProvider.updateUser(currUser);
-    final uniBox = await Hive.openBox('uniBox');
-    uniBox.put('currUserJson', currUser.toJson());
   }
 }

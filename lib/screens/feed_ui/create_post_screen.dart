@@ -164,7 +164,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     enableComments: false,
                     enableLikes: true,
                   );
-                  context.uniProvider.updatePostUploaded(post);
+                  // context.uniProvider.updatePostUploaded(post);
                   FeedService().uploadPost(context, post);
                   // context.router.pop();
                 }, radius: 10),

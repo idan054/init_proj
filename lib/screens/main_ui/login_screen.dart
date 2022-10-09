@@ -6,7 +6,6 @@ import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../common/mixins/assets.gen.dart';
 import '../../common/mixins/fonts.gen.dart';
@@ -21,8 +20,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
-
   @override
   Widget build(BuildContext context) {
     print('START: LoginScreen()');

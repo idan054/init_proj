@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/common/service/Hive/hive_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../models/user/user_model.dart';
 import '../Auth/firebase_database.dart' as click;
 import 'firebase_database.dart';
 
@@ -38,16 +40,19 @@ class AuthService {
     context.uniProvider.updateUser(user);
 
     var userFsData = await Database.docData('users/${user.email}');
-    userFsData == null ||
-            userFsData['gender'] == null ||
-            userFsData['age'] == null ||
-            userFsData['birthday'] == null
-        ? context.router.replace(const CreateUserRoute())
-        : context.router.replace(const DashboardRoute());
+    if (userFsData == null ||
+        userFsData['gender'] == null ||
+        userFsData['age'] == null ||
+        userFsData['birthday'] == null) {
+      context.router.replace(const CreateUserRoute());
+    } else {
+      // Embed data - when login only, no signup.
+      var currUser = UserModel.fromJson(userFsData);
+      HiveServices().saveCurrUserLocally(context, currUser);
+      context.router.replace(const DashboardRoute());
+    }
 
     print('userFsData $userFsData');
-    print(
-        'context.uniProvider.currUser.photoUrl ${context.uniProvider.currUser.photoUrl}');
   }
 }
 

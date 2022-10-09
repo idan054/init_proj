@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-import '../../common/models/user/user_model.dart';
+import '../../common/service/Hive/hive_services.dart';
 import '../../widgets/my_widgets.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,6 +18,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> with AfterLayout {
+  bool userLogged = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,8 +29,7 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
 
   @override
   void afterFirstLayout(BuildContext context) {
-    bool userLogged = FirebaseAuth.instance.currentUser?.uid != null;
-    // if (userLogged) {}
+    userLogged = FirebaseAuth.instance.currentUser?.uid != null;
 
     mySplashAsync().then(
       (_) => context.router.replaceAll(
@@ -38,13 +38,9 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
   }
 
   Future mySplashAsync() async {
-    await getUserLocallyData();
-  }
-
-  Future getUserLocallyData() async {
-    final uniBox = await Hive.openBox('uniBox');
-    var currUserJson = Map<String, dynamic>.from(uniBox.get('currUserJson'));
-    var currUser = UserModel.fromJson(currUserJson);
-    context.uniProvider.updateUser(currUser);
+    await HiveServices.openBoxes();
+    // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
+    Hive.box('postsBox').clear();
+    userLogged = await HiveServices().getUserLocallyData(context);
   }
 }

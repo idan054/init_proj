@@ -24,13 +24,13 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     return RefreshIndicator(
       backgroundColor: AppColors.darkGrey,
       color: AppColors.primary,
-      onRefresh: () async => setState(() {}),
+      onRefresh: () async => Database().handleGetPost(context),
       child: Scaffold(
         backgroundColor: AppColors.darkBlack,
         body: Stack(
           children: [
             FutureBuilder<List<PostModel>?>(
-                future: Database.getPosts(),
+                future: Database().handleGetPost(context),
                 builder: (context, snapshot) {
                   if (snapshot.hasData == false) {
                     return const CircularProgressIndicator(
@@ -43,7 +43,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                         .center;
                   }
                   var postList = snapshot.data!;
-                  var listHeight = 100 * postList.length * postRatio / 2;
+                  // var listHeight = 100 * postList.length * postRatio / 2;
+                  var listHeight = 100000.0; // todo remove this at Debug!
                   return SingleChildScrollView(
                     child: Row(
                       children: <Widget>[

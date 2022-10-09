@@ -1,7 +1,6 @@
 import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/models/models.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/models/message/message_model.dart';
+import '../../common/models/user/user_model.dart';
 import '../../common/service/Auth/firebase_database.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../widgets/app_bar.dart';
