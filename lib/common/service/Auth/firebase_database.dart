@@ -75,19 +75,42 @@ class Database {
   //~ Made for specific scenario:
   //~ =========================
 
-  static Future<List<PostModel>?> getPosts(
+  static Future<List<PostModel>?> getPostsStartAt(
       BuildContext context, DocumentSnapshot startAtDoc) async {
     print('START: getPosts()');
+    print('startAtDoc ${startAtDoc.id}');
 
     return db
         .collection('posts')
         .orderBy('timestamp', descending: true)
         .startAtDocument(startAtDoc)
-        .limit(2)
+        .limit(4)
         .get()
         .then((snap) async {
       var posts =
           snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+
+      return posts;
+    }).onError((e, stackTrace) {
+      print('ERROR: getPosts() E:  $e');
+      return [];
+    });
+  }
+
+  static Future<List<PostModel>?> getPostsEndBefore(
+      BuildContext context, DocumentSnapshot endBeforeDoc) async {
+    print('START: getPosts()');
+    print('startAtDoc ${endBeforeDoc.id}');
+
+    return db
+        .collection('posts')
+        .orderBy('timestamp', descending: true)
+        .endBeforeDocument(endBeforeDoc)
+        .limit(4)
+        .get()
+        .then((snap) async {
+      var posts =
+      snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
 
       return posts;
     }).onError((e, stackTrace) {

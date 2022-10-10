@@ -24,7 +24,10 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     return RefreshIndicator(
       backgroundColor: AppColors.darkGrey,
       color: AppColors.primary,
-      onRefresh: () async => setState(() => FeedService.handleGetPost(context)),
+      onRefresh: () async {
+            await FeedService.handleGetPost(context);
+            setState(()  {});
+      },
       child: Scaffold(
         backgroundColor: AppColors.darkBlack,
         body: Stack(
@@ -32,6 +35,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             FutureBuilder<List<PostModel>?>(
                 future: FeedService.handleGetPost(context),
                 builder: (context, snapshot) {
+                  print('START: FutureBuilder()');
+
                   if (snapshot.hasData == false) {
                     return const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 7)
                         .center;
@@ -40,8 +45,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                     return 'Sorry, no post found... \nTry again later!'.toText().center;
                   }
                   var postList = snapshot.data!;
-                  // var listHeight = 100 * postList.length * postRatio / 2;
-                  var listHeight = 100 * 100.0;
+                  var listHeight = 100 * postList.length * postRatio / 2;
+                  // var listHeight = 100 * 100.0;
                   return SingleChildScrollView(
                     child: Row(
                       children: <Widget>[

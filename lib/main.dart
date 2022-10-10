@@ -29,11 +29,11 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final dbDir = await getApplicationDocumentsDirectory();
   Hive.init(dbDir.path);
-  Hive.registerAdapter(GenderTypesAdapter()); // 1
-  Hive.registerAdapter(UserModelHiveAdapter()); // 2
-  Hive.registerAdapter(PostModelHiveAdapter());   // 3
+  Hive.registerAdapter(GenderTypesAdapter());      // 1
+  Hive.registerAdapter(UserModelHiveAdapter());    // 2
+  Hive.registerAdapter(PostModelHiveAdapter());    // 3
   Hive.registerAdapter(MessageModelHiveAdapter()); // 4
-  Hive.registerAdapter(ChatModelHiveAdapter()); // 5
+  Hive.registerAdapter(ChatModelHiveAdapter());    // 5
 
   runApp(
     MultiProvider(

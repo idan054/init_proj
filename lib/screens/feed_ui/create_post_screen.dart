@@ -158,7 +158,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   );
                   // context.uniProvider.updatePostUploaded(post);
                   FeedService().uploadPost(context, post);
-                  // context.router.pop();
+                  context.router.pop();
                 }, radius: 10),
               ],
             ),
