@@ -11,7 +11,6 @@ import 'package:flutter/cupertino.dart';
 
 import '../Auth/auth_services.dart' as auth;
 import '../Chat/chat_services.dart' as chat;
-import '../Hive/hive_services.dart';
 import '../Hive/timestamp_convert.dart';
 
 /// ChatService Available At [auth.AuthService] // <<---
@@ -77,9 +76,7 @@ class Database {
   //~ =========================
 
   static Future<List<PostModel>?> getPosts(
-      BuildContext context,
-      DocumentSnapshot startAtDoc,
-      List<Map<String, dynamic>> hivePostsList) async {
+      BuildContext context, DocumentSnapshot startAtDoc) async {
     print('START: getPosts()');
 
     return db
@@ -92,15 +89,6 @@ class Database {
       var posts =
           snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
 
-      var jsonPostsList = posts.map((post) => post.toJson()).toList();
-      var jsonReadyToHiveList =
-          jsonPostsList.map((json) => jsonWithTimestampToHive(json)).toList();
-
-      var hivePostsListReady =
-          hivePostsList.map((json) => jsonWithTimestampToHive(json)).toList();
-
-      HiveServices.postsBox
-          .put('jsonPostsList', [...hivePostsListReady, ...jsonPostsList]);
       return posts;
     }).onError((e, stackTrace) {
       print('ERROR: getPosts() E:  $e');

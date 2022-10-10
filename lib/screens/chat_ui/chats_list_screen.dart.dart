@@ -64,7 +64,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                       children: [
                         10.verticalSpace,
                         Text(
-                          chat.lastMessage?.createdAt.substring(9, 14) ?? '',
+                          chat.lastMessage?.createdAt!.substring(9, 14) ?? '',
                           style: AppStyles.text12PxRegular.greyLight,
                         )
                       ],

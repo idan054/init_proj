@@ -150,7 +150,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
         var currUser = context.uniProvider.currUser;
         currUser = currUser.copyWith(
             birthday: bDay, age: userAge, gender: selectedGender);
-        HiveServices().saveCurrUserLocally(context, currUser);
+        HiveServices().saveCurrUserToCache(context, currUser);
         Database().updateFirestore(
             collection: 'users',
             docName: '${currUser.email}',

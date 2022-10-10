@@ -48,7 +48,7 @@ class AuthService {
     } else {
       // Embed data - when login only, no signup.
       var currUser = UserModel.fromJson(userFsData);
-      HiveServices().saveCurrUserLocally(context, currUser);
+      HiveServices().saveCurrUserToCache(context, currUser);
       context.router.replace(const DashboardRoute());
     }
 

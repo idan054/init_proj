@@ -1,17 +1,19 @@
+// ignore_for_file: prefer_null_aware_operators
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 //~ DateTime Convert:
 //~ ================
-class DateTimeStampConv implements JsonConverter<DateTime, Timestamp> {
+class DateTimeStampConv implements JsonConverter<DateTime?, Timestamp?> {
   const DateTimeStampConv();
 
   @override // return DateTime from Timestamp
-  DateTime fromJson(Timestamp json) => json.toDate();
+  DateTime? fromJson(Timestamp? json) => json == null ? null : json.toDate();
 
   @override // return Timestamp from DateTime
-  Timestamp toJson(DateTime dateTime) => Timestamp.fromDate(dateTime);
+  Timestamp? toJson(DateTime? dateTime) => dateTime == null ? null : Timestamp.fromDate(dateTime);
 }
 
 //~ Color Convert:

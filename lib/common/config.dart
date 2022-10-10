@@ -13,6 +13,7 @@ bool boldPrimaryDesignConfig = false;
 
 /// Dev (debug)
 bool clearHiveBoxes = false;
+// bool clearHiveBoxes = false;
 // bool showDebugPrints = false && kDebugMode;
 
 // ? CTRL + F: Outside Lib folder:

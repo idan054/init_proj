@@ -124,7 +124,7 @@ class ChatScreen extends StatelessWidget {
     print('START: buildBubble()');
 
     bool currUser = message.fromId == context.uniProvider.currUser.uid;
-    bool isHebrew = message.textContent.isHebrew;
+    bool isHebrew = message.textContent!.isHebrew;
     return Row(
       mainAxisAlignment:
           currUser ? MainAxisAlignment.end : MainAxisAlignment.start,
@@ -139,10 +139,10 @@ class ChatScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(message.textContent,
+                    Text(message.textContent!,
                         textAlign: isHebrew ? TextAlign.end : TextAlign.start,
                         style: AppStyles.text16PxRegular.white),
-                    Text(message.createdAt.substring(9, 14),
+                    Text(message.createdAt!.substring(9, 14),
                         style: AppStyles.text12PxRegular.greyLight)
                   ],
                 ))).px(6).py(6)

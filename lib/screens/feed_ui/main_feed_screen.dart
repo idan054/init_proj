@@ -33,17 +33,15 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                 future: FeedService.handleGetPost(context),
                 builder: (context, snapshot) {
                   if (snapshot.hasData == false) {
-                    return const CircularProgressIndicator(
-                            color: AppColors.primary, strokeWidth: 7)
+                    return const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 7)
                         .center;
                   }
                   if (snapshot.data == null || snapshot.data!.isEmpty) {
-                    return 'Sorry, no post found... \nTry again later!'
-                        .toText()
-                        .center;
+                    return 'Sorry, no post found... \nTry again later!'.toText().center;
                   }
                   var postList = snapshot.data!;
-                  var listHeight = 100 * postList.length * postRatio / 2;
+                  // var listHeight = 100 * postList.length * postRatio / 2;
+                  var listHeight = 100 * 100.0;
                   return SingleChildScrollView(
                     child: Row(
                       children: <Widget>[
@@ -54,9 +52,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                               itemCount: postList.length,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int i) =>
-                                  i.isEven
-                                      ? const Offstage()
-                                      : PostView(postList[i])),
+                                  i.isEven ? const Offstage() : PostView(postList[i])),
                         ).offset(0, 100),
                         SizedBox(
                           height: listHeight, //ratio
@@ -65,9 +61,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                               itemCount: postList.length,
                               physics: const NeverScrollableScrollPhysics(),
                               itemBuilder: (BuildContext context, int i) =>
-                                  i.isOdd
-                                      ? const Offstage()
-                                      : PostView(postList[i])).appearAll,
+                                  i.isOdd ? const Offstage() : PostView(postList[i])).appearAll,
                         ),
                       ],
                     ),
@@ -76,11 +70,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             Container(
                 decoration: const BoxDecoration(
                   color: AppColors.darkBlack,
-                  borderRadius:
-                      BorderRadius.only(bottomRight: Radius.circular(5)),
+                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(5)),
                 ),
-                padding: const EdgeInsets.only(
-                    left: 15, right: 17.5, top: 35, bottom: 12.5),
+                padding: const EdgeInsets.only(left: 15, right: 17.5, top: 35, bottom: 12.5),
                 child: riltopiaLogo(fontSize: 35)),
           ],
         ),

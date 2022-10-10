@@ -23,8 +23,6 @@ class CreateUserScreen extends StatefulWidget {
   State<CreateUserScreen> createState() => _CreateUserScreenState();
 }
 
-enum GenderTypes { boy, girl, lgbt }
-
 class _CreateUserScreenState extends State<CreateUserScreen> {
   var editPageController = PageController(initialPage: 0);
   var nameController = TextEditingController();

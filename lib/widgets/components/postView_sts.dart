@@ -84,15 +84,15 @@ class PostView extends StatelessWidget {
             contentPadding: const EdgeInsets.only(left: 10, right: 0),
             leading: CircleAvatar(
               radius: 18,
-              backgroundImage: NetworkImage('${post.creatorUser.photoUrl}'),
+              backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
               backgroundColor: AppColors.darkBlack.withOpacity(0.33),
             ).pOnly(right: 5),
-            title: '${post.creatorUser.name}'.toText(fontSize: 13),
+            title: '${post.creatorUser!.name}'.toText(fontSize: 13),
             subtitle: Row(
               children: [
-                '${post.timestamp.hour}:'
-                        '${post.timestamp.minute.toString().length == 1 ? '0' : ''}'
-                        '${post.timestamp.minute}'
+                '${post.timestamp!.hour}:'
+                        '${post.timestamp!.minute.toString().length == 1 ? '0' : ''}'
+                        '${post.timestamp!.minute}'
                     .toText(
                         bold: true, fontSize: 10, color: AppColors.greyLight),
                 const Spacer(),

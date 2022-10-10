@@ -4,19 +4,20 @@ import 'package:example/common/service/Hive/timestamp_convert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
 
+import '../../models/post/post_model.dart';
+
 class HiveServices {
   static var uniBox = Hive.box('uniBox');
-  //~ Box values:
-  // - currUserJson
+  /// Box values:
+  //> currUser
 
   static var postsBox = Hive.box('postsBox');
-  //~ Box values:
-  // - postsList
-  // - oldestSeenPostDocId
+  /// Box values:
+  //> cachePostsList
 
   static Future openBoxes() async {
     await Hive.openBox('uniBox');
-    await Hive.openBox('postsBox');
+    await Hive.openBox<List<PostModel>>('postsBox');
   }
 
   static Future clearAllBoxes() async {
@@ -24,22 +25,22 @@ class HiveServices {
     await Hive.box('postsBox').clear();
   }
 
-  void saveCurrUserLocally(BuildContext context, UserModel currUser) async {
-    context.uniProvider.updateUser(currUser);
-    var currUserJson = jsonWithTimestampToHive(currUser.toJson());
-    HiveServices.uniBox.put('currUserJson', currUserJson);
-  }
-
-  Future<bool> getUserLocallyData(BuildContext context) async {
+  //~ CurrUser:
+  Future<bool> getCurrUserFromCache(BuildContext context) async {
+    print('START: getCurrUserFromCache()');
     try {
-      var currUserJson = Map<String, dynamic>.from(uniBox.get('currUserJson'));
-      var userFromHive = jsonWithTimestampFromHive(currUserJson);
-      var currUser = UserModel.fromJson(userFromHive);
+      var currUser = uniBox.get('currUser');
+      print('currUser ${currUser}');
       context.uniProvider.updateUser(currUser);
       return true;
     } catch (e) {
       return false;
     }
+  }
+
+  void saveCurrUserToCache(BuildContext context, UserModel currUser) async {
+    context.uniProvider.updateUser(currUser);
+    HiveServices.uniBox.put('currUser', currUser);
   }
 }
 
