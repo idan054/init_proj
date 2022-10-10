@@ -17,16 +17,21 @@ class FeedService {
     var cachePostsList = cacheHivePostsList.map((postModel) =>
         PostModelHive.fromHive(postModel)).toList();
 
+    cachePostsList.map((item)=>print('item: ${item}'));
+
     //> (2) Get lasted cached post
-    var startEndAtDoc = await Database.getStartAtDoc(
+    var endBeforeDoc = await Database.getStartEndAtDoc(
+        'posts', cachePostsList.isEmpty ? null : cachePostsList.first.postId);
+
+    var startAtDoc = await Database.getStartEndAtDoc(
         'posts', cachePostsList.isEmpty ? null : cachePostsList.last.postId);
 
     //> (3) Check if new & Get new posts after that from server
     // getPostsEndBefore() - Latest posts (if user upload new) - Stop on cache.
     // getPostsStartAt() - 10 new posts who didn't fetched yet - Start after cache.
     // so the post list order is [Latest posts -> cache -> older posts]
-    var latestPostList = await Database.getPostsEndBefore(context, startEndAtDoc) ?? [];
-    var newPostList = await Database.getPostsStartAt(context, startEndAtDoc) ?? [];
+    var latestPostList = await Database.getPostsEndBefore(context, endBeforeDoc) ?? [];
+    var newPostList = await Database.getPostsStartAt(context, startAtDoc) ?? [];
 
     //> (4) Remove duplicate, save to cache & Summary
     var noDuplicateList = <PostModel>{...latestPostList,...cachePostsList, ...newPostList}.toList();
@@ -34,9 +39,9 @@ class FeedService {
         PostModelHive.toHive(postModel)).toList();
     HiveServices.postsBox.put('cachePostsList', readyHiveList);
     print('SUMMARIES:');
-    print('✴️ (1) POSTS From Database (Latest): ${newPostList.length} ✴️ ');
-    print('❇️ (2) POSTS From Hive CACHE: ${cachePostsList.length} ❇️ ');
-    print('✴️ (3) POSTS From Database (older): ${newPostList.length} ✴️ ');
+    print('✴️ A (${latestPostList.length}) POSTS From Database (Latest) [EndBefore] ✴️ ');
+    print('❇️ B (${cachePostsList.length}) POSTS From Hive CACHE ❇️ ');
+    print('✴️ C (${newPostList.length}) POSTS From Database (older) [StartAt] ✴️ ');
 
     return noDuplicateList;
   }

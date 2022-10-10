@@ -51,7 +51,7 @@ class Database {
         .onError((error, stackTrace) => print('addToBatch ERR - $error'));
   }
 
-  static Future<DocumentSnapshot> getStartAtDoc(
+  static Future<DocumentSnapshot> getStartEndAtDoc(
       String collection, String? docId) async {
     print('START: getStartAtDoc()');
     if (docId != null) {
@@ -84,7 +84,7 @@ class Database {
         .collection('posts')
         .orderBy('timestamp', descending: true)
         .startAtDocument(startAtDoc)
-        .limit(4)
+        .limit(6)
         .get()
         .then((snap) async {
       var posts =
@@ -100,18 +100,17 @@ class Database {
   static Future<List<PostModel>?> getPostsEndBefore(
       BuildContext context, DocumentSnapshot endBeforeDoc) async {
     print('START: getPosts()');
-    print('startAtDoc ${endBeforeDoc.id}');
+    print('endBeforeDoc ${endBeforeDoc.id}');
 
     return db
         .collection('posts')
         .orderBy('timestamp', descending: true)
         .endBeforeDocument(endBeforeDoc)
-        .limit(4)
+        .limit(6)
         .get()
         .then((snap) async {
       var posts =
       snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
-
       return posts;
     }).onError((e, stackTrace) {
       print('ERROR: getPosts() E:  $e');

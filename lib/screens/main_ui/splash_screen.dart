@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
 
   Future mySplashAsync() async {
     await HiveServices.openBoxes();
-    // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
+    if (clearHiveBoxes) await HiveServices.clearAllBoxes();
     userLogged = await HiveServices.getCurrUserFromCache(context);
   }
 }
