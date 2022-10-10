@@ -14,16 +14,21 @@ class UniProvider with ChangeNotifier {
   }
 
   List<ChatModel>? chatList;
-
   void updateChatList(List<ChatModel> data) {
     chatList = data;
     notifyListeners();
   }
 
-  List<PostModel>? postsList;
 
-  void updatePostsList(List<PostModel> data) {
-    postsList = data;
+  // List<PostModel>? postsList;
+  // void updatePostsList(List<PostModel> data) {
+  //   postsList = data;
+  //   notifyListeners();
+  // }
+
+  bool isFeedLoading = false;
+  void updateIsFeedLoading(bool data) {
+    isFeedLoading = data;
     notifyListeners();
   }
 

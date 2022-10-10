@@ -47,7 +47,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         backgroundColor: AppColors.darkGrey,
         unselectedItemColor: AppColors.white,
         selectedItemColor: AppColors.primary,
-        dotIndicatorColor: boldPrimaryDesignConfig
+        dotIndicatorColor:
+        context.listenUniProvider.isFeedLoading ? AppColors.transparent :
+        boldPrimaryDesignConfig
             ? chatSelected
                 ? AppColors.white
                 : AppColors.primary
@@ -78,7 +80,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       : AppColors.white),
               selectedColor: AppColors.primary,
             ),
-          if (sItem == TabItems.home)
+          if (sItem == TabItems.home
+              && context.listenUniProvider.isFeedLoading)
+            DotNavigationBarItem(
+              icon: InkWell(
+                onTap: () => context.router.push(const CreatePostRoute()),
+                child: const CircularProgressIndicator(
+                    color: AppColors.primary, strokeWidth: 6).scale(scale: 0.90).pad(2)
+              ),
+              selectedColor: AppColors.primary,
+            ),
+          if (sItem == TabItems.home
+              && context.listenUniProvider.isFeedLoading == false)
             DotNavigationBarItem(
               icon: InkWell(
                 onTap: () => context.router.push(const CreatePostRoute()),
@@ -87,6 +100,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
               selectedColor: AppColors.primary,
             ),
+
+
         ],
       ),
     );
