@@ -23,7 +23,7 @@ static final post = PostModel(
     postId: 'postId 123',
     creatorUser: user,
     colorCover: Colors.green,
-    textAlign: TextAlign.left,
+    textAlign: 'left',
     likeCounter: 5,
     isDarkText: true,
     isSubPost: false,

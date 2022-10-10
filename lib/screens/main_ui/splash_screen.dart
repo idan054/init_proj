@@ -5,6 +5,7 @@ import 'package:example/common/service/mixins/after_layout_mixin.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
 import '../../common/config.dart';
 import '../../common/service/Hive/hive_services.dart';
@@ -39,8 +40,7 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
 
   Future mySplashAsync() async {
     await HiveServices.openBoxes();
-    if (clearHiveBoxes) await HiveServices.clearAllBoxes();
-    // Hive.box('postsBox').clear();
-    userLogged = await HiveServices().getCurrUserFromCache(context);
+    // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
+    userLogged = await HiveServices.getCurrUserFromCache(context);
   }
 }

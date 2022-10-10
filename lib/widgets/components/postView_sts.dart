@@ -18,9 +18,9 @@ class PostView extends StatelessWidget {
     bool isLiked = false;
     MainAxisAlignment?
         rowAlign; // Todo: Frontend so Hebrew will be only center || right Based .isHebrew
-    if (post.textAlign == TextAlign.right) rowAlign = MainAxisAlignment.end;
-    if (post.textAlign == TextAlign.center) rowAlign = MainAxisAlignment.center;
-    if (post.textAlign == TextAlign.right) rowAlign = MainAxisAlignment.end;
+    if (post.textAlign == 'right') rowAlign = MainAxisAlignment.end;
+    if (post.textAlign == 'center') rowAlign = MainAxisAlignment.center;
+    if (post.textAlign == 'right') rowAlign = MainAxisAlignment.end;
 
     return StatefulBuilder(builder: (context, setState) {
       return GestureDetector(

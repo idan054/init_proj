@@ -23,7 +23,7 @@ class UserModelHive {
   UserModelHive(
       {this.email, this.name, this.photoUrl, this.age, this.uid, this.birthday, this.gender});
 
-  UserModelHive toHive(UserModel user) => UserModelHive(
+  static UserModelHive toHive(UserModel user) => UserModelHive(
     birthday: user.birthday,
     email: user.email,
     uid: user.uid,
@@ -33,7 +33,7 @@ class UserModelHive {
     gender: user.gender,
   );
 
-  UserModel fromHive(UserModelHive user) => UserModel(
+  static UserModel fromHive(UserModelHive user) => UserModel(
     birthday: user.birthday,
     email: user.email,
     uid: user.uid,

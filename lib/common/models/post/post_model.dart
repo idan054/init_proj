@@ -25,7 +25,7 @@ class PostModel with _$PostModel {
     @Default(false) bool enableLikes,
     @Default(false) bool enableComments,
     @DateTimeStampConv() DateTime? timestamp,
-    @Default(TextAlign.center) TextAlign textAlign,
+    @Default('') String textAlign,
     int? likeCounter,
     String? photoCover,
     @ColorIntConv() Color? colorCover,

@@ -1,5 +1,7 @@
+import 'package:example/common/models/post/hive/hive_post_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:flutter/material.dart';
+import 'package:palestine_console/palestine_console.dart';
 
 import '../Auth/firebase_database.dart' as click;
 import '../Auth/firebase_database.dart';
@@ -11,10 +13,9 @@ class FeedService {
   static Future<List<PostModel>?> handleGetPost(BuildContext context) async {
     print('START: handleGetPost()');
     //> (1) Get All posts from cache
-    var cachePostsList = HiveServices.postsBox.get('cachePostsList') ?? [];
-    print('cachePostsList ${cachePostsList.runtimeType}');
-    print('cachePostsList ${cachePostsList}');
-
+    var cacheHivePostsList = HiveServices.postsBox.get('cachePostsList') ?? [];
+    var cachePostsList = cacheHivePostsList.map((postModel) =>
+        PostModelHive.fromHive(postModel)).toList();
     //> (2) Get lasted cached post
     var startAtDoc = await Database.getStartAtDoc(
         'posts', cachePostsList.isEmpty ? null : cachePostsList.last.postId);
@@ -24,10 +25,12 @@ class FeedService {
 
     //> (4) Remove duplicate, save to cache & Summary
     var noDuplicateList = <PostModel>{...cachePostsList, ...newPostList}.toList();
-    HiveServices.postsBox.put('cachePostsList', noDuplicateList);
+    var readyHiveList = noDuplicateList.map((postModel) =>
+        PostModelHive.toHive(postModel)).toList();
+    HiveServices.postsBox.put('cachePostsList', readyHiveList);
     print('SUMMARIES:');
-    print('POSTS From Hive CACHE: ${cachePostsList.length}');
-    print('POSTS From Database: ${newPostList.length}');
+    print('❇️ POSTS From Hive CACHE: ${cachePostsList.length} ❇️ ');
+    print('✴️ POSTS From Database: ${newPostList.length} ✴️ ');
 
     return noDuplicateList;
   }

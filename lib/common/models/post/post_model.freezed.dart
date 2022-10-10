@@ -30,7 +30,7 @@ mixin _$PostModel {
   bool get enableComments => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
-  TextAlign get textAlign => throw _privateConstructorUsedError;
+  String get textAlign => throw _privateConstructorUsedError;
   int? get likeCounter => throw _privateConstructorUsedError;
   String? get photoCover => throw _privateConstructorUsedError;
   @ColorIntConv()
@@ -55,7 +55,7 @@ abstract class $PostModelCopyWith<$Res> {
       bool enableLikes,
       bool enableComments,
       @DateTimeStampConv() DateTime? timestamp,
-      TextAlign textAlign,
+      String textAlign,
       int? likeCounter,
       String? photoCover,
       @ColorIntConv() Color? colorCover});
@@ -122,7 +122,7 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
       textAlign: textAlign == freezed
           ? _value.textAlign
           : textAlign // ignore: cast_nullable_to_non_nullable
-              as TextAlign,
+              as String,
       likeCounter: likeCounter == freezed
           ? _value.likeCounter
           : likeCounter // ignore: cast_nullable_to_non_nullable
@@ -165,7 +165,7 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
       bool enableLikes,
       bool enableComments,
       @DateTimeStampConv() DateTime? timestamp,
-      TextAlign textAlign,
+      String textAlign,
       int? likeCounter,
       String? photoCover,
       @ColorIntConv() Color? colorCover});
@@ -235,7 +235,7 @@ class __$$_PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
       textAlign: textAlign == freezed
           ? _value.textAlign
           : textAlign // ignore: cast_nullable_to_non_nullable
-              as TextAlign,
+              as String,
       likeCounter: likeCounter == freezed
           ? _value.likeCounter
           : likeCounter // ignore: cast_nullable_to_non_nullable
@@ -265,7 +265,7 @@ class _$_PostModel implements _PostModel {
       this.enableLikes = false,
       this.enableComments = false,
       @DateTimeStampConv() this.timestamp,
-      this.textAlign = TextAlign.center,
+      this.textAlign = '',
       this.likeCounter,
       this.photoCover,
       @ColorIntConv() this.colorCover});
@@ -299,7 +299,7 @@ class _$_PostModel implements _PostModel {
   final DateTime? timestamp;
   @override
   @JsonKey()
-  final TextAlign textAlign;
+  final String textAlign;
   @override
   final int? likeCounter;
   @override
@@ -380,7 +380,7 @@ abstract class _PostModel implements PostModel {
       final bool enableLikes,
       final bool enableComments,
       @DateTimeStampConv() final DateTime? timestamp,
-      final TextAlign textAlign,
+      final String textAlign,
       final int? likeCounter,
       final String? photoCover,
       @ColorIntConv() final Color? colorCover}) = _$_PostModel;
@@ -406,7 +406,7 @@ abstract class _PostModel implements PostModel {
   @DateTimeStampConv()
   DateTime? get timestamp;
   @override
-  TextAlign get textAlign;
+  String get textAlign;
   @override
   int? get likeCounter;
   @override

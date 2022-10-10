@@ -1,4 +1,6 @@
 import 'package:example/common/extensions/context_extensions.dart';
+import 'package:example/common/models/post/hive/hive_post_model.dart';
+import 'package:example/common/models/user/hive/hive_user_model.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/service/Hive/timestamp_convert.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +19,8 @@ class HiveServices {
 
   static Future openBoxes() async {
     await Hive.openBox('uniBox');
-    await Hive.openBox<List<PostModel>>('postsBox');
+    await Hive.openBox('postsBox');
+    // await Hive.openBox<List<PostModel>>('postsBox');
   }
 
   static Future clearAllBoxes() async {
@@ -26,11 +29,11 @@ class HiveServices {
   }
 
   //~ CurrUser:
-  Future<bool> getCurrUserFromCache(BuildContext context) async {
+  static Future<bool> getCurrUserFromCache(BuildContext context) async {
     print('START: getCurrUserFromCache()');
     try {
-      var currUser = uniBox.get('currUser');
-      print('currUser ${currUser}');
+      UserModelHive currUserHive = uniBox.get('currUser');
+      UserModel currUser = UserModelHive.fromHive(currUserHive);
       context.uniProvider.updateUser(currUser);
       return true;
     } catch (e) {
@@ -40,7 +43,7 @@ class HiveServices {
 
   void saveCurrUserToCache(BuildContext context, UserModel currUser) async {
     context.uniProvider.updateUser(currUser);
-    HiveServices.uniBox.put('currUser', currUser);
+    HiveServices.uniBox.put('currUser', UserModelHive.toHive(currUser));
   }
 }
 

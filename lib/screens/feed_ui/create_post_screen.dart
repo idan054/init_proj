@@ -20,7 +20,7 @@ class CreatePostScreen extends StatefulWidget {
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
   var postTextController = TextEditingController();
-  var postAlign = TextAlign.center;
+  var textAlignStr = 'center';
   Color postColor = AppColors.primary;
   bool isDarkText = false;
   bool simplePicker = true;
@@ -28,12 +28,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   Widget build(BuildContext context) {
     print('START: CreatePostScreen()');
+    TextAlign textAlign = textAlignStr == 'center'
+        ? TextAlign.center
+        : textAlignStr == 'right'
+            ? TextAlign.right
+            : TextAlign.left;
     // bool isKeyboardVisible = WidgetsBinding.instance.window.viewInsets.bottom > 0.0;
     UserModel currUser = context.uniProvider.currUser;
     var textColor = isDarkText ? AppColors.darkBlack : AppColors.white;
-    var textDir = postTextController.text.isHebrew
-        ? TextDirection.rtl
-        : TextDirection.ltr;
+    var textDir = postTextController.text.isHebrew ? TextDirection.rtl : TextDirection.ltr;
 
     return Scaffold(
       backgroundColor: postColor,
@@ -52,14 +55,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 onChanged: (val) {
                   setState(() {});
                 },
-                textAlign: postAlign,
+                textAlign: textAlign,
                 style: AppStyles.text18PxBold.copyWith(color: textColor),
                 decoration: InputDecoration(
                     counter: const Offstage(),
                     border: InputBorder.none,
                     hintText: 'Type your message...',
-                    hintStyle:
-                        AppStyles.text18PxBold.copyWith(color: textColor)),
+                    hintStyle: AppStyles.text18PxBold.copyWith(color: textColor)),
               ),
               // if (!isKeyboardVisible)
             ],
@@ -81,33 +83,30 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     ],
                   ),
                 ),
-                padding: const EdgeInsets.only(
-                    left: 15, right: 17.5, top: 35, bottom: 12.5),
+                padding: const EdgeInsets.only(left: 15, right: 17.5, top: 35, bottom: 12.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                        onPressed: () =>
-                            setState(() => isDarkText = !isDarkText),
+                        onPressed: () => setState(() => isDarkText = !isDarkText),
                         icon: Icons.invert_colors.icon(size: 30)),
                     //
                     // riltopiaLogo(fontSize: 25),
-                    if (postAlign == TextAlign.center &&
-                        postTextController.text.isHebrew)
-                      Icons.format_align_center.icon(size: 30).onTap(
-                          () => setState(() => postAlign = TextAlign.right)),
-                    if (postAlign == TextAlign.center &&
-                        !postTextController.text.isHebrew)
-                      Icons.format_align_left.icon(size: 30).onTap(
-                          () => setState(() => postAlign = TextAlign.left)),
-                    if (postAlign == TextAlign.right ||
-                        postAlign == TextAlign.left)
-                      Icons.format_align_right.icon(size: 30).onTap(
-                          () => setState(() => postAlign = TextAlign.center)),
+                    if (textAlignStr == 'center' && postTextController.text.isHebrew)
+                      Icons.format_align_center
+                          .icon(size: 30)
+                          .onTap(() => setState(() => textAlignStr = 'right')),
+                    if (textAlignStr == 'center' && !postTextController.text.isHebrew)
+                      Icons.format_align_left
+                          .icon(size: 30)
+                          .onTap(() => setState(() => textAlignStr = 'left')),
+                    if (textAlignStr == 'right' || textAlignStr == TextAlign.left)
+                      Icons.format_align_right
+                          .icon(size: 30)
+                          .onTap(() => setState(() => textAlignStr = 'center')),
                     //
                     IconButton(
-                        onPressed: () => showPickerDialog(),
-                        icon: Icons.palette.icon(size: 30)),
+                        onPressed: () => showPickerDialog(), icon: Icons.palette.icon(size: 30)),
                   ],
                 )).bottom,
           ),
@@ -126,35 +125,28 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 bottomRight: Radius.circular(5),
               ),
             ),
-            padding: const EdgeInsets.only(
-                left: 10, right: 10, top: 35, bottom: 12.5),
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 35, bottom: 12.5),
             child: Row(
               children: [
-                Icons.arrow_back_ios_new_rounded
-                    .icon()
-                    .pad(15)
-                    .onTap(() => context.router.pop()),
+                Icons.arrow_back_ios_new_rounded.icon().pad(15).onTap(() => context.router.pop()),
                 15.horizontalSpace,
                 Builder(builder: (context) {
                   var counter = postTextController.text.length;
-                  return '$counter/255'.toText(
-                      color:
-                          counter == 255 ? AppColors.errRed : AppColors.white);
+                  return '$counter/255'
+                      .toText(color: counter == 255 ? AppColors.errRed : AppColors.white);
                 }),
                 const Spacer(),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text('Ril',
-                        style: AppStyles.text18PxBold.white.rilTopiaFont),
-                    Text('Post',
-                        style: AppStyles.text18PxRegular.white.rilTopiaFont),
+                    Text('Ril', style: AppStyles.text18PxBold.white.rilTopiaFont),
+                    Text('Post', style: AppStyles.text18PxRegular.white.rilTopiaFont),
                   ],
                 ).py(10).px(10).onTap(() {
                   var post = PostModel(
                     textContent: postTextController.text,
                     postId: '${currUser.email}${UniqueKey()}',
-                    textAlign: postAlign,
+                    textAlign: textAlignStr,
                     creatorUser: currUser,
                     isDarkText: isDarkText,
                     colorCover: postColor,
@@ -190,8 +182,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               title: 'Simple',
               color: AppColors.darkGrey,
               width: 100,
-              textColor:
-                  simplePicker ? AppColors.primary : AppColors.greyUnavailable,
+              textColor: simplePicker ? AppColors.primary : AppColors.greyUnavailable,
               onPressed: () {
                 simplePicker = true;
                 Navigator.of(context).pop();
@@ -203,8 +194,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               title: 'Advanced',
               color: AppColors.darkGrey,
               width: 110,
-              textColor:
-                  simplePicker ? AppColors.greyUnavailable : AppColors.primary,
+              textColor: simplePicker ? AppColors.greyUnavailable : AppColors.primary,
               onPressed: () {
                 simplePicker = false;
                 Navigator.of(context).pop();

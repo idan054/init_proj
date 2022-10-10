@@ -46,6 +46,7 @@ dependencies:
   string_to_hex: ^0.2.2
   shared_preferences: ^2.0.15
   hive_generator: ^1.1.3
+  palestine_console: ^0.0.10
 
 dev_dependencies:
   flutter_test:

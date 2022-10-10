@@ -18,8 +18,7 @@ _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
       enableComments: json['enableComments'] as bool? ?? false,
       timestamp:
           const DateTimeStampConv().fromJson(json['timestamp'] as Timestamp?),
-      textAlign: $enumDecodeNullable(_$TextAlignEnumMap, json['textAlign']) ??
-          TextAlign.center,
+      textAlign: json['textAlign'] as String? ?? '',
       likeCounter: json['likeCounter'] as int?,
       photoCover: json['photoCover'] as String?,
       colorCover: _$JsonConverterFromJson<String, Color>(
@@ -36,21 +35,12 @@ Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
       'enableLikes': instance.enableLikes,
       'enableComments': instance.enableComments,
       'timestamp': const DateTimeStampConv().toJson(instance.timestamp),
-      'textAlign': _$TextAlignEnumMap[instance.textAlign]!,
+      'textAlign': instance.textAlign,
       'likeCounter': instance.likeCounter,
       'photoCover': instance.photoCover,
       'colorCover': _$JsonConverterToJson<String, Color>(
           instance.colorCover, const ColorIntConv().toJson),
     };
-
-const _$TextAlignEnumMap = {
-  TextAlign.left: 'left',
-  TextAlign.right: 'right',
-  TextAlign.center: 'center',
-  TextAlign.justify: 'justify',
-  TextAlign.start: 'start',
-  TextAlign.end: 'end',
-};
 
 Value? _$JsonConverterFromJson<Json, Value>(
   Object? json,

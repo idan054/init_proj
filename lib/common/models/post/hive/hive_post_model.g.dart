@@ -19,16 +19,16 @@ class PostModelHiveAdapter extends TypeAdapter<PostModelHive> {
     return PostModelHive(
       textContent: fields[0] as String?,
       postId: fields[1] as String?,
-      creatorUser: fields[2] as UserModel?,
+      creatorUser: fields[2] as UserModelHive?,
       isDarkText: fields[3] as bool?,
       isSubPost: fields[4] as bool?,
       enableLikes: fields[5] as bool?,
       enableComments: fields[6] as bool?,
       timestamp: fields[7] as DateTime?,
-      textAlign: fields[8] as TextAlign?,
+      textAlign: fields[8] as String?,
       likeCounter: fields[9] as int?,
       photoCover: fields[10] as String?,
-      colorCover: fields[11] as Color?,
+      colorCover: fields[11] as String?,
     );
   }
 
