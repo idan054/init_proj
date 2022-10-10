@@ -26,23 +26,6 @@ class Database {
   static Future<Map<String, dynamic>?> docData(String documentPath) =>
       db.doc(documentPath).get().then((doc) => doc.data());
 
-  static Stream<List<ChatModel>>? streamChats(String currUserId) {
-    print('START: streamChats()');
-    return db
-        .collection('chats')
-        .where('usersIds', arrayContains: currUserId)
-        .snapshots()
-        .map((QuerySnapshot list) {
-      return list.docs.map((DocumentSnapshot snap) {
-        print('CHAT_DOC_ID: ${snap.id}');
-        // print(snap.data());
-        return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
-      }).toList();
-    }).handleError((dynamic e) {
-      print('EEE $e');
-    });
-  }
-
   void updateFirestore(
       {required String collection,
       String? docName,
@@ -53,8 +36,6 @@ class Database {
         .set(toJson, SetOptions(merge: true))
         .onError((error, stackTrace) => print('updateFirestore ERR - $error'));
   }
-
-  /// Batch operations:
 
   void addToBatch(
       {required WriteBatch batch,
@@ -71,34 +52,41 @@ class Database {
         .onError((error, stackTrace) => print('addToBatch ERR - $error'));
   }
 
-  //~ Made for specific scenario:
-  //~ =========================
-  Future<List<PostModel>?> handleGetPost(BuildContext context) async {
-    print('START: handleGetPost()');
-    //> Get All posts from cache
-    List<Map<String, dynamic>> jsonPostsList =
-        HiveServices.postsBox.get('jsonPostsList') ?? [];
-    var postList =
-        jsonPostsList.map((json) => PostModel.fromJson(json)).toList();
-    print('postList ${postList.length}');
-    //> Get lasted cached post
-    var startAtDoc = await startAtDocBasedCache(
-        postList.isEmpty ? null : postList.last.postId);
-
-    //> Get new posts after that from server
-    var newPosts = await getPosts(context, startAtDoc) ?? [];
-    return [...postList, ...newPosts];
+  static Future<DocumentSnapshot> getStartAtDoc(
+      String collection, String? docId) async {
+    print('START: getStartAtDoc()');
+    if (docId != null) {
+      print('GET DOC BASED OLD ONE... (StartAt)');
+      var oldestSeenPostDoc = await db.collection(collection).doc(docId).get();
+      return oldestSeenPostDoc;
+    } else {
+      print('GET DOC BASED null: USE MOST RECENT INSTEAD!');
+      var mostRecentPostDoc = await db
+          .collection(collection)
+          .orderBy('timestamp', descending: true)
+          .limit(1)
+          .get()
+          .then((snapshot) => snapshot.docs.first);
+      return mostRecentPostDoc;
+    }
   }
 
-  Future<List<PostModel>?> getPosts(
-      BuildContext context, DocumentSnapshot? startAtDoc) async {
+// TODO: remove duplications! & limit the list to lasted 100. (From getPosts - jsonPostsList)
+
+  //~ Made for specific scenario:
+  //~ =========================
+
+  static Future<List<PostModel>?> getPosts(
+      BuildContext context,
+      DocumentSnapshot startAtDoc,
+      List<Map<String, dynamic>> hivePostsList) async {
     print('START: getPosts()');
 
     return db
         .collection('posts')
         .orderBy('timestamp', descending: true)
-        // .startAtDocument(startAtDoc)
-        .limit(10)
+        .startAtDocument(startAtDoc)
+        .limit(2)
         .get()
         .then((snap) async {
       var posts =
@@ -107,8 +95,12 @@ class Database {
       var jsonPostsList = posts.map((post) => post.toJson()).toList();
       var jsonReadyToHiveList =
           jsonPostsList.map((json) => jsonWithTimestampToHive(json)).toList();
-      HiveServices.postsBox.put('jsonPostsList', jsonReadyToHiveList);
-      print('posts len ${posts.length}');
+
+      var hivePostsListReady =
+          hivePostsList.map((json) => jsonWithTimestampToHive(json)).toList();
+
+      HiveServices.postsBox
+          .put('jsonPostsList', [...hivePostsListReady, ...jsonPostsList]);
       return posts;
     }).onError((e, stackTrace) {
       print('ERROR: getPosts() E:  $e');
@@ -116,22 +108,21 @@ class Database {
     });
   }
 
-  Future<DocumentSnapshot> startAtDocBasedCache(String? docId) async {
-    print('START: startAtDocBasedCache()');
-    if (docId != null) {
-      print('Start doc based oldest Seen');
-      var oldestSeenPostDoc = await db.collection("posts").doc(docId).get();
-      return oldestSeenPostDoc;
-    } else {
-      print('Start doc based most Recent');
-      var mostRecentPostDoc = await db
-          .collection("posts")
-          .orderBy('timestamp', descending: true)
-          .limit(1)
-          .get()
-          .then((snapshot) => snapshot.docs.first);
-      return mostRecentPostDoc;
-    }
+  static Stream<List<ChatModel>>? streamChats(String currUserId) {
+    print('START: streamChats()');
+    return db
+        .collection('chats')
+        .where('usersIds', arrayContains: currUserId)
+        .snapshots()
+        .map((QuerySnapshot list) {
+      return list.docs.map((DocumentSnapshot snap) {
+        print('CHAT_DOC_ID: ${snap.id}');
+        // print(snap.data());
+        return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
+      }).toList();
+    }).handleError((dynamic e) {
+      print('EEE $e');
+    });
   }
 
   static Stream<List<UserModel>>? streamUsers() {

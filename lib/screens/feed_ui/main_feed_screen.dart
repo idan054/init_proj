@@ -1,4 +1,5 @@
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:example/common/themes/app_colors.dart';
 // import 'package:example/common/service/Auth/firebase_database.dart';
 import 'package:example/widgets/components/postView_sts.dart';
@@ -6,7 +7,6 @@ import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
 
 import '../../common/models/post/post_model.dart';
-import '../../common/service/Auth/firebase_database.dart';
 
 class MainFeedScreen extends StatefulWidget {
   const MainFeedScreen({Key? key}) : super(key: key);
@@ -24,13 +24,13 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     return RefreshIndicator(
       backgroundColor: AppColors.darkGrey,
       color: AppColors.primary,
-      onRefresh: () async => Database().handleGetPost(context),
+      onRefresh: () async => setState(() => FeedService.handleGetPost(context)),
       child: Scaffold(
         backgroundColor: AppColors.darkBlack,
         body: Stack(
           children: [
             FutureBuilder<List<PostModel>?>(
-                future: Database().handleGetPost(context),
+                future: FeedService.handleGetPost(context),
                 builder: (context, snapshot) {
                   if (snapshot.hasData == false) {
                     return const CircularProgressIndicator(
@@ -43,8 +43,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                         .center;
                   }
                   var postList = snapshot.data!;
-                  // var listHeight = 100 * postList.length * postRatio / 2;
-                  var listHeight = 100000.0; // todo remove this at Debug!
+                  var listHeight = 100 * postList.length * postRatio / 2;
                   return SingleChildScrollView(
                     child: Row(
                       children: <Widget>[
