@@ -12,9 +12,13 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'common/models/chat/chat_model.dart';
+import 'common/models/chat/hive/hive_chat_model.dart';
+import 'common/models/message/hive/hive_message_model.dart';
 import 'common/models/message/message_model.dart';
+import 'common/models/post/hive/hive_post_model.dart';
 import 'common/models/post/post_model.dart';
 import 'common/models/sampleModels.dart';
+import 'package:example/common/models/user/hive/hive_user_model.dart';
 import 'common/models/universalModel.dart';
 import 'common/service/Auth/firebase_options.dart';
 import 'common/service/Hive/hive_services.dart';
@@ -25,18 +29,12 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   final dbDir = await getApplicationDocumentsDirectory();
   Hive.init(dbDir.path);
-  Hive.registerAdapter(UserModelAdapter());
-  Hive.registerAdapter(PostModelAdapter());
-  Hive.registerAdapter(MessageModelAdapter());
-  Hive.registerAdapter(ChatModelAdapter());
+  Hive.registerAdapter(GenderTypesAdapter()); // 1
+  Hive.registerAdapter(UserModelHiveAdapter()); // 2
+  Hive.registerAdapter(PostModelHiveAdapter()); // 3
+  Hive.registerAdapter(MessageModelHiveAdapter()); // 4
+  Hive.registerAdapter(ChatModelHiveAdapter()); // 5
 
-  await Hive.openBox('uniBox');
-  // This before put because i want to get it from cache!!
-  print('HiveServices.uniBox.values ${HiveServices.uniBox.values}');
-  HiveServices.uniBox.put('user', Sample.user);
-
-
-  return;
   runApp(
     MultiProvider(
         providers: [

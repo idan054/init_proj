@@ -20,15 +20,10 @@ ChatModel _$ChatModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChatModel {
-  @HiveField(0)
   String? get id => throw _privateConstructorUsedError; // chat id
-  @HiveField(1)
   MessageModel? get lastMessage => throw _privateConstructorUsedError;
-  @HiveField(2)
   List<String>? get usersIds => throw _privateConstructorUsedError;
-  @HiveField(3)
   List<UserModel>? get users => throw _privateConstructorUsedError;
-  @HiveField(4)
   List<MessageModel>? get messages => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -42,11 +37,11 @@ abstract class $ChatModelCopyWith<$Res> {
   factory $ChatModelCopyWith(ChatModel value, $Res Function(ChatModel) then) =
       _$ChatModelCopyWithImpl<$Res>;
   $Res call(
-      {@HiveField(0) String? id,
-      @HiveField(1) MessageModel? lastMessage,
-      @HiveField(2) List<String>? usersIds,
-      @HiveField(3) List<UserModel>? users,
-      @HiveField(4) List<MessageModel>? messages});
+      {String? id,
+      MessageModel? lastMessage,
+      List<String>? usersIds,
+      List<UserModel>? users,
+      List<MessageModel>? messages});
 
   $MessageModelCopyWith<$Res>? get lastMessage;
 }
@@ -110,11 +105,11 @@ abstract class _$$_ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
       __$$_ChatModelCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@HiveField(0) String? id,
-      @HiveField(1) MessageModel? lastMessage,
-      @HiveField(2) List<String>? usersIds,
-      @HiveField(3) List<UserModel>? users,
-      @HiveField(4) List<MessageModel>? messages});
+      {String? id,
+      MessageModel? lastMessage,
+      List<String>? usersIds,
+      List<UserModel>? users,
+      List<MessageModel>? messages});
 
   @override
   $MessageModelCopyWith<$Res>? get lastMessage;
@@ -168,11 +163,11 @@ class __$$_ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$_ChatModel implements _ChatModel {
   const _$_ChatModel(
-      {@HiveField(0) this.id,
-      @HiveField(1) this.lastMessage,
-      @HiveField(2) final List<String>? usersIds,
-      @HiveField(3) final List<UserModel>? users,
-      @HiveField(4) final List<MessageModel>? messages})
+      {this.id,
+      this.lastMessage,
+      final List<String>? usersIds,
+      final List<UserModel>? users,
+      final List<MessageModel>? messages})
       : _usersIds = usersIds,
         _users = users,
         _messages = messages;
@@ -181,15 +176,12 @@ class _$_ChatModel implements _ChatModel {
       _$$_ChatModelFromJson(json);
 
   @override
-  @HiveField(0)
   final String? id;
 // chat id
   @override
-  @HiveField(1)
   final MessageModel? lastMessage;
   final List<String>? _usersIds;
   @override
-  @HiveField(2)
   List<String>? get usersIds {
     final value = _usersIds;
     if (value == null) return null;
@@ -199,7 +191,6 @@ class _$_ChatModel implements _ChatModel {
 
   final List<UserModel>? _users;
   @override
-  @HiveField(3)
   List<UserModel>? get users {
     final value = _users;
     if (value == null) return null;
@@ -209,7 +200,6 @@ class _$_ChatModel implements _ChatModel {
 
   final List<MessageModel>? _messages;
   @override
-  @HiveField(4)
   List<MessageModel>? get messages {
     final value = _messages;
     if (value == null) return null;
@@ -260,29 +250,24 @@ class _$_ChatModel implements _ChatModel {
 
 abstract class _ChatModel implements ChatModel {
   const factory _ChatModel(
-      {@HiveField(0) final String? id,
-      @HiveField(1) final MessageModel? lastMessage,
-      @HiveField(2) final List<String>? usersIds,
-      @HiveField(3) final List<UserModel>? users,
-      @HiveField(4) final List<MessageModel>? messages}) = _$_ChatModel;
+      {final String? id,
+      final MessageModel? lastMessage,
+      final List<String>? usersIds,
+      final List<UserModel>? users,
+      final List<MessageModel>? messages}) = _$_ChatModel;
 
   factory _ChatModel.fromJson(Map<String, dynamic> json) =
       _$_ChatModel.fromJson;
 
   @override
-  @HiveField(0)
   String? get id;
   @override // chat id
-  @HiveField(1)
   MessageModel? get lastMessage;
   @override
-  @HiveField(2)
   List<String>? get usersIds;
   @override
-  @HiveField(3)
   List<UserModel>? get users;
   @override
-  @HiveField(4)
   List<MessageModel>? get messages;
   @override
   @JsonKey(ignore: true)

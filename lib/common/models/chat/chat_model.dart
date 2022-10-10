@@ -10,15 +10,15 @@ part 'chat_model.g.dart';
 
 // flutter pub run build_runner build --delete-conflicting-outputs
 @freezed
-@HiveType(typeId: 4, adapterName: 'ChatModelAdapter')
+//~ Don't forget to manually add in HIVE Model!
 class ChatModel with _$ChatModel {
   @JsonSerializable(explicitToJson: true) // This needed for sub classes only
   const factory ChatModel({
-    @HiveField(0) String? id, // chat id
-    @HiveField(1) MessageModel? lastMessage,
-    @HiveField(2) List<String>? usersIds,
-    @HiveField(3) List<UserModel>? users,
-    @HiveField(4) List<MessageModel>? messages,
+    String? id, // chat id
+    MessageModel? lastMessage,
+    List<String>? usersIds,
+    List<UserModel>? users,
+    List<MessageModel>? messages,
   }) = _ChatModel;
 
   factory ChatModel.fromJson(Map<String, dynamic> json) =>

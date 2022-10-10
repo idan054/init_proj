@@ -5,6 +5,7 @@ import 'package:example/common/service/Auth/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import 'package:example/common/models/user/hive/hive_user_model.dart';
 import '../../common/models/user/user_model.dart';
 import '../../common/routes/app_router.gr.dart';
 import '../../common/service/Hive/hive_services.dart';

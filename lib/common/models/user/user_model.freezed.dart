@@ -20,19 +20,12 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserModel {
-  @HiveField(0)
   String? get name => throw _privateConstructorUsedError;
-  @HiveField(1)
   String? get email => throw _privateConstructorUsedError;
-  @HiveField(2)
   String? get uid => throw _privateConstructorUsedError;
-  @HiveField(3)
   int? get age => throw _privateConstructorUsedError;
-  @HiveField(4)
   String? get photoUrl => throw _privateConstructorUsedError;
-  @HiveField(5)
   GenderTypes? get gender => throw _privateConstructorUsedError;
-  @HiveField(6)
   @DateTimeStampConv()
   DateTime? get birthday => throw _privateConstructorUsedError;
 
@@ -47,13 +40,13 @@ abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
       _$UserModelCopyWithImpl<$Res>;
   $Res call(
-      {@HiveField(0) String? name,
-      @HiveField(1) String? email,
-      @HiveField(2) String? uid,
-      @HiveField(3) int? age,
-      @HiveField(4) String? photoUrl,
-      @HiveField(5) GenderTypes? gender,
-      @HiveField(6) @DateTimeStampConv() DateTime? birthday});
+      {String? name,
+      String? email,
+      String? uid,
+      int? age,
+      String? photoUrl,
+      GenderTypes? gender,
+      @DateTimeStampConv() DateTime? birthday});
 }
 
 /// @nodoc
@@ -114,13 +107,13 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       __$$_UserModelCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@HiveField(0) String? name,
-      @HiveField(1) String? email,
-      @HiveField(2) String? uid,
-      @HiveField(3) int? age,
-      @HiveField(4) String? photoUrl,
-      @HiveField(5) GenderTypes? gender,
-      @HiveField(6) @DateTimeStampConv() DateTime? birthday});
+      {String? name,
+      String? email,
+      String? uid,
+      int? age,
+      String? photoUrl,
+      GenderTypes? gender,
+      @DateTimeStampConv() DateTime? birthday});
 }
 
 /// @nodoc
@@ -177,40 +170,34 @@ class __$$_UserModelCopyWithImpl<$Res> extends _$UserModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_UserModel implements _UserModel {
   const _$_UserModel(
-      {@HiveField(0) this.name,
-      @HiveField(1) this.email,
-      @HiveField(2) this.uid,
-      @HiveField(3) this.age,
-      @HiveField(4) this.photoUrl,
-      @HiveField(5) this.gender,
-      @HiveField(6) @DateTimeStampConv() this.birthday});
+      {this.name,
+      this.email,
+      this.uid,
+      this.age,
+      this.photoUrl,
+      this.gender,
+      @DateTimeStampConv() this.birthday});
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserModelFromJson(json);
 
   @override
-  @HiveField(0)
   final String? name;
   @override
-  @HiveField(1)
   final String? email;
   @override
-  @HiveField(2)
   final String? uid;
   @override
-  @HiveField(3)
   final int? age;
   @override
-  @HiveField(4)
   final String? photoUrl;
   @override
-  @HiveField(5)
   final GenderTypes? gender;
   @override
-  @HiveField(6)
   @DateTimeStampConv()
   final DateTime? birthday;
 
@@ -260,38 +247,30 @@ class _$_UserModel implements _UserModel {
 
 abstract class _UserModel implements UserModel {
   const factory _UserModel(
-          {@HiveField(0) final String? name,
-          @HiveField(1) final String? email,
-          @HiveField(2) final String? uid,
-          @HiveField(3) final int? age,
-          @HiveField(4) final String? photoUrl,
-          @HiveField(5) final GenderTypes? gender,
-          @HiveField(6) @DateTimeStampConv() final DateTime? birthday}) =
-      _$_UserModel;
+      {final String? name,
+      final String? email,
+      final String? uid,
+      final int? age,
+      final String? photoUrl,
+      final GenderTypes? gender,
+      @DateTimeStampConv() final DateTime? birthday}) = _$_UserModel;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$_UserModel.fromJson;
 
   @override
-  @HiveField(0)
   String? get name;
   @override
-  @HiveField(1)
   String? get email;
   @override
-  @HiveField(2)
   String? get uid;
   @override
-  @HiveField(3)
   int? get age;
   @override
-  @HiveField(4)
   String? get photoUrl;
   @override
-  @HiveField(5)
   GenderTypes? get gender;
   @override
-  @HiveField(6)
   @DateTimeStampConv()
   DateTime? get birthday;
   @override

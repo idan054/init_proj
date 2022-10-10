@@ -8,19 +8,20 @@ import '../convertors.dart';
 part 'message_model.freezed.dart';
 part 'message_model.g.dart';
 
+
 // flutter pub run build_runner build --delete-conflicting-outputs
+//~ Don't forget to manually add in HIVE Model!
 @freezed
-@HiveType(typeId: 3, adapterName: 'MessageModelAdapter')
 class MessageModel with _$MessageModel {
   // @JsonSerializable(explicitToJson: true) // This needed for sub classes only
   const factory MessageModel({
-    @HiveField(0) String? textContent,
-    @HiveField(1) String? fromId,
-    @HiveField(2) String? toId,
-    @HiveField(3) String? createdAt,
-    @HiveField(4) @DateTimeStampConv() DateTime? timestamp,
-    @HiveField(5) String? messageId, // Cuz new field, was not exist at begging
-    @HiveField(6) bool? read,
+    String? textContent,
+    String? fromId,
+    String? toId,
+    String? createdAt,
+    @DateTimeStampConv() DateTime? timestamp,
+    String? messageId, // Cuz new field, was not exist at begging
+    bool? read,
   }) = _MessageModel;
 
   factory MessageModel.fromJson(Map<String, dynamic> json) =>

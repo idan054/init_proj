@@ -20,21 +20,14 @@ MessageModel _$MessageModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MessageModel {
-  @HiveField(0)
   String? get textContent => throw _privateConstructorUsedError;
-  @HiveField(1)
   String? get fromId => throw _privateConstructorUsedError;
-  @HiveField(2)
   String? get toId => throw _privateConstructorUsedError;
-  @HiveField(3)
   String? get createdAt => throw _privateConstructorUsedError;
-  @HiveField(4)
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
-  @HiveField(5)
   String? get messageId =>
       throw _privateConstructorUsedError; // Cuz new field, was not exist at begging
-  @HiveField(6)
   bool? get read => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,13 +42,13 @@ abstract class $MessageModelCopyWith<$Res> {
           MessageModel value, $Res Function(MessageModel) then) =
       _$MessageModelCopyWithImpl<$Res>;
   $Res call(
-      {@HiveField(0) String? textContent,
-      @HiveField(1) String? fromId,
-      @HiveField(2) String? toId,
-      @HiveField(3) String? createdAt,
-      @HiveField(4) @DateTimeStampConv() DateTime? timestamp,
-      @HiveField(5) String? messageId,
-      @HiveField(6) bool? read});
+      {String? textContent,
+      String? fromId,
+      String? toId,
+      String? createdAt,
+      @DateTimeStampConv() DateTime? timestamp,
+      String? messageId,
+      bool? read});
 }
 
 /// @nodoc
@@ -117,13 +110,13 @@ abstract class _$$_MessageModelCopyWith<$Res>
       __$$_MessageModelCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@HiveField(0) String? textContent,
-      @HiveField(1) String? fromId,
-      @HiveField(2) String? toId,
-      @HiveField(3) String? createdAt,
-      @HiveField(4) @DateTimeStampConv() DateTime? timestamp,
-      @HiveField(5) String? messageId,
-      @HiveField(6) bool? read});
+      {String? textContent,
+      String? fromId,
+      String? toId,
+      String? createdAt,
+      @DateTimeStampConv() DateTime? timestamp,
+      String? messageId,
+      bool? read});
 }
 
 /// @nodoc
@@ -184,39 +177,32 @@ class __$$_MessageModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_MessageModel implements _MessageModel {
   const _$_MessageModel(
-      {@HiveField(0) this.textContent,
-      @HiveField(1) this.fromId,
-      @HiveField(2) this.toId,
-      @HiveField(3) this.createdAt,
-      @HiveField(4) @DateTimeStampConv() this.timestamp,
-      @HiveField(5) this.messageId,
-      @HiveField(6) this.read});
+      {this.textContent,
+      this.fromId,
+      this.toId,
+      this.createdAt,
+      @DateTimeStampConv() this.timestamp,
+      this.messageId,
+      this.read});
 
   factory _$_MessageModel.fromJson(Map<String, dynamic> json) =>
       _$$_MessageModelFromJson(json);
 
   @override
-  @HiveField(0)
   final String? textContent;
   @override
-  @HiveField(1)
   final String? fromId;
   @override
-  @HiveField(2)
   final String? toId;
   @override
-  @HiveField(3)
   final String? createdAt;
   @override
-  @HiveField(4)
   @DateTimeStampConv()
   final DateTime? timestamp;
   @override
-  @HiveField(5)
   final String? messageId;
 // Cuz new field, was not exist at begging
   @override
-  @HiveField(6)
   final bool? read;
 
   @override
@@ -266,38 +252,31 @@ class _$_MessageModel implements _MessageModel {
 
 abstract class _MessageModel implements MessageModel {
   const factory _MessageModel(
-      {@HiveField(0) final String? textContent,
-      @HiveField(1) final String? fromId,
-      @HiveField(2) final String? toId,
-      @HiveField(3) final String? createdAt,
-      @HiveField(4) @DateTimeStampConv() final DateTime? timestamp,
-      @HiveField(5) final String? messageId,
-      @HiveField(6) final bool? read}) = _$_MessageModel;
+      {final String? textContent,
+      final String? fromId,
+      final String? toId,
+      final String? createdAt,
+      @DateTimeStampConv() final DateTime? timestamp,
+      final String? messageId,
+      final bool? read}) = _$_MessageModel;
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
       _$_MessageModel.fromJson;
 
   @override
-  @HiveField(0)
   String? get textContent;
   @override
-  @HiveField(1)
   String? get fromId;
   @override
-  @HiveField(2)
   String? get toId;
   @override
-  @HiveField(3)
   String? get createdAt;
   @override
-  @HiveField(4)
   @DateTimeStampConv()
   DateTime? get timestamp;
   @override
-  @HiveField(5)
   String? get messageId;
   @override // Cuz new field, was not exist at begging
-  @HiveField(6)
   bool? get read;
   @override
   @JsonKey(ignore: true)
