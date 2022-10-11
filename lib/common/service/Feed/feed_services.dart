@@ -30,21 +30,21 @@ class FeedService {
     // getPostsEndBefore() - Latest posts (if user upload new) - Stop on cache.
     // getPostsStartAt() - 10 new posts who didn't fetched yet - Start after cache.
     // so the post list order is [Latest posts -> cache -> older posts]
-    var newPostList = latest && cachePostsList.isNotEmpty ?
-      await Database.getPostsEndBefore(context, endBeforeDoc) ?? []
-    : await Database.getPostsStartAt(context, startAtDoc) ?? [];
+    var newPostList = latest && cachePostsList.isNotEmpty
+        ? await Database.getPostsEndBefore(context, endBeforeDoc) ?? []
+        : await Database.getPostsStartAt(context, startAtDoc) ?? [];
 
     //> (4) Remove duplicate, save to cache & Summary
-    var noDuplicateList =
-    latest && cachePostsList.isNotEmpty ?
-        <PostModel>{...newPostList, ...cachePostsList}.toList()
+    var noDuplicateList = latest && cachePostsList.isNotEmpty
+        ? <PostModel>{...newPostList, ...cachePostsList}.toList()
         : <PostModel>{...cachePostsList, ...newPostList}.toList();
     var readyHiveList =
         noDuplicateList.map((postModel) => PostModelHive.toHive(postModel)).toList();
     HiveServices.postsBox.put('cachePostsList', readyHiveList);
     print('SUMMARIES:');
-    print(latest ? '✴️ (${newPostList.length}) POSTS From Database (Latest) [EndBefore] ✴️ '
-                 : '✴️ (${newPostList.length}) POSTS From Database (older) [StartAt] ✴️ ');
+    print(latest
+        ? '✴️ (${newPostList.length}) POSTS From Database (Latest) [EndBefore] ✴️ '
+        : '✴️ (${newPostList.length}) POSTS From Database (older) [StartAt] ✴️ ');
     print('❇️ (${cachePostsList.length}) POSTS From Hive CACHE ❇️ ');
 
     return noDuplicateList;
@@ -65,21 +65,23 @@ class FeedService {
     print('START: setPostLike()');
     var currUserUid = context.uniProvider.currUser.uid;
     List<String> likesUids = [...post.likeByIds];
+    final isAlreadyLiked = likesUids.contains(context.uniProvider.currUser.uid);
 
-    if(post.likeByIds.contains(currUserUid) || isLiked){
-    print('unLiked');
+    if (isLiked) {
+      print('unLiked');
       likesUids.remove(currUserUid!);
       post = post.copyWith(
-          likeCounter: post.likeCounter == 0 ? 0 : post.likeCounter! - 1,
-          likeByIds: likesUids
-      );
+          likeCounter: post.likeCounter == 0 ? 0 : post.likeCounter! - 1, likeByIds: likesUids);
     } else {
-    print('Liked!');
-    likesUids.add(currUserUid!);
-    post = post.copyWith(
-        likeCounter: post.likeCounter == null ? 1 : post.likeCounter! + 1,
-        likeByIds: likesUids
-    );
+      print('Liked!');
+      if(!isAlreadyLiked) likesUids.add(currUserUid!);
+      post = post.copyWith(
+          likeCounter: post.likeCounter == null
+              ? 1
+              : isAlreadyLiked
+                  ? post.likeCounter!
+                  : post.likeCounter! + 1,
+          likeByIds: likesUids);
     }
 
     HiveServices.updatePostInCache(post);

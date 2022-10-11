@@ -46,14 +46,20 @@ extension StringX on String {
   Text toText(
           {Color color = AppColors.white,
           double? fontSize,
-          bool bold = false}) =>
+          bool bold = false,
+          bool softWrap = false
+          }) =>
       Text(this,
+          softWrap: softWrap,
+          maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: bold
               ? AppStyles.text18PxBold
-                  .copyWith(color: color, fontSize: fontSize ?? 18.sp)
+                  .copyWith(color: color, fontSize: fontSize ?? 18.sp,
+              height: 1) // line spacing
               : AppStyles.text18PxRegular
-                  .copyWith(color: color, fontSize: fontSize ?? 18.sp));
+                  .copyWith(color: color, fontSize: fontSize ?? 18.sp,
+              height: 1)); // line spacing
 
   Text get testText => Text(
         this,
