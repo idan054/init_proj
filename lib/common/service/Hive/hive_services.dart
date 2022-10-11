@@ -28,6 +28,20 @@ class HiveServices {
     await Hive.box('postsBox').clear();
   }
 
+  // Use to update like status.
+  static updatePostInCache(PostModel updatePost) {
+    var cacheHivePostsList = HiveServices.postsBox.get('cachePostsList') ?? [];
+    var cachePostsList =
+    cacheHivePostsList.map((postModel) => PostModelHive.fromHive(postModel)).toList();
+
+    var postIndex = cachePostsList.indexWhere((item) => item.postId == updatePost.postId);
+    cachePostsList.removeWhere((item) => item.postId == updatePost.postId); // Remove original
+    cachePostsList.insert(postIndex, updatePost); // Add new
+
+    var readyHiveList = cachePostsList.map((postModel) => PostModelHive.toHive(postModel)).toList();
+    HiveServices.postsBox.put('cachePostsList', readyHiveList);
+  }
+
   //~ CurrUser:
   static Future<bool> getCurrUserFromCache(BuildContext context) async {
     print('START: getCurrUserFromCache()');

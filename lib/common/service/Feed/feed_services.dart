@@ -82,25 +82,13 @@ class FeedService {
     );
     }
 
+    HiveServices.updatePostInCache(post);
+    // todo use AddToBatch() + dispose() instead
     Database().updateFirestore(
       collection: 'posts',
       docName: post.postId,
       toJson: post.toJson(),
     );
-
-    //> Update Hive:
-    var cacheHivePostsList = HiveServices.postsBox.get('cachePostsList') ?? [];
-    var cachePostsList =
-           cacheHivePostsList.map((postModel) => PostModelHive.fromHive(postModel)).toList();
-
-    var postIndex = cachePostsList.indexWhere((item) => item.postId == post.postId);
-    cachePostsList.removeWhere((item) => item.postId == post.postId); // Remove original
-    cachePostsList.insert(postIndex, post); // Add new
-
-    var readyHiveList = cachePostsList.map((postModel) => PostModelHive.toHive(postModel)).toList();
-    HiveServices.postsBox.put('cachePostsList', readyHiveList);
-
-
   }
 
   void uploadPost(BuildContext context, PostModel post) {
