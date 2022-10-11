@@ -26,6 +26,11 @@ extension IconDataX on IconData {
 extension WidgetX on Widget {
   // My extension:
   InkWell onTap(GestureTapCallback? onTap, {double radius = 99}) => InkWell(
+    // overlayColor: MaterialStateProperty.all(Colors.yellow),
+    //   splashColor: Colors.yellow,
+    //   focusColor: Colors.yellow,
+    //   highlightColor: Colors.yellow,
+    //   hoverColor: Colors.yellow,
       borderRadius: BorderRadius.circular(radius), onTap: onTap, child: this);
 
   Directionality isHebrewDirectionality(String text) => Directionality(

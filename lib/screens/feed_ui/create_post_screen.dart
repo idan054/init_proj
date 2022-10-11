@@ -153,7 +153,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     timestamp: DateTime.now(),
                     likeCounter: 0,
                     isSubPost: false,
-                    enableComments: false,
+                    enableComments: true,
                     enableLikes: true,
                   );
                   // context.uniProvider.updatePostUploaded(post);
