@@ -32,6 +32,7 @@ mixin _$PostModel {
   DateTime? get timestamp => throw _privateConstructorUsedError;
   String get textAlign => throw _privateConstructorUsedError;
   int? get likeCounter => throw _privateConstructorUsedError;
+  List<String> get likeByIds => throw _privateConstructorUsedError;
   String? get photoCover => throw _privateConstructorUsedError;
   @ColorIntConv()
   Color? get colorCover => throw _privateConstructorUsedError;
@@ -57,6 +58,7 @@ abstract class $PostModelCopyWith<$Res> {
       @DateTimeStampConv() DateTime? timestamp,
       String textAlign,
       int? likeCounter,
+      List<String> likeByIds,
       String? photoCover,
       @ColorIntConv() Color? colorCover});
 
@@ -83,6 +85,7 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
     Object? timestamp = freezed,
     Object? textAlign = freezed,
     Object? likeCounter = freezed,
+    Object? likeByIds = freezed,
     Object? photoCover = freezed,
     Object? colorCover = freezed,
   }) {
@@ -127,6 +130,10 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
           ? _value.likeCounter
           : likeCounter // ignore: cast_nullable_to_non_nullable
               as int?,
+      likeByIds: likeByIds == freezed
+          ? _value.likeByIds
+          : likeByIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       photoCover: photoCover == freezed
           ? _value.photoCover
           : photoCover // ignore: cast_nullable_to_non_nullable
@@ -167,6 +174,7 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
       @DateTimeStampConv() DateTime? timestamp,
       String textAlign,
       int? likeCounter,
+      List<String> likeByIds,
       String? photoCover,
       @ColorIntConv() Color? colorCover});
 
@@ -196,6 +204,7 @@ class __$$_PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
     Object? timestamp = freezed,
     Object? textAlign = freezed,
     Object? likeCounter = freezed,
+    Object? likeByIds = freezed,
     Object? photoCover = freezed,
     Object? colorCover = freezed,
   }) {
@@ -240,6 +249,10 @@ class __$$_PostModelCopyWithImpl<$Res> extends _$PostModelCopyWithImpl<$Res>
           ? _value.likeCounter
           : likeCounter // ignore: cast_nullable_to_non_nullable
               as int?,
+      likeByIds: likeByIds == freezed
+          ? _value._likeByIds
+          : likeByIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       photoCover: photoCover == freezed
           ? _value.photoCover
           : photoCover // ignore: cast_nullable_to_non_nullable
@@ -267,8 +280,10 @@ class _$_PostModel implements _PostModel {
       @DateTimeStampConv() this.timestamp,
       this.textAlign = '',
       this.likeCounter,
+      final List<String> likeByIds = const [],
       this.photoCover,
-      @ColorIntConv() this.colorCover});
+      @ColorIntConv() this.colorCover})
+      : _likeByIds = likeByIds;
 
   factory _$_PostModel.fromJson(Map<String, dynamic> json) =>
       _$$_PostModelFromJson(json);
@@ -302,6 +317,14 @@ class _$_PostModel implements _PostModel {
   final String textAlign;
   @override
   final int? likeCounter;
+  final List<String> _likeByIds;
+  @override
+  @JsonKey()
+  List<String> get likeByIds {
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_likeByIds);
+  }
+
   @override
   final String? photoCover;
   @override
@@ -310,7 +333,7 @@ class _$_PostModel implements _PostModel {
 
   @override
   String toString() {
-    return 'PostModel(textContent: $textContent, postId: $postId, creatorUser: $creatorUser, isDarkText: $isDarkText, isSubPost: $isSubPost, enableLikes: $enableLikes, enableComments: $enableComments, timestamp: $timestamp, textAlign: $textAlign, likeCounter: $likeCounter, photoCover: $photoCover, colorCover: $colorCover)';
+    return 'PostModel(textContent: $textContent, postId: $postId, creatorUser: $creatorUser, isDarkText: $isDarkText, isSubPost: $isSubPost, enableLikes: $enableLikes, enableComments: $enableComments, timestamp: $timestamp, textAlign: $textAlign, likeCounter: $likeCounter, likeByIds: $likeByIds, photoCover: $photoCover, colorCover: $colorCover)';
   }
 
   @override
@@ -335,6 +358,8 @@ class _$_PostModel implements _PostModel {
             const DeepCollectionEquality()
                 .equals(other.likeCounter, likeCounter) &&
             const DeepCollectionEquality()
+                .equals(other._likeByIds, _likeByIds) &&
+            const DeepCollectionEquality()
                 .equals(other.photoCover, photoCover) &&
             const DeepCollectionEquality()
                 .equals(other.colorCover, colorCover));
@@ -354,6 +379,7 @@ class _$_PostModel implements _PostModel {
       const DeepCollectionEquality().hash(timestamp),
       const DeepCollectionEquality().hash(textAlign),
       const DeepCollectionEquality().hash(likeCounter),
+      const DeepCollectionEquality().hash(_likeByIds),
       const DeepCollectionEquality().hash(photoCover),
       const DeepCollectionEquality().hash(colorCover));
 
@@ -382,6 +408,7 @@ abstract class _PostModel implements PostModel {
       @DateTimeStampConv() final DateTime? timestamp,
       final String textAlign,
       final int? likeCounter,
+      final List<String> likeByIds,
       final String? photoCover,
       @ColorIntConv() final Color? colorCover}) = _$_PostModel;
 
@@ -409,6 +436,8 @@ abstract class _PostModel implements PostModel {
   String get textAlign;
   @override
   int? get likeCounter;
+  @override
+  List<String> get likeByIds;
   @override
   String? get photoCover;
   @override

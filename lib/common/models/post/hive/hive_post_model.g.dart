@@ -29,13 +29,14 @@ class PostModelHiveAdapter extends TypeAdapter<PostModelHive> {
       likeCounter: fields[9] as int?,
       photoCover: fields[10] as String?,
       colorCover: fields[11] as String?,
+      likeByIds: (fields[12] as List?)?.cast<String>(),
     );
   }
 
   @override
   void write(BinaryWriter writer, PostModelHive obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.textContent)
       ..writeByte(1)
@@ -59,7 +60,9 @@ class PostModelHiveAdapter extends TypeAdapter<PostModelHive> {
       ..writeByte(10)
       ..write(obj.photoCover)
       ..writeByte(11)
-      ..write(obj.colorCover);
+      ..write(obj.colorCover)
+      ..writeByte(12)
+      ..write(obj.likeByIds);
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -20,6 +21,10 @@ class PostView extends StatelessWidget {
     if (post.textAlign == 'right') postAlign = TextAlign.end;
     if (post.textAlign == 'center') postAlign = TextAlign.center;
     if (post.textAlign == 'right') postAlign = TextAlign.end;
+
+    print('-----------');
+    print('post.textContent ${post.textContent}');
+    print('post.likeByIds ${post.likeByIds}');
 
     return StatefulBuilder(builder: (context, setState) {
       return GestureDetector(
@@ -73,6 +78,7 @@ class PostView extends StatelessWidget {
             onTap: () {
               // U might change this view to STF & add the update on dispose()
               // Todo: Add like update on feed_services.dart
+              FeedService().setPostLike(context, post, isLiked);
               stfSetState(() => isLiked = !isLiked);
             },
             horizontalTitleGap: 0.0,
@@ -100,7 +106,7 @@ class PostView extends StatelessWidget {
                           color:
                               isLiked ? AppColors.white : AppColors.greyLight),
                 if (post.enableLikes)
-                  isLiked
+                  isLiked || post.likeByIds.contains(context.uniProvider.currUser.uid)
                       ? FontAwesomeIcons.solidHeart
                           .iconAwesome(size: 12)
                           .offset(0, 2)

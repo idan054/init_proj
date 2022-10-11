@@ -1,3 +1,4 @@
+import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/post/hive/hive_post_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,48 @@ class FeedService {
   //       docName: message.messageId,
   //       toJson: {'read': true});
   // }
+
+  void setPostLike(BuildContext context, PostModel post, bool isLiked) {
+    print('START: setPostLike()');
+    var currUserUid = context.uniProvider.currUser.uid;
+    List<String> likesUids = [...post.likeByIds];
+
+    if(post.likeByIds.contains(currUserUid) || isLiked){
+    print('unLiked');
+      likesUids.remove(currUserUid!);
+      post = post.copyWith(
+          likeCounter: post.likeCounter == 0 ? 0 : post.likeCounter! - 1,
+          likeByIds: likesUids
+      );
+    } else {
+    print('Liked!');
+    likesUids.add(currUserUid!);
+    post = post.copyWith(
+        likeCounter: post.likeCounter == null ? 1 : post.likeCounter! + 1,
+        likeByIds: likesUids
+    );
+    }
+
+    Database().updateFirestore(
+      collection: 'posts',
+      docName: post.postId,
+      toJson: post.toJson(),
+    );
+
+    //> Update Hive:
+    var cacheHivePostsList = HiveServices.postsBox.get('cachePostsList') ?? [];
+    var cachePostsList =
+           cacheHivePostsList.map((postModel) => PostModelHive.fromHive(postModel)).toList();
+
+    var postIndex = cachePostsList.indexWhere((item) => item.postId == post.postId);
+    cachePostsList.removeWhere((item) => item.postId == post.postId); // Remove original
+    cachePostsList.insert(postIndex, post); // Add new
+
+    var readyHiveList = cachePostsList.map((postModel) => PostModelHive.toHive(postModel)).toList();
+    HiveServices.postsBox.put('cachePostsList', readyHiveList);
+
+
+  }
 
   void uploadPost(BuildContext context, PostModel post) {
     print('START: uploadPost()');

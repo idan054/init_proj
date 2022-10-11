@@ -20,6 +20,7 @@ class PostModelHive {
   @HiveField(9) int? likeCounter;
   @HiveField(10) String? photoCover;
   @HiveField(11) String? colorCover; // Its converts to Color on fromHive()!
+  @HiveField(12) List<String>? likeByIds;
   PostModelHive({
         this.textContent,
         this.postId,
@@ -33,6 +34,7 @@ class PostModelHive {
         this.likeCounter,
         this.photoCover,
         this.colorCover,
+        this.likeByIds,
 
 });
 
@@ -52,6 +54,7 @@ class PostModelHive {
       likeCounter: post.likeCounter,
       photoCover: post.photoCover,
       colorCover: colorX,
+      likeByIds: post.likeByIds,
     );
   }
 
@@ -71,6 +74,7 @@ class PostModelHive {
       likeCounter: post.likeCounter,
       photoCover: post.photoCover,
       colorCover: color,
+      likeByIds: post.likeByIds ?? [],
     );
   }
 }

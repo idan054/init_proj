@@ -20,6 +20,10 @@ _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
           const DateTimeStampConv().fromJson(json['timestamp'] as Timestamp?),
       textAlign: json['textAlign'] as String? ?? '',
       likeCounter: json['likeCounter'] as int?,
+      likeByIds: (json['likeByIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
       photoCover: json['photoCover'] as String?,
       colorCover: _$JsonConverterFromJson<String, Color>(
           json['colorCover'], const ColorIntConv().fromJson),
@@ -37,6 +41,7 @@ Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
       'timestamp': const DateTimeStampConv().toJson(instance.timestamp),
       'textAlign': instance.textAlign,
       'likeCounter': instance.likeCounter,
+      'likeByIds': instance.likeByIds,
       'photoCover': instance.photoCover,
       'colorCover': _$JsonConverterToJson<String, Color>(
           instance.colorCover, const ColorIntConv().toJson),

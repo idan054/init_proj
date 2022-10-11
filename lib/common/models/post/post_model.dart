@@ -27,6 +27,7 @@ class PostModel with _$PostModel {
     @DateTimeStampConv() DateTime? timestamp,
     @Default('') String textAlign,
     int? likeCounter,
+    @Default([]) List<String> likeByIds,
     String? photoCover,
     @ColorIntConv() Color? colorCover,
   }) = _PostModel;
