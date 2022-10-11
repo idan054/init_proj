@@ -10,16 +10,15 @@ import '../Hive/hive_services.dart';
 /// streamMessages() Available At [click.Database] // <<---
 
 class FeedService {
-  static Future<List<PostModel>?> handleGetPost(BuildContext context) async {
+  static Future<List<PostModel>?> handleGetPost(BuildContext context,
+      {required bool latest}) async {
     print('START: handleGetPost()');
     //> (1) Get All posts from cache
     var cacheHivePostsList = HiveServices.postsBox.get('cachePostsList') ?? [];
-    var cachePostsList = cacheHivePostsList.map((postModel) =>
-        PostModelHive.fromHive(postModel)).toList();
+    var cachePostsList =
+        cacheHivePostsList.map((postModel) => PostModelHive.fromHive(postModel)).toList();
 
-    cachePostsList.map((item)=>print('item: ${item}'));
-
-    //> (2) Get lasted cached post
+    //> (2) Get Latest cached post
     var endBeforeDoc = await Database.getStartEndAtDoc(
         'posts', cachePostsList.isEmpty ? null : cachePostsList.first.postId);
 
@@ -30,18 +29,22 @@ class FeedService {
     // getPostsEndBefore() - Latest posts (if user upload new) - Stop on cache.
     // getPostsStartAt() - 10 new posts who didn't fetched yet - Start after cache.
     // so the post list order is [Latest posts -> cache -> older posts]
-    var latestPostList = await Database.getPostsEndBefore(context, endBeforeDoc) ?? [];
-    var newPostList = await Database.getPostsStartAt(context, startAtDoc) ?? [];
+    var newPostList = latest && cachePostsList.isNotEmpty ?
+      await Database.getPostsEndBefore(context, endBeforeDoc) ?? []
+    : await Database.getPostsStartAt(context, startAtDoc) ?? [];
 
     //> (4) Remove duplicate, save to cache & Summary
-    var noDuplicateList = <PostModel>{...latestPostList,...cachePostsList, ...newPostList}.toList();
-    var readyHiveList = noDuplicateList.map((postModel) =>
-        PostModelHive.toHive(postModel)).toList();
+    var noDuplicateList =
+    latest && cachePostsList.isNotEmpty ?
+        <PostModel>{...newPostList, ...cachePostsList}.toList()
+        : <PostModel>{...cachePostsList, ...newPostList}.toList();
+    var readyHiveList =
+        noDuplicateList.map((postModel) => PostModelHive.toHive(postModel)).toList();
     HiveServices.postsBox.put('cachePostsList', readyHiveList);
     print('SUMMARIES:');
-    print('✴️ A (${latestPostList.length}) POSTS From Database (Latest) [EndBefore] ✴️ ');
-    print('❇️ B (${cachePostsList.length}) POSTS From Hive CACHE ❇️ ');
-    print('✴️ C (${newPostList.length}) POSTS From Database (older) [StartAt] ✴️ ');
+    print(latest ? '✴️ (${newPostList.length}) POSTS From Database (Latest) [EndBefore] ✴️ '
+                 : '✴️ (${newPostList.length}) POSTS From Database (older) [StartAt] ✴️ ');
+    print('❇️ (${cachePostsList.length}) POSTS From Hive CACHE ❇️ ');
 
     return noDuplicateList;
   }
