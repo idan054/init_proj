@@ -54,8 +54,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             // U might also want to add lazy_load_scrollview Here instead.
             Builder(
                 builder: (context) {
-                  print('START: FutureBuilder()');
-
                   if (splashLoader) { // First time only
                     return const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 7)
                         .center;}

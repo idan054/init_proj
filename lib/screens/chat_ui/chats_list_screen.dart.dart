@@ -74,8 +74,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                         backgroundColor: Colors.grey,
                         backgroundImage: NetworkImage(otherUser.photoUrl ??
                             AppStrings.monkeyPlaceHolder)),
-                    onTap: () => ChatService().openChat(context,
-                        otherUser: otherUser, chatId: chat.id),
+                    onTap: () => ChatService().openChat(context, otherUser: otherUser),
                     title: Text(
                       otherUser.name ?? '',
                       style: AppStyles.text20PxSemiBold.white,

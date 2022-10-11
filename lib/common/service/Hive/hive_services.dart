@@ -12,6 +12,7 @@ class HiveServices {
   static var uniBox = Hive.box('uniBox');
   /// Box values:
   //> currUser
+  //> ChatsIdsList
 
   static var postsBox = Hive.box('postsBox');
   /// Box values:

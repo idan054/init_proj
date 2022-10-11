@@ -1,6 +1,8 @@
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/service/Chat/chat_services.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../common/mixins/fonts.gen.dart';
@@ -21,10 +23,6 @@ class PostView extends StatelessWidget {
     if (post.textAlign == 'right') postAlign = TextAlign.end;
     if (post.textAlign == 'center') postAlign = TextAlign.center;
     if (post.textAlign == 'right') postAlign = TextAlign.end;
-
-    print('-----------');
-    print('post.textContent ${post.textContent}');
-    print('post.likeByIds ${post.likeByIds}');
 
     return StatefulBuilder(builder: (context, setState) {
       return GestureDetector(
@@ -50,14 +48,51 @@ class PostView extends StatelessWidget {
                             : AppColors.white)).px(20)
                     .pOnly(bottom: post.textContent.length > 230 ? 35 : 0).center
             ),
-            buildBottomPost(postRatio, isLiked).offset(0, 10),
+            buildTop(postRatio, isLiked),
+            buildBottom(context, postRatio, isLiked).offset(0, 10),
           ],
         ),
       );
     });
   }
+  Container buildTop(double postRatio, bool isLiked) {
+    return Container(
+      // color: AppColors.testGreen,
+      alignment: Alignment.topCenter,
+      height: 100 * postRatio,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.bottomCenter,
+          end: Alignment.topCenter,
+          stops: const [0.75, 0.99],
+          colors: [
+            AppColors.transparent,
+            AppColors.darkBlack.withOpacity(0.40),
+          ],
+        ),
+      ),
+      child: StatefulBuilder(builder: (context, stfSetState) {
+        return ListTile(
+            onTap: () {
+              // U might change this view to STF & add the update on dispose()
+              // Todo: Add like update on feed_services.dart
+              FeedService().setPostLike(context, post, isLiked);
+              stfSetState(() => isLiked = !isLiked);
+            },
+            horizontalTitleGap: 0.0,
+            minVerticalPadding: 0.0,
+            contentPadding: const EdgeInsets.only(left: 10, right: 0),
+            trailing: FontAwesomeIcons.share
+                .iconAwesome(size: 12)
+                .offset(0, -6).pOnly(right: 10),
+          // Todo make share button works!
+        );
+      }),
+    );
+  }
 
-  Container buildBottomPost(double postRatio, bool isLiked) {
+  Container buildBottom(BuildContext context, double postRatio, bool isLiked) {
+    var currUser = context.uniProvider.currUser;
     return Container(
       // color: AppColors.testGreen,
       alignment: Alignment.bottomCenter,
@@ -98,21 +133,44 @@ class PostView extends StatelessWidget {
                     .toText(
                         bold: true, fontSize: 10, color: AppColors.greyLight),
                 const Spacer(),
+
+                //> Like button:
                 if (post.enableLikes && post.likeCounter != null)
                   '${isLiked ? post.likeCounter! + 1 : post.likeCounter == 0 ? '' : post.likeCounter}  '
                       .toText(
                           bold: true,
                           fontSize: isLiked ? 11 : 10,
                           color:
-                              isLiked ? AppColors.white : AppColors.greyLight),
+                              isLiked ? AppColors.white : AppColors.greyLight).offset(0, 2),
                 if (post.enableLikes)
-                  isLiked || post.likeByIds.contains(context.uniProvider.currUser.uid)
+                  isLiked || post.likeByIds.contains(currUser.uid)
                       ? FontAwesomeIcons.solidHeart
                           .iconAwesome(size: 12)
                           .offset(0, 2)
                       : FontAwesomeIcons.heart
                           .iconAwesome(size: 12)
                           .offset(0, 2),
+
+
+                //> DM / Comment button:
+                // if(post.enableComments)
+                //   '12'.toText(
+                //       bold: true,
+                //       fontSize: isLiked ? 11 : 10,
+                //       color:
+                //       isLiked ? AppColors.white : AppColors.greyLight).offset(4, 2),
+                // if(post.enableComments)
+                //   FontAwesomeIcons.commentDots
+                //       .iconAwesome(size: 12)
+                //       .offset(0, 2).pOnly(left: 10),
+
+                if(post.enableComments == false && post.creatorUser!.uid != currUser.uid)...[
+                const SizedBox(width: 10,),
+                FontAwesomeIcons.solidPaperPlane
+                    .iconAwesome(size: 12)
+                    .offset(0, 2).pOnly(right: 5).ltr.onTap(() =>
+                        ChatService().openChat(context, otherUser: post.creatorUser!)),
+                ]
               ],
             ).offset(0, -8).pOnly(right: 10));
       }),
