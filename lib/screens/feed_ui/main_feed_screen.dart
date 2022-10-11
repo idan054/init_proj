@@ -29,7 +29,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
-    postList = await FeedService.handleGetPost(context) ?? [];
+    postList = await FeedService.handleGetPost(context, latest: true) ?? [];
     splashLoader = false;
     setState(() {});
   }
@@ -44,7 +44,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       backgroundColor: AppColors.darkGrey,
       color: AppColors.primary,
       onRefresh: () async {
-        postList = await FeedService.handleGetPost(context) ?? [];
+        postList = await FeedService.handleGetPost(context, latest: true) ?? [];
         setState(() {});
       },
       child: Scaffold(
@@ -68,7 +68,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                     onEndOfPage: () async {
                       print('START: onEndOfPage()');
                       context.uniProvider.updateIsFeedLoading(true);
-                      postList = await FeedService.handleGetPost(context) ?? [];
+                      postList = await FeedService.handleGetPost(context, latest: false) ?? [];
                       // await Future.delayed(2.seconds);
                       context.uniProvider.updateIsFeedLoading(false);
                       setState(() {});
@@ -76,27 +76,37 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                     child: SingleChildScrollView(
                       child: Row(
                         children: <Widget>[
-                          SizedBox(
-                            height: listHeight, //ratio
-                            width: context.width * 0.5,
-                            child: ListView.builder(
-                                itemCount: postList.length,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (BuildContext context, int i) =>
-                                    i.isEven ? const Offstage() : PostView(postList[i])),
-                          ).offset(0, 100),
-                          SizedBox(
-                            height: listHeight, //ratio
-                            width: context.width * 0.5,
-                            child: ListView.builder(
-                                itemCount: postList.length,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (BuildContext context, int i) =>
-                                    i.isOdd ? const Offstage() : PostView(postList[i])).appearAll,
+                          Column(
+                            children: [
+                              'This is the end...'.toText().offset(0, listHeight-100),
+                              SizedBox(
+                                height: listHeight, //ratio
+                                width: context.width * 0.5,
+                                child: ListView.builder(
+                                    itemCount: postList.length,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (BuildContext context, int i) =>
+                                        i.isEven ? const Offstage() : PostView(postList[i])),
+                              ).offset(0, 100),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              'This is the end...'.toText().offset(0, listHeight-100),
+                              SizedBox(
+                                height: listHeight, //ratio
+                                width: context.width * 0.5,
+                                child: ListView.builder(
+                                    itemCount: postList.length,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    itemBuilder: (BuildContext context, int i) =>
+                                        i.isOdd ? const Offstage() : PostView(postList[i])).appearAll,
+                              ),
+                            ],
                           ),
                         ],
-                      ),
-                    ),
+                      )
+                    )
                   );
                 }),
             Container(

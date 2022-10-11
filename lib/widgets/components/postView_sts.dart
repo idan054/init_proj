@@ -16,11 +16,10 @@ class PostView extends StatelessWidget {
   Widget build(BuildContext context) {
     double postRatio = 3;
     bool isLiked = false;
-    MainAxisAlignment?
-        rowAlign; // Todo: Frontend so Hebrew will be only center || right Based .isHebrew
-    if (post.textAlign == 'right') rowAlign = MainAxisAlignment.end;
-    if (post.textAlign == 'center') rowAlign = MainAxisAlignment.center;
-    if (post.textAlign == 'right') rowAlign = MainAxisAlignment.end;
+    TextAlign? postAlign; // Todo: Frontend so Hebrew will be only center || right Based .isHebrew
+    if (post.textAlign == 'right') postAlign = TextAlign.end;
+    if (post.textAlign == 'center') postAlign = TextAlign.center;
+    if (post.textAlign == 'right') postAlign = TextAlign.end;
 
     return StatefulBuilder(builder: (context, setState) {
       return GestureDetector(
@@ -31,24 +30,21 @@ class PostView extends StatelessWidget {
           children: [
             Container(
                 height: 100 * postRatio,
+                width: context.width /2,
                 color: post.colorCover,
-                child: Row(
-                  mainAxisAlignment: rowAlign!,
-                  children: [
-                    Text(post.textContent,
-                            textAlign: TextAlign.right,
-                            style: AppStyles.text18PxBold.copyWith(
-                                fontSize: 14,
-                                fontFamily: FontFamily.rilTopia,
-                                color: post.isDarkText
-                                    ? AppColors.darkBlack
-                                    : AppColors.white))
-                        // .sizedBox(context.width/2, 100 * postRatio)
-                        .isHebrewDirectionality(post.textContent)
-                        .pOnly(right: 20, left: 20)
-                        .center,
-                  ],
-                )).center,
+                child:
+                Text(post.textContent,
+                    textAlign: postAlign,
+                    softWrap: true,
+                    maxLines: 15,
+                    style: AppStyles.text18PxBold.copyWith(
+                        fontSize: 14,
+                        fontFamily: FontFamily.rilTopia,
+                        color: post.isDarkText
+                            ? AppColors.darkBlack
+                            : AppColors.white)).px(20)
+                    .pOnly(bottom: post.textContent.length > 230 ? 35 : 0).center
+            ),
             buildBottomPost(postRatio, isLiked).offset(0, 10),
           ],
         ),

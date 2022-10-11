@@ -5,6 +5,7 @@ import 'package:example/common/themes/app_colors.dart';
 import 'package:example/screens/chat_ui/chats_list_screen.dart.dart';
 import 'package:example/screens/feed_ui/main_feed_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../common/config.dart';
@@ -54,7 +55,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ? AppColors.white
                 : AppColors.primary
             : AppColors.primary,
-        marginR: const EdgeInsets.only(right: 110, left: 110, bottom: 20),
+        marginR: EdgeInsets.only(right: 125.w, left: 125.w, bottom: 20),
         paddingR: sItem == TabItems.chat
             ? const EdgeInsets.symmetric(vertical: 8)
             : EdgeInsets.zero,
