@@ -10,51 +10,13 @@ import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:palestine_console/palestine_console.dart';
 
-import '../Auth/firebase_database.dart' as click;
-import '../Auth/firebase_database.dart';
+import '../Database/firebase_database.dart' as click;
+import '../Database/firebase_database.dart';
 import '../Hive/hive_services.dart';
 
 /// streamMessages() Available At [click.Database] // <<---
 
 class FeedService {
-  /// This smart func choose when Hive cache / Database needed.
-  static Future handleGetDocs(BuildContext context, ModelTypes modelType,
-      {required bool latest}) async {
-    var modelTypeName = modelType.name;
-    print('START: handleGetDocs of $modelTypeName()');
-
-    //> (1) Get All posts from cache
-    var cacheHiveDocsList = HiveServices.uniBox.get('cache${modelTypeName}List') ?? [];
-    var cacheDocsList =
-        cacheHiveDocsList.map((postModel) => PostModelHive.fromHive(postModel)).toList();
-
-    //> (2) Get Latest cached post
-    var endBeforeDoc = await Database.getStartEndAtDoc(
-        modelTypeName, cacheDocsList.isEmpty ? null : cacheDocsList.first.postId);
-    var startAtDoc = await Database.getStartEndAtDoc(
-        modelTypeName, cacheDocsList.isEmpty ? null : cacheDocsList.last.postId);
-
-    //> (3) Check if new & Get new posts after that from server
-    // getPostsEndBefore() - Latest posts (if user upload new) - Stop on cache.
-    // getPostsStartAt() - 10 new posts who didn't fetched yet - Start after cache.
-    // so the post list order is [Latest posts -> cache -> older posts]
-    var newPostList = latest && cacheDocsList.isNotEmpty
-        ? await Database.getDocsEndBefore(context, endBeforeDoc, modelType) ?? []
-        : await Database.getDocsStartAt(context, startAtDoc, modelType) ?? [];
-
-    //> (4) Remove duplicate, save to cache & Summary
-    var noDuplicateList = HiveServices.updateCacheDocsList(modelType,
-        latest: latest,
-        cacheDocsList: cacheDocsList,
-        newPostList: newPostList);
-
-    print('SUMMARIES:');
-    print(latest
-        ? '✴️ (${newPostList.length}) ${modelTypeName.toUpperCase()} From Database (Latest) [EndBefore] ✴️ '
-        : '✴️ (${newPostList.length}) ${modelTypeName.toUpperCase()} From Database (older) [StartAt] ✴️ ');
-    print('❇️ (${cacheDocsList.length}) ${modelTypeName.toUpperCase()} From Hive CACHE ❇️ ');
-    return noDuplicateList;
-  }
 
   // void setPostLike(MessageModel message, String chatId, WriteBatch batch) {
   //   // Todo make sure it works!
@@ -99,7 +61,7 @@ class FeedService {
     );
   }
 
-  void uploadPost(BuildContext context, PostModel post) {
+  static void uploadPost(BuildContext context, PostModel post) {
     print('START: uploadPost()');
     // var timeStamp = DateTime.now();
     // String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);

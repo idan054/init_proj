@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/models/chat/chat_model.dart';
-import '../../common/service/Auth/firebase_database.dart';
+import '../../common/service/Database/firebase_database.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../widgets/app_bar.dart';
 
@@ -20,9 +20,25 @@ class ChatsListScreen extends StatefulWidget {
 }
 
 class _ChatsListScreenState extends State<ChatsListScreen> {
+  var splashLoader = true;
+  List<ChatModel> chatList = [];
+
+  @override
+  void initState() {
+    _loadMore();
+    super.initState();
+  }
+
+  Future _loadMore() async {
+    // splashLoader = true; setState(() {});
+    chatList = await Database.advanced.handleGetDocs(context, ModelTypes.chats, latest: true) ?? [];
+    splashLoader = false;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
-    print('START: HomeChatsScreen');
+    print('START: ChatsListScreen');
     var currUser = context.uniProvider.currUser;
 
     return Scaffold(
@@ -37,57 +53,60 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                   ),
                   onPressed: () => context.router.push(const MembersRoute()))
             ]),
-        body: StreamProvider<List<ChatModel>>.value(
-          value: Database.streamChats(currUser.uid!),
-          initialData: const [],
-          builder: (context, child) {
-            var chats = context.listenChatsModelList;
-            WidgetsBinding.instance.addPostFrameCallback(
-                (_) => context.uniProvider.updateChatList(chats));
+        body: Builder(builder: (context) {
+          if (splashLoader) {
+            // First time only
+            return const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 7).center;
+          }
 
-            return Container(
-              color: AppColors.darkBlack,
-              child: ListView.builder(
-                itemCount: chats.length,
-                itemBuilder: (context, i) {
-                  if (chats.isEmpty) {
-                    return const Text('Chats with this user will be show here')
-                        .center;
-                  }
+          if (chatList.isEmpty) {
+            return 'Sorry, no chatList found... \nStart a chat from the Feed!'.toText().center;
+          }
 
-                  var chat = chats[i];
-                  var otherUser = chat.users!
-                      .firstWhere((user) => user.uid != currUser.uid);
+          return Container(
+            color: AppColors.darkBlack,
+            child: ListView.builder(
+              itemCount: chatList.length,
+              itemBuilder: (context, i) {
+                if (chatList.isEmpty) {
+                  return const Text('chatList with this user will be show here').center;
+                }
 
-                  return ListTile(
-                    trailing: Column(
-                      children: [
-                        10.verticalSpace,
-                        Text(
-                          chat.lastMessage?.createdAt!.substring(9, 14) ?? '',
-                          style: AppStyles.text12PxRegular.greyLight,
-                        )
-                      ],
-                    ),
-                    leading: CircleAvatar(
-                        radius: 28,
-                        backgroundColor: Colors.grey,
-                        backgroundImage: NetworkImage(otherUser.photoUrl ??
-                            AppStrings.monkeyPlaceHolder)),
-                    onTap: () => ChatService().openChat(context, otherUser: otherUser),
-                    title: Text(
-                      otherUser.name ?? '',
-                      style: AppStyles.text20PxSemiBold.white,
-                    ),
-                    subtitle: Text(
-                      chat.lastMessage?.textContent ?? '',
-                      style: AppStyles.text16PxRegular.greyLight,
-                    ),
-                  ).ltr.appearOffset;
-                },
-              ),
-            );
-          },
-        )).ltr;
+                // var chatList = context.listenchatListModelList;
+                // WidgetsBinding.instance.addPostFrameCallback(
+                //         (_) => context.uniProvider.updateChatList(chatList));
+
+                var chat = chatList[i];
+                var otherUser = chat.users!.firstWhere((user) => user.uid != currUser.uid);
+
+                return ListTile(
+                  trailing: Column(
+                    children: [
+                      10.verticalSpace,
+                      Text(
+                        chat.lastMessage?.createdAt!.substring(9, 14) ?? '',
+                        style: AppStyles.text12PxRegular.greyLight,
+                      )
+                    ],
+                  ),
+                  leading: CircleAvatar(
+                      radius: 28,
+                      backgroundColor: Colors.grey,
+                      backgroundImage:
+                          NetworkImage(otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
+                  onTap: () => ChatService.openChat(context, otherUser: otherUser),
+                  title: Text(
+                    otherUser.name ?? '',
+                    style: AppStyles.text20PxSemiBold.white,
+                  ),
+                  subtitle: Text(
+                    chat.lastMessage?.textContent ?? '',
+                    style: AppStyles.text16PxRegular.greyLight,
+                  ),
+                ).ltr.appearOffset;
+              },
+            ),
+          );
+        }));
   }
 }

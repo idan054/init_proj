@@ -1,7 +1,7 @@
 import 'package:age_calculator/age_calculator.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
-import 'package:example/common/service/Auth/firebase_database.dart';
+import 'package:example/common/service/Database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

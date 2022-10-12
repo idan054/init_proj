@@ -25,6 +25,8 @@ mixin _$ChatModel {
   List<String>? get usersIds => throw _privateConstructorUsedError;
   List<UserModel>? get users => throw _privateConstructorUsedError;
   List<MessageModel>? get messages => throw _privateConstructorUsedError;
+  @DateTimeStampConv()
+  DateTime? get timestamp => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,7 +43,8 @@ abstract class $ChatModelCopyWith<$Res> {
       MessageModel? lastMessage,
       List<String>? usersIds,
       List<UserModel>? users,
-      List<MessageModel>? messages});
+      List<MessageModel>? messages,
+      @DateTimeStampConv() DateTime? timestamp});
 
   $MessageModelCopyWith<$Res>? get lastMessage;
 }
@@ -61,6 +64,7 @@ class _$ChatModelCopyWithImpl<$Res> implements $ChatModelCopyWith<$Res> {
     Object? usersIds = freezed,
     Object? users = freezed,
     Object? messages = freezed,
+    Object? timestamp = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -83,6 +87,10 @@ class _$ChatModelCopyWithImpl<$Res> implements $ChatModelCopyWith<$Res> {
           ? _value.messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<MessageModel>?,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 
@@ -109,7 +117,8 @@ abstract class _$$_ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
       MessageModel? lastMessage,
       List<String>? usersIds,
       List<UserModel>? users,
-      List<MessageModel>? messages});
+      List<MessageModel>? messages,
+      @DateTimeStampConv() DateTime? timestamp});
 
   @override
   $MessageModelCopyWith<$Res>? get lastMessage;
@@ -132,6 +141,7 @@ class __$$_ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
     Object? usersIds = freezed,
     Object? users = freezed,
     Object? messages = freezed,
+    Object? timestamp = freezed,
   }) {
     return _then(_$_ChatModel(
       id: id == freezed
@@ -154,6 +164,10 @@ class __$$_ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
           ? _value._messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<MessageModel>?,
+      timestamp: timestamp == freezed
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -167,7 +181,8 @@ class _$_ChatModel implements _ChatModel {
       this.lastMessage,
       final List<String>? usersIds,
       final List<UserModel>? users,
-      final List<MessageModel>? messages})
+      final List<MessageModel>? messages,
+      @DateTimeStampConv() this.timestamp})
       : _usersIds = usersIds,
         _users = users,
         _messages = messages;
@@ -208,8 +223,12 @@ class _$_ChatModel implements _ChatModel {
   }
 
   @override
+  @DateTimeStampConv()
+  final DateTime? timestamp;
+
+  @override
   String toString() {
-    return 'ChatModel(id: $id, lastMessage: $lastMessage, usersIds: $usersIds, users: $users, messages: $messages)';
+    return 'ChatModel(id: $id, lastMessage: $lastMessage, usersIds: $usersIds, users: $users, messages: $messages, timestamp: $timestamp)';
   }
 
   @override
@@ -222,7 +241,8 @@ class _$_ChatModel implements _ChatModel {
                 .equals(other.lastMessage, lastMessage) &&
             const DeepCollectionEquality().equals(other._usersIds, _usersIds) &&
             const DeepCollectionEquality().equals(other._users, _users) &&
-            const DeepCollectionEquality().equals(other._messages, _messages));
+            const DeepCollectionEquality().equals(other._messages, _messages) &&
+            const DeepCollectionEquality().equals(other.timestamp, timestamp));
   }
 
   @JsonKey(ignore: true)
@@ -233,7 +253,8 @@ class _$_ChatModel implements _ChatModel {
       const DeepCollectionEquality().hash(lastMessage),
       const DeepCollectionEquality().hash(_usersIds),
       const DeepCollectionEquality().hash(_users),
-      const DeepCollectionEquality().hash(_messages));
+      const DeepCollectionEquality().hash(_messages),
+      const DeepCollectionEquality().hash(timestamp));
 
   @JsonKey(ignore: true)
   @override
@@ -254,7 +275,8 @@ abstract class _ChatModel implements ChatModel {
       final MessageModel? lastMessage,
       final List<String>? usersIds,
       final List<UserModel>? users,
-      final List<MessageModel>? messages}) = _$_ChatModel;
+      final List<MessageModel>? messages,
+      @DateTimeStampConv() final DateTime? timestamp}) = _$_ChatModel;
 
   factory _ChatModel.fromJson(Map<String, dynamic> json) =
       _$_ChatModel.fromJson;
@@ -269,6 +291,9 @@ abstract class _ChatModel implements ChatModel {
   List<UserModel>? get users;
   @override
   List<MessageModel>? get messages;
+  @override
+  @DateTimeStampConv()
+  DateTime? get timestamp;
   @override
   @JsonKey(ignore: true)
   _$$_ChatModelCopyWith<_$_ChatModel> get copyWith =>

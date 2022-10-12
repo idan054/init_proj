@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../common/models/chat/chat_model.dart';
 import '../../common/models/user/user_model.dart';
-import '../../common/service/Auth/firebase_database.dart';
+import '../../common/service/Database/firebase_database.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../widgets/app_bar.dart';
 
@@ -48,7 +48,7 @@ class _MembersScreenState extends State<MembersScreen> {
                 return Card(
                     child: ListTile(
                   onTap: () =>
-                      ChatService().openChat(context, otherUser: users[i]),
+                      ChatService.openChat(context, otherUser: users[i]),
                   title: Text(users[i].email ?? ''),
                 ));
               },

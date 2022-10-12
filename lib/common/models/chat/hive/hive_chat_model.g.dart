@@ -18,17 +18,18 @@ class ChatModelHiveAdapter extends TypeAdapter<ChatModelHive> {
     };
     return ChatModelHive(
       id: fields[0] as String?,
-      lastMessage: fields[1] as MessageModel?,
+      lastMessage: fields[1] as MessageModelHive?,
       usersIds: (fields[2] as List?)?.cast<String>(),
-      users: (fields[3] as List?)?.cast<UserModel>(),
-      messages: (fields[4] as List?)?.cast<MessageModel>(),
+      users: (fields[3] as List?)?.cast<UserModelHive>(),
+      messages: (fields[4] as List?)?.cast<MessageModelHive>(),
+      timestamp: fields[5] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ChatModelHive obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class ChatModelHiveAdapter extends TypeAdapter<ChatModelHive> {
       ..writeByte(3)
       ..write(obj.users)
       ..writeByte(4)
-      ..write(obj.messages);
+      ..write(obj.messages)
+      ..writeByte(5)
+      ..write(obj.timestamp);
   }
 
   @override

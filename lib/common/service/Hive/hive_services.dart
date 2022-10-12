@@ -2,7 +2,7 @@ import 'package:example/common/extensions/context_extensions.dart';
 import 'package:example/common/models/post/hive/hive_post_model.dart';
 import 'package:example/common/models/user/hive/hive_user_model.dart';
 import 'package:example/common/models/user/user_model.dart';
-import 'package:example/common/service/Auth/firebase_database.dart';
+import 'package:example/common/service/Database/firebase_database.dart';
 import 'package:example/common/service/Hive/timestamp_convert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:hive/hive.dart';
@@ -37,38 +37,86 @@ class HiveServices {
   static List updateCacheDocsList(ModelTypes modelType, {
     required bool latest,
     required List cacheDocsList,
-    required List newPostList}){
+    required List newDocsList}){
 
     var readyHiveList;
     var noDuplicateList;
     switch (modelType) {
       case ModelTypes.posts:
         noDuplicateList = latest && cacheDocsList.isNotEmpty
-            ? <PostModel>{...newPostList, ...cacheDocsList}.toList()
-            : <PostModel>{...cacheDocsList, ...newPostList}.toList();
+            ? <PostModel>{...newDocsList, ...cacheDocsList}.toList()
+            : <PostModel>{...cacheDocsList, ...newDocsList}.toList();
         readyHiveList = noDuplicateList.map((model) => PostModelHive.toHive(model)).toList();
         break;
       case ModelTypes.chats:
         noDuplicateList = latest && cacheDocsList.isNotEmpty
-            ? <ChatModel>{...newPostList, ...cacheDocsList}.toList()
-            : <ChatModel>{...cacheDocsList, ...newPostList}.toList();
+            ? <ChatModel>{...newDocsList, ...cacheDocsList}.toList()
+            : <ChatModel>{...cacheDocsList, ...newDocsList}.toList();
         readyHiveList = noDuplicateList.map((model) => ChatModelHive.toHive(model)).toList();
         break;
       case ModelTypes.messages:
         noDuplicateList = latest && cacheDocsList.isNotEmpty
-            ? <MessageModel>{...newPostList, ...cacheDocsList}.toList()
-            : <MessageModel>{...cacheDocsList, ...newPostList}.toList();
+            ? <MessageModel>{...newDocsList, ...cacheDocsList}.toList()
+            : <MessageModel>{...cacheDocsList, ...newDocsList}.toList();
         readyHiveList = noDuplicateList.map((model) => MessageModelHive.toHive(model)).toList();
         break;
       case ModelTypes.users:
         noDuplicateList = latest && cacheDocsList.isNotEmpty
-            ? <UserModel>{...newPostList, ...cacheDocsList}.toList()
-            : <UserModel>{...cacheDocsList, ...newPostList}.toList();
+            ? <UserModel>{...newDocsList, ...cacheDocsList}.toList()
+            : <UserModel>{...cacheDocsList, ...newDocsList}.toList();
         readyHiveList = noDuplicateList.map((model) => UserModelHive.toHive(model)).toList();
         break;
     }
     HiveServices.uniBox.put('cache${modelType.name}List', readyHiveList);
     return noDuplicateList;
+  }
+
+  static Future<Map<String, dynamic>> getStartEndAtDocBasedCache(
+      List cacheHiveDocsList, ModelTypes modelType,)async{
+    var modelTypeName = modelType.name;
+    var cacheDocsList;
+    var endBeforeDoc;
+    var startAtDoc;
+    switch (modelType) {
+      case ModelTypes.posts:
+        cacheDocsList = cacheHiveDocsList.map((model)
+        => PostModelHive.fromHive(model)).toList();
+        endBeforeDoc = await Database.advanced.getStartEndAtDoc(  //> First
+            modelTypeName, cacheDocsList.isEmpty ? null : cacheDocsList.first.postId);
+        startAtDoc = await Database.advanced.getStartEndAtDoc( //> Last
+            modelTypeName, cacheDocsList.isEmpty ? null : cacheDocsList.last.postId);
+        break;
+      case ModelTypes.chats:
+        cacheDocsList = cacheHiveDocsList.map((model)
+        => ChatModelHive.fromHive(model)).toList();
+        endBeforeDoc = await Database.advanced.getStartEndAtDoc(  //> First
+            modelTypeName, cacheDocsList.isEmpty ? null : cacheDocsList.first.id);
+        startAtDoc = await Database.advanced.getStartEndAtDoc( //> Last
+            modelTypeName, cacheDocsList.isEmpty ? null : cacheDocsList.last.id);
+        break;
+      case ModelTypes.messages:
+        cacheDocsList = cacheHiveDocsList.map((model)
+        => MessageModelHive.fromHive(model)).toList();
+        endBeforeDoc = await Database.advanced.getStartEndAtDoc(  //> First
+            modelTypeName, cacheDocsList.isEmpty ? null : cacheDocsList.first.messageId);
+        startAtDoc = await Database.advanced.getStartEndAtDoc( //> Last
+            modelTypeName, cacheDocsList.isEmpty ? null : cacheDocsList.last.messageId);
+
+        break;
+      case ModelTypes.users:
+        cacheDocsList = cacheHiveDocsList.map((model)
+        => UserModelHive.fromHive(model)).toList();
+        endBeforeDoc = await Database.advanced.getStartEndAtDoc(  //> First
+            modelTypeName, cacheDocsList.isEmpty ? null : cacheDocsList.first.uid);
+        startAtDoc = await Database.advanced.getStartEndAtDoc( //> Last
+            modelTypeName, cacheDocsList.isEmpty ? null : cacheDocsList.last.uid);
+        break;
+    }
+    return {
+      'cacheDocsList' : cacheDocsList,
+      'endBeforeDoc' : endBeforeDoc,
+      'startAtDoc' : startAtDoc
+    };
   }
 
   // Use to update like status.

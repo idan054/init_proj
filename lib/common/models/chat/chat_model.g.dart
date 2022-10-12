@@ -20,6 +20,8 @@ _$_ChatModel _$$_ChatModelFromJson(Map<String, dynamic> json) => _$_ChatModel(
       messages: (json['messages'] as List<dynamic>?)
           ?.map((e) => MessageModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      timestamp:
+          const DateTimeStampConv().fromJson(json['timestamp'] as Timestamp?),
     );
 
 Map<String, dynamic> _$$_ChatModelToJson(_$_ChatModel instance) =>
@@ -29,4 +31,5 @@ Map<String, dynamic> _$$_ChatModelToJson(_$_ChatModel instance) =>
       'usersIds': instance.usersIds,
       'users': instance.users?.map((e) => e.toJson()).toList(),
       'messages': instance.messages?.map((e) => e.toJson()).toList(),
+      'timestamp': const DateTimeStampConv().toJson(instance.timestamp),
     };

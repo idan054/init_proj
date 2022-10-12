@@ -133,7 +133,7 @@ class PostView extends StatelessWidget {
                       if (post.creatorUser!.uid == currUser.uid) {
                         context.router.push(DashboardRoute(dashboardPage: TabItems.chat));
                       } else {
-                        ChatService().openChat(context, otherUser: post.creatorUser!);
+                        ChatService.openChat(context, otherUser: post.creatorUser!);
                       }
                     })),
                 if(post.enableComments)

@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../models/user/user_model.dart';
-import '../Auth/firebase_database.dart' as click;
-import 'firebase_database.dart';
+import '../Database/firebase_database.dart' as click;
+import '../Database/firebase_database.dart';
 
 class AuthService {
   /// streamUsers() Available At [click.Database] // <<---

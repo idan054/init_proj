@@ -1,7 +1,7 @@
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/service/Auth/firebase_database.dart';
-import 'package:example/common/service/Auth/firebase_database.dart';
-import 'package:example/common/service/Auth/firebase_database.dart';
+import 'package:example/common/service/Database/firebase_database.dart';
+import 'package:example/common/service/Database/firebase_database.dart';
+import 'package:example/common/service/Database/firebase_database.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:example/common/themes/app_colors.dart';
 
@@ -32,7 +32,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
-    postList = await FeedService.handleGetDocs(context, ModelTypes.posts, latest: true) ?? [];
+    postList = await Database.advanced.handleGetDocs(context, ModelTypes.posts, latest: true) ?? [];
     splashLoader = false;
     setState(() {});
   }
@@ -52,7 +52,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               print('START: onEndOfPage()');
               context.uniProvider.updateIsFeedLoading(true);
               postList =
-                  await FeedService.handleGetDocs(context, ModelTypes.posts, latest: false) ?? [];
+                  await Database.advanced.handleGetDocs(context, ModelTypes.posts, latest: false) ??
+                      [];
               // await Future.delayed(2.seconds);
               context.uniProvider.updateIsFeedLoading(false);
               setState(() {});
@@ -73,9 +74,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                 color: AppColors.primary,
                 onRefresh: () async {
                   print('START: onRefresh()');
-                  postList =
-                      await FeedService.handleGetDocs(context, ModelTypes.posts, latest: true) ??
-                          [];
+                  postList = await Database.advanced
+                          .handleGetDocs(context, ModelTypes.posts, latest: true) ??
+                      [];
                   setState(() {});
                 },
                 child: SingleChildScrollView(

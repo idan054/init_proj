@@ -11,54 +11,15 @@ import 'package:intl/intl.dart';
 import '../../../screens/chat_ui/chat_screen.dart' as screen;
 import '../../models/message/hive/hive_message_model.dart';
 import '../../models/user/user_model.dart';
-import '../Auth/firebase_database.dart';
-import '../Auth/firebase_database.dart' as click;
+import '../Database/firebase_database.dart';
+import '../Database/firebase_database.dart' as click;
 
 // ChatService Usage At [screen.ChatScreen] // <<---
 // streamMessages() Available At [click.Database] // <<---
 
 class ChatService {
-  static Future<List<MessageModel>?> handleGetMessages(BuildContext context,
-      {required bool latest}) async {
-    print('START: handleGetPost()');
-    //> (1) Get All posts from cache
-    var cacheHivePostsList = HiveServices.postsBox.get('cachePostsList') ?? [];
-    var cachePostsList =
-    cacheHivePostsList.map((MessageModel) => MessageModelHive.fromHive(MessageModel)).toList();
 
-    //> (2) Get Latest cached post
-    var endBeforeDoc = await Database.getStartEndAtDoc(
-        'posts', cachePostsList.isEmpty ? null : cachePostsList.first.postId);
-
-    var startAtDoc = await Database.getStartEndAtDoc(
-        'posts', cachePostsList.isEmpty ? null : cachePostsList.last.postId);
-
-    //> (3) Check if new & Get new posts after that from server
-    // getPostsEndBefore() - Latest posts (if user upload new) - Stop on cache.
-    // getPostsStartAt() - 10 new posts who didn't fetched yet - Start after cache.
-    // so the post list order is [Latest posts -> cache -> older posts]
-    var newPostList = latest && cachePostsList.isNotEmpty
-        ? /*await Database.getDocsEndBefore(context, endBeforeDoc) ?? */[]
-        : /*await Database.getDocsStartAt(context, startAtDoc) ??*/ [];
-
-    //> (4) Remove duplicate, save to cache & Summary
-    var noDuplicateList = latest && cachePostsList.isNotEmpty
-        ? <MessageModel>{...newPostList, ...cachePostsList}.toList()
-        : <MessageModel>{...cachePostsList, ...newPostList}.toList();
-    var readyHiveList =
-    noDuplicateList.map((MessageModel) => MessageModelHive.toHive(MessageModel)).toList();
-    HiveServices.postsBox.put('cachePostsList', readyHiveList);
-    print('SUMMARIES:');
-    print(latest
-        ? '✴️ (${newPostList.length}) POSTS From Database (Latest) [EndBefore] ✴️ '
-        : '✴️ (${newPostList.length}) POSTS From Database (older) [StartAt] ✴️ ');
-    print('❇️ (${cachePostsList.length}) POSTS From Hive CACHE ❇️ ');
-
-    return noDuplicateList;
-  }
-  
-  
-  Future openChat(BuildContext context, {required UserModel otherUser}) async {
+  static Future openChat(BuildContext context, {required UserModel otherUser}) async {
     print('START: openChat()');
     var currUser = context.uniProvider.currUser;
 
@@ -129,6 +90,7 @@ class ChatService {
     );
 
     var chatData = ChatModel(
+      timestamp: timeStamp,
       id: chatId,
       lastMessage: messageData,
       users: [context.uniProvider.currUser, otherUser],

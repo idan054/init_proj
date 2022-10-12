@@ -1,8 +1,10 @@
 // ignore_for_file: invalid_annotation_target
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hive/hive.dart';
 
+import '../convertors.dart';
 import '../user/user_model.dart';
 
 part 'chat_model.freezed.dart';
@@ -19,6 +21,7 @@ class ChatModel with _$ChatModel {
     List<String>? usersIds,
     List<UserModel>? users,
     List<MessageModel>? messages,
+    @DateTimeStampConv() DateTime? timestamp,
   }) = _ChatModel;
 
   factory ChatModel.fromJson(Map<String, dynamic> json) =>

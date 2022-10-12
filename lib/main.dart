@@ -20,7 +20,7 @@ import 'common/models/post/post_model.dart';
 import 'common/models/sampleModels.dart';
 import 'package:example/common/models/user/hive/hive_user_model.dart';
 import 'common/models/universalModel.dart';
-import 'common/service/Auth/firebase_options.dart';
+import 'common/service/Database/firebase_options.dart';
 import 'common/service/Hive/hive_services.dart';
 
 /// Add More Pre-Actions At [click.SplashScreen]
