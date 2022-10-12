@@ -32,6 +32,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
     chatList = await Database.advanced.handleGetDocs(context, ModelTypes.chats, latest: true) ?? [];
+    // chatList = await Database.getChats(context.uniProvider.currUser.uid!) ?? [];
     splashLoader = false;
     setState(() {});
   }
@@ -42,6 +43,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     var currUser = context.uniProvider.currUser;
 
     return Scaffold(
+        backgroundColor: AppColors.darkBlack,
         appBar: darkAppBar(context,
             title: 'Messages', // STR
             backAction: () => context.router.replace(const LoginRoute()),
@@ -60,7 +62,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
           }
 
           if (chatList.isEmpty) {
-            return 'Sorry, no chatList found... \nStart a chat from the Feed!'.toText().center;
+            return 'Start a new chat \nfrom the Feed!'.toText().center;
           }
 
           return Container(

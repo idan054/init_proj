@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/chat/hive/hive_chat_model.dart';
 import 'package:example/common/models/message/hive/hive_message_model.dart';
@@ -23,8 +24,10 @@ class FsAdvanced {
 
   //~ The AMAZING SMART func that perfectly choose
   //~ when to use Hive (cache) / Firestore (Database).
-  Future handleGetDocs(BuildContext context, ModelTypes modelType,
-      {bool latest = true}) async {
+  //! Cached Also means Deleted posts/ users/ chats/ messages will still show.
+  // U can fix it by request on SplashScreen "deleted_posts" doc and update Hive based.
+  //> Currently use for posts & chats
+  Future handleGetDocs(BuildContext context, ModelTypes modelType, {bool latest = true}) async {
     var modelTypeName = modelType.name;
     print('START: handleGetDocs of $modelTypeName()');
 
@@ -39,15 +42,29 @@ class FsAdvanced {
     // getPostsEndBefore() - Latest posts (if user upload new) - Stop on cache.
     // getPostsStartAt() - 10 new posts who didn't fetched yet - Start after cache.
     // so the post list order is [Latest posts -> cache -> older posts]
-    var newDocsList = latest && cacheDocsList.isNotEmpty
-        ? await getDocsEndBefore(context, endBeforeDoc, modelType) ?? []
-        : await getDocsStartAt(context, startAtDoc, modelType) ?? [];
+
+    var newDocsList;
+    if (modelType == ModelTypes.posts) {
+      newDocsList = latest && cacheDocsList.isNotEmpty
+          ? await getDocsEndBefore(context, endBeforeDoc, modelType) ?? []
+          : await getDocsStartAt(context, startAtDoc, modelType) ?? [];
+    } else if (modelType == ModelTypes.chats) {
+      var currUser = context.uniProvider.currUser;
+      newDocsList = latest && cacheDocsList.isNotEmpty
+          ? await Database.getChatsBefore(currUser.uid!, endBeforeDoc) ?? []
+          : await Database.getChatsAfter(currUser.uid!, startAtDoc) ?? [];
+      // newDocsList = await Database.getChats(currUser.uid!);
+    } else if (modelType == ModelTypes.users) {
+      newDocsList = [];
+      print('No new docs found, not configured yet!');
+    } else if (modelType == ModelTypes.messages) {
+      newDocsList = [];
+      print('No new docs found, not configured yet!');
+    }
 
     //> (4) Remove duplicate, save to cache & Summary
     var noDuplicateList = HiveServices.updateCacheDocsList(modelType,
-        latest: latest,
-        cacheDocsList: cacheDocsList,
-        newDocsList: newDocsList);
+        latest: latest, cacheDocsList: cacheDocsList, newDocsList: newDocsList);
 
     print('SUMMARIES:');
     print(latest
@@ -58,14 +75,12 @@ class FsAdvanced {
     return noDuplicateList;
   }
 
-
   Future<DocumentSnapshot> getStartEndAtDoc(String collection, String? docId) async {
     print('START: getStartAtDoc()');
 
     if (docId != null) {
       print('GET DOC BASED OLD ONE... (StartAt)');
-      var oldestSeenPostDoc = await db.collection(collection)
-          .doc(docId).get();
+      var oldestSeenPostDoc = await db.collection(collection).doc(docId).get();
       return oldestSeenPostDoc;
     } else {
       print('GET DOC BASED null: USE MOST RECENT INSTEAD!');
@@ -79,7 +94,6 @@ class FsAdvanced {
     }
   }
 
-  // static Future<List<PostModel>?> getPostsStartAt
   Future getDocsStartAt(
       BuildContext context, DocumentSnapshot startAtDoc, ModelTypes modelType) async {
     print('START: getDoc of: ${modelType.name}()');

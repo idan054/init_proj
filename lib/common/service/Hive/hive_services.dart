@@ -18,20 +18,17 @@ class HiveServices {
   /// Box values:
   //> currUser
   //> ChatsIdsList
+  //> cache${modelType.name}List (x4)
 
-  static var postsBox = Hive.box('postsBox');
   /// Box values:
-  //> cachePostsList
 
   static Future openBoxes() async {
     await Hive.openBox('uniBox');
-    await Hive.openBox('postsBox');
     // await Hive.openBox<List<PostModel>>('postsBox');
   }
 
   static Future clearAllBoxes() async {
     await Hive.box('uniBox').clear();
-    await Hive.box('postsBox').clear();
   }
 
   static List updateCacheDocsList(ModelTypes modelType, {
@@ -121,7 +118,8 @@ class HiveServices {
 
   // Use to update like status.
   static updatePostInCache(PostModel updatePost) {
-    var cacheHivePostsList = HiveServices.postsBox.get('cachePostsList') ?? [];
+    var postStr = ModelTypes.posts.name;
+    var cacheHivePostsList = HiveServices.uniBox.get('cache${postStr}List') ?? [];
     var cachePostsList =
     cacheHivePostsList.map((postModel) => PostModelHive.fromHive(postModel)).toList();
 
@@ -130,7 +128,7 @@ class HiveServices {
     cachePostsList.insert(postIndex, updatePost); // Add new
 
     var readyHiveList = cachePostsList.map((postModel) => PostModelHive.toHive(postModel)).toList();
-    HiveServices.postsBox.put('cachePostsList', readyHiveList);
+    HiveServices.uniBox.put('cache${postStr}List', readyHiveList);
   }
 
   //~ CurrUser:

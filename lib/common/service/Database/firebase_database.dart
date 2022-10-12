@@ -50,6 +50,40 @@ class Database {
         .onError((error, stackTrace) => print('addToBatch ERR - $error'));
   }
 
+  static Future<List<ChatModel>>? getChatsBefore(String currUserId, DocumentSnapshot endBeforeDoc) {
+    print('START: getChatsBefore()');
+    print('startAtDoc ${endBeforeDoc.id}');
+
+    return db
+        .collection('chats')
+        .orderBy('timestamp', descending: true)
+        .endBeforeDocument(endBeforeDoc)
+        .where('usersIds', arrayContains: currUserId)
+        .get()
+        .then((snap) => snap.docs.map((DocumentSnapshot snap) {
+      print('CHAT_DOC_ID: ${snap.id}');
+      // print(snap.data());
+      return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
+    }).toList());
+  }
+
+  static Future<List<ChatModel>>? getChatsAfter(String currUserId, DocumentSnapshot startAtDoc,) {
+    print('START: getChatsAfter()');
+    print('startAtDoc ${startAtDoc.id}');
+
+    return db
+        .collection('chats')
+        .orderBy('timestamp', descending: true)
+        .startAtDocument(startAtDoc)
+        .where('usersIds', arrayContains: currUserId)
+        .get()
+        .then((snap) => snap.docs.map((DocumentSnapshot snap) {
+      print('CHAT_DOC_ID: ${snap.id}');
+      // print(snap.data());
+      return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
+    }).toList());
+  }
+
   static Stream<List<ChatModel>>? streamChats(String currUserId) {
     print('START: streamChats()');
     return db

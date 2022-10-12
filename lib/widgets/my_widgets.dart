@@ -18,6 +18,7 @@ Widget wMainTextField(
   BuildContext context,
   TextEditingController controller, {
   TextInputType keyboardType = TextInputType.multiline,
+  bool autofocus = false,
   Function(String)? onChanged,
   String? topLabel,
   TextStyle? topLabelStyle,
@@ -31,6 +32,7 @@ Widget wMainTextField(
         Text(topLabel, style: topLabelStyle ?? AppStyles.text16PxBold.white)
             .pOnly(bottom: 5),
       TextField(
+        autofocus: autofocus,
         maxLength: maxLength,
         controller: controller,
         keyboardType: keyboardType,
