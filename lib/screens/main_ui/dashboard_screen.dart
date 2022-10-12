@@ -11,18 +11,25 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../common/config.dart';
 import '../../common/routes/app_router.gr.dart';
 
+enum TabItems { chat, home }
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  final TabItems dashboardPage;
+  const DashboardScreen({Key? key, this.dashboardPage = TabItems.home}) : super(key: key);
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-enum TabItems { chat, home }
-
 class _DashboardScreenState extends State<DashboardScreen> {
-  final _pageController = PageController(initialPage: TabItems.home.index);
-  var sItem = TabItems.home; // initial
+  PageController _pageController = PageController();
+  TabItems sItem = TabItems.home; // initial
+
+  @override
+  void initState() {
+    _pageController = PageController(initialPage: widget.dashboardPage.index);
+    sItem = widget.dashboardPage;
+    super.initState();
+  }
 
   void _handleIndexChanged(int i) {
     sItem = TabItems.values[i];

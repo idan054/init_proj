@@ -8,13 +8,14 @@ import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../Auth/auth_services.dart' as auth;
 import '../Chat/chat_services.dart' as chat;
 import '../Hive/timestamp_convert.dart';
 
-/// ChatService Available At [auth.AuthService] // <<---
-/// newChat() & sendMessage() Available At [chat.ChatService] // <<---
+//> MUST Be same as collection name!
+enum ModelTypes { posts, chats, messages, users }
 
 class Database {
   //> .get() = READ.
@@ -26,9 +27,7 @@ class Database {
       db.doc(documentPath).get().then((doc) => doc.data());
 
   void updateFirestore(
-      {required String collection,
-      String? docName,
-      required Map<String, dynamic> toJson}) {
+      {required String collection, String? docName, required Map<String, dynamic> toJson}) {
     db
         .collection(collection)
         .doc(docName)
@@ -41,8 +40,7 @@ class Database {
       required String collection,
       String? docName,
       required Map<String, dynamic> toJson}) {
-    batch.set(db.collection(collection).doc(docName), toJson,
-        SetOptions(merge: true));
+    batch.set(db.collection(collection).doc(docName), toJson, SetOptions(merge: true));
 
     db
         .collection(collection)
@@ -51,9 +49,9 @@ class Database {
         .onError((error, stackTrace) => print('addToBatch ERR - $error'));
   }
 
-  static Future<DocumentSnapshot> getStartEndAtDoc(
-      String collection, String? docId) async {
+  static Future<DocumentSnapshot> getStartEndAtDoc(String collection, String? docId) async {
     print('START: getStartAtDoc()');
+
     if (docId != null) {
       print('GET DOC BASED OLD ONE... (StartAt)');
       var oldestSeenPostDoc = await db.collection(collection).doc(docId).get();
@@ -75,45 +73,72 @@ class Database {
   //~ Made for specific scenario:
   //~ =========================
 
-  static Future<List<PostModel>?> getPostsStartAt(
-      BuildContext context, DocumentSnapshot startAtDoc) async {
-    print('START: getPosts()');
+  // static Future<List<PostModel>?> getPostsStartAt
+  static Future getDocsStartAt(
+      BuildContext context, DocumentSnapshot startAtDoc, ModelTypes modelType) async {
+    print('START: getDoc of: ${modelType.name}()');
     print('startAtDoc ${startAtDoc.id}');
 
     return db
-        .collection('posts')
+        .collection(modelType.name)
         .orderBy('timestamp', descending: true)
         .startAtDocument(startAtDoc)
         .limit(6)
         .get()
         .then((snap) async {
-      var posts =
-          snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
-
+      var posts;
+      switch (modelType) {
+        case ModelTypes.posts:
+          posts = snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+          break;
+        case ModelTypes.chats:
+          posts = snap.docs.map((doc) => ChatModel.fromJson(doc.data())).toList();
+          break;
+        case ModelTypes.messages:
+          posts = snap.docs.map((doc) => MessageModel.fromJson(doc.data())).toList();
+          break;
+        case ModelTypes.users:
+          posts = snap.docs.map((doc) => UserModel.fromJson(doc.data())).toList();
+          break;
+      }
       return posts;
     }).onError((e, stackTrace) {
-      print('ERROR: getPosts() E:  $e');
+      print('ERROR: getDoc of: $modelType() E:  $e');
       return [];
     });
   }
 
-  static Future<List<PostModel>?> getPostsEndBefore(
-      BuildContext context, DocumentSnapshot endBeforeDoc) async {
-    print('START: getPosts()');
+  // static Future<List<PostModel>?> getDocsEndBefore
+  static Future getDocsEndBefore(
+      BuildContext context, DocumentSnapshot endBeforeDoc, ModelTypes modelType) async {
+    print('START: getDoc of: ${modelType.name}()');
     print('endBeforeDoc ${endBeforeDoc.id}');
 
     return db
-        .collection('posts')
+        .collection(modelType.name)
         .orderBy('timestamp', descending: true)
         .endBeforeDocument(endBeforeDoc)
         .limit(6)
         .get()
         .then((snap) async {
-      var posts =
-      snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+      var posts;
+      switch (modelType) {
+        case ModelTypes.posts:
+          posts = snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+          break;
+        case ModelTypes.chats:
+          posts = snap.docs.map((doc) => ChatModel.fromJson(doc.data())).toList();
+          break;
+        case ModelTypes.messages:
+          posts = snap.docs.map((doc) => MessageModel.fromJson(doc.data())).toList();
+          break;
+        case ModelTypes.users:
+          posts = snap.docs.map((doc) => UserModel.fromJson(doc.data())).toList();
+          break;
+      }
       return posts;
     }).onError((e, stackTrace) {
-      print('ERROR: getPosts() E:  $e');
+      print('ERROR: getDoc of: $modelType() E:  $e');
       return [];
     });
   }

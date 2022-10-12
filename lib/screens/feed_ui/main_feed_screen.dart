@@ -1,4 +1,7 @@
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/service/Auth/firebase_database.dart';
+import 'package:example/common/service/Auth/firebase_database.dart';
+import 'package:example/common/service/Auth/firebase_database.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:example/common/themes/app_colors.dart';
 
@@ -29,7 +32,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
-    postList = await FeedService.handleGetPost(context, latest: true) ?? [];
+    postList = await FeedService.handleGetDocs(context, ModelTypes.posts, latest: true) ?? [];
     splashLoader = false;
     setState(() {});
   }
@@ -42,69 +45,69 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.darkBlack,
-      body:
-      Stack(
+      body: Stack(
         children: [
           LazyLoadScrollView(
             onEndOfPage: () async {
               print('START: onEndOfPage()');
               context.uniProvider.updateIsFeedLoading(true);
-              postList = await FeedService.handleGetPost(context, latest: false) ?? [];
+              postList =
+                  await FeedService.handleGetDocs(context, ModelTypes.posts, latest: false) ?? [];
               // await Future.delayed(2.seconds);
               context.uniProvider.updateIsFeedLoading(false);
               setState(() {});
             },
-            child: Builder(
-                builder: (context) {
-                  if (splashLoader) { // First time only
-                    return const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 7)
-                        .center;}
+            child: Builder(builder: (context) {
+              if (splashLoader) {
+                // First time only
+                return const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 7)
+                    .center;
+              }
 
-                  if (postList.isEmpty) {
-                    return 'Sorry, no post found... \nTry again later!'.toText().center;
-                  }
-                  var listHeight = 100 * postList.length * postRatio / 2;
-                  return RefreshIndicator(
-                    backgroundColor: AppColors.darkGrey,
-                    color: AppColors.primary,
-                    onRefresh: () async {
-                      print('START: onRefresh()');
-                      postList = await FeedService.handleGetPost(context, latest: true) ?? [];
-                      setState(() {});
-                    },
-                    child: SingleChildScrollView(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: <Widget>[
-                          SizedBox(
-                            height: listHeight, //ratio
-                            width: context.width * 0.5,
-                            child: ListView.builder(
-                                itemCount: postList.length,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (BuildContext context, int i) =>
-                                i.isEven ? const Offstage()
-                                    : PostView(postList[i])
-                            ),
-                          ).offset(0, 100),
-                          SizedBox(
-                            height: listHeight, //ratio
-                            width: context.width * 0.5,
-                            child: ListView.builder(
-                                itemCount: postList.length,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (BuildContext context, int i) =>
-                                i.isOdd ? const Offstage() : PostView(postList[i])).appearAll,
-                          ),
-                        ],
-                      )
+              if (postList.isEmpty) {
+                return 'Sorry, no post found... \nTry again later!'.toText().center;
+              }
+              var listHeight = 100 * postList.length * postRatio / 2;
+              return RefreshIndicator(
+                backgroundColor: AppColors.darkGrey,
+                color: AppColors.primary,
+                onRefresh: () async {
+                  print('START: onRefresh()');
+                  postList =
+                      await FeedService.handleGetDocs(context, ModelTypes.posts, latest: true) ??
+                          [];
+                  setState(() {});
+                },
+                child: SingleChildScrollView(
+                    child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    SizedBox(
+                      height: listHeight, //ratio
+                      width: context.width * 0.5,
+                      child: ListView.builder(
+                          itemCount: postList.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int i) =>
+                              i.isEven ? const Offstage() : PostView(postList[i])),
+                    ).offset(0, 100),
+                    SizedBox(
+                      height: listHeight, //ratio
+                      width: context.width * 0.5,
+                      child: ListView.builder(
+                          itemCount: postList.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (BuildContext context, int i) =>
+                              i.isOdd ? const Offstage() : PostView(postList[i])).appearAll,
                     ),
-                  );
-                }),
+                  ],
+                )),
+              );
+            }),
           ),
           Container(
-            width: context.width /2,
+              width: context.width / 2,
               height: 75,
               decoration: const BoxDecoration(
                 color: AppColors.darkBlack,

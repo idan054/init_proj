@@ -40,9 +40,14 @@ class AppRouter extends _i11.RootStackRouter {
       );
     },
     DashboardRoute.name: (routeData) {
+      final args = routeData.argsAs<DashboardRouteArgs>(
+          orElse: () => const DashboardRouteArgs());
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i2.DashboardScreen(),
+        child: _i2.DashboardScreen(
+          key: args.key,
+          dashboardPage: args.dashboardPage,
+        ),
         opaque: true,
         barrierDismissible: false,
       );
@@ -177,14 +182,36 @@ class SplashRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.DashboardScreen]
-class DashboardRoute extends _i11.PageRouteInfo<void> {
-  const DashboardRoute()
-      : super(
+class DashboardRoute extends _i11.PageRouteInfo<DashboardRouteArgs> {
+  DashboardRoute({
+    _i12.Key? key,
+    _i2.TabItems dashboardPage = _i2.TabItems.home,
+  }) : super(
           DashboardRoute.name,
           path: '/dashboard-screen',
+          args: DashboardRouteArgs(
+            key: key,
+            dashboardPage: dashboardPage,
+          ),
         );
 
   static const String name = 'DashboardRoute';
+}
+
+class DashboardRouteArgs {
+  const DashboardRouteArgs({
+    this.key,
+    this.dashboardPage = _i2.TabItems.home,
+  });
+
+  final _i12.Key? key;
+
+  final _i2.TabItems dashboardPage;
+
+  @override
+  String toString() {
+    return 'DashboardRouteArgs{key: $key, dashboardPage: $dashboardPage}';
+  }
 }
 
 /// generated route for

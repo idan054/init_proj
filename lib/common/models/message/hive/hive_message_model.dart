@@ -25,7 +25,7 @@ class MessageModelHive {
     this.read,
   });
 
-  MessageModelHive toHive(MessageModel message) => MessageModelHive(
+  static MessageModelHive toHive(MessageModel message) => MessageModelHive(
     textContent: message.textContent,
     fromId: message.fromId,
     toId: message.toId,
@@ -35,7 +35,7 @@ class MessageModelHive {
     read: message.read,
   );
 
-  MessageModel fromHive(MessageModelHive message) => MessageModel(
+  static MessageModel fromHive(MessageModelHive message) => MessageModel(
     textContent: message.textContent,
     fromId: message.fromId,
     toId: message.toId,

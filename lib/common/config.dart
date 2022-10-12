@@ -12,7 +12,7 @@ String FirstPostDocId_config = 'idanbit80@gmail.com[#f8926]';
 bool boldPrimaryDesignConfig = false;
 
 /// Dev (debug)
-bool clearHiveBoxes = false;
+bool clearHiveBoxes = true;
 // bool clearHiveBoxes = false;
 // bool showDebugPrints = false && kDebugMode;
 

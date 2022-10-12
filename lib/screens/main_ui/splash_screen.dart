@@ -34,7 +34,8 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
     userLogged = FirebaseAuth.instance.currentUser?.uid != null;
 
     mySplashAsync().then(
-      (_) => context.router.replaceAll([userLogged ? const DashboardRoute() : const LoginRoute()]),
+      (_) => userLogged ? context.router.replaceAll([DashboardRoute()])
+                        : context.router.replaceAll([const LoginRoute()])
     );
   }
 

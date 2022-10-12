@@ -22,7 +22,7 @@ class ChatModelHive {
     this.messages,
   });
 
-  ChatModel toHive(ChatModel message) => ChatModel(
+  static ChatModel toHive(ChatModel message) => ChatModel(
     id: message.id,
     lastMessage: message.lastMessage,
     usersIds: message.usersIds,
@@ -30,7 +30,7 @@ class ChatModelHive {
     messages: message.messages,
   );
 
-  ChatModel fromHive(ChatModelHive message) => ChatModel(
+  static ChatModel fromHive(ChatModelHive message) => ChatModel(
     id: message.id,
     lastMessage: message.lastMessage,
     usersIds: message.usersIds,

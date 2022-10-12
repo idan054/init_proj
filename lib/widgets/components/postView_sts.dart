@@ -1,4 +1,6 @@
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/routes/app_router.dart';
+import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Chat/chat_services.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +11,7 @@ import '../../common/mixins/fonts.gen.dart';
 import '../../common/models/post/post_model.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
+import '../../screens/main_ui/dashboard_screen.dart';
 
 class PostView extends StatelessWidget {
   final PostModel post;
@@ -35,24 +38,24 @@ class PostView extends StatelessWidget {
         child: Stack(
           children: [
             Builder(
-              builder: (context) {
-                bool isLongPost = post.textContent.length > 200;
-                return Container(
-                    height: 100 * postRatio,
-                    width: context.width / 2,
-                    color: post.colorCover,
-                    child: Text(post.textContent,
-                            textAlign: postAlign,
-                            softWrap: true,
-                            maxLines: 15,
-                            style: AppStyles.text18PxBold.copyWith(
-                                fontSize: isLongPost ? 11 : 14,
-                                fontFamily: FontFamily.rilTopia,
-                                color: post.isDarkText ? AppColors.darkBlack : AppColors.white))
-                        .px(20)
-                        .pOnly(top: isLongPost ? 20 : 0)
-                        .center);
-              }
+                builder: (context) {
+                  bool isLongPost = post.textContent.length > 200;
+                  return Container(
+                      height: 100 * postRatio,
+                      width: context.width / 2,
+                      color: post.colorCover,
+                      child: Text(post.textContent,
+                          textAlign: postAlign,
+                          softWrap: true,
+                          maxLines: 15,
+                          style: AppStyles.text18PxBold.copyWith(
+                              fontSize: isLongPost ? 11 : 14,
+                              fontFamily: FontFamily.rilTopia,
+                              color: post.isDarkText ? AppColors.darkBlack : AppColors.white))
+                          .px(20)
+                          .pOnly(top: isLongPost ? 20 : 0)
+                          .center);
+                }
             ),
             buildTop(postRatio),
             buildBottom(context, postRatio, isLiked).offset(0, 10),
@@ -80,27 +83,29 @@ class PostView extends StatelessWidget {
       ),
       child: StatefulBuilder(builder: (context, stfSetState) {
         return ListTile(
-            onTap: () {},
-            horizontalTitleGap: 0.0,
-            minVerticalPadding: 0.0,
-            contentPadding: const EdgeInsets.only(left: 10, right: 0),
-            trailing: Icons.more_vert.iconAwesome(size: 18).offset(0, -6).px(10).onTap(() { }),
-            leading: CircleAvatar(
-              radius: 18,
-              backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
-              backgroundColor: AppColors.darkBlack.withOpacity(0.33),
-            ).pOnly(right: 5),
-            title: post.creatorUser!.name!.toText(fontSize: 13, softWrap: true),
-            subtitle: Row(
-              children: [
-                '${post.creatorUser!.age}yrs  ·  2min'
-                // '${post.timestamp!.hour}:'
-                //         '${post.timestamp!.minute.toString().length == 1 ? '0' : ''}'
-                //         '${post.timestamp!.minute}'
-                    .toText(bold: true, fontSize: 10, color: post.isDarkText ? AppColors.greyUnavailable : AppColors.greyLight),
-                const Spacer(),
-              ],
-            ).pOnly(right: 10, top: 0).offset(0, -5),
+          onTap: () {},
+          horizontalTitleGap: 0.0,
+          minVerticalPadding: 0.0,
+          contentPadding: const EdgeInsets.only(left: 10, right: 0),
+          trailing: Icons.more_vert.iconAwesome(size: 18).offset(0, -6).px(10).onTap(() {}),
+          leading: CircleAvatar(
+            radius: 18,
+            backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
+            backgroundColor: AppColors.darkBlack.withOpacity(0.33),
+          ).pOnly(right: 5),
+          title: post.creatorUser!.name!.toText(fontSize: 13, softWrap: true),
+          subtitle: Row(
+            children: [
+              '${post.creatorUser!.age}yrs  ·  2min'
+              // '${post.timestamp!.hour}:'
+              //         '${post.timestamp!.minute.toString().length == 1 ? '0' : ''}'
+              //         '${post.timestamp!.minute}'
+                  .toText(bold: true,
+                  fontSize: 10,
+                  color: post.isDarkText ? AppColors.greyUnavailable : AppColors.greyLight),
+              const Spacer(),
+            ],
+          ).pOnly(right: 10, top: 0).offset(0, -5),
         ).offset(0, -5);
       }),
     );
@@ -111,26 +116,33 @@ class PostView extends StatelessWidget {
 
     return Container(
       // color: AppColors.testGreen,
-      alignment: Alignment.bottomCenter,
-      height: 100 * postRatio,
-      //     stops: const [0.01, 0.25],
-      child: ListTile(
-          horizontalTitleGap: 0.0,
-          minVerticalPadding: 0.0,
-          contentPadding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
-          // trailing:  FontAwesomeIcons.commentDots.iconAwesome(size: 18).pOnly(left: 5),
-          title:  Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              CircleAvatar(
-                  backgroundColor: AppColors.darkBlack.withOpacity(0.30),
-                  child: FontAwesomeIcons.solidPaperPlane.iconAwesome(size: 18).onTap(() { })),
-              CircleAvatar(
-                  backgroundColor: AppColors.darkBlack.withOpacity(0.30),
-                  child: FontAwesomeIcons.commentDots.iconAwesome(size: 18).onTap(() { })),
-            ],
-          )
-      )
+        alignment: Alignment.bottomCenter,
+        height: 100 * postRatio,
+        //     stops: const [0.01, 0.25],
+        child: ListTile(
+            horizontalTitleGap: 0.0,
+            minVerticalPadding: 0.0,
+            contentPadding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+            // trailing:  FontAwesomeIcons.commentDots.iconAwesome(size: 18).pOnly(left: 5),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CircleAvatar(
+                    backgroundColor: AppColors.darkBlack.withOpacity(0.30),
+                    child: FontAwesomeIcons.solidPaperPlane.iconAwesome(size: 18).onTap(() {
+                      if (post.creatorUser!.uid == currUser.uid) {
+                        context.router.push(DashboardRoute(dashboardPage: TabItems.chat));
+                      } else {
+                        ChatService().openChat(context, otherUser: post.creatorUser!);
+                      }
+                    })),
+                if(post.enableComments)
+                  CircleAvatar(
+                      backgroundColor: AppColors.darkBlack.withOpacity(0.30),
+                      child: FontAwesomeIcons.commentDots.iconAwesome(size: 18).onTap(() {})),
+              ],
+            )
+        )
     );
   }
 }

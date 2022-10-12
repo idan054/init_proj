@@ -49,7 +49,7 @@ class AuthService {
       // Embed data - when login only, no signup.
       var currUser = UserModel.fromJson(userFsData);
       HiveServices().saveCurrUserToCache(context, currUser);
-      context.router.replace(const DashboardRoute());
+      context.router.replace(DashboardRoute());
     }
 
     print('userFsData $userFsData');
