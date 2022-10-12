@@ -28,10 +28,10 @@ class PostView extends StatelessWidget {
 
     return StatefulBuilder(builder: (context, setState) {
       return GestureDetector(
-        onDoubleTap: () {
-          FeedService().setPostLike(context, post, isLiked);
-          setState(() => isLiked = !isLiked);
-        },
+        // onDoubleTap: () {
+        //   FeedService().setPostLike(context, post, isLiked);
+        //   setState(() => isLiked = !isLiked);
+        // },
         child: Stack(
           children: [
             Builder(
@@ -97,7 +97,7 @@ class PostView extends StatelessWidget {
                 // '${post.timestamp!.hour}:'
                 //         '${post.timestamp!.minute.toString().length == 1 ? '0' : ''}'
                 //         '${post.timestamp!.minute}'
-                    .toText(bold: true, fontSize: 10, color: AppColors.greyLight),
+                    .toText(bold: true, fontSize: 10, color: post.isDarkText ? AppColors.greyUnavailable : AppColors.greyLight),
                 const Spacer(),
               ],
             ).pOnly(right: 10, top: 0).offset(0, -5),
@@ -113,76 +113,24 @@ class PostView extends StatelessWidget {
       // color: AppColors.testGreen,
       alignment: Alignment.bottomCenter,
       height: 100 * postRatio,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-          stops: const [0.01, 0.25],
-          colors: [
-            AppColors.darkBlack.withOpacity(0.40),
-            AppColors.transparent,
-          ],
-        ),
-      ),
-      child: StatefulBuilder(builder: (context, stfSetState) {
-        final isNewLike = !post.likeByIds.contains(context.uniProvider.currUser.uid);
-        return ListTile(
-            horizontalTitleGap: 0.0,
-            minVerticalPadding: 0.0,
-            contentPadding: const EdgeInsets.only(left: 10, right: 0),
-            subtitle: Builder(builder: (context) {
-              var likes = post.likeCounter;
-              if (isNewLike && isLiked) likes = post.likeCounter! + 1;
-              if (!isNewLike && !isLiked) likes = post.likeCounter! - 1;
-
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // const Spacer(),
-                  FontAwesomeIcons.share.iconAwesome(size: 18).pad(10).onTap(() { print('x');}),
-
-                  //> Like button:
-                  if (post.enableLikes && post.likeCounter != null) ...[
-                    Row(
-                      children: [
-                        '${likes == 0 ? '' : likes}'.toText(
-                            bold: true,
-                            fontSize: isLiked ? 11 : 10,
-                            color: isLiked ? AppColors.white : AppColors.greyLight),
-                        isLiked
-                            ? FontAwesomeIcons.solidHeart.iconAwesome(size: 18).pOnly(left: 5)
-                            : FontAwesomeIcons.heart.iconAwesome(size: 18).pOnly(left: 5),
-                      ],
-                    ).pad(10).onTap(() {
-                      FeedService().setPostLike(context, post, isLiked);
-                      stfSetState(() => isLiked = !isLiked);
-                    }),
-                  ],
-
-                  //> DM / Comment button:
-                  if (post.enableComments == false && post.creatorUser!.uid != currUser.uid) ...[
-                    FontAwesomeIcons.solidPaperPlane
-                        .iconAwesome(size: 18)
-                        .pOnly(right: 5, left: 20)
-                        .ltr
-                        .onTap(() => ChatService().openChat(context, otherUser: post.creatorUser!)),
-                  ] else if (post.enableComments) ...[
-                    Row(
-                      children: [
-                        '99'.toText(
-                            bold: true,
-                            fontSize: isLiked ? 11 : 10,
-                            color: isLiked ? AppColors.white : AppColors.greyLight),
-                        FontAwesomeIcons.commentDots.iconAwesome(size: 18).pOnly(left: 5)
-                      ],
-                    ),
-                  ] else ...[
-                    Icons.done.icon(color: Colors.transparent)
-                  ]
-                ],
-              ).offset(0, -8).pOnly(right: 10);
-            }));
-      }),
+      //     stops: const [0.01, 0.25],
+      child: ListTile(
+          horizontalTitleGap: 0.0,
+          minVerticalPadding: 0.0,
+          contentPadding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          // trailing:  FontAwesomeIcons.commentDots.iconAwesome(size: 18).pOnly(left: 5),
+          title:  Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              CircleAvatar(
+                  backgroundColor: AppColors.darkBlack.withOpacity(0.30),
+                  child: FontAwesomeIcons.solidPaperPlane.iconAwesome(size: 18).onTap(() { })),
+              CircleAvatar(
+                  backgroundColor: AppColors.darkBlack.withOpacity(0.30),
+                  child: FontAwesomeIcons.commentDots.iconAwesome(size: 18).onTap(() { })),
+            ],
+          )
+      )
     );
   }
 }

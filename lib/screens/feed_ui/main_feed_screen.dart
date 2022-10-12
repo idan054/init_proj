@@ -40,19 +40,21 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     // context.uniProvider.updateIsFeedLoading(false);
     double postRatio = 3;
 
-    return RefreshIndicator(
-      backgroundColor: AppColors.darkGrey,
-      color: AppColors.primary,
-      onRefresh: () async {
-        postList = await FeedService.handleGetPost(context, latest: true) ?? [];
-        setState(() {});
-      },
-      child: Scaffold(
-        backgroundColor: AppColors.darkBlack,
-        body: Stack(
-          children: [
-            // U might also want to add lazy_load_scrollview Here instead.
-            Builder(
+    return Scaffold(
+      backgroundColor: AppColors.darkBlack,
+      body:
+      Stack(
+        children: [
+          LazyLoadScrollView(
+            onEndOfPage: () async {
+              print('START: onEndOfPage()');
+              context.uniProvider.updateIsFeedLoading(true);
+              postList = await FeedService.handleGetPost(context, latest: false) ?? [];
+              // await Future.delayed(2.seconds);
+              context.uniProvider.updateIsFeedLoading(false);
+              setState(() {});
+            },
+            child: Builder(
                 builder: (context) {
                   if (splashLoader) { // First time only
                     return const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 7)
@@ -62,60 +64,55 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                     return 'Sorry, no post found... \nTry again later!'.toText().center;
                   }
                   var listHeight = 100 * postList.length * postRatio / 2;
-                  return LazyLoadScrollView(
-                    onEndOfPage: () async {
-                      print('START: onEndOfPage()');
-                      context.uniProvider.updateIsFeedLoading(true);
-                      postList = await FeedService.handleGetPost(context, latest: false) ?? [];
-                      // await Future.delayed(2.seconds);
-                      context.uniProvider.updateIsFeedLoading(false);
+                  return RefreshIndicator(
+                    backgroundColor: AppColors.darkGrey,
+                    color: AppColors.primary,
+                    onRefresh: () async {
+                      print('START: onRefresh()');
+                      postList = await FeedService.handleGetPost(context, latest: true) ?? [];
                       setState(() {});
                     },
                     child: SingleChildScrollView(
                       child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: <Widget>[
-                          Column(
-                            children: [
-                              'This is the end...'.toText().offset(0, listHeight-100),
-                              SizedBox(
-                                height: listHeight, //ratio
-                                width: context.width * 0.5,
-                                child: ListView.builder(
-                                    itemCount: postList.length,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (BuildContext context, int i) =>
-                                        i.isEven ? const Offstage() : PostView(postList[i])),
-                              ).offset(0, 100),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              'This is the end...'.toText().offset(0, listHeight-100),
-                              SizedBox(
-                                height: listHeight, //ratio
-                                width: context.width * 0.5,
-                                child: ListView.builder(
-                                    itemCount: postList.length,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    itemBuilder: (BuildContext context, int i) =>
-                                        i.isOdd ? const Offstage() : PostView(postList[i])).appearAll,
-                              ),
-                            ],
+                          SizedBox(
+                            height: listHeight, //ratio
+                            width: context.width * 0.5,
+                            child: ListView.builder(
+                                itemCount: postList.length,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (BuildContext context, int i) =>
+                                i.isEven ? const Offstage()
+                                    : PostView(postList[i])
+                            ),
+                          ).offset(0, 100),
+                          SizedBox(
+                            height: listHeight, //ratio
+                            width: context.width * 0.5,
+                            child: ListView.builder(
+                                itemCount: postList.length,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (BuildContext context, int i) =>
+                                i.isOdd ? const Offstage() : PostView(postList[i])).appearAll,
                           ),
                         ],
                       )
-                    )
+                    ),
                   );
                 }),
-            Container(
-                decoration: const BoxDecoration(
-                  color: AppColors.darkBlack,
-                  borderRadius: BorderRadius.only(bottomRight: Radius.circular(5)),
-                ),
-                padding: const EdgeInsets.only(left: 15, right: 17.5, top: 35, bottom: 12.5),
-                child: riltopiaLogo(fontSize: 35)),
-          ],
-        ),
+          ),
+          Container(
+            width: context.width /2,
+              height: 75,
+              decoration: const BoxDecoration(
+                color: AppColors.darkBlack,
+                borderRadius: BorderRadius.only(bottomRight: Radius.circular(5)),
+              ),
+              // padding: const EdgeInsets.only(left: 15, right: 17.5, top: 35, bottom: 12.5),
+              child: riltopiaLogo(fontSize: 35).center),
+        ],
       ),
     );
   }
