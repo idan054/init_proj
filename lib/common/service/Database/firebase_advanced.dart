@@ -26,6 +26,7 @@ class FsAdvanced {
   //~ when to use Hive (cache) / Firestore (Database).
   //! Cached Also means Deleted posts/ users/ chats/ messages will still show.
   // U can fix it by request on SplashScreen "deleted_posts" doc and update Hive based.
+  // OR Like updatePostInCache() (Or both?)
   //> Currently use for posts & chats
   Future handleGetDocs(BuildContext context, ModelTypes modelType, {bool latest = true}) async {
     var modelTypeName = modelType.name;
@@ -75,7 +76,7 @@ class FsAdvanced {
     return noDuplicateList;
   }
 
-  Future<DocumentSnapshot> getStartEndAtDoc(String collection, String? docId) async {
+  Future<DocumentSnapshot?> getStartEndAtDoc(String collection, String? docId) async {
     print('START: getStartAtDoc()');
 
     if (docId != null) {
@@ -89,7 +90,7 @@ class FsAdvanced {
           .orderBy('timestamp', descending: true)
           .limit(1)
           .get()
-          .then((snapshot) => snapshot.docs.first);
+          .then((snapshot) => snapshot.docs.isEmpty ? null : snapshot.docs.first);
       return mostRecentPostDoc;
     }
   }

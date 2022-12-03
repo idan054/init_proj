@@ -1,7 +1,12 @@
 
 
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/common/service/Database/firebase_database.dart';
 import 'package:example/screens/main_ui/splash_screen.dart' as click;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +39,7 @@ void main() async {
   Hive.registerAdapter(PostModelHiveAdapter());    // 3
   Hive.registerAdapter(MessageModelHiveAdapter()); // 4
   Hive.registerAdapter(ChatModelHiveAdapter());    // 5
+  Database().dbSetting;
 
   runApp(
     MultiProvider(

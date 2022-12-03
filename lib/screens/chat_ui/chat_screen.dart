@@ -13,43 +13,64 @@ import '../../common/service/Database/firebase_database.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../widgets/app_bar.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends StatefulWidget {
   final UserModel otherUser;
   final String chatId;
 
   ChatScreen({required this.otherUser, required this.chatId, Key? key})
       : super(key: key);
 
+  @override
+  State<ChatScreen> createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
   var sendController = TextEditingController();
+  // var splashLoader = true;
+  // List<MessageModel> chatList = [];
+  //
+  // @override
+  // void initState() {
+  //   _loadMore();
+  //   super.initState();
+  // }
+  //
+  // Future _loadMore() async {
+  //   // splashLoader = true; setState(() {});
+  //   chatList = await Database.advanced.handleGetDocs(context, ModelTypes.messages, latest: true) ?? [];
+  //   // chatList = await Database.getChats(context.uniProvider.currUser.uid!) ?? [];
+  //   splashLoader = false;
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
-    print('chatId ${chatId}');
+    print('chatId ${widget.chatId}');
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         backgroundColor: AppColors.darkBlack,
-        appBar: darkAppBar(context, title: otherUser.email.toString()),
+        appBar: darkAppBar(context, title: widget.otherUser.email.toString()),
         body: Column(
           children: [
             StreamProvider<List<MessageModel>>.value(
-              value: Database.streamMessages(chatId),
+              value: Database.streamMessages(widget.chatId),
               initialData: const [],
               builder: (context, child) {
                 var messages = context.listenMessagesModelList;
                 print('messages.length ${messages.length}');
                 // print('messages ${messages.length}');
 
-                WriteBatch messagesBatch = Database.db.batch();
-                for (var message in messages) {
-                  if (message.toId == context.uniProvider.currUser.uid) {
-                    // Todo make sure this works!
-                    ChatService()
-                        .setMessageRead(message, chatId, messagesBatch);
-                  }
-                }
-                messagesBatch.commit();
+                // WriteBatch messagesBatch = Database.db.batch();
+                // for (var message in messages) {
+                //   if (message.toId == context.uniProvider.currUser.uid) {
+                //     // Todo make sure this works!
+                //     ChatService()
+                //         .setMessageRead(message, widget.chatId, messagesBatch);
+                //   }
+                // }
+                // messagesBatch.commit();
 
                 return ListView.builder(
                   reverse: true,
@@ -61,7 +82,7 @@ class ChatScreen extends StatelessWidget {
               },
             ).expanded(),
             4.verticalSpace,
-            buildTextField(context, chatId, otherUser)
+            buildTextField(context, widget.chatId, widget.otherUser)
           ],
         ),
       ),

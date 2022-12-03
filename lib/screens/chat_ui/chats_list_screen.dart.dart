@@ -45,7 +45,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     return Scaffold(
         backgroundColor: AppColors.darkBlack,
         appBar: darkAppBar(context,
-            title: 'Messages', // STR
+            title: 'Messages (${currUser.email})', // STR
             backAction: () => context.router.replace(const LoginRoute()),
             actions: [
               IconButton(

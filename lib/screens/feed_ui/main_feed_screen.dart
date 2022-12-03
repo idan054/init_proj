@@ -22,7 +22,7 @@ class MainFeedScreen extends StatefulWidget {
 
 class _MainFeedScreenState extends State<MainFeedScreen> {
   var splashLoader = true;
-  List<PostModel> postList = [];
+  Stream<List<PostModel>> postList = Stream.value([]);
 
   @override
   void initState() {
@@ -32,7 +32,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
-    postList = await Database.advanced.handleGetDocs(context, ModelTypes.posts, latest: true) ?? [];
+    // postList = await Database.advanced.handleGetDocs(context, ModelTypes.posts, latest: true) ?? [];
+    postList = Database.streamPosts();
     splashLoader = false;
     setState(() {});
   }

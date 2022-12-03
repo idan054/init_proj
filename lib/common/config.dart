@@ -12,8 +12,16 @@ String FirstPostDocId_config = 'idanbit80@gmail.com[#f8926]';
 bool boldPrimaryDesignConfig = false;
 
 /// Dev (debug)
-bool clearHiveBoxes = true; // (Clear cache)
+bool clearHiveBoxes = false; // (Clear cache)
 // bool showDebugPrints = false && kDebugMode;
 
 // ? CTRL + F: Outside Lib folder:
 // ? var homeCooldown = 2 * 60;
+
+
+// How Hive should works:
+// 1. .add every item to his box (PostsBox, ChatsBox, Chat#123_MessagesBox)
+// 2. Now every box have postsBox.values of HiveModels
+// 3. Change it to List of Models
+// 4. On Feed already works good Because no Likes or dynamic data (No requests of updates needed)
+// 4. On Chats its not works well because
