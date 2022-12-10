@@ -4,11 +4,9 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/models/chat/chat_model.dart';
-import 'package:example/common/models/message/hive/hive_message_model.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
-import 'package:example/common/service/Hive/hive_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,14 +24,15 @@ enum ModelTypes { posts, chats, messages, users }
 // .set() / .update() = WRITE.
 class Database {
   static var db = FirebaseFirestore.instance;
+
   // var db = Database.db;
   //
- get dbSetting {
-   db.settings = const Settings(
-     persistenceEnabled: true,
-     cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
-   );
- }
+  get dbSetting {
+    db.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+    );
+  }
 
   static final advanced = FsAdvanced();
 
@@ -49,11 +48,10 @@ class Database {
         .onError((error, stackTrace) => print('updateFirestore ERR - $error'));
   }
 
-  void addToBatch(
-      {required WriteBatch batch,
-      required String collection,
-      String? docName,
-      required Map<String, dynamic> toJson}) {
+  void addToBatch({required WriteBatch batch,
+    required String collection,
+    String? docName,
+    required Map<String, dynamic> toJson}) {
     batch.set(db.collection(collection).doc(docName), toJson, SetOptions(merge: true));
 
     db
@@ -73,17 +71,16 @@ class Database {
         .endBeforeDocument(endBeforeDoc)
         .where('usersIds', arrayContains: currUserId)
         .get()
-        .then((snap) => snap.docs.map((DocumentSnapshot snap) {
-              print('CHAT_DOC_ID: ${snap.id}');
-              // print(snap.data());
-              return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
-            }).toList());
+        .then((snap) =>
+        snap.docs.map((DocumentSnapshot snap) {
+          print('CHAT_DOC_ID: ${snap.id}');
+          // print(snap.data());
+          return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
+        }).toList());
   }
 
-  static Future<List<ChatModel>>? getChatsAfter(
-    String currUserId,
-    DocumentSnapshot startAtDoc,
-  ) {
+  static Future<List<ChatModel>>? getChatsAfter(String currUserId,
+      DocumentSnapshot startAtDoc,) {
     print('START: getChatsAfter()');
     print('startAtDoc ${startAtDoc.id}');
 
@@ -93,11 +90,12 @@ class Database {
         .startAtDocument(startAtDoc)
         .where('usersIds', arrayContains: currUserId)
         .get()
-        .then((snap) => snap.docs.map((DocumentSnapshot snap) {
-              print('CHAT_DOC_ID: ${snap.id}');
-              // print(snap.data());
-              return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
-            }).toList());
+        .then((snap) =>
+        snap.docs.map((DocumentSnapshot snap) {
+          print('CHAT_DOC_ID: ${snap.id}');
+          // print(snap.data());
+          return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
+        }).toList());
   }
 
   static Stream<List<ChatModel>>? streamChats(String currUserId) {
@@ -155,9 +153,7 @@ class Database {
   // cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   // );
 
-  static Stream<List<MessageModel>>? streamMessages(String chatId, /*DocumentSnapshot startAfter*/) {
-    print('db.settings ${db.settings}');
-
+  static Stream<List<MessageModel>>? streamMessages(String chatId) {
     print('START: streamMessages()');
     print('chatId ${chatId}');
     return db
@@ -165,17 +161,13 @@ class Database {
         .doc(chatId)
         .collection('messages')
         .orderBy('timestamp', descending: true)
-        // .startAfterDocument(startAfter)
-        .limit(40)
-        .snapshots(includeMetadataChanges: true)
-        .listen((QuerySnapshot list) {
-        // .map((QuerySnapshot list) {
+        .limit(10)
+    // .limit(1)
+        .snapshots()
+        .map((QuerySnapshot list) {
       return list.docs.map((DocumentSnapshot snap) {
-        var messageModel = MessageModel.fromJson(snap.data() as Map<String, dynamic>);
-        // var chatMessagesBox = Hive.box('$chatId-Messages');
-        // chatMessagesBox.add(MessageModelHive.toHive(messageModel));
         //> print('MSG_DOC_ID: ${snap.id}');
-        return messageModel;
+        return MessageModel.fromJson(snap.data() as Map<String, dynamic>);
       }).toList();
     }).handleError((dynamic e) {
       print('ERROR: streamMessages() E: $e');
