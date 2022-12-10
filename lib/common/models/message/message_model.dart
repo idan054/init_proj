@@ -1,8 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive/hive.dart';
-
 import '../convertors.dart';
 
 part 'message_model.freezed.dart';

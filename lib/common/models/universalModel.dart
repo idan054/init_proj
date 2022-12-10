@@ -5,8 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'chat/chat_model.dart';
 
 class UniProvider with ChangeNotifier {
-  UserModel currUser = const UserModel();
+  String? startAtDocId;
+  void updateStartAtDocId(String data) {
+    startAtDocId = data;
+    notifyListeners();
+  }
 
+  UserModel currUser = const UserModel();
   void updateUser(UserModel data) {
     currUser = data;
     notifyListeners();

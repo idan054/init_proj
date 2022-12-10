@@ -4,11 +4,8 @@ import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/service/Database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import 'package:example/common/models/user/hive/hive_user_model.dart';
 import '../../common/models/user/user_model.dart';
 import '../../common/routes/app_router.gr.dart';
-import '../../common/service/Hive/hive_services.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
 import '../../widgets/my_widgets.dart';
@@ -151,7 +148,6 @@ class _GenderAgeViewState extends State<GenderAgeView> {
         var currUser = context.uniProvider.currUser;
         currUser = currUser.copyWith(
             birthday: bDay, age: userAge, gender: selectedGender);
-        HiveServices().saveCurrUserToCache(context, currUser);
         Database().updateFirestore(
             collection: 'users',
             docName: '${currUser.email}',

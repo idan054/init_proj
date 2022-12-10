@@ -4,13 +4,9 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
-import 'package:example/common/service/Hive/hive_services.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
-
 import '../../../screens/chat_ui/chat_screen.dart' as screen;
-import '../../models/message/hive/hive_message_model.dart';
 import '../../models/user/user_model.dart';
 import '../Database/firebase_database.dart';
 import '../Database/firebase_database.dart' as click;
@@ -19,47 +15,21 @@ import '../Database/firebase_database.dart' as click;
 // streamMessages() Available At [click.Database] // <<---
 
 class ChatService {
+
   static Future openChat(BuildContext context, {required UserModel otherUser}) async {
     print('START: openChat()');
     var currUser = context.uniProvider.currUser;
 
-    /// Hive saves always needed request when open chat!
-    //> Exist in Hive cache?
-    // ChatId: idanbit80@gmail.com-theblackhero2@gmail.com
-    List cachedChatsIdsList = HiveServices.uniBox.get('ChatsIdsList') ?? [];
-    String? chatIdHive = cachedChatsIdsList.firstWhere(
-        (chatIdStr) => chatIdStr?.contains(otherUser.email!) ?? false,
-        orElse: () => null);
-    print('HIVE chatId: $chatIdHive');
-
-    //> Not in Hive cache? Check Firestore:
     String? chatId;
-    if (chatIdHive == null) {
-      // Not in Hive cache - search in Firestore.
-      var snap = await Database.db.collection('chats').where('usersIds', whereIn: [
-        [currUser.uid],
-        [otherUser.uid]
-      ]).get();
-      chatId = snap.docs.isEmpty ? null : snap.docs.first.data()['id'];
+    var snap = await Database.db
+        .collection('chats')
+        .where('usersIds', whereIn: [[currUser.uid], [otherUser.uid]])
+        .get();
+    chatId = snap.docs.isEmpty ? null : snap.docs.first.data()['id'];
 
-      //> Exist in Firestore! - Add to cache.
-      if (chatId != null) {
-        print('DATABASE chatId: $chatId');
-      } else {
-        //> Not exist (New)
-        print('NO chatId found. (Create new chat)');
-        chatId = '${currUser.email}-${otherUser.email}';
-      }
-    }
-    HiveServices.uniBox.put('ChatsIdsList', [...cachedChatsIdsList, chatId]);
-
-    var chatMessagesBox = Hive.isBoxOpen('$chatId-Messages')
-        ? Hive.box('$chatId-Messages')
-        : await Hive.openBox('$chatId-Messages');
-    print('chatMessagesBox.values.length ${chatMessagesBox.values.length}');
-    // print('chatMessagesBox.values.first.runtimeType ${chatMessagesBox.values.first.runtimeType}');
-
-    return context.router.push(ChatRoute(otherUser: otherUser, chatId: chatIdHive ?? chatId!));
+    print('(Create new chat)');
+    chatId = '${currUser.email}-${otherUser.email}';
+    return context.router.push(ChatRoute(otherUser: otherUser, chatId: chatId));
   }
 
   void setMessageRead(MessageModel message, String chatId, WriteBatch batch) {

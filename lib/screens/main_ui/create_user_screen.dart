@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/service/Auth/auth_services.dart';
@@ -7,8 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'package:example/common/models/user/hive/hive_user_model.dart';
 import '../../common/models/user/user_model.dart';
 import '../../common/routes/app_router.gr.dart';
 import '../../common/themes/app_colors.dart';

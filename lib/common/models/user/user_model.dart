@@ -1,13 +1,11 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:hive/hive.dart';
-
 import '../convertors.dart';
-import 'hive/hive_user_model.dart';
-
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
+
+enum GenderTypes { boy, girl, lgbt }
 
 
 // flutter pub run build_runner build --delete-conflicting-outputs

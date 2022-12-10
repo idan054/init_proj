@@ -22,18 +22,18 @@ class MainFeedScreen extends StatefulWidget {
 
 class _MainFeedScreenState extends State<MainFeedScreen> {
   var splashLoader = true;
-  Stream<List<PostModel>> postList = Stream.value([]);
+  List<PostModel> postList = [];
 
   @override
   void initState() {
+    print('START: initState()');
     _loadMore();
     super.initState();
   }
 
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
-    // postList = await Database.advanced.handleGetDocs(context, ModelTypes.posts, latest: true) ?? [];
-    postList = Database.streamPosts();
+    postList = <PostModel>[...await Database.advanced.handleGetModel(context, ModelTypes.posts)];
     splashLoader = false;
     setState(() {});
   }
@@ -52,9 +52,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             onEndOfPage: () async {
               print('START: onEndOfPage()');
               context.uniProvider.updateIsFeedLoading(true);
-              postList =
-                  await Database.advanced.handleGetDocs(context, ModelTypes.posts, latest: false) ??
-                      [];
+              postList = <PostModel>[
+                ...await Database.advanced.handleGetModel(context, ModelTypes.posts)
+              ];
               // await Future.delayed(2.seconds);
               context.uniProvider.updateIsFeedLoading(false);
               setState(() {});
@@ -75,9 +75,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                 color: AppColors.primary,
                 onRefresh: () async {
                   print('START: onRefresh()');
-                  postList = await Database.advanced
-                          .handleGetDocs(context, ModelTypes.posts, latest: true) ??
-                      [];
+                  postList = <PostModel>[
+                    ...await Database.advanced.handleGetModel(context, ModelTypes.posts)
+                  ];
                   setState(() {});
                 },
                 child: SingleChildScrollView(

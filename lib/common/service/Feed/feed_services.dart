@@ -1,18 +1,8 @@
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/models/chat/chat_model.dart';
-import 'package:example/common/models/chat/hive/hive_chat_model.dart';
-import 'package:example/common/models/message/hive/hive_message_model.dart';
-import 'package:example/common/models/message/message_model.dart';
-import 'package:example/common/models/post/hive/hive_post_model.dart';
 import 'package:example/common/models/post/post_model.dart';
-import 'package:example/common/models/user/hive/hive_user_model.dart';
-import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/material.dart';
-import 'package:palestine_console/palestine_console.dart';
-
 import '../Database/firebase_database.dart' as click;
 import '../Database/firebase_database.dart';
-import '../Hive/hive_services.dart';
 
 /// streamMessages() Available At [click.Database] // <<---
 
@@ -52,7 +42,6 @@ class FeedService {
           likeByIds: likesUids);
     }
 
-    HiveServices.updatePostInCache(post);
     // todo use AddToBatch() + dispose() instead
     Database().updateFirestore(
       collection: 'posts',

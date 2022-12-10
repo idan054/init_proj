@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 
 import '../Auth/auth_services.dart' as auth;
 import '../Chat/chat_services.dart' as chat;
-import '../Hive/timestamp_convert.dart';
+import '../timestamp_convert.dart';
 import 'firebase_advanced.dart';
 import 'package:hive/hive.dart';
 
@@ -74,13 +74,16 @@ class Database {
         .where('usersIds', arrayContains: currUserId)
         .get()
         .then((snap) => snap.docs.map((DocumentSnapshot snap) {
-      print('CHAT_DOC_ID: ${snap.id}');
-      // print(snap.data());
-      return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
-    }).toList());
+              print('CHAT_DOC_ID: ${snap.id}');
+              // print(snap.data());
+              return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
+            }).toList());
   }
 
-  static Future<List<ChatModel>>? getChatsAfter(String currUserId, DocumentSnapshot startAtDoc,) {
+  static Future<List<ChatModel>>? getChatsAfter(
+    String currUserId,
+    DocumentSnapshot startAtDoc,
+  ) {
     print('START: getChatsAfter()');
     print('startAtDoc ${startAtDoc.id}');
 
@@ -91,10 +94,10 @@ class Database {
         .where('usersIds', arrayContains: currUserId)
         .get()
         .then((snap) => snap.docs.map((DocumentSnapshot snap) {
-      print('CHAT_DOC_ID: ${snap.id}');
-      // print(snap.data());
-      return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
-    }).toList());
+              print('CHAT_DOC_ID: ${snap.id}');
+              // print(snap.data());
+              return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
+            }).toList());
   }
 
   static Stream<List<ChatModel>>? streamChats(String currUserId) {

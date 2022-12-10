@@ -1,8 +1,4 @@
-
-
 import 'package:example/common/models/post/post_model.dart';
-import 'package:example/common/models/user/hive/hive_user_model.dart';
-
 import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/material.dart';
 import 'chat/chat_model.dart';

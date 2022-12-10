@@ -24,7 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     print('START: LoginScreen()');
     if (!kDebugMode) {
-      Timer(250.milliseconds, () => AuthService().signInWithGoogle(context));
+      Timer(250.milliseconds, () => AuthService.signInWithGoogle(context));
     }
 
     return Container(
@@ -71,7 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: AppColors.white,
                     textColor: AppColors.darkBlack,
                     onPressed: () async =>
-                        AuthService().signInWithGoogle(context)).appearAll,
+                       await AuthService.signInWithGoogle(context)).appearAll,
               ],
             ),
             const Spacer(

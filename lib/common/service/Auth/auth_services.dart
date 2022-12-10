@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
-import 'package:example/common/service/Hive/hive_services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -12,15 +12,47 @@ import '../Database/firebase_database.dart';
 
 class AuthService {
   /// streamUsers() Available At [click.Database] // <<---
-
   static final auth = FirebaseAuth.instance;
+  static final authUser = FirebaseAuth.instance.currentUser;
 
   /// Google LOGIN
-  Future signInWithGoogle(BuildContext context) async {
+  static Future signInWithGoogle(BuildContext context) async {
     print('START: signInWithGoogle()');
     // if (_auth.currentUser != null && kDebugMode) {
     //   return context.router.replace(const CreateUserRoute());
     // }
+
+    User? googleUser;
+    if (authUser?.uid == null) googleUser = await googleAuthAction;
+
+    //~ Check if User exist:
+    var userEmail = authUser?.uid == null ? googleUser!.email : authUser!.email;
+    print('userEmail ${userEmail}');
+    var userData = await Database.docData('users/$userEmail');
+    // print('userData $userData');
+    if (userData == null ||
+        userData['gender'] == null ||
+        userData['age'] == null ||
+        userData['birthday'] == null) {
+
+      //~ New User:
+      var user = context.uniProvider.currUser.copyWith(
+        uid: googleUser!.uid,
+        email: googleUser.email,
+        name: googleUser.displayName,
+        photoUrl: googleUser.photoURL,
+      );
+      context.uniProvider.updateUser(user);
+      context.router.replace(const CreateUserRoute());
+    } else {
+      //~ Exist User:
+      var currUser = UserModel.fromJson(userData);
+      context.uniProvider.updateUser(currUser);
+      context.router.replace(DashboardRoute());
+    }
+  }
+
+  static Future<User?> get googleAuthAction async {
     await auth.signOut();
     await GoogleSignIn().signOut();
     final googleUser = await GoogleSignIn().signIn();
@@ -30,29 +62,7 @@ class AuthService {
     await auth.signInWithCredential(GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
 
-    var fireUser = auth.currentUser;
-    var user = context.uniProvider.currUser.copyWith(
-      uid: fireUser?.uid,
-      email: fireUser?.email,
-      name: fireUser?.displayName,
-      photoUrl: fireUser?.photoURL,
-    );
-    context.uniProvider.updateUser(user);
-
-    var userFsData = await Database.docData('users/${user.email}');
-    if (userFsData == null ||
-        userFsData['gender'] == null ||
-        userFsData['age'] == null ||
-        userFsData['birthday'] == null) {
-      context.router.replace(const CreateUserRoute());
-    } else {
-      // Embed data - when login only, no signup.
-      var currUser = UserModel.fromJson(userFsData);
-      HiveServices().saveCurrUserToCache(context, currUser);
-      context.router.replace(DashboardRoute());
-    }
-
-    print('userFsData $userFsData');
+    return auth.currentUser;
   }
 }
 

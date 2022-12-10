@@ -31,8 +31,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
 
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
-    chatList = await Database.advanced.handleGetDocs(context, ModelTypes.chats, latest: true) ?? [];
-    // chatList = await Database.getChats(context.uniProvider.currUser.uid!) ?? [];
+    chatList = <ChatModel>[
+      ...await Database.advanced.handleGetModel(context, ModelTypes.chats)
+    ];
     splashLoader = false;
     setState(() {});
   }
