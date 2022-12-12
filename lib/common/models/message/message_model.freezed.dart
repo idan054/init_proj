@@ -20,14 +20,14 @@ MessageModel _$MessageModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MessageModel {
+  String? get id =>
+      throw _privateConstructorUsedError; // Cuz new field, was not exist at begging
   String? get textContent => throw _privateConstructorUsedError;
   String? get fromId => throw _privateConstructorUsedError;
   String? get toId => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
-  String? get messageId =>
-      throw _privateConstructorUsedError; // Cuz new field, was not exist at begging
   bool? get read => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -43,12 +43,12 @@ abstract class $MessageModelCopyWith<$Res> {
       _$MessageModelCopyWithImpl<$Res, MessageModel>;
   @useResult
   $Res call(
-      {String? textContent,
+      {String? id,
+      String? textContent,
       String? fromId,
       String? toId,
       String? createdAt,
       @DateTimeStampConv() DateTime? timestamp,
-      String? messageId,
       bool? read});
 }
 
@@ -65,15 +65,19 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? textContent = freezed,
     Object? fromId = freezed,
     Object? toId = freezed,
     Object? createdAt = freezed,
     Object? timestamp = freezed,
-    Object? messageId = freezed,
     Object? read = freezed,
   }) {
     return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       textContent: freezed == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
@@ -94,10 +98,6 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      messageId: freezed == messageId
-          ? _value.messageId
-          : messageId // ignore: cast_nullable_to_non_nullable
-              as String?,
       read: freezed == read
           ? _value.read
           : read // ignore: cast_nullable_to_non_nullable
@@ -115,12 +115,12 @@ abstract class _$$_MessageModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? textContent,
+      {String? id,
+      String? textContent,
       String? fromId,
       String? toId,
       String? createdAt,
       @DateTimeStampConv() DateTime? timestamp,
-      String? messageId,
       bool? read});
 }
 
@@ -135,15 +135,19 @@ class __$$_MessageModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? textContent = freezed,
     Object? fromId = freezed,
     Object? toId = freezed,
     Object? createdAt = freezed,
     Object? timestamp = freezed,
-    Object? messageId = freezed,
     Object? read = freezed,
   }) {
     return _then(_$_MessageModel(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       textContent: freezed == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
@@ -164,10 +168,6 @@ class __$$_MessageModelCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      messageId: freezed == messageId
-          ? _value.messageId
-          : messageId // ignore: cast_nullable_to_non_nullable
-              as String?,
       read: freezed == read
           ? _value.read
           : read // ignore: cast_nullable_to_non_nullable
@@ -180,17 +180,20 @@ class __$$_MessageModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_MessageModel implements _MessageModel {
   const _$_MessageModel(
-      {this.textContent,
+      {this.id,
+      this.textContent,
       this.fromId,
       this.toId,
       this.createdAt,
       @DateTimeStampConv() this.timestamp,
-      this.messageId,
       this.read});
 
   factory _$_MessageModel.fromJson(Map<String, dynamic> json) =>
       _$$_MessageModelFromJson(json);
 
+  @override
+  final String? id;
+// Cuz new field, was not exist at begging
   @override
   final String? textContent;
   @override
@@ -203,14 +206,11 @@ class _$_MessageModel implements _MessageModel {
   @DateTimeStampConv()
   final DateTime? timestamp;
   @override
-  final String? messageId;
-// Cuz new field, was not exist at begging
-  @override
   final bool? read;
 
   @override
   String toString() {
-    return 'MessageModel(textContent: $textContent, fromId: $fromId, toId: $toId, createdAt: $createdAt, timestamp: $timestamp, messageId: $messageId, read: $read)';
+    return 'MessageModel(id: $id, textContent: $textContent, fromId: $fromId, toId: $toId, createdAt: $createdAt, timestamp: $timestamp, read: $read)';
   }
 
   @override
@@ -218,6 +218,7 @@ class _$_MessageModel implements _MessageModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_MessageModel &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.textContent, textContent) ||
                 other.textContent == textContent) &&
             (identical(other.fromId, fromId) || other.fromId == fromId) &&
@@ -226,15 +227,13 @@ class _$_MessageModel implements _MessageModel {
                 other.createdAt == createdAt) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
-            (identical(other.messageId, messageId) ||
-                other.messageId == messageId) &&
             (identical(other.read, read) || other.read == read));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, textContent, fromId, toId,
-      createdAt, timestamp, messageId, read);
+  int get hashCode => Object.hash(
+      runtimeType, id, textContent, fromId, toId, createdAt, timestamp, read);
 
   @JsonKey(ignore: true)
   @override
@@ -252,18 +251,20 @@ class _$_MessageModel implements _MessageModel {
 
 abstract class _MessageModel implements MessageModel {
   const factory _MessageModel(
-      {final String? textContent,
+      {final String? id,
+      final String? textContent,
       final String? fromId,
       final String? toId,
       final String? createdAt,
       @DateTimeStampConv() final DateTime? timestamp,
-      final String? messageId,
       final bool? read}) = _$_MessageModel;
 
   factory _MessageModel.fromJson(Map<String, dynamic> json) =
       _$_MessageModel.fromJson;
 
   @override
+  String? get id;
+  @override // Cuz new field, was not exist at begging
   String? get textContent;
   @override
   String? get fromId;
@@ -275,8 +276,6 @@ abstract class _MessageModel implements MessageModel {
   @DateTimeStampConv()
   DateTime? get timestamp;
   @override
-  String? get messageId;
-  @override // Cuz new field, was not exist at begging
   bool? get read;
   @override
   @JsonKey(ignore: true)

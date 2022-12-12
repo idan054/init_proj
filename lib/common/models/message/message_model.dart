@@ -13,12 +13,12 @@ part 'message_model.g.dart';
 class MessageModel with _$MessageModel {
   // @JsonSerializable(explicitToJson: true) // This needed for sub classes only
   const factory MessageModel({
+    String? id, // Cuz new field, was not exist at begging
     String? textContent,
     String? fromId,
     String? toId,
     String? createdAt,
     @DateTimeStampConv() DateTime? timestamp,
-    String? messageId, // Cuz new field, was not exist at begging
     bool? read,
   }) = _MessageModel;
 

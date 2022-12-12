@@ -39,17 +39,6 @@ class ChatService {
     return context.router.push(ChatRoute(otherUser: otherUser, chatId: chatId));
   }
 
-  void setMessageRead(MessageModel message, String chatId, WriteBatch batch) {
-    // Todo make sure it works!
-    print('chatId ${chatId}');
-    print('message ${message.messageId}');
-    Database().addToBatch(
-        batch: batch,
-        collection: 'chats/$chatId/messages',
-        docName: message.messageId,
-        toJson: {'read': true});
-  }
-
   void sendMessage(BuildContext context,
       {required String chatId, required String content, required UserModel otherUser}) {
     print('START: sendMessage()');
@@ -65,17 +54,17 @@ class ChatService {
         ' ${UniqueKey()}';
 
     var messageData = MessageModel(
+      id: messageId,
       textContent: content,
       fromId: fromId!,
       toId: toId!,
-      messageId: messageId,
       createdAt: createdAtStr,
       timestamp: timeStamp,
     );
 
     var chatData = ChatModel(
-      timestamp: timeStamp,
       id: chatId,
+      timestamp: timeStamp,
       lastMessage: messageData,
       users: [context.uniProvider.currUser, otherUser],
       usersIds: [context.uniProvider.currUser.uid!, otherUser.uid!],
