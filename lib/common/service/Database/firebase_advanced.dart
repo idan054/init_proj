@@ -13,8 +13,9 @@ import 'firebase_database.dart';
 class FsAdvanced {
   static final db = FirebaseFirestore.instance;
 
-  Future<List> handleGetModel(BuildContext context, ModelTypes modelType) async {
+  Future<List> handleGetModel(BuildContext context, ModelTypes modelType, List? currList) async {
     print('START: handleGetModel()');
+    var modelList = currList ?? [];
     var collectionName = modelType.name;
     var currUser = context.uniProvider.currUser;
     var startAtDocId = context.uniProvider.startAtDocId; // Not from Hive - Hard cache unneeded.
@@ -23,16 +24,22 @@ class FsAdvanced {
     // 1) Get Doc based ID:
     if (startAtDocId != null) {
       startAtDoc = await db.collection(collectionName).doc(startAtDocId).get();
-      context.uniProvider.updateStartAtDocId(startAtDoc.id);
     }
 
-    // 2) Set modelList from Database docs:
+    // 2) Set modelList from Database snap:
     print('Start fetch From: ${startAtDoc == null ? 'Most recent' : startAtDoc.id}');
-    var docs = await getDocsBasedModel(currUser.uid!, startAtDoc, modelType);
-    var modelList = await docsToModelList(docs, modelType);
+    var snap = await getDocsBasedModel(currUser.uid!, startAtDoc, modelType);
+    if (snap.docs.isNotEmpty) {
+      context.uniProvider.updateStartAtDocId(snap.docs.last.id);
+      print('context.uniProvider.startAtDocId ${context.uniProvider.startAtDocId}');
+      var newItems = await docsToModelList(snap, modelType);
+      modelList = [...modelList, ...newItems];
 
-    print('✴️ SUMMARY: ${modelList.length} ${collectionName.toUpperCase()}');
-    return modelList;
+      print('✴️ SUMMARY: ${modelList.length} ${collectionName.toUpperCase()}');
+      return modelList;
+    } else {
+      throw 'No More $collectionName Found!!!';
+    }
   }
 
   // static Future<List<PostModel>?> getDocsEndBefore

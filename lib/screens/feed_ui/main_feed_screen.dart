@@ -33,7 +33,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
-    postList = <PostModel>[...await Database.advanced.handleGetModel(context, ModelTypes.posts)];
+    postList = <PostModel>[
+      ...await Database.advanced.handleGetModel(context, ModelTypes.posts, postList)
+    ];
     splashLoader = false;
     setState(() {});
   }
@@ -49,15 +51,12 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       body: Stack(
         children: [
           LazyLoadScrollView(
+            scrollOffset: 300,
             onEndOfPage: () async {
               print('START: onEndOfPage()');
               context.uniProvider.updateIsFeedLoading(true);
-              postList = <PostModel>[
-                ...await Database.advanced.handleGetModel(context, ModelTypes.posts)
-              ];
-              // await Future.delayed(2.seconds);
+              await _loadMore();
               context.uniProvider.updateIsFeedLoading(false);
-              setState(() {});
             },
             child: Builder(builder: (context) {
               if (splashLoader) {
@@ -75,10 +74,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                 color: AppColors.primary,
                 onRefresh: () async {
                   print('START: onRefresh()');
-                  postList = <PostModel>[
-                    ...await Database.advanced.handleGetModel(context, ModelTypes.posts)
-                  ];
-                  setState(() {});
+                  await _loadMore();
                 },
                 child: SingleChildScrollView(
                     child: Row(
