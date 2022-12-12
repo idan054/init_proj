@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'chat_model.dart';
 
@@ -37,7 +37,8 @@ mixin _$ChatModel {
 /// @nodoc
 abstract class $ChatModelCopyWith<$Res> {
   factory $ChatModelCopyWith(ChatModel value, $Res Function(ChatModel) then) =
-      _$ChatModelCopyWithImpl<$Res>;
+      _$ChatModelCopyWithImpl<$Res, ChatModel>;
+  @useResult
   $Res call(
       {String? id,
       MessageModel? lastMessage,
@@ -50,13 +51,16 @@ abstract class $ChatModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ChatModelCopyWithImpl<$Res> implements $ChatModelCopyWith<$Res> {
+class _$ChatModelCopyWithImpl<$Res, $Val extends ChatModel>
+    implements $ChatModelCopyWith<$Res> {
   _$ChatModelCopyWithImpl(this._value, this._then);
 
-  final ChatModel _value;
   // ignore: unused_field
-  final $Res Function(ChatModel) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
@@ -67,41 +71,42 @@ class _$ChatModelCopyWithImpl<$Res> implements $ChatModelCopyWith<$Res> {
     Object? timestamp = freezed,
   }) {
     return _then(_value.copyWith(
-      id: id == freezed
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      lastMessage: lastMessage == freezed
+      lastMessage: freezed == lastMessage
           ? _value.lastMessage
           : lastMessage // ignore: cast_nullable_to_non_nullable
               as MessageModel?,
-      usersIds: usersIds == freezed
+      usersIds: freezed == usersIds
           ? _value.usersIds
           : usersIds // ignore: cast_nullable_to_non_nullable
               as List<String>?,
-      users: users == freezed
+      users: freezed == users
           ? _value.users
           : users // ignore: cast_nullable_to_non_nullable
               as List<UserModel>?,
-      messages: messages == freezed
+      messages: freezed == messages
           ? _value.messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<MessageModel>?,
-      timestamp: timestamp == freezed
+      timestamp: freezed == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-    ));
+    ) as $Val);
   }
 
   @override
+  @pragma('vm:prefer-inline')
   $MessageModelCopyWith<$Res>? get lastMessage {
     if (_value.lastMessage == null) {
       return null;
     }
 
     return $MessageModelCopyWith<$Res>(_value.lastMessage!, (value) {
-      return _then(_value.copyWith(lastMessage: value));
+      return _then(_value.copyWith(lastMessage: value) as $Val);
     });
   }
 }
@@ -112,6 +117,7 @@ abstract class _$$_ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
           _$_ChatModel value, $Res Function(_$_ChatModel) then) =
       __$$_ChatModelCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String? id,
       MessageModel? lastMessage,
@@ -125,15 +131,14 @@ abstract class _$$_ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
+class __$$_ChatModelCopyWithImpl<$Res>
+    extends _$ChatModelCopyWithImpl<$Res, _$_ChatModel>
     implements _$$_ChatModelCopyWith<$Res> {
   __$$_ChatModelCopyWithImpl(
       _$_ChatModel _value, $Res Function(_$_ChatModel) _then)
-      : super(_value, (v) => _then(v as _$_ChatModel));
+      : super(_value, _then);
 
-  @override
-  _$_ChatModel get _value => super._value as _$_ChatModel;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? id = freezed,
@@ -144,27 +149,27 @@ class __$$_ChatModelCopyWithImpl<$Res> extends _$ChatModelCopyWithImpl<$Res>
     Object? timestamp = freezed,
   }) {
     return _then(_$_ChatModel(
-      id: id == freezed
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String?,
-      lastMessage: lastMessage == freezed
+      lastMessage: freezed == lastMessage
           ? _value.lastMessage
           : lastMessage // ignore: cast_nullable_to_non_nullable
               as MessageModel?,
-      usersIds: usersIds == freezed
+      usersIds: freezed == usersIds
           ? _value._usersIds
           : usersIds // ignore: cast_nullable_to_non_nullable
               as List<String>?,
-      users: users == freezed
+      users: freezed == users
           ? _value._users
           : users // ignore: cast_nullable_to_non_nullable
               as List<UserModel>?,
-      messages: messages == freezed
+      messages: freezed == messages
           ? _value._messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<MessageModel>?,
-      timestamp: timestamp == freezed
+      timestamp: freezed == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
@@ -200,6 +205,7 @@ class _$_ChatModel implements _ChatModel {
   List<String>? get usersIds {
     final value = _usersIds;
     if (value == null) return null;
+    if (_usersIds is EqualUnmodifiableListView) return _usersIds;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -209,6 +215,7 @@ class _$_ChatModel implements _ChatModel {
   List<UserModel>? get users {
     final value = _users;
     if (value == null) return null;
+    if (_users is EqualUnmodifiableListView) return _users;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -218,6 +225,7 @@ class _$_ChatModel implements _ChatModel {
   List<MessageModel>? get messages {
     final value = _messages;
     if (value == null) return null;
+    if (_messages is EqualUnmodifiableListView) return _messages;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -236,28 +244,30 @@ class _$_ChatModel implements _ChatModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ChatModel &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality()
-                .equals(other.lastMessage, lastMessage) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.lastMessage, lastMessage) ||
+                other.lastMessage == lastMessage) &&
             const DeepCollectionEquality().equals(other._usersIds, _usersIds) &&
             const DeepCollectionEquality().equals(other._users, _users) &&
             const DeepCollectionEquality().equals(other._messages, _messages) &&
-            const DeepCollectionEquality().equals(other.timestamp, timestamp));
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(lastMessage),
+      id,
+      lastMessage,
       const DeepCollectionEquality().hash(_usersIds),
       const DeepCollectionEquality().hash(_users),
       const DeepCollectionEquality().hash(_messages),
-      const DeepCollectionEquality().hash(timestamp));
+      timestamp);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ChatModelCopyWith<_$_ChatModel> get copyWith =>
       __$$_ChatModelCopyWithImpl<_$_ChatModel>(this, _$identity);
 

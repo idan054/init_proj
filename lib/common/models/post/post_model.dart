@@ -17,7 +17,7 @@ class PostModel with _$PostModel {
   const factory PostModel({
     // required List<CommentsModel> comments,
     @Default('') String textContent,
-    @Default('') String postId,
+    @Default('') String id,
     UserModel? creatorUser,
     @Default(false) bool isDarkText,
     @Default(false) bool isSubPost,

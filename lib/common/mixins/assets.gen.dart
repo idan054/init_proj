@@ -5,7 +5,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import
+// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,6 +16,9 @@ class $AssetsFontsGen {
 
   /// File path: assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF
   String get bahnschriftRiltopia => 'assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF';
+
+  /// List of all assets
+  List<String> get values => [bahnschriftRiltopia];
 }
 
 class $AssetsImagesGen {
@@ -31,6 +34,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/minecloudLogo.png
   AssetGenImage get minecloudLogo =>
       const AssetGenImage('assets/images/minecloudLogo.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [logo, mapPlaceholder, minecloudLogo];
 }
 
 class $AssetsSvgGen {
@@ -170,6 +176,52 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/weight.svg
   SvgGenImage get weight => const SvgGenImage('assets/svg/weight.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+        gLogoIcon,
+        add,
+        appLogo,
+        apple,
+        bag,
+        ballon,
+        ballonIndex,
+        bike,
+        call,
+        chat,
+        clock,
+        close,
+        delete,
+        delivery,
+        driverIcon,
+        dropDown,
+        dropDownSelected,
+        email,
+        eventIcon,
+        excel,
+        forward,
+        google,
+        home,
+        iosDown,
+        iosDownward,
+        live,
+        logo,
+        logoIcon,
+        mapPlaceholder,
+        menuDot,
+        moreVert,
+        pallet,
+        placeHolder2,
+        placeHolder3,
+        plannedPath,
+        pogoLogo,
+        save,
+        searchIcon,
+        speedMeter,
+        tick,
+        user,
+        weight
+      ];
 }
 
 class $AssetsSvgIconsGen {
@@ -186,6 +238,9 @@ class $AssetsSvgIconsGen {
   /// File path: assets/svg/icons/smsBubble.svg
   SvgGenImage get smsBubble =>
       const SvgGenImage('assets/svg/icons/smsBubble.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [bagSquare, microsoftExcel, smsBubble];
 }
 
 class Assets {
@@ -254,6 +309,8 @@ class AssetGenImage {
     );
   }
 
+  ImageProvider provider() => AssetImage(_assetName);
+
   String get path => _assetName;
 
   String get keyName => _assetName;
@@ -306,4 +363,6 @@ class SvgGenImage {
   }
 
   String get path => _assetName;
+
+  String get keyName => _assetName;
 }

@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'app_error.dart';
 
@@ -24,8 +24,8 @@ mixin _$AppError {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message)? serverError,
-    TResult Function()? noInternet,
+    TResult? Function(String message)? serverError,
+    TResult? Function()? noInternet,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -43,8 +43,8 @@ mixin _$AppError {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_ServerError value)? serverError,
-    TResult Function(_NoInternet value)? noInternet,
+    TResult? Function(_ServerError value)? serverError,
+    TResult? Function(_NoInternet value)? noInternet,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -59,16 +59,18 @@ mixin _$AppError {
 /// @nodoc
 abstract class $AppErrorCopyWith<$Res> {
   factory $AppErrorCopyWith(AppError value, $Res Function(AppError) then) =
-      _$AppErrorCopyWithImpl<$Res>;
+      _$AppErrorCopyWithImpl<$Res, AppError>;
 }
 
 /// @nodoc
-class _$AppErrorCopyWithImpl<$Res> implements $AppErrorCopyWith<$Res> {
+class _$AppErrorCopyWithImpl<$Res, $Val extends AppError>
+    implements $AppErrorCopyWith<$Res> {
   _$AppErrorCopyWithImpl(this._value, this._then);
 
-  final AppError _value;
   // ignore: unused_field
-  final $Res Function(AppError) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 }
 
 /// @nodoc
@@ -76,25 +78,25 @@ abstract class _$$_ServerErrorCopyWith<$Res> {
   factory _$$_ServerErrorCopyWith(
           _$_ServerError value, $Res Function(_$_ServerError) then) =
       __$$_ServerErrorCopyWithImpl<$Res>;
+  @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$_ServerErrorCopyWithImpl<$Res> extends _$AppErrorCopyWithImpl<$Res>
+class __$$_ServerErrorCopyWithImpl<$Res>
+    extends _$AppErrorCopyWithImpl<$Res, _$_ServerError>
     implements _$$_ServerErrorCopyWith<$Res> {
   __$$_ServerErrorCopyWithImpl(
       _$_ServerError _value, $Res Function(_$_ServerError) _then)
-      : super(_value, (v) => _then(v as _$_ServerError));
+      : super(_value, _then);
 
-  @override
-  _$_ServerError get _value => super._value as _$_ServerError;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = freezed,
+    Object? message = null,
   }) {
     return _then(_$_ServerError(
-      message: message == freezed
+      message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
@@ -120,15 +122,15 @@ class _$_ServerError implements _ServerError {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ServerError &&
-            const DeepCollectionEquality().equals(other.message, message));
+            (identical(other.message, message) || other.message == message));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(message));
+  int get hashCode => Object.hash(runtimeType, message);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_ServerErrorCopyWith<_$_ServerError> get copyWith =>
       __$$_ServerErrorCopyWithImpl<_$_ServerError>(this, _$identity);
 
@@ -144,8 +146,8 @@ class _$_ServerError implements _ServerError {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message)? serverError,
-    TResult Function()? noInternet,
+    TResult? Function(String message)? serverError,
+    TResult? Function()? noInternet,
   }) {
     return serverError?.call(message);
   }
@@ -175,8 +177,8 @@ class _$_ServerError implements _ServerError {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_ServerError value)? serverError,
-    TResult Function(_NoInternet value)? noInternet,
+    TResult? Function(_ServerError value)? serverError,
+    TResult? Function(_NoInternet value)? noInternet,
   }) {
     return serverError?.call(this);
   }
@@ -212,14 +214,12 @@ abstract class _$$_NoInternetCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$_NoInternetCopyWithImpl<$Res> extends _$AppErrorCopyWithImpl<$Res>
+class __$$_NoInternetCopyWithImpl<$Res>
+    extends _$AppErrorCopyWithImpl<$Res, _$_NoInternet>
     implements _$$_NoInternetCopyWith<$Res> {
   __$$_NoInternetCopyWithImpl(
       _$_NoInternet _value, $Res Function(_$_NoInternet) _then)
-      : super(_value, (v) => _then(v as _$_NoInternet));
-
-  @override
-  _$_NoInternet get _value => super._value as _$_NoInternet;
+      : super(_value, _then);
 }
 
 /// @nodoc
@@ -253,8 +253,8 @@ class _$_NoInternet implements _NoInternet {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function(String message)? serverError,
-    TResult Function()? noInternet,
+    TResult? Function(String message)? serverError,
+    TResult? Function()? noInternet,
   }) {
     return noInternet?.call();
   }
@@ -284,8 +284,8 @@ class _$_NoInternet implements _NoInternet {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_ServerError value)? serverError,
-    TResult Function(_NoInternet value)? noInternet,
+    TResult? Function(_ServerError value)? serverError,
+    TResult? Function(_NoInternet value)? noInternet,
   }) {
     return noInternet?.call(this);
   }

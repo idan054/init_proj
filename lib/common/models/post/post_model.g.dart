@@ -8,7 +8,7 @@ part of 'post_model.dart';
 
 _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
       textContent: json['textContent'] as String? ?? '',
-      postId: json['postId'] as String? ?? '',
+      id: json['id'] as String? ?? '',
       creatorUser: json['creatorUser'] == null
           ? null
           : UserModel.fromJson(json['creatorUser'] as Map<String, dynamic>),
@@ -32,7 +32,7 @@ _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
 Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
     <String, dynamic>{
       'textContent': instance.textContent,
-      'postId': instance.postId,
+      'id': instance.id,
       'creatorUser': instance.creatorUser?.toJson(),
       'isDarkText': instance.isDarkText,
       'isSubPost': instance.isSubPost,

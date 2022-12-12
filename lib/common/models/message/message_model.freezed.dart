@@ -1,7 +1,7 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint
-// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
 part of 'message_model.dart';
 
@@ -40,7 +40,8 @@ mixin _$MessageModel {
 abstract class $MessageModelCopyWith<$Res> {
   factory $MessageModelCopyWith(
           MessageModel value, $Res Function(MessageModel) then) =
-      _$MessageModelCopyWithImpl<$Res>;
+      _$MessageModelCopyWithImpl<$Res, MessageModel>;
+  @useResult
   $Res call(
       {String? textContent,
       String? fromId,
@@ -52,13 +53,16 @@ abstract class $MessageModelCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$MessageModelCopyWithImpl<$Res> implements $MessageModelCopyWith<$Res> {
+class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
+    implements $MessageModelCopyWith<$Res> {
   _$MessageModelCopyWithImpl(this._value, this._then);
 
-  final MessageModel _value;
   // ignore: unused_field
-  final $Res Function(MessageModel) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? textContent = freezed,
@@ -70,35 +74,35 @@ class _$MessageModelCopyWithImpl<$Res> implements $MessageModelCopyWith<$Res> {
     Object? read = freezed,
   }) {
     return _then(_value.copyWith(
-      textContent: textContent == freezed
+      textContent: freezed == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
               as String?,
-      fromId: fromId == freezed
+      fromId: freezed == fromId
           ? _value.fromId
           : fromId // ignore: cast_nullable_to_non_nullable
               as String?,
-      toId: toId == freezed
+      toId: freezed == toId
           ? _value.toId
           : toId // ignore: cast_nullable_to_non_nullable
               as String?,
-      createdAt: createdAt == freezed
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String?,
-      timestamp: timestamp == freezed
+      timestamp: freezed == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      messageId: messageId == freezed
+      messageId: freezed == messageId
           ? _value.messageId
           : messageId // ignore: cast_nullable_to_non_nullable
               as String?,
-      read: read == freezed
+      read: freezed == read
           ? _value.read
           : read // ignore: cast_nullable_to_non_nullable
               as bool?,
-    ));
+    ) as $Val);
   }
 }
 
@@ -109,6 +113,7 @@ abstract class _$$_MessageModelCopyWith<$Res>
           _$_MessageModel value, $Res Function(_$_MessageModel) then) =
       __$$_MessageModelCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String? textContent,
       String? fromId,
@@ -121,15 +126,13 @@ abstract class _$$_MessageModelCopyWith<$Res>
 
 /// @nodoc
 class __$$_MessageModelCopyWithImpl<$Res>
-    extends _$MessageModelCopyWithImpl<$Res>
+    extends _$MessageModelCopyWithImpl<$Res, _$_MessageModel>
     implements _$$_MessageModelCopyWith<$Res> {
   __$$_MessageModelCopyWithImpl(
       _$_MessageModel _value, $Res Function(_$_MessageModel) _then)
-      : super(_value, (v) => _then(v as _$_MessageModel));
+      : super(_value, _then);
 
-  @override
-  _$_MessageModel get _value => super._value as _$_MessageModel;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? textContent = freezed,
@@ -141,31 +144,31 @@ class __$$_MessageModelCopyWithImpl<$Res>
     Object? read = freezed,
   }) {
     return _then(_$_MessageModel(
-      textContent: textContent == freezed
+      textContent: freezed == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
               as String?,
-      fromId: fromId == freezed
+      fromId: freezed == fromId
           ? _value.fromId
           : fromId // ignore: cast_nullable_to_non_nullable
               as String?,
-      toId: toId == freezed
+      toId: freezed == toId
           ? _value.toId
           : toId // ignore: cast_nullable_to_non_nullable
               as String?,
-      createdAt: createdAt == freezed
+      createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String?,
-      timestamp: timestamp == freezed
+      timestamp: freezed == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      messageId: messageId == freezed
+      messageId: freezed == messageId
           ? _value.messageId
           : messageId // ignore: cast_nullable_to_non_nullable
               as String?,
-      read: read == freezed
+      read: freezed == read
           ? _value.read
           : read // ignore: cast_nullable_to_non_nullable
               as bool?,
@@ -215,30 +218,27 @@ class _$_MessageModel implements _MessageModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_MessageModel &&
-            const DeepCollectionEquality()
-                .equals(other.textContent, textContent) &&
-            const DeepCollectionEquality().equals(other.fromId, fromId) &&
-            const DeepCollectionEquality().equals(other.toId, toId) &&
-            const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
-            const DeepCollectionEquality().equals(other.timestamp, timestamp) &&
-            const DeepCollectionEquality().equals(other.messageId, messageId) &&
-            const DeepCollectionEquality().equals(other.read, read));
+            (identical(other.textContent, textContent) ||
+                other.textContent == textContent) &&
+            (identical(other.fromId, fromId) || other.fromId == fromId) &&
+            (identical(other.toId, toId) || other.toId == toId) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
+            (identical(other.messageId, messageId) ||
+                other.messageId == messageId) &&
+            (identical(other.read, read) || other.read == read));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(textContent),
-      const DeepCollectionEquality().hash(fromId),
-      const DeepCollectionEquality().hash(toId),
-      const DeepCollectionEquality().hash(createdAt),
-      const DeepCollectionEquality().hash(timestamp),
-      const DeepCollectionEquality().hash(messageId),
-      const DeepCollectionEquality().hash(read));
+  int get hashCode => Object.hash(runtimeType, textContent, fromId, toId,
+      createdAt, timestamp, messageId, read);
 
   @JsonKey(ignore: true)
   @override
+  @pragma('vm:prefer-inline')
   _$$_MessageModelCopyWith<_$_MessageModel> get copyWith =>
       __$$_MessageModelCopyWithImpl<_$_MessageModel>(this, _$identity);
 

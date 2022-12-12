@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
@@ -18,27 +19,25 @@ class FsAdvanced {
     var modelList = currList ?? [];
     var collectionName = modelType.name;
     var currUser = context.uniProvider.currUser;
-    var startAtDocId = context.uniProvider.startAtDocId; // Not from Hive - Hard cache unneeded.
     DocumentSnapshot? startAtDoc;
 
     // 1) Get Doc based ID:
-    if (startAtDocId != null) {
-      startAtDoc = await db.collection(collectionName).doc(startAtDocId).get();
+    /// Every model must have 'id' String variable!
+    if (currList != null && currList.isNotEmpty) {
+      startAtDoc = await db.collection(collectionName).doc(currList.last.id).get();
     }
 
     // 2) Set modelList from Database snap:
     print('Start fetch From: ${startAtDoc == null ? 'Most recent' : startAtDoc.id}');
     var snap = await getDocsBasedModel(currUser.uid!, startAtDoc, modelType);
     if (snap.docs.isNotEmpty) {
-      context.uniProvider.updateStartAtDocId(snap.docs.last.id);
-      print('context.uniProvider.startAtDocId ${context.uniProvider.startAtDocId}');
       var newItems = await docsToModelList(snap, modelType);
       modelList = [...modelList, ...newItems];
-
       print('✴️ SUMMARY: ${modelList.length} ${collectionName.toUpperCase()}');
       return modelList;
     } else {
-      throw 'No More $collectionName Found!!!';
+      // throw Exception('No More $collectionName Found!!!');
+      return [];
     }
   }
 
@@ -51,7 +50,7 @@ class FsAdvanced {
         : 'startAfterDoc ${startAfterDoc.id}');
 
     QuerySnapshot<Map<String, dynamic>>? docs;
-    var reqBase = db.collection(modelType.name).orderBy('timestamp', descending: true).limit(6);
+    var reqBase = db.collection(modelType.name).orderBy('timestamp', descending: true).limit(8);
 
     switch (modelType) {
       case ModelTypes.posts:

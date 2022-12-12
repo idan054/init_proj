@@ -174,3 +174,7 @@ class Database {
     });
   }
 }
+
+
+// "timestamp": "__Timestamp__2022-10-10T20:54:17.572Z"
+// "timestamp": {"__time__": "2022-12-12T14:12:45.190999Z"}

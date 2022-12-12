@@ -31,9 +31,11 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
 
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
-    chatList = <ChatModel>[
+    var updatedList = <ChatModel>[
       ...await Database.advanced.handleGetModel(context, ModelTypes.chats, chatList)
     ];
+    print('updatedList ${updatedList.length}');
+    if(updatedList.isNotEmpty) chatList = updatedList;
     splashLoader = false;
     setState(() {});
   }

@@ -42,7 +42,7 @@ class PostView extends StatelessWidget {
                   bool isLongPost = post.textContent.length > 200;
                   return Container(
                       height: 100 * postRatio,
-                      width: context.width / 2,
+                      width: context.width,
                       color: post.colorCover,
                       child: Text(post.textContent,
                           textAlign: postAlign,

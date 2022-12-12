@@ -33,9 +33,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
-    postList = <PostModel>[
-      ...await Database.advanced.handleGetModel(context, ModelTypes.posts, postList)
-    ];
+    List newPosts = await Database.advanced.handleGetModel(context, ModelTypes.posts, postList);
+    if(newPosts.isNotEmpty) postList = [...newPosts];
     splashLoader = false;
     setState(() {});
   }
@@ -51,7 +50,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       body: Stack(
         children: [
           LazyLoadScrollView(
-            scrollOffset: 300,
+            scrollOffset: 1000,
             onEndOfPage: () async {
               print('START: onEndOfPage()');
               context.uniProvider.updateIsFeedLoading(true);
@@ -68,7 +67,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               if (postList.isEmpty) {
                 return 'Sorry, no post found... \nTry again later!'.toText().center;
               }
-              var listHeight = 100 * postList.length * postRatio / 2;
               return RefreshIndicator(
                 backgroundColor: AppColors.darkGrey,
                 color: AppColors.primary,
@@ -76,31 +74,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                   print('START: onRefresh()');
                   await _loadMore();
                 },
-                child: SingleChildScrollView(
-                    child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    SizedBox(
-                      height: listHeight, //ratio
-                      width: context.width * 0.5,
-                      child: ListView.builder(
-                          itemCount: postList.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int i) =>
-                              i.isEven ? const Offstage() : PostView(postList[i])),
-                    ).offset(0, 100),
-                    SizedBox(
-                      height: listHeight, //ratio
-                      width: context.width * 0.5,
-                      child: ListView.builder(
-                          itemCount: postList.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int i) =>
-                              i.isOdd ? const Offstage() : PostView(postList[i])).appearAll,
-                    ),
-                  ],
-                )),
+                child: ListView.builder(
+                    itemCount: postList.length,
+                    itemBuilder: (BuildContext context, int i) => PostView(postList[i])),
               );
             }),
           ),

@@ -16,7 +16,7 @@ static final user = UserModel(
 
 static final post = PostModel(
     textContent: 'Hello post',
-    postId: 'postId 123',
+    id: 'id 123',
     creatorUser: user,
     colorCover: Colors.green,
     textAlign: 'left',

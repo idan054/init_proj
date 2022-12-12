@@ -145,7 +145,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 ).py(10).px(10).onTap(() {
                   var post = PostModel(
                     textContent: postTextController.text,
-                    postId: '${currUser.email}${UniqueKey()}',
+                    id: '${currUser.email}${UniqueKey()}',
                     textAlign: textAlignStr,
                     creatorUser: currUser,
                     isDarkText: isDarkText,

@@ -1,0 +1,582 @@
+{
+  "meta": {
+    "format": "JSON",
+    "version": "1.1.0",
+    "projectId": "biton-messanger",
+    "resourcePath": [
+      "posts"
+    ],
+    "recursive": false,
+    "creationTime": 1670857200,
+    "app": "firefoo"
+  },
+  "data": {
+    "idanbit80@gmail.com[#1a47b]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#1a47b]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeByIds": [
+        "IVGr0VcKbhOg5jK23r9DTzvGhar2"
+      ],
+      "likeCounter": 1,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "Hell yah!",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:10.937Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#21ae5]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#21ae5]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeByIds": [
+        "IVGr0VcKbhOg5jK23r9DTzvGhar2"
+      ],
+      "likeCounter": 1,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "פוסט חדש וואלה",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:11.121Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#2bf5d]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#2bf5d]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "5",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:11.291Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#2f4fb]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#2f4fb]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "8",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:11.460Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#3a3a8]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#3a3a8]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "4",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:11.624Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#46a34]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#46a34]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "2",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:11.791Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#4db96]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#4db96]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "A",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:11.979Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#4eb2d]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#4eb2d]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "13",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:12.172Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#57020]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#1a47b]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeByIds": [
+        "IVGr0VcKbhOg5jK23r9DTzvGhar2"
+      ],
+      "likeCounter": 1,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "Hell yah!",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:12.393Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#5dc94]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": true,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#5dc94]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeByIds": [],
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "פוסט עם תגובות! וואלה סבבה",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:12.655Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#76f88]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#76f88]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "9",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:12.942Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#7b0d2]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#7b0d2]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "1",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:13.602Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#94323]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#94323]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "12",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:13.832Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#960ee]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": true,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#960ee]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeByIds": [],
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "just test",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:14.009Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#9f285]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#9f285]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "that took a bit of time...",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:14.212Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#9fc0b]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#9fc0b]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "10",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:14.408Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#ac772]": {
+      "colorCover": "0xffffeb3b",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": true,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#ac772]",
+      "isDarkText": true,
+      "isSubPost": false,
+      "likeByIds": [
+        "IVGr0VcKbhOg5jK23r9DTzvGhar2"
+      ],
+      "likeCounter": 1,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "בוקר טוב לי 🌞",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:14.670Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#bdbfb]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#bdbfb]",
+      "isDarkText": true,
+      "isSubPost": false,
+      "likeByIds": [
+        "IVGr0VcKbhOg5jK23r9DTzvGhar2"
+      ],
+      "likeCounter": 1,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "בום אחי",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:14.834Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#c2e96]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#c2e96]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "yah?",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:14.984Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#c4899]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#c4899]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "this one new!1",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:15.165Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#cb40e]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#cb40e]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeByIds": [
+        "IVGr0VcKbhOg5jK23r9DTzvGhar2"
+      ],
+      "likeCounter": 1,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "וואלה זה יותר אפילו",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:15.381Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#d60ab]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#d60ab]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "6",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:15.549Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#dce02]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#dce02]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "אבל ברצינות, מה קורה אם אני עושה משפט אחד, ארוך במיוחד? אה כן, בנתיים זה פשוט ירד לי שורה אוטומטית, השאלה מה יקרה כשאני אשלח את הפוסט, וגם שווה לראות על מה מתבסס המסך הזה ובכללי האם כל הטקסט הזה יכנס בכלל? כי מדובר כל המילים   שחהקליד.\nאבל סה\"כ, יצא מגניב",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:15.737Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#e229c]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#e229c]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeByIds": [],
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "30 יום מהיום?",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:15.919Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#f2a39]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#f2a39]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "7",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:16.108Z"
+      },
+      "__collections__": {}
+    },
+    "idanbit80@gmail.com[#f2a45]": {
+      "colorCover": "0xff621bee",
+      "creatorUser": {
+        "timestamp": {
+          "__time__": "2003-02-02T22:00:00.000Z"
+        }
+      },
+      "enableComments": false,
+      "enableLikes": true,
+      "id": "idanbit80@gmail.com[#f2a45]",
+      "isDarkText": false,
+      "isSubPost": false,
+      "likeCounter": 0,
+      "photoCover": null,
+      "textAlign": "center",
+      "textContent": "3",
+      "timestamp": {
+        "__time__": "2022-12-12T14:45:16.290Z"
+      },
+      "__collections__": {}
+    }
+  }
+}
