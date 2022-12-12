@@ -3,8 +3,10 @@ import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/themes/app_strings.dart';
 import 'package:example/common/themes/themes.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/models/chat/chat_model.dart';
@@ -35,7 +37,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
       ...await Database.advanced.handleGetModel(context, ModelTypes.chats, chatList)
     ];
     print('updatedList ${updatedList.length}');
-    if(updatedList.isNotEmpty) chatList = updatedList;
+    if (updatedList.isNotEmpty) chatList = updatedList;
     splashLoader = false;
     setState(() {});
   }
@@ -47,17 +49,19 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
 
     return Scaffold(
         backgroundColor: AppColors.darkBlack,
-        appBar: darkAppBar(context,
-            title: 'Messages (${currUser.email})', // STR
-            backAction: () => context.router.replace(const LoginRoute()),
-            actions: [
-              IconButton(
-                  icon: Icon(
-                    Icons.people,
-                    color: AppColors.testGreen,
-                  ),
-                  onPressed: () => context.router.push(const MembersRoute()))
-            ]),
+        appBar: darkAppBar(context, title: 'Messages (${currUser.email})', // STR
+            backAction: () async {
+          await FirebaseAuth.instance.signOut();
+          await GoogleSignIn().signOut();
+          context.router.replace(const LoginRoute());
+        }, actions: [
+          IconButton(
+              icon: Icon(
+                Icons.people,
+                color: AppColors.testGreen,
+              ),
+              onPressed: () => context.router.push(const MembersRoute()))
+        ]),
         body: Builder(builder: (context) {
           if (splashLoader) {
             // First time only

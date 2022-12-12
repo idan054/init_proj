@@ -12,7 +12,7 @@ import '../../widgets/my_widgets.dart';
 
 Future splashInit(BuildContext context) async {
   print('FirebaseAuth.instance.currentUser?.uid ${FirebaseAuth.instance.currentUser?.uid}');
-  if(FirebaseAuth.instance.currentUser?.uid != null) await AuthService.signInWithGoogle(context);
+  if (FirebaseAuth.instance.currentUser?.uid != null) await AuthService.signInWithGoogle(context);
 
   await HiveServices.openBoxes();
   // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
@@ -42,5 +42,11 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
     splashInit(context).then((_) => userLogged
         ? context.router.replaceAll([DashboardRoute()])
         : context.router.replaceAll([const LoginRoute()]));
+  }
+
+  @override
+  void didChangeDependencies() {
+    Navigator.of(context);
+    super.didChangeDependencies();
   }
 }

@@ -53,8 +53,6 @@ class AuthService {
   }
 
   static Future<User?> get googleAuthAction async {
-    await auth.signOut();
-    await GoogleSignIn().signOut();
     final googleUser = await GoogleSignIn().signIn();
 
     // Sign in & Create user on firebase console

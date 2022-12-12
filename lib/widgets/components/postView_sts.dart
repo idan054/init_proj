@@ -37,14 +37,13 @@ class PostView extends StatelessWidget {
         // },
         child: Stack(
           children: [
-            Builder(
-                builder: (context) {
-                  bool isLongPost = post.textContent.length > 200;
-                  return Container(
-                      height: 100 * postRatio,
-                      width: context.width,
-                      color: post.colorCover,
-                      child: Text(post.textContent,
+            Builder(builder: (context) {
+              bool isLongPost = post.textContent.length > 200;
+              return Container(
+                  height: 100 * postRatio,
+                  width: context.width,
+                  color: post.colorCover,
+                  child: Text(post.textContent,
                           textAlign: postAlign,
                           softWrap: true,
                           maxLines: 15,
@@ -52,11 +51,10 @@ class PostView extends StatelessWidget {
                               fontSize: isLongPost ? 11 : 14,
                               fontFamily: FontFamily.rilTopia,
                               color: post.isDarkText ? AppColors.darkBlack : AppColors.white))
-                          .px(20)
-                          .pOnly(top: isLongPost ? 20 : 0)
-                          .center);
-                }
-            ),
+                      .px(20)
+                      .pOnly(top: isLongPost ? 20 : 0)
+                      .center);
+            }),
             buildTop(postRatio),
             buildBottom(context, postRatio, isLiked).offset(0, 10),
           ],
@@ -66,6 +64,9 @@ class PostView extends StatelessWidget {
   }
 
   Container buildTop(double postRatio) {
+    var postDiff = DateTime.now().difference(post.timestamp!);
+    var postAgo =
+        postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec' : '${postDiff.inMinutes} min';
     return Container(
       // color: AppColors.testGreen,
       alignment: Alignment.topCenter,
@@ -96,13 +97,14 @@ class PostView extends StatelessWidget {
           title: post.creatorUser!.name!.toText(fontSize: 13, softWrap: true),
           subtitle: Row(
             children: [
-              '${post.creatorUser!.age}yrs  ·  2min'
-              // '${post.timestamp!.hour}:'
-              //         '${post.timestamp!.minute.toString().length == 1 ? '0' : ''}'
-              //         '${post.timestamp!.minute}'
-                  .toText(bold: true,
-                  fontSize: 10,
-                  color: post.isDarkText ? AppColors.greyUnavailable : AppColors.greyLight),
+              '${post.creatorUser!.age}yrs  ·  $postAgo'
+                  // '${post.timestamp!.hour}:'
+                  //         '${post.timestamp!.minute.toString().length == 1 ? '0' : ''}'
+                  //         '${post.timestamp!.minute}'
+                  .toText(
+                      bold: true,
+                      fontSize: 10,
+                      color: post.isDarkText ? AppColors.greyUnavailable : AppColors.greyLight),
               const Spacer(),
             ],
           ).pOnly(right: 10, top: 0).offset(0, -5),
@@ -115,7 +117,7 @@ class PostView extends StatelessWidget {
     var currUser = context.uniProvider.currUser;
 
     return Container(
-      // color: AppColors.testGreen,
+        // color: AppColors.testGreen,
         alignment: Alignment.bottomCenter,
         height: 100 * postRatio,
         //     stops: const [0.01, 0.25],
@@ -136,13 +138,11 @@ class PostView extends StatelessWidget {
                         ChatService.openChat(context, otherUser: post.creatorUser!);
                       }
                     })),
-                if(post.enableComments)
+                if (post.enableComments)
                   CircleAvatar(
                       backgroundColor: AppColors.darkBlack.withOpacity(0.30),
                       child: FontAwesomeIcons.commentDots.iconAwesome(size: 18).onTap(() {})),
               ],
-            )
-        )
-    );
+            )));
   }
 }

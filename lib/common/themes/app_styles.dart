@@ -7,264 +7,265 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AppStyles {
   const AppStyles._();
-  static TextStyle get heeboFont => GoogleFonts.palanquin();
+  // static TextStyle get heeboFont => GoogleFonts.palanquin();
+  static TextStyle get nunitoFont => GoogleFonts.nunitoSans();
 
-  static TextStyle get text8PxRegular => heeboFont.copyWith(
+  static TextStyle get text8PxRegular => nunitoFont.copyWith(
         fontSize: 8.sp,
         fontWeight: FontWeight.w400,
       );
 
   //light
-  static TextStyle get text30PxLight => heeboFont.copyWith(
+  static TextStyle get text30PxLight => nunitoFont.copyWith(
         fontSize: 30.sp,
         fontWeight: FontWeight.w300,
       );
 
-  static TextStyle get text26PxLight => heeboFont.copyWith(
+  static TextStyle get text26PxLight => nunitoFont.copyWith(
         fontSize: 26.sp,
         fontWeight: FontWeight.w300,
       );
 
-  static TextStyle get text24PxLight => heeboFont.copyWith(
+  static TextStyle get text24PxLight => nunitoFont.copyWith(
         fontSize: 24.sp,
         fontWeight: FontWeight.w300,
       );
 
-  static TextStyle get text20PxLight => heeboFont.copyWith(
+  static TextStyle get text20PxLight => nunitoFont.copyWith(
         fontSize: 20.sp,
         fontWeight: FontWeight.w300,
       );
 
-  static TextStyle get text18PxLight => heeboFont.copyWith(
+  static TextStyle get text18PxLight => nunitoFont.copyWith(
         fontSize: 18.sp,
         fontWeight: FontWeight.w300,
       );
 
-  static TextStyle get text16PxLight => heeboFont.copyWith(
+  static TextStyle get text16PxLight => nunitoFont.copyWith(
         fontSize: 16.sp,
         fontWeight: FontWeight.w300,
       );
 
-  static TextStyle get text14PxLight => heeboFont.copyWith(
+  static TextStyle get text14PxLight => nunitoFont.copyWith(
         fontSize: 14.sp,
         fontWeight: FontWeight.w300,
       );
 
-  static TextStyle get text12PxLight => heeboFont.copyWith(
+  static TextStyle get text12PxLight => nunitoFont.copyWith(
         fontSize: 12.sp,
         fontWeight: FontWeight.w300,
       );
 
   //regular
-  static TextStyle get text30PxRegular => heeboFont.copyWith(
+  static TextStyle get text30PxRegular => nunitoFont.copyWith(
         fontSize: 30.sp,
         fontWeight: FontWeight.w400,
       );
 
-  static TextStyle get text26PxRegular => heeboFont.copyWith(
+  static TextStyle get text26PxRegular => nunitoFont.copyWith(
         fontSize: 26.sp,
         fontWeight: FontWeight.w400,
       );
 
-  static TextStyle get text24PxRegular => heeboFont.copyWith(
+  static TextStyle get text24PxRegular => nunitoFont.copyWith(
         fontSize: 24.sp,
         fontWeight: FontWeight.w400,
       );
 
-  static TextStyle get text23PxRegular => heeboFont.copyWith(
+  static TextStyle get text23PxRegular => nunitoFont.copyWith(
         fontSize: 23.sp,
         fontWeight: FontWeight.w400,
       );
 
-  static TextStyle get text23PxMedium => heeboFont.copyWith(
+  static TextStyle get text23PxMedium => nunitoFont.copyWith(
         fontSize: 23.sp,
         fontWeight: FontWeight.w500,
       );
-  static TextStyle get text23PxSemiBlod => heeboFont.copyWith(
+  static TextStyle get text23PxSemiBlod => nunitoFont.copyWith(
         fontSize: 23.sp,
         fontWeight: FontWeight.w600,
       );
 
-  static TextStyle get text20PxRegular => heeboFont.copyWith(
+  static TextStyle get text20PxRegular => nunitoFont.copyWith(
         fontSize: 20.sp,
         fontWeight: FontWeight.w400,
       );
 
-  static TextStyle get text18PxRegular => heeboFont.copyWith(
+  static TextStyle get text18PxRegular => nunitoFont.copyWith(
         fontSize: 18.sp,
         fontWeight: FontWeight.w400,
       );
 
-  static TextStyle get text16PxRegular => heeboFont.copyWith(
+  static TextStyle get text16PxRegular => nunitoFont.copyWith(
         fontSize: 16.sp,
         fontWeight: FontWeight.w400,
       );
 
-  static TextStyle get text14PxRegular => heeboFont.copyWith(
+  static TextStyle get text14PxRegular => nunitoFont.copyWith(
         fontSize: 14.sp,
         fontWeight: FontWeight.w400,
       );
 
-  static TextStyle get text10PxRegular => heeboFont.copyWith(
+  static TextStyle get text10PxRegular => nunitoFont.copyWith(
         fontSize: 10.sp,
         fontWeight: FontWeight.w400,
       );
 
-  static TextStyle get text12PxRegular => heeboFont.copyWith(
+  static TextStyle get text12PxRegular => nunitoFont.copyWith(
         fontSize: 12.sp,
         fontWeight: FontWeight.w400,
       );
 
 //medium
 
-  static TextStyle get text30PxMedium => heeboFont.copyWith(
+  static TextStyle get text30PxMedium => nunitoFont.copyWith(
         fontSize: 30.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text26PxMedium => heeboFont.copyWith(
+  static TextStyle get text26PxMedium => nunitoFont.copyWith(
         fontSize: 26.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text24PxMedium => heeboFont.copyWith(
+  static TextStyle get text24PxMedium => nunitoFont.copyWith(
         fontSize: 24.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text20PxMedium => heeboFont.copyWith(
+  static TextStyle get text20PxMedium => nunitoFont.copyWith(
         fontSize: 20.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text19PxMedium => heeboFont.copyWith(
+  static TextStyle get text19PxMedium => nunitoFont.copyWith(
         fontSize: 19.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text18PxMedium => heeboFont.copyWith(
+  static TextStyle get text18PxMedium => nunitoFont.copyWith(
         fontSize: 18.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text16PxMedium => heeboFont.copyWith(
+  static TextStyle get text16PxMedium => nunitoFont.copyWith(
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text14PxMedium => heeboFont.copyWith(
+  static TextStyle get text14PxMedium => nunitoFont.copyWith(
         fontSize: 14.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text12PxMedium => heeboFont.copyWith(
+  static TextStyle get text12PxMedium => nunitoFont.copyWith(
         fontSize: 12.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text10PxMedium => heeboFont.copyWith(
+  static TextStyle get text10PxMedium => nunitoFont.copyWith(
         fontSize: 10.sp,
         fontWeight: FontWeight.w500,
       );
 
 //semi `bold`
 
-  static TextStyle get text30PxSemiBold => heeboFont.copyWith(
+  static TextStyle get text30PxSemiBold => nunitoFont.copyWith(
         fontSize: 30.sp,
         fontWeight: FontWeight.w600,
       );
 
-  static TextStyle get text26PxSemiBold => heeboFont.copyWith(
+  static TextStyle get text26PxSemiBold => nunitoFont.copyWith(
         fontSize: 26.sp,
         fontWeight: FontWeight.w600,
       );
 
-  static TextStyle get text24PxSemiBold => heeboFont.copyWith(
+  static TextStyle get text24PxSemiBold => nunitoFont.copyWith(
         fontSize: 24.sp,
         fontWeight: FontWeight.w600,
       );
 
-  static TextStyle get text20PxSemiBold => heeboFont.copyWith(
+  static TextStyle get text20PxSemiBold => nunitoFont.copyWith(
         fontSize: 20.sp,
         fontWeight: FontWeight.w600,
       );
 
-  static TextStyle get text18PxSemiBold => heeboFont.copyWith(
+  static TextStyle get text18PxSemiBold => nunitoFont.copyWith(
         fontSize: 18.sp,
         fontWeight: FontWeight.w600,
       );
 
-  static TextStyle get text16PxSemiBold => heeboFont.copyWith(
+  static TextStyle get text16PxSemiBold => nunitoFont.copyWith(
         fontSize: 16.sp,
         fontWeight: FontWeight.w600,
       );
 
-  static TextStyle get text14PxSemiBold => heeboFont.copyWith(
+  static TextStyle get text14PxSemiBold => nunitoFont.copyWith(
         fontSize: 14.sp,
         fontWeight: FontWeight.w600,
       );
 
-  static TextStyle get text12PxSemiBold => heeboFont.copyWith(
+  static TextStyle get text12PxSemiBold => nunitoFont.copyWith(
         fontSize: 12.sp,
         fontWeight: FontWeight.w600,
       );
 
-  static TextStyle get text10PxSemiBold => heeboFont.copyWith(
+  static TextStyle get text10PxSemiBold => nunitoFont.copyWith(
         fontSize: 10.sp,
         fontWeight: FontWeight.w600,
       );
 
   //bold
-  static TextStyle get text30PxBold => heeboFont.copyWith(
+  static TextStyle get text30PxBold => nunitoFont.copyWith(
         fontSize: 30.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text26PxBold => heeboFont.copyWith(
+  static TextStyle get text26PxBold => nunitoFont.copyWith(
         fontSize: 26.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text24PxBold => heeboFont.copyWith(
+  static TextStyle get text24PxBold => nunitoFont.copyWith(
         fontSize: 24.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text20PxBold => heeboFont.copyWith(
+  static TextStyle get text20PxBold => nunitoFont.copyWith(
         fontSize: 20.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text19PxBold => heeboFont.copyWith(
+  static TextStyle get text19PxBold => nunitoFont.copyWith(
         fontSize: 19.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text18PxBold => heeboFont.copyWith(
+  static TextStyle get text18PxBold => nunitoFont.copyWith(
         fontSize: 18.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text16PxBold => heeboFont.copyWith(
+  static TextStyle get text16PxBold => nunitoFont.copyWith(
         fontSize: 16.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text14PxBold => heeboFont.copyWith(
+  static TextStyle get text14PxBold => nunitoFont.copyWith(
         fontSize: 14.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text12PxBold => heeboFont.copyWith(
+  static TextStyle get text12PxBold => nunitoFont.copyWith(
         fontSize: 12.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text10PxBold => heeboFont.copyWith(
+  static TextStyle get text10PxBold => nunitoFont.copyWith(
         fontSize: 10.sp,
         fontWeight: FontWeight.bold,
       );
-  static TextStyle get text8pxBold => heeboFont.copyWith(
+  static TextStyle get text8pxBold => nunitoFont.copyWith(
         fontSize: 8.sp,
         fontWeight: FontWeight.bold,
       );

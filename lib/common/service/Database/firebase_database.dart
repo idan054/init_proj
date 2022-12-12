@@ -165,8 +165,9 @@ class Database {
     // .limit(1)
         .snapshots()
         .map((QuerySnapshot list) {
+          print('chats - list ${list.docs.length}');
       return list.docs.map((DocumentSnapshot snap) {
-        //> print('MSG_DOC_ID: ${snap.id}');
+        print('MSG_DOC_ID: ${snap.id}');
         return MessageModel.fromJson(snap.data() as Map<String, dynamic>);
       }).toList();
     }).handleError((dynamic e) {

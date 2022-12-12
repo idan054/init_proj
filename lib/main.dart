@@ -18,7 +18,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   printWhite('START main()!');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // await FirebaseAuth.instance.signOut(); //! For Debugging!
   final dbDir = await getApplicationDocumentsDirectory();
   Hive.init(dbDir.path);
 

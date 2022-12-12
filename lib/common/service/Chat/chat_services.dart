@@ -15,20 +15,27 @@ import '../Database/firebase_database.dart' as click;
 // streamMessages() Available At [click.Database] // <<---
 
 class ChatService {
-
   static Future openChat(BuildContext context, {required UserModel otherUser}) async {
     print('START: openChat()');
     var currUser = context.uniProvider.currUser;
 
     String? chatId;
-    var snap = await Database.db
-        .collection('chats')
-        .where('usersIds', whereIn: [[currUser.uid], [otherUser.uid]])
-        .get();
-    chatId = snap.docs.isEmpty ? null : snap.docs.first.data()['id'];
+    var userIds = [currUser.uid, otherUser.uid];
+    var reqBase = Database.db.collection('chats').limit(1);
 
-    print('(Create new chat)');
-    chatId = '${currUser.email}-${otherUser.email}';
+    var snap = await reqBase.where('usersIds', isEqualTo: userIds).get();
+    if (snap.docs.isEmpty) {
+    // Check the reversed option.
+      snap = await reqBase.where('usersIds', isEqualTo: userIds.reversed.toList()).get();
+    }
+
+    if (snap.docs.isEmpty) {
+      // (Still empty..)
+      chatId = '${currUser.email}-${otherUser.email}';
+    } else {
+      chatId = snap.docs.first.id;
+    }
+    print('chatId ${chatId}');
     return context.router.push(ChatRoute(otherUser: otherUser, chatId: chatId));
   }
 

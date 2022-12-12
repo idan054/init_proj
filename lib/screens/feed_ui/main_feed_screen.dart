@@ -31,10 +31,11 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     super.initState();
   }
 
-  Future _loadMore() async {
+  Future _loadMore({bool resetList = false}) async {
     // splashLoader = true; setState(() {});
+    if(resetList) postList = [];
     List newPosts = await Database.advanced.handleGetModel(context, ModelTypes.posts, postList);
-    if(newPosts.isNotEmpty) postList = [...newPosts];
+    if (newPosts.isNotEmpty) postList = [...newPosts];
     splashLoader = false;
     setState(() {});
   }
@@ -47,49 +48,47 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.darkBlack,
-      body: Stack(
-        children: [
-          LazyLoadScrollView(
-            scrollOffset: 1000,
-            onEndOfPage: () async {
-              print('START: onEndOfPage()');
-              context.uniProvider.updateIsFeedLoading(true);
-              await _loadMore();
-              context.uniProvider.updateIsFeedLoading(false);
-            },
-            child: Builder(builder: (context) {
-              if (splashLoader) {
-                // First time only
-                return const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 7)
-                    .center;
-              }
-
-              if (postList.isEmpty) {
-                return 'Sorry, no post found... \nTry again later!'.toText().center;
-              }
-              return RefreshIndicator(
-                backgroundColor: AppColors.darkGrey,
-                color: AppColors.primary,
-                onRefresh: () async {
-                  print('START: onRefresh()');
-                  await _loadMore();
-                },
-                child: ListView.builder(
-                    itemCount: postList.length,
-                    itemBuilder: (BuildContext context, int i) => PostView(postList[i])),
-              );
-            }),
+      appBar: AppBar(actions: [
+        CircleAvatar(
+          radius: 23,
+          backgroundColor: AppColors.darkGrey,
+          child: CircleAvatar(
+            radius: 20,
+            backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl!),
+            backgroundColor: AppColors.darkGrey,
           ),
-          Container(
-              width: context.width / 2,
-              height: 75,
-              decoration: const BoxDecoration(
-                color: AppColors.darkBlack,
-                borderRadius: BorderRadius.only(bottomRight: Radius.circular(5)),
-              ),
-              // padding: const EdgeInsets.only(left: 15, right: 17.5, top: 35, bottom: 12.5),
-              child: riltopiaLogo(fontSize: 35).center),
-        ],
+        ).px(10)
+      ], title: riltopiaLogo(fontSize: 25), backgroundColor: AppColors.darkBlack),
+      body: LazyLoadScrollView(
+        scrollOffset: 1000,
+        onEndOfPage: () async {
+          print('START: onEndOfPage()');
+          context.uniProvider.updateIsFeedLoading(true);
+          await _loadMore();
+          context.uniProvider.updateIsFeedLoading(false);
+        },
+        child: Builder(builder: (context) {
+          if (splashLoader) {
+            // First time only
+            return const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 7).center;
+          }
+
+          if (postList.isEmpty) {
+            return 'Sorry, no post found... \nTry again later!'.toText().center;
+          }
+
+          return RefreshIndicator(
+            backgroundColor: AppColors.darkGrey,
+            color: AppColors.primary,
+            onRefresh: () async {
+              print('START: onRefresh()');
+              await _loadMore(resetList: true);
+            },
+            child: ListView.builder(
+                itemCount: postList.length,
+                itemBuilder: (BuildContext context, int i) => PostView(postList[i])),
+          );
+        }),
       ),
     );
   }
