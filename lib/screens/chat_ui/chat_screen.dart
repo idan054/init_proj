@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
@@ -46,6 +47,12 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     print('chatId ${widget.chatId}');
+    print('context.routeData.path ${context.routeData.path}');
+    // print('context.routeData.path ${context.routeData.queryParams}');
+    // print('context.routeData.path ${context.routeData.name}');
+    // print('context.routeData.path ${context.routeData.meta}');
+    String myurl = Uri.base.toString(); //get complete url
+    print('myurl ${myurl}');
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),

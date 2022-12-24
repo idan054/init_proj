@@ -11,11 +11,13 @@ import '../../screens/main_ui/dashboard_screen.dart';
 import '../../screens/main_ui/login_screen.dart';
 import '../../screens/main_ui/splash_screen.dart';
 import 'app_router.dart';
-
 export 'package:auto_route/auto_route.dart';
 
-//> context.router.replace(route) //   pushReplacement
-//> context.router.push(route)   //   push
+//> HOW TO USE:
+// Just create STF & Add CustomRoute() below    //   Add route
+// Than: flutter packages pub run build_runner build
+// context.router.replace(route)                //   pushReplacement
+// context.router.push(route)                   //   push
 
 /// Full routes available in [gen.AppRouter]
 @AdaptiveAutoRouter(
@@ -26,6 +28,7 @@ export 'package:auto_route/auto_route.dart';
     CustomRoute(page: DashboardScreen),
     CustomRoute(page: LoginScreen),
     CustomRoute(page: CreateUserScreen),
+
     //~ Chat Screens:
     CustomRoute(page: ChatsListScreen),
     CustomRoute(page: MembersScreen),

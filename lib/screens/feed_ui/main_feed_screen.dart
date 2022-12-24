@@ -1,4 +1,5 @@
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/service/Database/firebase_database.dart';
 import 'package:example/common/service/Database/firebase_database.dart';
 import 'package:example/common/service/Database/firebase_database.dart';
@@ -42,7 +43,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('START: MainFeedScreen()');
+    print('START: MainFeedScreen() ${context.routeData.path}');
     // context.uniProvider.updateIsFeedLoading(false);
     double postRatio = 3;
 
