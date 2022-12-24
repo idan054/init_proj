@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.darkBlack,
+      backgroundColor: AppColors.darkBg,
       body: riltopiaLogo(fontSize: 32).center,
     ); // Splash here
   }

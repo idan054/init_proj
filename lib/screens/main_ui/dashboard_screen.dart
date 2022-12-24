@@ -56,10 +56,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _pageController = PageController(initialPage: widget.dashboardPage.index);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBlack,
+      backgroundColor: AppColors.darkBg,
       body: PageView(
           controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(), // disable swipe
+          // physics: const NeverScrollableScrollPhysics(), // disable swipe
           onPageChanged: (i) => _handleIndexChanged(i, false),
           children: const <Widget>[
             MainFeedScreen(),
@@ -72,13 +72,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(color: AppColors.darkBlack, height: 3, width: double.maxFinite),
+                Container(color: AppColors.darkBg, height: 3, width: double.maxFinite),
                 SizedBox(
                   height: 55,
                   child: BottomNavigationBar(
                     selectedFontSize: 0,
                     unselectedFontSize: 0,
-                    backgroundColor: AppColors.darkBg,
+                    backgroundColor: AppColors.primaryDark,
                     currentIndex: sItem.index,
                     onTap: (i) {
                       _handleIndexChanged(i, true);
@@ -108,12 +108,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ],
             ),
-            Container(
-                    color: AppColors.primary,
-                    height: 35,
-                    width: 35,
-                    child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
-                .rounded(radius: 10)
+            TextButton(onPressed: (){}, child:
+              Container(
+                      color: AppColors.primaryOriginal,
+                      height: 35,
+                      width: 35,
+                      child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
+                  .rounded(radius: 10))
                 .center,
           ],
         ),

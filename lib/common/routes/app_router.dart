@@ -5,7 +5,7 @@ import 'package:example/screens/feed_ui/main_feed_screen.dart';
 import '../../screens/chat_ui/chat_screen.dart';
 import '../../screens/chat_ui/chats_list_screen.dart.dart';
 import '../../screens/chat_ui/members_screen.dart';
-import '../../screens/feed_ui/post_screen.dart';
+import '../../screens/feed_ui/user_screen.dart';
 import '../../screens/main_ui/create_user_screen.dart';
 import '../../screens/main_ui/dashboard_screen.dart';
 import '../../screens/main_ui/login_screen.dart';
@@ -27,14 +27,15 @@ export 'package:auto_route/auto_route.dart';
     CustomRoute(page: SplashScreen, initial: true),
     CustomRoute(page: DashboardScreen),
     CustomRoute(page: LoginScreen),
+
     CustomRoute(page: CreateUserScreen),
+    CustomRoute(page: UserScreen),
     //~ Chat Screens:
     CustomRoute(page: ChatsListScreen),
     CustomRoute(page: MembersScreen),
     CustomRoute(page: ChatScreen),
     //~ Feed Screens:
     CustomRoute(page: MainFeedScreen),
-    CustomRoute(page: PostScreen),
     CustomRoute(page: CreatePostScreen),
   ],
 )

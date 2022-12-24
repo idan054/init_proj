@@ -18,12 +18,12 @@ static final post = PostModel(
     textContent: 'Hello post',
     id: 'id 123',
     creatorUser: user,
-    colorCover: Colors.green,
-    textAlign: 'left',
-    likeCounter: 5,
-    isDarkText: true,
+    // colorCover: Colors.green,
+    // textAlign: 'left',
+    // likeCounter: 5,
+    // isDarkText: true,
     isSubPost: false,
-    enableLikes: true,
+    // enableLikes: true,
     enableComments: true,
     timestamp: DateTime.now());
 

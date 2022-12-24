@@ -37,7 +37,7 @@ Widget wMainTextField(
         style: AppStyles.text20PxBold.white,
         minLines: 1,
         textAlign: TextAlign.center,
-        cursorColor: AppColors.primary,
+        cursorColor: AppColors.primaryOriginal,
         decoration: InputDecoration(
           counter: const Offstage(),
           contentPadding: const EdgeInsets.symmetric(vertical: 12.5, horizontal: 5),
@@ -63,7 +63,7 @@ Widget wMainButton(BuildContext context,
     double radius = 12,
     Widget? icon,
     double? width,
-    Color color = AppColors.primary,
+    Color color = AppColors.primaryOriginal,
     Color borderColor = AppColors.transparent,
     Color textColor = AppColors.white,
     required VoidCallback onPressed}) {
@@ -98,7 +98,7 @@ Widget riltopiaLogo({double fontSize = 52, bool shadowActive = true}) {
                 const Shadow(
                   offset: Offset(1.0, 1.0),
                   blurRadius: 10.0,
-                  color: AppColors.darkBlack,
+                  color: AppColors.darkBg,
                 ),
               ]
             : null,
@@ -107,7 +107,7 @@ Widget riltopiaLogo({double fontSize = 52, bool shadowActive = true}) {
   return Text.rich(TextSpan(children: <InlineSpan>[
     TextSpan(
       text: 'Ril',
-      style: rilTopiaStyle(AppColors.primary),
+      style: rilTopiaStyle(AppColors.primaryOriginal),
     ),
     TextSpan(
       text: 'Topia',

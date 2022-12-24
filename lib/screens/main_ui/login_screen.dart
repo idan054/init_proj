@@ -33,8 +33,8 @@ class _LoginScreenState extends State<LoginScreen> {
           end: Alignment.bottomLeft,
           stops: [0.1, 0.5],
           colors: [
-            AppColors.primary,
-            AppColors.darkBlack,
+            AppColors.primaryOriginal,
+            AppColors.darkBg,
           ],
         ),
       ),
@@ -68,7 +68,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     title: 'join with Google',
                     icon: Assets.svg.gLogoIcon.svg(height: 25),
                     color: AppColors.white,
-                    textColor: AppColors.darkBlack,
+                    textColor: AppColors.darkBg,
                     onPressed: () async =>
                        await AuthService.signInWithGoogle(context)).appearAll,
               ],

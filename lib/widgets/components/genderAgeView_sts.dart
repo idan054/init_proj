@@ -36,7 +36,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
           stfSetState(() {});
         },
             width: 100,
-            textColor: selectedGender == currGender ? AppColors.darkBlack : AppColors.white,
+            textColor: selectedGender == currGender ? AppColors.darkBg : AppColors.white,
             color: selectedGender == currGender ? AppColors.greyLight : AppColors.darkGrey);
 
     return Column(

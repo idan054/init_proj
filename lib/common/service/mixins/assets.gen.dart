@@ -255,6 +255,10 @@ class $AssetsSvgGen {
 class $AssetsSvgIconsGen {
   const $AssetsSvgIconsGen();
 
+  /// File path: assets/svg/icons/arrow_back_left.svg
+  SvgGenImage get arrowBackLeft =>
+      const SvgGenImage('assets/svg/icons/arrow_back_left.svg');
+
   /// File path: assets/svg/icons/bell-untitled-icon.svg
   SvgGenImage get bellUntitledIcon =>
       const SvgGenImage('assets/svg/icons/bell-untitled-icon.svg');
@@ -267,9 +271,17 @@ class $AssetsSvgIconsGen {
   SvgGenImage get commentUntitledIcon =>
       const SvgGenImage('assets/svg/icons/comment-untitled-icon.svg');
 
+  /// File path: assets/svg/icons/date_time_calender.svg
+  SvgGenImage get dateTimeCalender =>
+      const SvgGenImage('assets/svg/icons/date_time_calender.svg');
+
   /// File path: assets/svg/icons/dmPlane-untitled-icon.svg
   SvgGenImage get dmPlaneUntitledIcon =>
       const SvgGenImage('assets/svg/icons/dmPlane-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/group_multi_people.svg
+  SvgGenImage get groupMultiPeople =>
+      const SvgGenImage('assets/svg/icons/group_multi_people.svg');
 
   /// File path: assets/svg/icons/heart-untitled-icon.svg
   SvgGenImage get heartUntitledIcon =>
@@ -282,6 +294,10 @@ class $AssetsSvgIconsGen {
   /// File path: assets/svg/icons/homeSolid-untitled-icon.svg
   SvgGenImage get homeSolidUntitledIcon =>
       const SvgGenImage('assets/svg/icons/homeSolid-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/man_profile.svg
+  SvgGenImage get manProfile =>
+      const SvgGenImage('assets/svg/icons/man_profile.svg');
 
   /// File path: assets/svg/icons/plusAdd-untitled-icon.svg
   SvgGenImage get plusAddUntitledIcon =>
@@ -297,13 +313,17 @@ class $AssetsSvgIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        arrowBackLeft,
         bellUntitledIcon,
         chatBubblesUntitledIcon,
         commentUntitledIcon,
+        dateTimeCalender,
         dmPlaneUntitledIcon,
+        groupMultiPeople,
         heartUntitledIcon,
         homeUntitledIcon,
         homeSolidUntitledIcon,
+        manProfile,
         plusAddUntitledIcon,
         shareClassicUntitledIcon,
         shieldTickUntitledIcon

@@ -21,7 +21,7 @@ class CreatePostScreen extends StatefulWidget {
 class _CreatePostScreenState extends State<CreatePostScreen> {
   var postTextController = TextEditingController();
   var textAlignStr = 'center';
-  Color postColor = AppColors.primary;
+  Color postColor = AppColors.primaryOriginal;
   bool isDarkText = false;
   bool simplePicker = true;
 
@@ -35,7 +35,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             : TextAlign.left;
     // bool isKeyboardVisible = WidgetsBinding.instance.window.viewInsets.bottom > 0.0;
     UserModel currUser = context.uniProvider.currUser;
-    var textColor = isDarkText ? AppColors.darkBlack : AppColors.white;
+    var textColor = isDarkText ? AppColors.darkBg : AppColors.white;
     var textDir = postTextController.text.isHebrew ? TextDirection.rtl : TextDirection.ltr;
 
     return Scaffold(
@@ -78,7 +78,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     end: Alignment.topCenter,
                     stops: [0.01, 0.99],
                     colors: [
-                      AppColors.darkBlack.withOpacity(0.40),
+                      AppColors.darkBg.withOpacity(0.40),
                       AppColors.transparent,
                     ],
                   ),
@@ -118,7 +118,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 stops: [0.01, 0.99],
                 colors: [
                   AppColors.transparent,
-                  AppColors.darkBlack.withOpacity(0.40),
+                  AppColors.darkBg.withOpacity(0.40),
                 ],
               ),
               borderRadius: const BorderRadius.only(
@@ -182,7 +182,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               title: 'Simple',
               color: AppColors.darkGrey,
               width: 100,
-              textColor: simplePicker ? AppColors.primary : AppColors.greyUnavailable,
+              textColor: simplePicker ? AppColors.primaryOriginal : AppColors.greyUnavailable,
               onPressed: () {
                 simplePicker = true;
                 Navigator.of(context).pop();
@@ -194,7 +194,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               title: 'Advanced',
               color: AppColors.darkGrey,
               width: 110,
-              textColor: simplePicker ? AppColors.greyUnavailable : AppColors.primary,
+              textColor: simplePicker ? AppColors.greyUnavailable : AppColors.primaryOriginal,
               onPressed: () {
                 simplePicker = false;
                 Navigator.of(context).pop();

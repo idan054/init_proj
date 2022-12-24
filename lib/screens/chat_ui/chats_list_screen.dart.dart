@@ -48,7 +48,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     var currUser = context.uniProvider.currUser;
 
     return Scaffold(
-        backgroundColor: AppColors.darkBlack,
+        backgroundColor: AppColors.darkBg,
         appBar: darkAppBar(context, title: 'Messages (${currUser.email})', // STR
             backAction: () async {
           await FirebaseAuth.instance.signOut();
@@ -65,7 +65,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
         body: Builder(builder: (context) {
           if (splashLoader) {
             // First time only
-            return const CircularProgressIndicator(color: AppColors.primary, strokeWidth: 7).center;
+            return const CircularProgressIndicator(color: AppColors.primaryOriginal, strokeWidth: 7).center;
           }
 
           if (chatList.isEmpty) {
@@ -73,7 +73,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
           }
 
           return Container(
-            color: AppColors.darkBlack,
+            color: AppColors.darkBg,
             child: ListView.builder(
               itemCount: chatList.length,
               itemBuilder: (context, i) {

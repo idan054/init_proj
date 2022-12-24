@@ -13,12 +13,12 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i11;
 import 'package:example/common/models/user/user_model.dart' as _i13;
-import 'package:example/screens/chat_ui/chat_screen.dart' as _i7;
-import 'package:example/screens/chat_ui/chats_list_screen.dart.dart' as _i5;
-import 'package:example/screens/chat_ui/members_screen.dart' as _i6;
+import 'package:example/screens/chat_ui/chat_screen.dart' as _i8;
+import 'package:example/screens/chat_ui/chats_list_screen.dart.dart' as _i6;
+import 'package:example/screens/chat_ui/members_screen.dart' as _i7;
 import 'package:example/screens/feed_ui/create_post_screen.dart' as _i10;
-import 'package:example/screens/feed_ui/main_feed_screen.dart' as _i8;
-import 'package:example/screens/feed_ui/post_screen.dart' as _i9;
+import 'package:example/screens/feed_ui/main_feed_screen.dart' as _i9;
+import 'package:example/screens/feed_ui/user_screen.dart' as _i5;
 import 'package:example/screens/main_ui/create_user_screen.dart' as _i4;
 import 'package:example/screens/main_ui/dashboard_screen.dart' as _i2;
 import 'package:example/screens/main_ui/login_screen.dart' as _i3;
@@ -68,10 +68,18 @@ class AppRouter extends _i11.RootStackRouter {
         barrierDismissible: false,
       );
     },
+    UserRoute.name: (routeData) {
+      return _i11.CustomPage<dynamic>(
+        routeData: routeData,
+        child: const _i5.UserScreen(),
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
     ChatsListRoute.name: (routeData) {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i5.ChatsListScreen(),
+        child: const _i6.ChatsListScreen(),
         opaque: true,
         barrierDismissible: false,
       );
@@ -79,7 +87,7 @@ class AppRouter extends _i11.RootStackRouter {
     MembersRoute.name: (routeData) {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i6.MembersScreen(),
+        child: const _i7.MembersScreen(),
         opaque: true,
         barrierDismissible: false,
       );
@@ -88,7 +96,7 @@ class AppRouter extends _i11.RootStackRouter {
       final args = routeData.argsAs<ChatRouteArgs>();
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
-        child: _i7.ChatScreen(
+        child: _i8.ChatScreen(
           otherUser: args.otherUser,
           chatId: args.chatId,
           key: args.key,
@@ -100,15 +108,7 @@ class AppRouter extends _i11.RootStackRouter {
     MainFeedRoute.name: (routeData) {
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i8.MainFeedScreen(),
-        opaque: true,
-        barrierDismissible: false,
-      );
-    },
-    PostRoute.name: (routeData) {
-      return _i11.CustomPage<dynamic>(
-        routeData: routeData,
-        child: const _i9.PostScreen(),
+        child: const _i9.MainFeedScreen(),
         opaque: true,
         barrierDismissible: false,
       );
@@ -142,6 +142,10 @@ class AppRouter extends _i11.RootStackRouter {
           path: '/create-user-screen',
         ),
         _i11.RouteConfig(
+          UserRoute.name,
+          path: '/user-screen',
+        ),
+        _i11.RouteConfig(
           ChatsListRoute.name,
           path: '/chats-list-screen',
         ),
@@ -156,10 +160,6 @@ class AppRouter extends _i11.RootStackRouter {
         _i11.RouteConfig(
           MainFeedRoute.name,
           path: '/main-feed-screen',
-        ),
-        _i11.RouteConfig(
-          PostRoute.name,
-          path: '/post-screen',
         ),
         _i11.RouteConfig(
           CreatePostRoute.name,
@@ -239,7 +239,19 @@ class CreateUserRoute extends _i11.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i5.ChatsListScreen]
+/// [_i5.UserScreen]
+class UserRoute extends _i11.PageRouteInfo<void> {
+  const UserRoute()
+      : super(
+          UserRoute.name,
+          path: '/user-screen',
+        );
+
+  static const String name = 'UserRoute';
+}
+
+/// generated route for
+/// [_i6.ChatsListScreen]
 class ChatsListRoute extends _i11.PageRouteInfo<void> {
   const ChatsListRoute()
       : super(
@@ -251,7 +263,7 @@ class ChatsListRoute extends _i11.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i6.MembersScreen]
+/// [_i7.MembersScreen]
 class MembersRoute extends _i11.PageRouteInfo<void> {
   const MembersRoute()
       : super(
@@ -263,7 +275,7 @@ class MembersRoute extends _i11.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.ChatScreen]
+/// [_i8.ChatScreen]
 class ChatRoute extends _i11.PageRouteInfo<ChatRouteArgs> {
   ChatRoute({
     required _i13.UserModel otherUser,
@@ -302,7 +314,7 @@ class ChatRouteArgs {
 }
 
 /// generated route for
-/// [_i8.MainFeedScreen]
+/// [_i9.MainFeedScreen]
 class MainFeedRoute extends _i11.PageRouteInfo<void> {
   const MainFeedRoute()
       : super(
@@ -311,18 +323,6 @@ class MainFeedRoute extends _i11.PageRouteInfo<void> {
         );
 
   static const String name = 'MainFeedRoute';
-}
-
-/// generated route for
-/// [_i9.PostScreen]
-class PostRoute extends _i11.PageRouteInfo<void> {
-  const PostRoute()
-      : super(
-          PostRoute.name,
-          path: '/post-screen',
-        );
-
-  static const String name = 'PostRoute';
 }
 
 /// generated route for

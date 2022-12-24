@@ -41,7 +41,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        backgroundColor: AppColors.darkBlack,
+        backgroundColor: AppColors.darkBg,
         appBar: darkAppBar(
           context,
           title: 'Create Account',
@@ -62,16 +62,16 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                   onTap: () async => photoUploaded = await updateProfilePhoto(currUser),
                   child: CircleAvatar(
                     radius: 65,
-                    backgroundColor: isProfilePicErr ? AppColors.errRed : AppColors.darkBlack,
+                    backgroundColor: isProfilePicErr ? AppColors.errRed : AppColors.darkBg,
                     child: CircleAvatar(
                       // bool photoUploaded - used to AVOID default
                       // (So users will actually choose picture.)
                       backgroundImage: photoUploaded ? NetworkImage('${currUser.photoUrl}') : null,
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: AppColors.primaryOriginal,
                       radius: 60,
                       child: CircleAvatar(
                           radius: 30,
-                          backgroundColor: AppColors.darkBlack.withOpacity(0.33),
+                          backgroundColor: AppColors.darkBg.withOpacity(0.33),
                           child: Icons.collections.icon(size: 30, color:
                                isProfilePicErr ? AppColors.errRed : AppColors.white)),
                     ).appearAll,

@@ -18,7 +18,7 @@ AppBar darkAppBar(BuildContext context,
   return AppBar(
     elevation: 0,
     titleSpacing: 0.0,
-    backgroundColor: AppColors.darkBlack,
+    backgroundColor: AppColors.darkBg,
     title: Text(
       title,
       style: AppStyles.text18PxRegular.white,

@@ -27,7 +27,7 @@ class AppTextField extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.all(8.0),
           focusedBorder: _borderStyle.copyWith(
-              borderSide: const BorderSide(color: AppColors.primary)),
+              borderSide: const BorderSide(color: AppColors.primaryOriginal)),
           enabledBorder: _borderStyle,
           border: _borderStyle,
           hintText: title,

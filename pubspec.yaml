@@ -51,6 +51,8 @@ dependencies:
   ansicolor: ^2.0.1
   rich_console: ^1.0.4
   badges: ^2.0.3
+  widgets_to_image: ^0.0.2
+  share_plus: ^6.3.0
 
 dev_dependencies:
   flutter_test:

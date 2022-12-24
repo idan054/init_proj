@@ -57,7 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        backgroundColor: AppColors.darkBlack,
+        backgroundColor: AppColors.darkBg,
         appBar: darkAppBar(context, title: widget.otherUser.email.toString()),
         body: Column(
           children: [
@@ -108,7 +108,7 @@ class _ChatScreenState extends State<ChatScreen> {
         minLines: 1,
         maxLines: 5,
         textAlign: includeHeb ? TextAlign.end : TextAlign.start,
-        cursorColor: AppColors.primary,
+        cursorColor: AppColors.primaryOriginal,
         onChanged: (val) => stfSetState(() {}),
         decoration: InputDecoration(
           hintStyle: AppStyles.text18PxRegular.white,
@@ -127,8 +127,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   Icons.send_rounded,
                   size: 25,
                   color: sendController.text.isNotEmpty
-                      ? AppColors.primary
-                      : AppColors.primaryDisable,
+                      ? AppColors.primaryOriginal
+                      : AppColors.primaryOriginal,
                 ),
                 onPressed: sendController.text.isNotEmpty
                     ? () {
@@ -160,7 +160,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ConstrainedBox(
             constraints: BoxConstraints(maxWidth: context.width * 0.8),
             child: Bubble(
-                color: currUser ? AppColors.primary : AppColors.darkGrey,
+                color: currUser ? AppColors.primaryOriginal : AppColors.darkGrey,
                 elevation: 0,
                 padding: const BubbleEdges.all(6.0),
                 nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,

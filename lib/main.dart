@@ -1,5 +1,6 @@
 
 import 'package:example/common/extensions/color_printer.dart';
+import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/screens/main_ui/splash_screen.dart' as click;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,6 +14,10 @@ import 'package:provider/provider.dart';
 import 'common/models/universalModel.dart';
 import 'common/service/Database/firebase_options.dart';
 import 'common/themes/app_colors.dart';
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
+import 'package:widgets_to_image/widgets_to_image.dart';
+
 
 /// Add More Pre-Actions At [click.SplashScreen]
 void main() async {
@@ -57,7 +62,7 @@ class _AppState extends State<App> {
     try {
       return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(
-          systemNavigationBarColor: AppColors.darkBg,
+          systemNavigationBarColor: AppColors.primaryDark,
           systemNavigationBarIconBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.dark,
           statusBarColor: Colors.transparent,
@@ -72,7 +77,7 @@ class _AppState extends State<App> {
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
                 colorSchemeSeed: AppColors.darkOutline,
-                // scaffoldBackgroundColor: AppColors.primaryColor,
+                // scaffoldBackgroundColor: AppColors.primaryOriginalColor,
                 ),
             builder: (context, child) {
               return Directionality(

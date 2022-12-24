@@ -11,7 +11,7 @@ class CustomButton extends StatelessWidget {
     this.title,
     this.onPressed,
     this.titleStyle,
-    this.backgroundColor = AppColors.primary,
+    this.backgroundColor = AppColors.primaryOriginal,
     this.shape,
     this.width = 140,
     this.height = 45,
@@ -89,7 +89,7 @@ class CustomButton extends StatelessWidget {
                       child: CircularProgressIndicator(
                         color: backgroundColor == AppColors.white ||
                                 backgroundColor == AppColors.transparent
-                            ? AppColors.primary
+                            ? AppColors.primaryOriginal
                             : AppColors.white,
                         strokeWidth: 2,
                       ),
