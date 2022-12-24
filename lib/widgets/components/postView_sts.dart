@@ -138,6 +138,15 @@ class PostView extends StatelessWidget {
                         ChatService.openChat(context, otherUser: post.creatorUser!);
                       }
                     })),
+
+
+                CircleAvatar(
+                    backgroundColor: AppColors.darkBlack.withOpacity(0.30),
+                    child: FontAwesomeIcons.share.iconAwesome(size: 18).onTap(() {
+                      print('Share Button Tapped!');
+                      //ToDO Use DeepLink to enable Share Button
+                    })),
+
                 if (post.enableComments)
                   CircleAvatar(
                       backgroundColor: AppColors.darkBlack.withOpacity(0.30),
