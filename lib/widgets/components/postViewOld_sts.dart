@@ -5,10 +5,11 @@ import 'package:example/common/service/Chat/chat_services.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../../common/mixins/fonts.gen.dart';
 import '../../common/models/post/post_model.dart';
+import '../../common/service/mixins/assets.gen.dart';
+import '../../common/service/mixins/fonts.gen.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
 import '../../screens/main_ui/dashboard_screen.dart';
@@ -23,6 +24,8 @@ class PostView extends StatelessWidget {
     double postRatio = 3;
     // likeByIds.contains is the initial. (isLiked will change when click)
     var isLiked = post.likeByIds.contains(context.uniProvider.currUser.uid);
+
+
 
     TextAlign? postAlign; // Todo: Frontend so Hebrew will be only center || right Based .isHebrew
     if (post.textAlign == 'right') postAlign = TextAlign.end;
@@ -129,6 +132,11 @@ class PostView extends StatelessWidget {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
+
+                Assets.svg.icons.commentUntitledIcon.svg(),
+                // SvgPicture.asset('assets/svg/comment-untitled-icon.svg'),
+                // Assets.svg.gLogoIcon.svg(height: 25),
+
                 CircleAvatar(
                     backgroundColor: AppColors.darkBlack.withOpacity(0.30),
                     child: FontAwesomeIcons.solidPaperPlane.iconAwesome(size: 18).onTap(() {

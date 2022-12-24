@@ -39,6 +39,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     print('updatedList ${updatedList.length}');
     if (updatedList.isNotEmpty) chatList = updatedList;
     splashLoader = false;
+    //! UnComment this!
     setState(() {});
   }
 

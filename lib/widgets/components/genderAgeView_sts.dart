@@ -30,27 +30,20 @@ class _GenderAgeViewState extends State<GenderAgeView> {
   Widget build(BuildContext context) {
     print('START: CreateUserScreen()');
 
-    Widget genderButton(
-            StateSetter stfSetState, String title, GenderTypes currGender) =>
+    Widget genderButton(StateSetter stfSetState, String title, GenderTypes currGender) =>
         wMainButton(context, title: title, onPressed: () {
           selectedGender = currGender;
           stfSetState(() {});
         },
             width: 100,
-            textColor: selectedGender == currGender
-                ? AppColors.darkBlack
-                : AppColors.white,
-            color: selectedGender == currGender
-                ? AppColors.greyLight
-                : AppColors.darkGrey);
+            textColor: selectedGender == currGender ? AppColors.darkBlack : AppColors.white,
+            color: selectedGender == currGender ? AppColors.greyLight : AppColors.darkGrey);
 
     return Column(
       children: [
         const Spacer(flex: 45),
         Text('What is your gender?',
-                style: isGenderErr
-                    ? AppStyles.text16PxBold.errRed
-                    : AppStyles.text16PxBold.white)
+                style: isGenderErr ? AppStyles.text16PxBold.errRed : AppStyles.text16PxBold.white)
             .pOnly(bottom: 5)
             .px(55)
             .centerLeft,
@@ -61,13 +54,11 @@ class _GenderAgeViewState extends State<GenderAgeView> {
             children: [
               const SizedBox(width: 55),
               genderButton(stfSetState, 'Boy', GenderTypes.boy).appearAll,
-              genderButton(stfSetState, 'Girl', GenderTypes.girl)
-                  .px(15)
-                  .appearAll,
+              genderButton(stfSetState, 'Girl', GenderTypes.girl).px(15).appearAll,
               genderButton(stfSetState, 'LGBTQ+', GenderTypes.lgbt).appearAll,
               const SizedBox(width: 25),
             ],
-          ).sizedBox(context.width, 55);
+          ).sizedBox(context, width: context.width, height: 55);
         }),
         StatefulBuilder(builder: (context, stfSetState) {
           DateDuration? nextBirthdayIn;
@@ -79,49 +70,41 @@ class _GenderAgeViewState extends State<GenderAgeView> {
             print('nextBirthdayIn $nextBirthdayIn');
           }
 
-          return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                wMainTextField(
-                  context,
-                  ageController,
-                  topLabelStyle: isAgeErr
-                      ? AppStyles.text16PxBold.errRed
-                      : AppStyles.text16PxBold.white,
-                  topLabel: ageController.text.length == 10
-                      ? 'Your $userAge years old!'
-                      : 'When is your birthday?',
-                  hintText: '01/12/2001',
-                  maxLength: 10,
-                  keyboardType: TextInputType.datetime,
-                  onChanged: (val) {
-                    var ageLen = ageController.text.length;
-                    // To hide / show widget below.
-                    if (ageLen == 0 ||
-                        ageLen == 1 ||
-                        ageLen == 9 ||
-                        ageLen == 10) stfSetState(() {});
-                    if (ageLen == 2 || ageLen == 5) {
-                      ageController.text = '${ageController.text}/';
-                      ageController.selection = TextSelection.fromPosition(
-                          TextPosition(offset: ageController.text.length));
-                    }
-                  },
-                ),
-                if (ageController.text.isNotEmpty)
-                  Row(
-                    children: [
-                      Text('01/12/2001',
-                          style: AppStyles.text12PxBold.greyLight),
-                      const Spacer(),
-                      InkWell(
-                        onTap: () => stfSetState(() => ageController.text = ''),
-                        child: Text('erase',
-                            style: AppStyles.text12PxBold.greyLight),
-                      )
-                    ],
-                  ).px(55).offset(0, -5),
-              ]).pOnly(bottom: 15, top: 20).appearAll;
+          return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            wMainTextField(
+              context,
+              ageController,
+              topLabelStyle:
+                  isAgeErr ? AppStyles.text16PxBold.errRed : AppStyles.text16PxBold.white,
+              topLabel: ageController.text.length == 10
+                  ? 'Your $userAge years old!'
+                  : 'When is your birthday?',
+              hintText: '01/12/2001',
+              maxLength: 10,
+              keyboardType: TextInputType.datetime,
+              onChanged: (val) {
+                var ageLen = ageController.text.length;
+                // To hide / show widget below.
+                if (ageLen == 0 || ageLen == 1 || ageLen == 9 || ageLen == 10) stfSetState(() {});
+                if (ageLen == 2 || ageLen == 5) {
+                  ageController.text = '${ageController.text}/';
+                  ageController.selection =
+                      TextSelection.fromPosition(TextPosition(offset: ageController.text.length));
+                }
+              },
+            ),
+            if (ageController.text.isNotEmpty)
+              Row(
+                children: [
+                  Text('01/12/2001', style: AppStyles.text12PxBold.greyLight),
+                  const Spacer(),
+                  InkWell(
+                    onTap: () => stfSetState(() => ageController.text = ''),
+                    child: Text('erase', style: AppStyles.text12PxBold.greyLight),
+                  )
+                ],
+              ).px(55).offset(0, -5),
+          ]).pOnly(bottom: 15, top: 20).appearAll;
         }),
         buildSubmitButton(),
         const Spacer(
@@ -133,11 +116,8 @@ class _GenderAgeViewState extends State<GenderAgeView> {
 
   bool get genderAgeValid {
     selectedGender == null ? isGenderErr = true : isGenderErr = false;
-    userAge == null || ageController.text.length != 10
-        ? isAgeErr = true
-        : isAgeErr = false;
-    if ((userAge != null && userAge! < 0) ||
-        (userAge != null && userAge! > 100)) isAgeErr = true;
+    userAge == null || ageController.text.length != 10 ? isAgeErr = true : isAgeErr = false;
+    if ((userAge != null && userAge! < 0) || (userAge != null && userAge! > 100)) isAgeErr = true;
     if (isAgeErr || isGenderErr) return false;
     return true;
   }
@@ -146,8 +126,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
     return wMainButton(context, title: 'Done', onPressed: () {
       if (genderAgeValid) {
         var currUser = context.uniProvider.currUser;
-        currUser = currUser.copyWith(
-            birthday: bDay, age: userAge, gender: selectedGender);
+        currUser = currUser.copyWith(birthday: bDay, age: userAge, gender: selectedGender);
         Database().updateFirestore(
             collection: 'users',
             docName: '${currUser.email}',

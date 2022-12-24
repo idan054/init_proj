@@ -54,7 +54,8 @@ extension StringX on String {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: bold
-              ? AppStyles.text18PxBold
+              // ? AppStyles.text18PxBold
+              ? AppStyles.text18PxMedium
                   .copyWith(color: color, fontSize: fontSize ?? 18.sp,
               height: 1) // line spacing
               : AppStyles.text18PxRegular

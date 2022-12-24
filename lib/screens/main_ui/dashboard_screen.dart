@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
+import 'package:example/main.dart';
 import 'package:example/screens/chat_ui/chats_list_screen.dart.dart';
 import 'package:example/screens/feed_ui/main_feed_screen.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../common/config.dart';
 import '../../common/routes/app_router.gr.dart';
+import '../../common/service/mixins/assets.gen.dart';
 
-enum TabItems { chat, home }
+// enum TabItems { home, placeHolder, chat }
+enum TabItems { home, chat }
+
 class DashboardScreen extends StatefulWidget {
   final TabItems dashboardPage;
+
   const DashboardScreen({Key? key, this.dashboardPage = TabItems.home}) : super(key: key);
 
   @override
@@ -23,6 +28,7 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   PageController _pageController = PageController();
   TabItems sItem = TabItems.home; // initial
+  bool homePage = true;
 
   @override
   void initState() {
@@ -31,86 +37,86 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
   }
 
-  void _handleIndexChanged(int i) {
+  void _handleIndexChanged(int i, bool navBar) {
     sItem = TabItems.values[i];
-    _pageController.animateToPage(i,
-        duration: 200.milliseconds, curve: Curves.easeIn);
+    // 0 = home, 2 = chat
+    //    _pageController.animateToPage(homePage ? 2 : 0, duration: 200.milliseconds, curve: Curves.easeIn);
+    // if (sItem.index == 1) return;
     setState(() {});
+    if (navBar) {
+      _pageController.jumpToPage(i);
+    }
+
+    homePage = sItem == TabItems.home;
   }
 
   @override
   Widget build(BuildContext context) {
     print('START: CreatePostScreen()');
-    bool chatSelected = sItem == TabItems.chat;
+    _pageController = PageController(initialPage: widget.dashboardPage.index);
 
     return Scaffold(
-      backgroundColor: AppColors.darkGrey,
+      backgroundColor: AppColors.darkBlack,
       body: PageView(
-        onPageChanged: _handleIndexChanged,
-        controller: _pageController,
-        children: const [ChatsListScreen(), MainFeedScreen()],
-      ),
-      extendBody: true, //<------like this
-      bottomNavigationBar: DotNavigationBar(
-        backgroundColor: AppColors.darkGrey,
-        unselectedItemColor: AppColors.white,
-        selectedItemColor: AppColors.primary,
-        dotIndicatorColor:
-        context.listenUniProvider.isFeedLoading ? AppColors.transparent :
-        boldPrimaryDesignConfig
-            ? chatSelected
-                ? AppColors.white
-                : AppColors.primary
-            : AppColors.primary,
-        marginR: EdgeInsets.only(right: 125.w, left: 125.w, bottom: 20),
-        paddingR: sItem == TabItems.chat
-            ? const EdgeInsets.symmetric(vertical: 8)
-            : EdgeInsets.zero,
-        currentIndex: TabItems.values.indexOf(sItem),
-        onTap: _handleIndexChanged,
-        // dotIndicatorColor: Colors.black,
-        items: [
-          DotNavigationBarItem(
-            icon: FontAwesomeIcons.solidComment.iconAwesome(
-                size: 22,
-                color: boldPrimaryDesignConfig
-                    ? AppColors.white
-                    : chatSelected
-                        ? AppColors.primary
-                        : AppColors.white),
-          ),
-          if (chatSelected)
-            DotNavigationBarItem(
-              icon: FontAwesomeIcons.hashtag.iconAwesome(
-                  size: 22,
-                  color: boldPrimaryDesignConfig
-                      ? AppColors.primary
-                      : AppColors.white),
-              selectedColor: AppColors.primary,
+          controller: _pageController,
+          // physics: const NeverScrollableScrollPhysics(), // disable swipe
+          onPageChanged: (i) => _handleIndexChanged(i, false),
+          children: const <Widget>[
+            MainFeedScreen(),
+            ChatsListScreen(),
+          ]),
+      bottomNavigationBar: SizedBox(
+        height: 55+3,
+        child: Stack(
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(color: AppColors.darkBlack, height: 3, width: double.maxFinite),
+                SizedBox(
+                  height: 55,
+                  child: BottomNavigationBar(
+                    selectedFontSize: 0,
+                    unselectedFontSize: 0,
+                    backgroundColor: AppColors.darkBg,
+                    currentIndex: sItem.index,
+                    onTap: (i) {
+                      _handleIndexChanged(i, true);
+                      // stfSetState(() {});
+                    },
+                    items: [
+                      BottomNavigationBarItem(
+                        label: '',
+                        icon: Assets.svg.icons.homeUntitledIcon
+                            .svg(color: AppColors.grey50)
+                            .pOnly(right: 15),
+                        activeIcon: Assets.svg.icons.homeSolidUntitledIcon
+                            .svg(color: AppColors.white)
+                            .pOnly(right: 15),
+                      ),
+                      BottomNavigationBarItem(
+                        label: '',
+                        icon: Assets.svg.icons.chatBubblesUntitledIcon
+                            .svg(color: AppColors.grey50)
+                            .pOnly(left: 15),
+                        activeIcon: Assets.svg.icons.chatBubblesUntitledIcon
+                            .svg(color: AppColors.white)
+                            .pOnly(left: 15),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          if (sItem == TabItems.home
-              && context.listenUniProvider.isFeedLoading)
-            DotNavigationBarItem(
-              icon: InkWell(
-                onTap: () => context.router.push(const CreatePostRoute()),
-                child: const CircularProgressIndicator(
-                    color: AppColors.primary, strokeWidth: 6).scale(scale: 0.90).pad(2)
-              ),
-              selectedColor: AppColors.primary,
-            ),
-          if (sItem == TabItems.home
-              && context.listenUniProvider.isFeedLoading == false)
-            DotNavigationBarItem(
-              icon: InkWell(
-                onTap: () => context.router.push(const CreatePostRoute()),
-                child: FontAwesomeIcons.circlePlus
-                    .iconAwesome(color: AppColors.primary, size: 40),
-              ),
-              selectedColor: AppColors.primary,
-            ),
-
-
-        ],
+            Container(
+                    color: AppColors.primary,
+                    height: 35,
+                    width: 35,
+                    child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
+                .rounded(10)
+                .center,
+          ],
+        ),
       ),
     );
   }

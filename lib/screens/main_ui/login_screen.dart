@@ -6,10 +6,9 @@ import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../common/mixins/assets.gen.dart';
-import '../../common/mixins/fonts.gen.dart';
 import '../../common/service/Auth/auth_services.dart';
+import '../../common/service/mixins/assets.gen.dart';
+import '../../common/service/mixins/fonts.gen.dart';
 import '../../widgets/my_widgets.dart';
 
 class LoginScreen extends StatefulWidget {

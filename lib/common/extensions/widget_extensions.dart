@@ -15,8 +15,7 @@ extension IconDataX on IconData {
         size: size,
       );
 
-  FaIcon iconAwesome({Color color = AppColors.white, double size = 20}) =>
-      FaIcon(
+  FaIcon iconAwesome({Color color = AppColors.white, double size = 20}) => FaIcon(
         this,
         color: color,
         size: size,
@@ -26,28 +25,28 @@ extension IconDataX on IconData {
 extension WidgetX on Widget {
   // My extension:
   InkWell onTap(GestureTapCallback? onTap, {double radius = 99}) => InkWell(
-    // overlayColor: MaterialStateProperty.all(Colors.yellow),
-    //   splashColor: Colors.yellow,
-    //   focusColor: Colors.yellow,
-    //   highlightColor: Colors.yellow,
-    //   hoverColor: Colors.yellow,
-      borderRadius: BorderRadius.circular(radius), onTap: onTap, child: this);
-
-  Directionality isHebrewDirectionality(String text) => Directionality(
-      textDirection: text.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+      // overlayColor: MaterialStateProperty.all(Colors.yellow),
+      //   splashColor: Colors.yellow,
+      //   focusColor: Colors.yellow,
+      //   highlightColor: Colors.yellow,
+      //   hoverColor: Colors.yellow,
+      borderRadius: BorderRadius.circular(radius),
+      onTap: onTap,
       child: this);
 
-  Container get testContainer =>
-      Container(color: AppColors.testGreen, child: this);
+  Directionality isHebrewDirectionality(String text) => Directionality(
+      textDirection: text.isHebrew ? TextDirection.rtl : TextDirection.ltr, child: this);
 
-  Directionality get rtl =>
-      Directionality(textDirection: TextDirection.rtl, child: this);
+  Container get testContainer => Container(color: AppColors.testGreen, child: this);
 
-  Directionality get ltr =>
-      Directionality(textDirection: TextDirection.ltr, child: this);
+  Directionality get rtl => Directionality(textDirection: TextDirection.rtl, child: this);
 
-  ClipRRect get rounded =>
-      ClipRRect(borderRadius: BorderRadius.circular(99), child: this);
+  Directionality get ltr => Directionality(textDirection: TextDirection.ltr, child: this);
+
+  ClipRRect get roundedFull => ClipRRect(borderRadius: BorderRadius.circular(99), child: this);
+
+  ClipRRect rounded(double radius) =>
+      ClipRRect(borderRadius: BorderRadius.circular(radius), child: this);
 
   Entry get appearAll => Entry.all(
         duration: Duration(milliseconds: appearDuration),
@@ -81,12 +80,7 @@ extension WidgetX on Widget {
         child: this,
       );
 
-  Padding pOnly(
-          {double top = 0,
-          double right = 0,
-          double bottom = 0,
-          double left = 0,
-          Key? key}) =>
+  Padding pOnly({double top = 0, double right = 0, double bottom = 0, double left = 0, Key? key}) =>
       Padding(
         padding: EdgeInsets.only(
           top: top,
@@ -125,11 +119,21 @@ extension WidgetX on Widget {
         child: this,
       );
 
-  SizedBox sizedBox(double w, double h) => SizedBox(
-        width: w,
-        height: h,
-        child: this,
-      );
+  SizedBox sizedBox(
+    context, {
+    double? width,
+    double? height,
+    double wRatio = 1.0,
+    double hRatio = 1.0,
+  }) {
+    double maxHeight = MediaQuery.of(context).size.height;
+    double maxWidth = MediaQuery.of(context).size.width;
+    return SizedBox(
+      width: width ?? maxWidth * wRatio,
+      height: height ?? maxHeight * hRatio,
+      child: this,
+    );
+  }
 
   Widget offset(double x, double y) => Transform.translate(
         offset: Offset(x, y),

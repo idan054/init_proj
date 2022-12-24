@@ -7,9 +7,7 @@ import '../common/themes/app_styles.dart';
 export 'bottom_sheet.dart';
 export 'scaffold_wrapper.dart';
 
-BoxDecoration borderDeco(
-        {Color color = Colors.grey, width = 2.0, radius = 10.0}) =>
-    BoxDecoration(
+BoxDecoration borderDeco({Color color = Colors.grey, width = 2.0, radius = 10.0}) => BoxDecoration(
       border: Border.all(color: color, width: width),
       borderRadius: BorderRadius.circular(radius),
     );
@@ -29,8 +27,7 @@ Widget wMainTextField(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       if (topLabel != null)
-        Text(topLabel, style: topLabelStyle ?? AppStyles.text16PxBold.white)
-            .pOnly(bottom: 5),
+        Text(topLabel, style: topLabelStyle ?? AppStyles.text16PxBold.white).pOnly(bottom: 5),
       TextField(
         autofocus: autofocus,
         maxLength: maxLength,
@@ -43,8 +40,7 @@ Widget wMainTextField(
         cursorColor: AppColors.primary,
         decoration: InputDecoration(
           counter: const Offstage(),
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 12.5, horizontal: 5),
+          contentPadding: const EdgeInsets.symmetric(vertical: 12.5, horizontal: 5),
           filled: true,
           fillColor: AppColors.darkGrey,
           hintText: hintText ?? '',
@@ -87,7 +83,7 @@ Widget wMainButton(BuildContext context,
             title,
             style: AppStyles.text20PxBold.copyWith(color: textColor),
           ).offset(icon == null ? -5 : 0, 0))
-      .sizedBox(width ?? context.width, 55)
+      .sizedBox(context, width: width ?? context.width, height: 55)
       .px(width == null ? (isWide ? 55 : 85) : 0);
 }
 

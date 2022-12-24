@@ -28,7 +28,6 @@ export 'package:auto_route/auto_route.dart';
     CustomRoute(page: DashboardScreen),
     CustomRoute(page: LoginScreen),
     CustomRoute(page: CreateUserScreen),
-
     //~ Chat Screens:
     CustomRoute(page: ChatsListScreen),
     CustomRoute(page: MembersScreen),

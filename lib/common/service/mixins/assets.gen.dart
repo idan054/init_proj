@@ -5,11 +5,21 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import
+// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
+
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF
+  String get bahnschriftRiltopia => 'assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF';
+
+  /// List of all assets
+  List<String> get values => [bahnschriftRiltopia];
+}
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
@@ -24,6 +34,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/minecloudLogo.png
   AssetGenImage get minecloudLogo =>
       const AssetGenImage('assets/images/minecloudLogo.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [logo, mapPlaceholder, minecloudLogo];
 }
 
 class $AssetsSvgGen {
@@ -43,6 +56,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/bag.svg
   SvgGenImage get bag => const SvgGenImage('assets/svg/bag.svg');
+
+  /// File path: assets/svg/bagSquare.svg
+  SvgGenImage get bagSquare => const SvgGenImage('assets/svg/bagSquare.svg');
 
   /// File path: assets/svg/ballon.svg
   SvgGenImage get ballon => const SvgGenImage('assets/svg/ballon.svg');
@@ -125,6 +141,10 @@ class $AssetsSvgGen {
   /// File path: assets/svg/menu_dot.svg
   SvgGenImage get menuDot => const SvgGenImage('assets/svg/menu_dot.svg');
 
+  /// File path: assets/svg/microsoftExcel.svg
+  SvgGenImage get microsoftExcel =>
+      const SvgGenImage('assets/svg/microsoftExcel.svg');
+
   /// File path: assets/svg/more_vert.svg
   SvgGenImage get moreVert => const SvgGenImage('assets/svg/more_vert.svg');
 
@@ -152,6 +172,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/search_icon.svg
   SvgGenImage get searchIcon => const SvgGenImage('assets/svg/search_icon.svg');
 
+  /// File path: assets/svg/smsBubble.svg
+  SvgGenImage get smsBubble => const SvgGenImage('assets/svg/smsBubble.svg');
+
   /// File path: assets/svg/speed_meter.svg
   SvgGenImage get speedMeter => const SvgGenImage('assets/svg/speed_meter.svg');
 
@@ -163,27 +186,114 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/weight.svg
   SvgGenImage get weight => const SvgGenImage('assets/svg/weight.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+        gLogoIcon,
+        add,
+        appLogo,
+        apple,
+        bag,
+        bagSquare,
+        ballon,
+        ballonIndex,
+        bike,
+        call,
+        chat,
+        clock,
+        close,
+        delete,
+        delivery,
+        driverIcon,
+        dropDown,
+        dropDownSelected,
+        email,
+        eventIcon,
+        excel,
+        forward,
+        google,
+        home,
+        iosDown,
+        iosDownward,
+        live,
+        logo,
+        logoIcon,
+        mapPlaceholder,
+        menuDot,
+        microsoftExcel,
+        moreVert,
+        pallet,
+        placeHolder2,
+        placeHolder3,
+        plannedPath,
+        pogoLogo,
+        save,
+        searchIcon,
+        smsBubble,
+        speedMeter,
+        tick,
+        user,
+        weight
+      ];
 }
 
 class $AssetsSvgIconsGen {
   const $AssetsSvgIconsGen();
 
-  /// File path: assets/svg/icons/bagSquare.svg
-  SvgGenImage get bagSquare =>
-      const SvgGenImage('assets/svg/icons/bagSquare.svg');
+  /// File path: assets/svg/icons/bell-untitled-icon.svg
+  SvgGenImage get bellUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/bell-untitled-icon.svg');
 
-  /// File path: assets/svg/icons/microsoftExcel.svg
-  SvgGenImage get microsoftExcel =>
-      const SvgGenImage('assets/svg/icons/microsoftExcel.svg');
+  /// File path: assets/svg/icons/chatBubbles-untitled-icon.svg
+  SvgGenImage get chatBubblesUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/chatBubbles-untitled-icon.svg');
 
-  /// File path: assets/svg/icons/smsBubble.svg
-  SvgGenImage get smsBubble =>
-      const SvgGenImage('assets/svg/icons/smsBubble.svg');
+  /// File path: assets/svg/icons/comment-untitled-icon.svg
+  SvgGenImage get commentUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/comment-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/dmPlane-untitled-icon.svg
+  SvgGenImage get dmPlaneUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/dmPlane-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/heart-untitled-icon.svg
+  SvgGenImage get heartUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/heart-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/home-untitled-icon.svg
+  SvgGenImage get homeUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/home-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/homeSolid-untitled-icon.svg
+  SvgGenImage get homeSolidUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/homeSolid-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/plusAdd-untitled-icon.svg
+  SvgGenImage get plusAddUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/plusAdd-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/shareClassic-untitled-icon.svg
+  SvgGenImage get shareClassicUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/shareClassic-untitled-icon.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+        bellUntitledIcon,
+        chatBubblesUntitledIcon,
+        commentUntitledIcon,
+        dmPlaneUntitledIcon,
+        heartUntitledIcon,
+        homeUntitledIcon,
+        homeSolidUntitledIcon,
+        plusAddUntitledIcon,
+        shareClassicUntitledIcon
+      ];
 }
 
 class Assets {
   Assets._();
 
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
 }
@@ -246,6 +356,8 @@ class AssetGenImage {
     );
   }
 
+  ImageProvider provider() => AssetImage(_assetName);
+
   String get path => _assetName;
 
   String get keyName => _assetName;
@@ -298,4 +410,6 @@ class SvgGenImage {
   }
 
   String get path => _assetName;
+
+  String get keyName => _assetName;
 }

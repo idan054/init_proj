@@ -69,7 +69,7 @@ flutter_icons:
   image_path: "assets/messages_icon.png"
 
 flutter_gen:
-  output: lib/common/mixins/
+  output: lib/common/service/mixins/
   integrations:
     flutter_svg: true
 
@@ -79,6 +79,15 @@ flutter:
     - family: RilTopia # BAHNSCHRIFT
       fonts:
         - asset: assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF
+#    - family: LexendBold
+#      fonts:
+#        - asset: assets/fonts/Lexend-Bold.ttf
+#    - family: LexendMedium
+#      fonts:
+#        - asset: assets/fonts/Lexend-Medium.ttf
+#     - family: LexendRegular
+#       fonts:
+#         - asset: assets/fonts/Lexend-Regular.ttf
 
   assets:
     - assets/fonts/

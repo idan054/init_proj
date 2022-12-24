@@ -5,14 +5,17 @@ import 'package:example/common/service/Database/firebase_database.dart';
 import 'package:example/common/service/Database/firebase_database.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:example/common/themes/app_colors.dart';
+import 'package:example/main.dart';
 
 // import 'package:example/common/service/Auth/firebase_database.dart';
-import 'package:example/widgets/components/postView_sts.dart';
+import 'package:example/widgets/components/postViewOld_sts.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import '../../common/models/post/post_model.dart';
+import '../../common/service/mixins/assets.gen.dart';
+import '../../widgets/components/postBlock_sts.dart';
 
 class MainFeedScreen extends StatefulWidget {
   const MainFeedScreen({Key? key}) : super(key: key);
@@ -34,10 +37,11 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
   Future _loadMore({bool resetList = false}) async {
     // splashLoader = true; setState(() {});
-    if(resetList) postList = [];
+    if (resetList) postList = [];
     List newPosts = await Database.advanced.handleGetModel(context, ModelTypes.posts, postList);
     if (newPosts.isNotEmpty) postList = [...newPosts];
     splashLoader = false;
+    //! UnComment this!
     setState(() {});
   }
 
@@ -49,6 +53,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
     return Scaffold(
       backgroundColor: AppColors.darkBlack,
+      // backgroundColor: AppColors.darkOutline,
       appBar: AppBar(actions: [
         CircleAvatar(
           radius: 23,
@@ -87,7 +92,10 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             },
             child: ListView.builder(
                 itemCount: postList.length,
-                itemBuilder: (BuildContext context, int i) => PostView(postList[i])),
+                itemBuilder: (BuildContext context, int i) =>
+                    // PostView(postList[i])
+                PostBlock(postList[i]),
+                    ),
           );
         }),
       ),

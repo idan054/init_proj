@@ -34,7 +34,7 @@ static final msg = MessageModel(
     fromId: 'Y',
     textContent: 'Hello',
     createdAt: 'Whatever',
-    messageId: 'WhatId');
+    id: 'WhatId');
 
 static final chat = ChatModel(
     users: [user, user],
