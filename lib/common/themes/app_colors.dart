@@ -8,8 +8,8 @@ class AppColors {
   static const Color primaryDark = Color(0xff5324DB);
   static const Color white = Colors.white;
   static const Color grey50 = Color(0xff8D8C92);
-  static Color darkOutline = AppColors.grey50.withOpacity(0.15);
-  // static const Color darkOutline = Color(0xff221F2B);
+  // static Color darkOutline = AppColors.grey50.withOpacity(0.15);
+  static const Color darkOutline = Color(0xff292533);
   static const Color darkBg = Color(0xff221F2B);
   static const Color green = Color(0xffB2F4B0);
   static const Color likeRed = Color(0xfff4b0b0);

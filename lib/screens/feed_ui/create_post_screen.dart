@@ -146,15 +146,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   var post = PostModel(
                     textContent: postTextController.text,
                     id: '${currUser.email}${UniqueKey()}',
-                    textAlign: textAlignStr,
+                    // textAlign: textAlignStr,
                     creatorUser: currUser,
-                    isDarkText: isDarkText,
-                    colorCover: postColor,
+                    // isDarkText: isDarkText,
+                    // colorCover: postColor,
                     timestamp: DateTime.now(),
-                    likeCounter: 0,
+                    // likeCounter: 0,
                     isSubPost: false,
                     enableComments: true,
-                    enableLikes: true,
+                    // enableLikes: true,
                   );
                   // context.uniProvider.updatePostUploaded(post);
                   FeedService.uploadPost(context, post);

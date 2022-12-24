@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'common/models/universalModel.dart';
 import 'common/service/Database/firebase_options.dart';
+import 'common/themes/app_colors.dart';
 
 /// Add More Pre-Actions At [click.SplashScreen]
 void main() async {
@@ -56,7 +57,7 @@ class _AppState extends State<App> {
     try {
       return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(
-          // systemNavigationBarColor: AppColors.whiteColor,
+          systemNavigationBarColor: AppColors.darkBg,
           systemNavigationBarIconBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.dark,
           statusBarColor: Colors.transparent,
@@ -70,7 +71,7 @@ class _AppState extends State<App> {
             title: 'Example',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
-                // colorSchemeSeed: AppColors.primaryColor,
+                colorSchemeSeed: AppColors.darkOutline,
                 // scaffoldBackgroundColor: AppColors.primaryColor,
                 ),
             builder: (context, child) {

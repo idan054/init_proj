@@ -9,26 +9,20 @@ part 'post_model.freezed.dart';
 part 'post_model.g.dart';
 
 // flutter pub run build_runner build --delete-conflicting-outputs
-
 @freezed
-//~ Don't forget to manually add in HIVE Model!
 class PostModel with _$PostModel {
   @JsonSerializable(explicitToJson: true) // This needed for sub classes only
   const factory PostModel({
-    // required List<CommentsModel> comments,
     @Default('') String textContent,
     @Default('') String id,
     UserModel? creatorUser,
-    @Default(false) bool isDarkText,
-    @Default(false) bool isSubPost,
-    @Default(false) bool enableLikes,
-    @Default(false) bool enableComments,
-    @DateTimeStampConv() DateTime? timestamp,
-    @Default('') String textAlign,
-    int? likeCounter,
     @Default([]) List<String> likeByIds,
-    String? photoCover,
-    @ColorIntConv() Color? colorCover,
+    @DateTimeStampConv() DateTime? timestamp,
+    @Default(false) bool isSubPost,
+    @Default(false) bool enableComments,
+    // required List<CommentsModel> comments,
+    // @ColorIntConv() Color? colorCover,
+    // String? photoCover,
   }) = _PostModel;
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>

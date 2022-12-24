@@ -45,8 +45,8 @@ extension WidgetX on Widget {
 
   ClipRRect get roundedFull => ClipRRect(borderRadius: BorderRadius.circular(99), child: this);
 
-  ClipRRect rounded(double radius) =>
-      ClipRRect(borderRadius: BorderRadius.circular(radius), child: this);
+  ClipRRect rounded({double? radius}) =>
+      ClipRRect(borderRadius: BorderRadius.circular(radius ?? 99), child: this);
 
   Entry get appearAll => Entry.all(
         duration: Duration(milliseconds: appearDuration),
@@ -123,14 +123,16 @@ extension WidgetX on Widget {
     context, {
     double? width,
     double? height,
+    bool maxWidth = false,
+    bool maxHeight = false,
     double wRatio = 1.0,
     double hRatio = 1.0,
   }) {
-    double maxHeight = MediaQuery.of(context).size.height;
-    double maxWidth = MediaQuery.of(context).size.width;
+    double maxHeightSize = MediaQuery.of(context).size.height;
+    double maxWidthSize = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: width ?? maxWidth * wRatio,
-      height: height ?? maxHeight * hRatio,
+      width: width ?? (maxWidth ? maxWidthSize * wRatio : null),
+      height: height ?? (maxHeight ? maxHeightSize * hRatio : null),
       child: this,
     );
   }

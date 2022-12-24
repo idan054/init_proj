@@ -17,12 +17,26 @@ class $AssetsFontsGen {
   /// File path: assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF
   String get bahnschriftRiltopia => 'assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF';
 
+  /// File path: assets/fonts/Lexend-Bold.ttf
+  String get lexendBold => 'assets/fonts/Lexend-Bold.ttf';
+
+  /// File path: assets/fonts/Lexend-Medium.ttf
+  String get lexendMedium => 'assets/fonts/Lexend-Medium.ttf';
+
+  /// File path: assets/fonts/Lexend-Regular.ttf
+  String get lexendRegular => 'assets/fonts/Lexend-Regular.ttf';
+
   /// List of all assets
-  List<String> get values => [bahnschriftRiltopia];
+  List<String> get values =>
+      [bahnschriftRiltopia, lexendBold, lexendMedium, lexendRegular];
 }
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
+
+  /// File path: assets/images/LogoCircularRilTopiaLogo.png
+  AssetGenImage get logoCircularRilTopiaLogo =>
+      const AssetGenImage('assets/images/LogoCircularRilTopiaLogo.png');
 
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
@@ -36,7 +50,8 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/minecloudLogo.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [logo, mapPlaceholder, minecloudLogo];
+  List<AssetGenImage> get values =>
+      [logoCircularRilTopiaLogo, logo, mapPlaceholder, minecloudLogo];
 }
 
 class $AssetsSvgGen {
@@ -276,6 +291,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get shareClassicUntitledIcon =>
       const SvgGenImage('assets/svg/icons/shareClassic-untitled-icon.svg');
 
+  /// File path: assets/svg/icons/shieldTick-untitled-icon.svg
+  SvgGenImage get shieldTickUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/shieldTick-untitled-icon.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
         bellUntitledIcon,
@@ -286,7 +305,8 @@ class $AssetsSvgIconsGen {
         homeUntitledIcon,
         homeSolidUntitledIcon,
         plusAddUntitledIcon,
-        shareClassicUntitledIcon
+        shareClassicUntitledIcon,
+        shieldTickUntitledIcon
       ];
 }
 

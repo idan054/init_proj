@@ -1,8 +1,10 @@
+import 'package:badges/badges.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Chat/chat_services.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
+import 'package:example/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -28,12 +30,21 @@ class PostBlock extends StatelessWidget {
       child: Column(
         children: [
           buildProfile(),
-          Text('let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
-                  style: AppStyles.text18PxMedium.copyWith(color: AppColors.grey50, fontSize: 12))
-              .pOnly(right: 16),
-          const SizedBox(height: 12),
-          buildActionRow(context),
-          const SizedBox(height: 8),
+          Column(
+            children: [
+              Text('let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
+                      // post.textContent,
+                      // textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+                      textAlign: TextAlign.start,
+                      style: AppStyles.text18PxMedium.copyWith(color: AppColors.white, fontSize: 12))
+                  .pOnly(right: 16)
+                  .sizedBox(context, maxWidth: true),
+              const SizedBox(height: 12),
+              buildActionRow(context),
+              const SizedBox(height: 8),
+            ],
+          // ).pOnly(left: 5)
+          ).pOnly(left: 55)
         ],
       ).px(15),
     );
@@ -50,46 +61,127 @@ class PostBlock extends StatelessWidget {
       subtitle:
           // '$postAgo ago · Gaming'.toText(color: AppColors.grey50, fontSize: 12),
           '2 min ago · Gaming'.toText(color: AppColors.grey50, fontSize: 12),
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
-        backgroundColor: AppColors.darkOutline,
+      leading:
+      Stack(
+        children: [
+          CircleAvatar(
+            radius: 20,
+            backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
+            backgroundColor: AppColors.darkOutline,
+          ),
+          buildOnlineBadge(),
+
+        ],
       ),
-      trailing:
-          Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50).px(6).pad(12).onTap(() {}),
+
+      trailing: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50).pad(8).onTap(() {}),
     );
+  }
+
+  Positioned buildOnlineBadge() {
+    return Positioned(
+          bottom: 0,
+          right: 0,
+          child: CircleAvatar(
+            radius: 7,
+            backgroundColor: AppColors.darkBg,
+            child:
+            // STATIC VERSION:
+            // CircleAvatar(
+            //   radius: 4,
+            //   backgroundColor: AppColors.green,
+            // ),
+
+            // LIVE VERSION:
+            BlinkingOnlineBadge(),
+          ),
+        );
   }
 
   Row buildActionRow(BuildContext context) {
     var isLiked = post.likeByIds.contains(context.uniProvider.currUser.uid);
+    var currUser = context.uniProvider.currUser;
+    var iconColor = Colors.white60;
+
     return Row(
       children: [
         StatefulBuilder(builder: (context, stfSetState) {
-          return Assets.svg.icons.heartUntitledIcon
-              .svg(height: 17, color: isLiked ? AppColors.likeRed : null)
-              .pad(12)
-              .onTap(() {
-            isLiked = !isLiked;
-            // Todo Connect to server!
-            stfSetState(() {});
-          });
+          return Opacity(
+            opacity: isLiked ? 1.0 : 0.5,
+            child: Assets.svg.icons.heartUntitledIcon
+                .svg(height: 17, color: isLiked ? AppColors.likeRed : null)
+                .pOnly(left: 0, right: 12, top: 12, bottom: 12)
+                // .pad(12)
+                .onTap(() {
+              isLiked = !isLiked;
+              // Todo Connect to server!
+              stfSetState(() {});
+            }),
+          );
         }),
-        Assets.svg.icons.shareClassicUntitledIcon.svg(height: 17).pad(12).onTap(() {}),
+        Assets.svg.icons.shareClassicUntitledIcon
+            .svg(height: 17, color: iconColor)
+            .pad(12)
+            .onTap(() {}),
         Row(
           children: [
-            Assets.svg.icons.commentUntitledIcon.svg(height: 17).pOnly(right: 6),
+            Assets.svg.icons.commentUntitledIcon.svg(height: 17, color: iconColor).pOnly(right: 6),
             '5'.toText(color: AppColors.grey50, fontSize: 12),
           ],
         ).pad(12).onTap(() {}),
-        Spacer(),
-        OutlinedButton.icon(
+        const Spacer(),
+        if (post.creatorUser!.uid != currUser.uid)
+          OutlinedButton.icon(
             style: OutlinedButton.styleFrom(
-              side: BorderSide(width: 2.0, color: AppColors.darkOutline),
+              side: const BorderSide(width: 2.0, color: AppColors.darkOutline),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.5)),
             ),
-            onPressed: () {},
-            icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17),
-            label: 'DM'.toText(fontSize: 12))
+            icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: iconColor),
+            label: 'DM'.toText(fontSize: 12, color: iconColor),
+            onPressed: () {
+              ChatService.openChat(context, otherUser: post.creatorUser!);
+            },
+          )
       ],
     );
+  }
+}
+
+class BlinkingOnlineBadge extends StatefulWidget {
+  @override
+  _BlinkingOnlineBadgeState createState() => _BlinkingOnlineBadgeState();
+}
+
+class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: 3.seconds);
+    _animationController.repeat(reverse: true);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      radius: 4,
+      backgroundColor: AppColors.green.withOpacity(0.65),
+      child: FadeTransition(
+        opacity: _animationController,
+        child: const CircleAvatar(
+          radius: 4,
+          backgroundColor: AppColors.green,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }

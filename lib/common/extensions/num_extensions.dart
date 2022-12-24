@@ -31,6 +31,9 @@ extension NumX on num {
 
   BorderRadiusGeometry get rounded => BorderRadius.circular(toDouble());
 
+  RoundedRectangleBorder get roundedShape =>
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(toDouble()));
+
   EdgeInsets get all => EdgeInsets.all(toDouble());
 
   EdgeInsets get horizontal => EdgeInsets.symmetric(horizontal: toDouble());

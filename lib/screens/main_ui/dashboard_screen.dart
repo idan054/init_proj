@@ -59,7 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: AppColors.darkBlack,
       body: PageView(
           controller: _pageController,
-          // physics: const NeverScrollableScrollPhysics(), // disable swipe
+          physics: const NeverScrollableScrollPhysics(), // disable swipe
           onPageChanged: (i) => _handleIndexChanged(i, false),
           children: const <Widget>[
             MainFeedScreen(),
@@ -113,7 +113,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     height: 35,
                     width: 35,
                     child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
-                .rounded(10)
+                .rounded(radius: 10)
                 .center,
           ],
         ),

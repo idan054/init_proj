@@ -20,22 +20,14 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PostModel {
-// required List<CommentsModel> comments,
   String get textContent => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
   UserModel? get creatorUser => throw _privateConstructorUsedError;
-  bool get isDarkText => throw _privateConstructorUsedError;
-  bool get isSubPost => throw _privateConstructorUsedError;
-  bool get enableLikes => throw _privateConstructorUsedError;
-  bool get enableComments => throw _privateConstructorUsedError;
+  List<String> get likeByIds => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
-  String get textAlign => throw _privateConstructorUsedError;
-  int? get likeCounter => throw _privateConstructorUsedError;
-  List<String> get likeByIds => throw _privateConstructorUsedError;
-  String? get photoCover => throw _privateConstructorUsedError;
-  @ColorIntConv()
-  Color? get colorCover => throw _privateConstructorUsedError;
+  bool get isSubPost => throw _privateConstructorUsedError;
+  bool get enableComments => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -52,16 +44,10 @@ abstract class $PostModelCopyWith<$Res> {
       {String textContent,
       String id,
       UserModel? creatorUser,
-      bool isDarkText,
-      bool isSubPost,
-      bool enableLikes,
-      bool enableComments,
-      @DateTimeStampConv() DateTime? timestamp,
-      String textAlign,
-      int? likeCounter,
       List<String> likeByIds,
-      String? photoCover,
-      @ColorIntConv() Color? colorCover});
+      @DateTimeStampConv() DateTime? timestamp,
+      bool isSubPost,
+      bool enableComments});
 
   $UserModelCopyWith<$Res>? get creatorUser;
 }
@@ -82,16 +68,10 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
     Object? textContent = null,
     Object? id = null,
     Object? creatorUser = freezed,
-    Object? isDarkText = null,
-    Object? isSubPost = null,
-    Object? enableLikes = null,
-    Object? enableComments = null,
-    Object? timestamp = freezed,
-    Object? textAlign = null,
-    Object? likeCounter = freezed,
     Object? likeByIds = null,
-    Object? photoCover = freezed,
-    Object? colorCover = freezed,
+    Object? timestamp = freezed,
+    Object? isSubPost = null,
+    Object? enableComments = null,
   }) {
     return _then(_value.copyWith(
       textContent: null == textContent
@@ -106,46 +86,22 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
           ? _value.creatorUser
           : creatorUser // ignore: cast_nullable_to_non_nullable
               as UserModel?,
-      isDarkText: null == isDarkText
-          ? _value.isDarkText
-          : isDarkText // ignore: cast_nullable_to_non_nullable
-              as bool,
+      likeByIds: null == likeByIds
+          ? _value.likeByIds
+          : likeByIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      timestamp: freezed == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       isSubPost: null == isSubPost
           ? _value.isSubPost
           : isSubPost // ignore: cast_nullable_to_non_nullable
-              as bool,
-      enableLikes: null == enableLikes
-          ? _value.enableLikes
-          : enableLikes // ignore: cast_nullable_to_non_nullable
               as bool,
       enableComments: null == enableComments
           ? _value.enableComments
           : enableComments // ignore: cast_nullable_to_non_nullable
               as bool,
-      timestamp: freezed == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      textAlign: null == textAlign
-          ? _value.textAlign
-          : textAlign // ignore: cast_nullable_to_non_nullable
-              as String,
-      likeCounter: freezed == likeCounter
-          ? _value.likeCounter
-          : likeCounter // ignore: cast_nullable_to_non_nullable
-              as int?,
-      likeByIds: null == likeByIds
-          ? _value.likeByIds
-          : likeByIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      photoCover: freezed == photoCover
-          ? _value.photoCover
-          : photoCover // ignore: cast_nullable_to_non_nullable
-              as String?,
-      colorCover: freezed == colorCover
-          ? _value.colorCover
-          : colorCover // ignore: cast_nullable_to_non_nullable
-              as Color?,
     ) as $Val);
   }
 
@@ -173,16 +129,10 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
       {String textContent,
       String id,
       UserModel? creatorUser,
-      bool isDarkText,
-      bool isSubPost,
-      bool enableLikes,
-      bool enableComments,
-      @DateTimeStampConv() DateTime? timestamp,
-      String textAlign,
-      int? likeCounter,
       List<String> likeByIds,
-      String? photoCover,
-      @ColorIntConv() Color? colorCover});
+      @DateTimeStampConv() DateTime? timestamp,
+      bool isSubPost,
+      bool enableComments});
 
   @override
   $UserModelCopyWith<$Res>? get creatorUser;
@@ -202,16 +152,10 @@ class __$$_PostModelCopyWithImpl<$Res>
     Object? textContent = null,
     Object? id = null,
     Object? creatorUser = freezed,
-    Object? isDarkText = null,
-    Object? isSubPost = null,
-    Object? enableLikes = null,
-    Object? enableComments = null,
-    Object? timestamp = freezed,
-    Object? textAlign = null,
-    Object? likeCounter = freezed,
     Object? likeByIds = null,
-    Object? photoCover = freezed,
-    Object? colorCover = freezed,
+    Object? timestamp = freezed,
+    Object? isSubPost = null,
+    Object? enableComments = null,
   }) {
     return _then(_$_PostModel(
       textContent: null == textContent
@@ -226,46 +170,22 @@ class __$$_PostModelCopyWithImpl<$Res>
           ? _value.creatorUser
           : creatorUser // ignore: cast_nullable_to_non_nullable
               as UserModel?,
-      isDarkText: null == isDarkText
-          ? _value.isDarkText
-          : isDarkText // ignore: cast_nullable_to_non_nullable
-              as bool,
+      likeByIds: null == likeByIds
+          ? _value._likeByIds
+          : likeByIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      timestamp: freezed == timestamp
+          ? _value.timestamp
+          : timestamp // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       isSubPost: null == isSubPost
           ? _value.isSubPost
           : isSubPost // ignore: cast_nullable_to_non_nullable
-              as bool,
-      enableLikes: null == enableLikes
-          ? _value.enableLikes
-          : enableLikes // ignore: cast_nullable_to_non_nullable
               as bool,
       enableComments: null == enableComments
           ? _value.enableComments
           : enableComments // ignore: cast_nullable_to_non_nullable
               as bool,
-      timestamp: freezed == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      textAlign: null == textAlign
-          ? _value.textAlign
-          : textAlign // ignore: cast_nullable_to_non_nullable
-              as String,
-      likeCounter: freezed == likeCounter
-          ? _value.likeCounter
-          : likeCounter // ignore: cast_nullable_to_non_nullable
-              as int?,
-      likeByIds: null == likeByIds
-          ? _value._likeByIds
-          : likeByIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      photoCover: freezed == photoCover
-          ? _value.photoCover
-          : photoCover // ignore: cast_nullable_to_non_nullable
-              as String?,
-      colorCover: freezed == colorCover
-          ? _value.colorCover
-          : colorCover // ignore: cast_nullable_to_non_nullable
-              as Color?,
     ));
   }
 }
@@ -278,22 +198,15 @@ class _$_PostModel implements _PostModel {
       {this.textContent = '',
       this.id = '',
       this.creatorUser,
-      this.isDarkText = false,
-      this.isSubPost = false,
-      this.enableLikes = false,
-      this.enableComments = false,
-      @DateTimeStampConv() this.timestamp,
-      this.textAlign = '',
-      this.likeCounter,
       final List<String> likeByIds = const [],
-      this.photoCover,
-      @ColorIntConv() this.colorCover})
+      @DateTimeStampConv() this.timestamp,
+      this.isSubPost = false,
+      this.enableComments = false})
       : _likeByIds = likeByIds;
 
   factory _$_PostModel.fromJson(Map<String, dynamic> json) =>
       _$$_PostModelFromJson(json);
 
-// required List<CommentsModel> comments,
   @override
   @JsonKey()
   final String textContent;
@@ -302,26 +215,6 @@ class _$_PostModel implements _PostModel {
   final String id;
   @override
   final UserModel? creatorUser;
-  @override
-  @JsonKey()
-  final bool isDarkText;
-  @override
-  @JsonKey()
-  final bool isSubPost;
-  @override
-  @JsonKey()
-  final bool enableLikes;
-  @override
-  @JsonKey()
-  final bool enableComments;
-  @override
-  @DateTimeStampConv()
-  final DateTime? timestamp;
-  @override
-  @JsonKey()
-  final String textAlign;
-  @override
-  final int? likeCounter;
   final List<String> _likeByIds;
   @override
   @JsonKey()
@@ -332,14 +225,18 @@ class _$_PostModel implements _PostModel {
   }
 
   @override
-  final String? photoCover;
+  @DateTimeStampConv()
+  final DateTime? timestamp;
   @override
-  @ColorIntConv()
-  final Color? colorCover;
+  @JsonKey()
+  final bool isSubPost;
+  @override
+  @JsonKey()
+  final bool enableComments;
 
   @override
   String toString() {
-    return 'PostModel(textContent: $textContent, id: $id, creatorUser: $creatorUser, isDarkText: $isDarkText, isSubPost: $isSubPost, enableLikes: $enableLikes, enableComments: $enableComments, timestamp: $timestamp, textAlign: $textAlign, likeCounter: $likeCounter, likeByIds: $likeByIds, photoCover: $photoCover, colorCover: $colorCover)';
+    return 'PostModel(textContent: $textContent, id: $id, creatorUser: $creatorUser, likeByIds: $likeByIds, timestamp: $timestamp, isSubPost: $isSubPost, enableComments: $enableComments)';
   }
 
   @override
@@ -352,26 +249,14 @@ class _$_PostModel implements _PostModel {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.creatorUser, creatorUser) ||
                 other.creatorUser == creatorUser) &&
-            (identical(other.isDarkText, isDarkText) ||
-                other.isDarkText == isDarkText) &&
-            (identical(other.isSubPost, isSubPost) ||
-                other.isSubPost == isSubPost) &&
-            (identical(other.enableLikes, enableLikes) ||
-                other.enableLikes == enableLikes) &&
-            (identical(other.enableComments, enableComments) ||
-                other.enableComments == enableComments) &&
-            (identical(other.timestamp, timestamp) ||
-                other.timestamp == timestamp) &&
-            (identical(other.textAlign, textAlign) ||
-                other.textAlign == textAlign) &&
-            (identical(other.likeCounter, likeCounter) ||
-                other.likeCounter == likeCounter) &&
             const DeepCollectionEquality()
                 .equals(other._likeByIds, _likeByIds) &&
-            (identical(other.photoCover, photoCover) ||
-                other.photoCover == photoCover) &&
-            (identical(other.colorCover, colorCover) ||
-                other.colorCover == colorCover));
+            (identical(other.timestamp, timestamp) ||
+                other.timestamp == timestamp) &&
+            (identical(other.isSubPost, isSubPost) ||
+                other.isSubPost == isSubPost) &&
+            (identical(other.enableComments, enableComments) ||
+                other.enableComments == enableComments));
   }
 
   @JsonKey(ignore: true)
@@ -381,16 +266,10 @@ class _$_PostModel implements _PostModel {
       textContent,
       id,
       creatorUser,
-      isDarkText,
-      isSubPost,
-      enableLikes,
-      enableComments,
-      timestamp,
-      textAlign,
-      likeCounter,
       const DeepCollectionEquality().hash(_likeByIds),
-      photoCover,
-      colorCover);
+      timestamp,
+      isSubPost,
+      enableComments);
 
   @JsonKey(ignore: true)
   @override
@@ -411,48 +290,29 @@ abstract class _PostModel implements PostModel {
       {final String textContent,
       final String id,
       final UserModel? creatorUser,
-      final bool isDarkText,
-      final bool isSubPost,
-      final bool enableLikes,
-      final bool enableComments,
-      @DateTimeStampConv() final DateTime? timestamp,
-      final String textAlign,
-      final int? likeCounter,
       final List<String> likeByIds,
-      final String? photoCover,
-      @ColorIntConv() final Color? colorCover}) = _$_PostModel;
+      @DateTimeStampConv() final DateTime? timestamp,
+      final bool isSubPost,
+      final bool enableComments}) = _$_PostModel;
 
   factory _PostModel.fromJson(Map<String, dynamic> json) =
       _$_PostModel.fromJson;
 
-  @override // required List<CommentsModel> comments,
+  @override
   String get textContent;
   @override
   String get id;
   @override
   UserModel? get creatorUser;
   @override
-  bool get isDarkText;
-  @override
-  bool get isSubPost;
-  @override
-  bool get enableLikes;
-  @override
-  bool get enableComments;
+  List<String> get likeByIds;
   @override
   @DateTimeStampConv()
   DateTime? get timestamp;
   @override
-  String get textAlign;
+  bool get isSubPost;
   @override
-  int? get likeCounter;
-  @override
-  List<String> get likeByIds;
-  @override
-  String? get photoCover;
-  @override
-  @ColorIntConv()
-  Color? get colorCover;
+  bool get enableComments;
   @override
   @JsonKey(ignore: true)
   _$$_PostModelCopyWith<_$_PostModel> get copyWith =>
