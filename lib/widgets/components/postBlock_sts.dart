@@ -18,6 +18,8 @@ import '../../common/themes/app_styles.dart';
 import '../../screens/main_ui/dashboard_screen.dart';
 import 'dart:io';
 
+var _rightPadding = 15.0; // It set this way for the OnTap Size
+
 class PostBlock extends StatelessWidget {
   final PostModel post;
 
@@ -34,38 +36,45 @@ class PostBlock extends StatelessWidget {
           buildProfile(),
           Column(
             children: [
-              Text(
-                      // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
-                      post.textContent,
-                      textDirection:
-                          post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+              Text('let’s try to think of an interesting topic or fdsk conte tou fc words as possible... I think I’ve already ',
+                      // post.textContent,
+                      // textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
                       textAlign: TextAlign.start,
-                      style:
-                          AppStyles.text18PxMedium.copyWith(color: AppColors.white, fontSize: 12))
-                  .pOnly(right: 16)
+                      style: AppStyles.text14PxRegular.copyWith(color: AppColors.white))
+                  .pOnly(right: 16 + _rightPadding)
                   .sizedBox(context, maxWidth: true),
-              const SizedBox(height: 12),
+              // const SizedBox(height: 12),
               buildActionRow(context),
-              const SizedBox(height: 8),
+              // const SizedBox(height: 8),
             ],
             // ).pOnly(left: 5)
           ).pOnly(left: 55)
         ],
-      ).px(15),
-    );
+      )
+          //.px(15),
+          .pOnly(left: 15),
+    ).onTap(() {}, radius: 10);
   }
 
-  ListTile buildProfile() {
+  Widget buildProfile() {
     var postDiff = DateTime.now().difference(post.timestamp!);
     var postAgo =
         postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec' : '${postDiff.inMinutes} min';
 
     return ListTile(
       contentPadding: EdgeInsets.zero,
-      title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true),
+      title: '${post.creatorUser?.name}'.toText(fontSize: 14, medium: true),
       subtitle:
           // '$postAgo ago · Gaming'.toText(color: AppColors.grey50, fontSize: 12),
-          '2 min ago · Gaming'.toText(color: AppColors.grey50, fontSize: 12),
+          Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          '2 min ago · Gaming'
+              .toText(color: AppColors.grey50, fontSize: 12)
+              .pOnly(right: 10, top: 4, bottom: 10)
+          .onTap(() { }, radius: 10), // TODO Add move to Tag
+        ],
+      ),
       leading: Stack(
         children: [
           CircleAvatar(
@@ -76,28 +85,17 @@ class PostBlock extends StatelessWidget {
           buildOnlineBadge(),
         ],
       ),
-      trailing: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50).pad(8).onTap(() {}),
-    );
-  }
-
-  Positioned buildOnlineBadge() {
-    return Positioned(
-      bottom: 0,
-      right: 0,
-      child: CircleAvatar(
-        radius: 7,
-        backgroundColor: AppColors.primaryDark,
-        child:
-            // STATIC VERSION:
-            // CircleAvatar(
-            //   radius: 4,
-            //   backgroundColor: AppColors.green,
-            // ),
-
-            // LIVE VERSION:
-            BlinkingOnlineBadge(),
-      ),
-    );
+      trailing: Assets.svg.moreVert
+          .svg(height: 17, color: AppColors.grey50)
+          .pad(8)
+          .py(10)
+          .px(_rightPadding)
+          .onTap(() {
+        print('POST SETTINGS CLICKED');
+      }, radius: 10),
+    ).pad(0).onTap(() {
+      print('POST SETTINGS CLICKED');
+    }, radius: 5);
   }
 
   Row buildActionRow(BuildContext context) {
@@ -106,50 +104,80 @@ class PostBlock extends StatelessWidget {
     var iconColor = Colors.white60;
 
     return Row(
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        StatefulBuilder(builder: (context, stfSetState) {
-          return Opacity(
-            opacity: isLiked ? 1.0 : 0.5,
-            child: Assets.svg.icons.heartUntitledIcon
-                .svg(height: 17, color: isLiked ? AppColors.likeRed : null)
-                .pOnly(left: 0, right: 12, top: 12, bottom: 12)
-                // .pad(12)
-                .onTap(() {
-              isLiked = !isLiked;
-              // Todo Connect to server!
-              stfSetState(() {});
-            }),
-          );
-        }),
-        Assets.svg.icons.shareClassicUntitledIcon
-            .svg(height: 17, color: iconColor)
-            .pad(12)
-            .onTap(() async {}),
-        Row(
-          children: [
-            Assets.svg.icons.commentUntitledIcon.svg(height: 17, color: iconColor).pOnly(right: 6),
-            '5'.toText(color: AppColors.grey50, fontSize: 12),
-          ],
-        ).pad(12).onTap(() {}),
+        '5 comments'
+            .toText(color: AppColors.grey50, fontSize: 12)
+            .pOnly(left: 0, right: 12, top: 12, bottom: 12)
+            .onTap(() {}, radius: 10),
         const Spacer(),
-        if (post.creatorUser!.uid != currUser.uid)
+        if (post.creatorUser!.uid != currUser.uid) ...[
+          // Like Button
+          buildHeartIcon(isLiked),
+          // Divider
+          Container(height: 20, width: 2, color: AppColors.darkOutline50).roundedFull,
+          // Chat Button
           OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              side: const BorderSide(width: 2.0, color: AppColors.darkOutline),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(7.5)),
-            ),
-            icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: iconColor),
-            label: 'DM'.toText(fontSize: 12, color: iconColor),
-            onPressed: () {
-              ChatService.openChat(context, otherUser: post.creatorUser!);
-            },
-          )
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    side: const BorderSide(width: 0.0, color: AppColors.transparent),
+                  ),
+                  icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: iconColor),
+                  label: 'Chat'.toText(fontSize: 12, color: iconColor),
+                  onPressed: null)
+              .pOnly(
+                right: _rightPadding,
+                left: 12,
+              )
+              .onTap(() {}, radius: 10)
+        ]
       ],
     );
   }
+
+  StatefulBuilder buildHeartIcon(bool isLiked) {
+    return StatefulBuilder(builder: (context, stfSetState) {
+      return Opacity(
+        opacity: isLiked ? 1.0 : 0.5,
+        child: Assets.svg.icons.heartUntitledIcon
+            .svg(height: 17, color: isLiked ? AppColors.likeRed : null)
+            .pOnly(left: 12, right: 12, top: 16, bottom: 16)
+            // .pad(12)
+            .onTap(() {
+          isLiked = !isLiked;
+          // Todo Connect to server!
+          stfSetState(() {});
+        }, radius: 10),
+      );
+    });
+  }
+}
+
+Positioned buildOnlineBadge({bool doubleSize = false}) {
+  return Positioned(
+    bottom: 0,
+    right: 0,
+    child: CircleAvatar(
+      radius: doubleSize ? 12 : 7,
+      backgroundColor: AppColors.primaryDark,
+      child:
+          // STATIC VERSION:
+          // CircleAvatar(
+          //   radius: 4,
+          //   backgroundColor: AppColors.green,
+          // ),
+
+          // LIVE VERSION:
+          BlinkingOnlineBadge(doubleSize: doubleSize),
+    ),
+  );
 }
 
 class BlinkingOnlineBadge extends StatefulWidget {
+  final bool doubleSize;
+
+  const BlinkingOnlineBadge({this.doubleSize = false, Key? key}) : super(key: key);
+
   @override
   _BlinkingOnlineBadgeState createState() => _BlinkingOnlineBadgeState();
 }
@@ -167,13 +195,14 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
 
   @override
   Widget build(BuildContext context) {
+    var size = widget.doubleSize ? 7.5 : 4.0;
     return CircleAvatar(
-      radius: 4,
-      backgroundColor: AppColors.green.withOpacity(0.50),
+      radius: size,
+      backgroundColor: AppColors.green.withOpacity(0.20),
       child: FadeTransition(
         opacity: _animationController,
-        child: const CircleAvatar(
-          radius: 4,
+        child: CircleAvatar(
+          radius: size,
           backgroundColor: AppColors.green,
         ),
       ),

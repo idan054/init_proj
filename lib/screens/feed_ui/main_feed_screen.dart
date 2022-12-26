@@ -94,7 +94,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               child: Builder(builder: (context) {
                 if (splashLoader) {
                   // First time only
-                  return const CircularProgressIndicator(color: AppColors.primaryOriginal, strokeWidth: 7)
+                  return const CircularProgressIndicator(
+                          color: AppColors.primaryOriginal, strokeWidth: 7)
                       .center;
                 }
 
@@ -150,7 +151,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               .pOnly(top: 3)
         ],
       ).pOnly(bottom: 15),
-      subtitle: tags[tagIndex].toUpperCase().toText().appearAll,
+      subtitle: tags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
     );
   }
 
@@ -207,9 +208,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                         selectedColor: AppColors.white,
                         side: BorderSide(
                             width: 2.0,
-                            color: tagIndex == i
-                                ? AppColors.white
-                                : AppColors.darkOutline50),
+                            color: tagIndex == i ? AppColors.white : AppColors.darkOutline50),
                         // side: BorderSide.none,
                         labelStyle: AppStyles.text14PxSemiBold.copyWith(
                             color: tagIndex == i ? AppColors.primaryDark : AppColors.white,

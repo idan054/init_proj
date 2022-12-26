@@ -19,9 +19,9 @@ extension StringX on String {
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
       .hasMatch(this);
 
-  bool get isPassword => RegExp(
-          r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$')
-      .hasMatch(this);
+  bool get isPassword =>
+      RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$')
+          .hasMatch(this);
 
   String get firstWordUpper {
     final words = split(' ');
@@ -37,8 +37,7 @@ extension StringX on String {
     return buffer.toString();
   }
 
-  String toCapitalized() =>
-      length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
+  String toCapitalized() => length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
 
   DateTime get toDate => DateTime.parse(this).toLocal();
 
@@ -46,21 +45,27 @@ extension StringX on String {
   Text toText(
           {Color color = AppColors.white,
           double? fontSize,
+          bool medium = false,
           bool bold = false,
-          bool softWrap = false
-          }) =>
+          bool softWrap = false}) =>
       Text(this,
           softWrap: softWrap,
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: bold
-              // ? AppStyles.text18PxBold
-              ? AppStyles.text18PxMedium
-                  .copyWith(color: color, fontSize: fontSize ?? 18.sp,
-              height: 1) // line spacing
-              : AppStyles.text18PxRegular
-                  .copyWith(color: color, fontSize: fontSize ?? 18.sp,
-              height: 1)); // line spacing
+              ? AppStyles.text14PxBold
+                  .copyWith(color: color, fontSize: fontSize ?? 14.sp,
+              // height: 1
+          ) // line spacing
+              : medium
+                  ? AppStyles.text14PxMedium
+                      .copyWith(color: color, fontSize: fontSize ?? 14.sp,
+              // height: 1
+          )
+                  : AppStyles.text14PxRegular.copyWith(
+                      color: color, fontSize: fontSize ?? 14.sp,
+              // height: 1
+          )); // line spacing
 
   Text get testText => Text(
         this,

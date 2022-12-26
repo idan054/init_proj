@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../service/mixins/fonts.gen.dart';
+
 
 
 
@@ -9,12 +11,23 @@ class AppStyles {
   const AppStyles._();
   // static TextStyle get heeboFont => GoogleFonts.palanquin();
   // static TextStyle get nunitoFont => GoogleFonts.nunitoSans();
-  static TextStyle get lexendFont => GoogleFonts.lexend();
+  // static TextStyle get lexendFont => GoogleFonts.lexend();
+  static TextStyle get lexendFont => const TextStyle(
+    fontFamily: FontFamily.lexendRegular
+  );
 
-  static TextStyle get text8PxRegular => lexendFont.copyWith(
-        fontSize: 8.sp,
-        fontWeight: FontWeight.w400,
-      );
+  static TextStyle get lexendFontMedium => const TextStyle(
+      fontFamily: FontFamily.lexendMedium
+  );
+
+  static TextStyle get lexendFontBold => const TextStyle(
+      fontFamily: FontFamily.lexendBold
+  );
+
+  // static TextStyle get text8PxRegular => lexendFont.copyWith(
+  //       fontSize: 8.sp,
+  //       fontWeight: FontWeight.w400,
+  //     );
 
   //light
   static TextStyle get text30PxLight => lexendFont.copyWith(
@@ -119,52 +132,52 @@ class AppStyles {
 
 //medium
 
-  static TextStyle get text30PxMedium => lexendFont.copyWith(
+  static TextStyle get text30PxMedium => lexendFontMedium.copyWith(
         fontSize: 30.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text26PxMedium => lexendFont.copyWith(
+  static TextStyle get text26PxMedium => lexendFontMedium.copyWith(
         fontSize: 26.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text24PxMedium => lexendFont.copyWith(
+  static TextStyle get text24PxMedium => lexendFontMedium.copyWith(
         fontSize: 24.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text20PxMedium => lexendFont.copyWith(
+  static TextStyle get text20PxMedium => lexendFontMedium.copyWith(
         fontSize: 20.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text19PxMedium => lexendFont.copyWith(
+  static TextStyle get text19PxMedium => lexendFontMedium.copyWith(
         fontSize: 19.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text18PxMedium => lexendFont.copyWith(
+  static TextStyle get text18PxMedium => lexendFontMedium.copyWith(
         fontSize: 18.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text16PxMedium => lexendFont.copyWith(
+  static TextStyle get text16PxMedium => lexendFontMedium.copyWith(
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text14PxMedium => lexendFont.copyWith(
+  static TextStyle get text14PxMedium => lexendFontMedium.copyWith(
         fontSize: 14.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text12PxMedium => lexendFont.copyWith(
+  static TextStyle get text12PxMedium => lexendFontMedium.copyWith(
         fontSize: 12.sp,
         fontWeight: FontWeight.w500,
       );
 
-  static TextStyle get text10PxMedium => lexendFont.copyWith(
+  static TextStyle get text10PxMedium => lexendFontMedium.copyWith(
         fontSize: 10.sp,
         fontWeight: FontWeight.w500,
       );
@@ -217,56 +230,56 @@ class AppStyles {
       );
 
   //bold
-  static TextStyle get text30PxBold => lexendFont.copyWith(
+  static TextStyle get text30PxBold => lexendFontBold.copyWith(
         fontSize: 30.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text26PxBold => lexendFont.copyWith(
+  static TextStyle get text26PxBold => lexendFontBold.copyWith(
         fontSize: 26.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text24PxBold => lexendFont.copyWith(
+  static TextStyle get text24PxBold => lexendFontBold.copyWith(
         fontSize: 24.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text20PxBold => lexendFont.copyWith(
+  static TextStyle get text20PxBold => lexendFontBold.copyWith(
         fontSize: 20.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text19PxBold => lexendFont.copyWith(
+  static TextStyle get text19PxBold => lexendFontBold.copyWith(
         fontSize: 19.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text18PxBold => lexendFont.copyWith(
+  static TextStyle get text18PxBold => lexendFontBold.copyWith(
         fontSize: 18.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text16PxBold => lexendFont.copyWith(
+  static TextStyle get text16PxBold => lexendFontBold.copyWith(
         fontSize: 16.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text14PxBold => lexendFont.copyWith(
+  static TextStyle get text14PxBold => lexendFontBold.copyWith(
         fontSize: 14.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text12PxBold => lexendFont.copyWith(
+  static TextStyle get text12PxBold => lexendFontBold.copyWith(
         fontSize: 12.sp,
         fontWeight: FontWeight.bold,
       );
 
-  static TextStyle get text10PxBold => lexendFont.copyWith(
+  static TextStyle get text10PxBold => lexendFontBold.copyWith(
         fontSize: 10.sp,
         fontWeight: FontWeight.bold,
       );
-  static TextStyle get text8pxBold => lexendFont.copyWith(
+  static TextStyle get text8pxBold => lexendFontBold.copyWith(
         fontSize: 8.sp,
         fontWeight: FontWeight.bold,
       );

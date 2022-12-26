@@ -10,6 +10,15 @@
 class FontFamily {
   FontFamily._();
 
+  /// Font family: LexendBold
+  static const String lexendBold = 'LexendBold';
+
+  /// Font family: LexendMedium
+  static const String lexendMedium = 'LexendMedium';
+
+  /// Font family: LexendRegular
+  static const String lexendRegular = 'LexendRegular';
+
   /// Font family: RilTopia
   static const String rilTopia = 'RilTopia';
 }

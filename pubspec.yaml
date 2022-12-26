@@ -53,6 +53,7 @@ dependencies:
   badges: ^2.0.3
   widgets_to_image: ^0.0.2
   share_plus: ^6.3.0
+  expandable_text: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -82,15 +83,15 @@ flutter:
     - family: RilTopia # BAHNSCHRIFT
       fonts:
         - asset: assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF
-#    - family: LexendBold
-#      fonts:
-#        - asset: assets/fonts/Lexend-Bold.ttf
-#    - family: LexendMedium
-#      fonts:
-#        - asset: assets/fonts/Lexend-Medium.ttf
-#     - family: LexendRegular
-#       fonts:
-#         - asset: assets/fonts/Lexend-Regular.ttf
+    - family: LexendBold
+      fonts:
+        - asset: assets/fonts/Lexend-Bold.ttf
+    - family: LexendMedium
+      fonts:
+        - asset: assets/fonts/Lexend-Medium.ttf
+    - family: LexendRegular
+      fonts:
+        - asset: assets/fonts/Lexend-Regular.ttf
 
   assets:
     - assets/fonts/

@@ -22,9 +22,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     print('START: LoginScreen()');
-    if (!kDebugMode) {
-      Timer(250.milliseconds, () => AuthService.signInWithGoogle(context));
-    }
+    // if (!kDebugMode) {
+    //   Timer(250.milliseconds, () => AuthService.signInWithGoogle(context));
+    // }
 
     return Container(
       decoration: const BoxDecoration(
@@ -47,8 +47,8 @@ class _LoginScreenState extends State<LoginScreen> {
             Text(
               'A Social Chat App', // STR
               textAlign: TextAlign.center,
-              style: AppStyles.text20PxRegular.copyWith(
-                  color: AppColors.white, fontFamily: FontFamily.rilTopia),
+              style: AppStyles.text20PxRegular
+                  .copyWith(color: AppColors.white, fontFamily: FontFamily.rilTopia),
             ),
             250.verticalSpace,
             // googleLoginButton(),
@@ -58,8 +58,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   'Start Share & Chat', // STR
                   textAlign: TextAlign.center,
-                  style: AppStyles.text20PxRegular.copyWith(
-                      color: AppColors.white, fontFamily: FontFamily.rilTopia),
+                  style: AppStyles.text20PxRegular
+                      .copyWith(color: AppColors.white, fontFamily: FontFamily.rilTopia),
                 ).px(55),
                 10.verticalSpace,
                 wMainButton(context,
@@ -70,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: AppColors.white,
                     textColor: AppColors.darkBg,
                     onPressed: () async =>
-                       await AuthService.signInWithGoogle(context)).appearAll,
+                        await AuthService.signInWithGoogle(context, alsoSignOut: true)).appearAll,
               ],
             ),
             const Spacer(

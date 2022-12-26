@@ -16,26 +16,31 @@ class AuthService {
   static final authUser = FirebaseAuth.instance.currentUser;
 
   /// Google LOGIN
-  static Future signInWithGoogle(BuildContext context) async {
+  static Future signInWithGoogle(BuildContext context, {alsoSignOut = false}) async {
     print('START: signInWithGoogle()');
-    // if (_auth.currentUser != null && kDebugMode) {
-    //   return context.router.replace(const CreateUserRoute());
-    // }
+
+    // When signInWithGoogle Button Clicked.
+    if (alsoSignOut) {
+      await FirebaseAuth.instance.signOut();
+      await GoogleSignIn().signOut();
+    }
 
     User? googleUser;
     if (authUser?.uid == null) googleUser = await googleAuthAction;
 
     //~ Check if User exist:
     var userEmail = authUser?.uid == null ? googleUser!.email : authUser!.email;
-    print('userEmail ${userEmail}');
+    print('userEmail $userEmail');
     var userData = await Database.docData('users/$userEmail');
     // print('userData $userData');
     if (userData == null ||
         userData['gender'] == null ||
         userData['age'] == null ||
         userData['birthday'] == null) {
-
       //~ New User:
+      // This fix bug when user out while signup.
+      if (googleUser?.uid == null) googleUser = await googleAuthAction;
+
       var user = context.uniProvider.currUser.copyWith(
         uid: googleUser!.uid,
         email: googleUser.email,
