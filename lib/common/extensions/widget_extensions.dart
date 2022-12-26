@@ -120,6 +120,16 @@ extension WidgetX on Widget {
       );
 
   SizedBox sizedBox(
+    double? width,
+    double? height,
+  ) =>
+      SizedBox(
+        width: width,
+        height: height,
+        child: this,
+      );
+
+  SizedBox advancedSizedBox(
     context, {
     double? width,
     double? height,
@@ -158,4 +168,6 @@ extension WidgetX on Widget {
         scale: scale,
         child: this,
       );
+
+  Padding get customRowPadding => Padding(padding: const EdgeInsets.only(top: 15, bottom: 12), child: this);
 }

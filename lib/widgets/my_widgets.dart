@@ -83,7 +83,7 @@ Widget wMainButton(BuildContext context,
             title,
             style: AppStyles.text20PxBold.copyWith(color: textColor),
           ).offset(icon == null ? -5 : 0, 0))
-      .sizedBox(context, width: width ?? context.width, height: 55)
+      .advancedSizedBox(context, width: width ?? context.width, height: 55)
       .px(width == null ? (isWide ? 55 : 85) : 0);
 }
 

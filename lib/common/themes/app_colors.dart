@@ -25,7 +25,7 @@ class AppColors {
   static const Color errRed = Color(0xffc22f2f);
   static const Color greenOld = Color(0xff41BE7B);
 
-  static Color testGreen = AppColors.green.withOpacity(0.70);
+  static Color testGreen = AppColors.green.withOpacity(0.40);
   static const Color transparent = Colors.transparent;
 }
 

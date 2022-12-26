@@ -111,23 +111,14 @@ class _UserScreenState extends State<UserScreen> {
                         ],
                       ),
                       20.verticalSpace,
-                      ExpandableText(
-                          'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                          'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                          'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                          'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                          'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                          'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
-                          maxLines: 5,
-                          expandText: 'Expand',
-                          collapseText: 'Collape',
-                          animation: true,
-                          animationDuration: 1000.milliseconds,
-                          // overflow: TextOverflow.ellipsis,
-                          // textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
-                          textAlign: TextAlign.center,
-                          linkStyle: AppStyles.text14PxMedium,
-                          style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50)),
+                      buildExpandableText(
+                        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
+                      ),
                       24.verticalSpace,
                       SizedBox(
                         width: context.width * 0.5,
@@ -212,4 +203,18 @@ class _UserScreenState extends State<UserScreen> {
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
+}
+
+ExpandableText buildExpandableText(String text,
+    {TextStyle? style, TextAlign? textAlign, TextDirection? textDirection, int? maxLines}) {
+  return ExpandableText(text,
+      maxLines: maxLines ?? 5,
+      textAlign: textAlign ?? TextAlign.center,
+      expandText: 'Expand',
+      collapseText: 'Collape',
+      animation: true,
+      animationDuration: 1000.milliseconds,
+      textDirection: textDirection,
+      linkStyle: AppStyles.text14PxMedium,
+      style: style ?? AppStyles.text14PxRegular.copyWith(color: AppColors.grey50));
 }

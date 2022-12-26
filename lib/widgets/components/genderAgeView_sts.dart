@@ -58,7 +58,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
               genderButton(stfSetState, 'LGBTQ+', GenderTypes.lgbt).appearAll,
               const SizedBox(width: 25),
             ],
-          ).sizedBox(context, width: context.width, height: 55);
+          ).advancedSizedBox(context, width: context.width, height: 55);
         }),
         StatefulBuilder(builder: (context, stfSetState) {
           DateDuration? nextBirthdayIn;

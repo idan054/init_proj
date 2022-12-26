@@ -1,3 +1,7 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:example/common/extensions/extensions.dart';
@@ -29,11 +33,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   PageController _pageController = PageController();
   TabItems sItem = TabItems.home; // initial
   bool homePage = true;
+  var postReadyProgress = 0.0;
 
   @override
   void initState() {
     _pageController = PageController(initialPage: widget.dashboardPage.index);
     sItem = widget.dashboardPage;
+
     super.initState();
   }
 
@@ -66,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ChatsListScreen(),
           ]),
       bottomNavigationBar: SizedBox(
-        height: 55+3,
+        height: 55 + 3,
         child: Stack(
           children: [
             Column(
@@ -108,17 +114,47 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ],
             ),
-            TextButton(onPressed: (){}, child:
-              Container(
-                      color: AppColors.primaryOriginal,
-                      height: 35,
-                      width: 35,
-                      child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
-                  .rounded(radius: 10))
+            TextButton(
+                    onPressed: () {},
+                    child: Container(
+                            color: AppColors.primaryOriginal,
+                            height: 35,
+                            width: 35,
+                            child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
+                        .rounded(radius: 10))
                 .center,
           ],
         ),
       ),
     );
   }
+
+// TO COMPLEX FOR MVP!!
+  //! DO NOT USE!
+  // StatefulBuilder buildProgressBar() {
+  //   print('START: buildProgressBar()');
+  //
+  //   StateSetter? _setState;
+  //
+  //   // 60 * 5 = 300 (5 min)
+  //   Timer.periodic(50.milliseconds, (Timer timer) {
+  //
+  //     if (postReadyProgress == 1) {
+  //       timer.cancel();
+  //     } else {
+  //       postReadyProgress = postReadyProgress + (0.005);
+  //     }
+  //     _setState!(() {});
+  //   });
+  //
+  //   return StatefulBuilder(builder: (context, stfSetState) {
+  //     _setState = stfSetState;
+  //
+  //     return LinearProgressIndicator(
+  //             color: AppColors.darkBg,
+  //             backgroundColor: AppColors.primaryDark,
+  //             value: postReadyProgress)
+  //         .sizedBox(null, 3);
+  //   });
+  // }
 }
