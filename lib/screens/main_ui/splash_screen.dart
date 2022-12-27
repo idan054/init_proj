@@ -46,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
 
   @override
   void didChangeDependencies() {
-    Navigator.of(context);
+    // Navigator.of(context);
     super.didChangeDependencies();
   }
 }

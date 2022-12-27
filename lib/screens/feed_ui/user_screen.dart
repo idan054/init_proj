@@ -174,8 +174,8 @@ class _UserScreenState extends State<UserScreen> {
                           id: 'TEST',
                           creatorUser: user,
                           enableComments: true,
-                          isSubPost: false,
-                          textContent: 'EXAMPLE This is just A Test Off example user\'s post!!!',
+                          tag: 'Gaming',
+                          textContent: 'EXAMPLE This is just A Test Of example user\'s post!!!',
                           likeByIds: [],
                           timestamp: DateTime.now(),
                         );
@@ -189,6 +189,7 @@ class _UserScreenState extends State<UserScreen> {
       ),
     );
   }
+}
 
   Widget buildChip(String label, {Widget? icon}) {
     return Chip(
@@ -203,7 +204,6 @@ class _UserScreenState extends State<UserScreen> {
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
   }
-}
 
 ExpandableText buildExpandableText(String text,
     {TextStyle? style, TextAlign? textAlign, TextDirection? textDirection, int? maxLines}) {

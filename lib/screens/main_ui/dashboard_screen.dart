@@ -16,6 +16,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../common/config.dart';
 import '../../common/routes/app_router.gr.dart';
 import '../../common/service/mixins/assets.gen.dart';
+import '../feed_ui/create_post_screen.dart';
 
 // enum TabItems { home, placeHolder, chat }
 enum TabItems { home, chat }
@@ -115,7 +116,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
             TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          barrierColor: Colors.black54,
+                          context: context,
+                          builder: (context) {
+                            return const CreatePostScreen();
+                          });
+                    },
                     child: Container(
                             color: AppColors.primaryOriginal,
                             height: 35,
@@ -129,32 +138,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+
 // TO COMPLEX FOR MVP!!
-  //! DO NOT USE!
-  // StatefulBuilder buildProgressBar() {
-  //   print('START: buildProgressBar()');
-  //
-  //   StateSetter? _setState;
-  //
-  //   // 60 * 5 = 300 (5 min)
-  //   Timer.periodic(50.milliseconds, (Timer timer) {
-  //
-  //     if (postReadyProgress == 1) {
-  //       timer.cancel();
-  //     } else {
-  //       postReadyProgress = postReadyProgress + (0.005);
-  //     }
-  //     _setState!(() {});
-  //   });
-  //
-  //   return StatefulBuilder(builder: (context, stfSetState) {
-  //     _setState = stfSetState;
-  //
-  //     return LinearProgressIndicator(
-  //             color: AppColors.darkBg,
-  //             backgroundColor: AppColors.primaryDark,
-  //             value: postReadyProgress)
-  //         .sizedBox(null, 3);
-  //   });
-  // }
+//! DO NOT USE!
+// StatefulBuilder buildProgressBar() {
+//   print('START: buildProgressBar()');
+//
+//   StateSetter? _setState;
+//
+//   // 60 * 5 = 300 (5 min)
+//   Timer.periodic(50.milliseconds, (Timer timer) {
+//
+//     if (postReadyProgress == 1) {
+//       timer.cancel();
+//     } else {
+//       postReadyProgress = postReadyProgress + (0.005);
+//     }
+//     _setState!(() {});
+//   });
+//
+//   return StatefulBuilder(builder: (context, stfSetState) {
+//     _setState = stfSetState;
+//
+//     return LinearProgressIndicator(
+//             color: AppColors.darkBg,
+//             backgroundColor: AppColors.primaryDark,
+//             value: postReadyProgress)
+//         .sizedBox(null, 3);
+//   });
+// }
 }
+

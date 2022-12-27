@@ -18,8 +18,8 @@ _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
           const [],
       timestamp:
           const DateTimeStampConv().fromJson(json['timestamp'] as Timestamp?),
-      isSubPost: json['isSubPost'] as bool? ?? false,
       enableComments: json['enableComments'] as bool? ?? false,
+      tag: json['tag'] as String?,
     );
 
 Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
@@ -29,6 +29,6 @@ Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
       'creatorUser': instance.creatorUser?.toJson(),
       'likeByIds': instance.likeByIds,
       'timestamp': const DateTimeStampConv().toJson(instance.timestamp),
-      'isSubPost': instance.isSubPost,
       'enableComments': instance.enableComments,
+      'tag': instance.tag,
     };

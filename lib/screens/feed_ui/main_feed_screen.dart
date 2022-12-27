@@ -20,6 +20,21 @@ import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import '../../common/models/post/post_model.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/components/postBlock_sts.dart';
+import '../../widgets/components/riltopiaAppBar.dart';
+
+// Todo: Add ranks
+List<String> tags = [
+  'Gaming',
+  'Sport',
+  'Music',
+  'Netflix',
+  'TV',
+  'Gaming 2',
+  'Sport 2',
+  'Music 2',
+  'Netflix 2',
+  'TV 2',
+];
 
 class MainFeedScreen extends StatefulWidget {
   const MainFeedScreen({Key? key}) : super(key: key);
@@ -34,21 +49,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
   List<PostModel> postList = [];
   var splashLoader = true;
   int tagIndex = 0;
-
-  // Todo: Add ranks
-  List<String> tags = [
-    'New',
-    'Gaming',
-    'Sport',
-    'Music',
-    'Netflix',
-    'TV',
-    'Gaming 2',
-    'Sport 2',
-    'Music 2',
-    'Netflix 2',
-    'TV 2',
-  ];
 
   @override
   void initState() {
@@ -187,50 +187,69 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
         child: Card(
           elevation: 0,
           color: AppColors.primaryDark,
-          child: SizedBox(
-            height: 50.0,
-            child: ListView(
-              controller: chipsController,
-              scrollDirection: Axis.horizontal,
-              children: List<Widget>.generate(
-                tags.length,
-                (int i) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                    child: Theme(
-                      data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-                      child: ChoiceChip(
-                        elevation: 0,
-                        shadowColor: Colors.transparent,
-                        shape: 10.roundedShape,
-                        selected: tagIndex == i,
-                        backgroundColor: AppColors.darkOutline,
-                        selectedColor: AppColors.white,
-                        side: BorderSide(
-                            width: 2.0,
-                            color: tagIndex == i ? AppColors.white : AppColors.darkOutline50),
-                        // side: BorderSide.none,
-                        labelStyle: AppStyles.text14PxSemiBold.copyWith(
-                            color: tagIndex == i ? AppColors.primaryDark : AppColors.white,
-                            fontWeight: tagIndex == i ? FontWeight.bold : FontWeight.normal,
-                            // fontWeight: FontWeight.bold,
-                            fontSize: 12),
-                        label: Text(tags[i]),
-                        onSelected: (bool selected) {
-                          tagIndex = (selected ? i : null)!;
-                          feedController.jumpToPage(tagIndex);
-                          // feedController.animateToPage(selectedTag!, duration: 250.milliseconds, curve: Curves.easeIn);
-                          setState(() {});
-                        },
-                      ),
-                    ),
-                  );
-                },
-              ).toList(),
-            ),
-          ),
+          child: _feedChoiceList(context),
         ),
       ),
     );
   }
+
+  SizedBox _feedChoiceList(BuildContext context) {
+    var newTags = ['New', ...tags];
+
+    return SizedBox(
+      height: 50.0,
+      child: ListView(
+        controller: chipsController,
+        scrollDirection: Axis.horizontal,
+        children: List<Widget>.generate(
+          newTags.length,
+          (int i) {
+            var isChipSelected = tagIndex == i;
+
+            return buildChoiceChip(
+              context,
+              label: Text(newTags[i]),
+              selected: isChipSelected,
+              onSelect: (bool newSelection) {
+                if (newSelection) tagIndex = i;
+                feedController.jumpToPage(tagIndex);
+                // feedController.animateToPage(selectedTag!, duration: 250.milliseconds, curve: Curves.easeIn);
+                setState(() {});
+              },
+            );
+          },
+        ).toList(),
+      ),
+    );
+  }
+}
+
+Widget buildChoiceChip(BuildContext context,
+    {bool showClose = false,
+    required bool selected,
+    ValueChanged<bool>? onSelect,
+    required Widget label}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 6.0),
+    child: Theme(
+      data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+      child: ChoiceChip(
+          elevation: 0,
+          shadowColor: Colors.transparent,
+          shape: 10.roundedShape,
+          selected: selected,
+          backgroundColor: AppColors.darkOutline,
+          selectedColor: AppColors.white,
+          side: BorderSide(width: 2.0, color: selected ? AppColors.white : AppColors.darkOutline50),
+          // side: BorderSide.none,
+          labelStyle: AppStyles.text14PxRegular.copyWith(
+              color: selected ? AppColors.primaryDark : AppColors.white,
+              fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+              // fontWeight: FontWeight.bold,
+              fontSize: 12),
+          label: label,
+          avatar: showClose && selected ? Icons.close_rounded.icon(color: AppColors.primaryDark) : null,
+          onSelected: onSelect),
+    ),
+  );
 }

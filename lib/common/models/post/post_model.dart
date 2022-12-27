@@ -18,11 +18,10 @@ class PostModel with _$PostModel {
     UserModel? creatorUser,
     @Default([]) List<String> likeByIds,
     @DateTimeStampConv() DateTime? timestamp,
-    @Default(false) bool isSubPost,
     @Default(false) bool enableComments,
+    String? tag,
     // required List<CommentsModel> comments,
     // @ColorIntConv() Color? colorCover,
-    // String? photoCover,
   }) = _PostModel;
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>

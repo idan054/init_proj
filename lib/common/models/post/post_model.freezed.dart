@@ -26,8 +26,8 @@ mixin _$PostModel {
   List<String> get likeByIds => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
-  bool get isSubPost => throw _privateConstructorUsedError;
   bool get enableComments => throw _privateConstructorUsedError;
+  String? get tag => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,8 +46,8 @@ abstract class $PostModelCopyWith<$Res> {
       UserModel? creatorUser,
       List<String> likeByIds,
       @DateTimeStampConv() DateTime? timestamp,
-      bool isSubPost,
-      bool enableComments});
+      bool enableComments,
+      String? tag});
 
   $UserModelCopyWith<$Res>? get creatorUser;
 }
@@ -70,8 +70,8 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
     Object? creatorUser = freezed,
     Object? likeByIds = null,
     Object? timestamp = freezed,
-    Object? isSubPost = null,
     Object? enableComments = null,
+    Object? tag = freezed,
   }) {
     return _then(_value.copyWith(
       textContent: null == textContent
@@ -94,14 +94,14 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      isSubPost: null == isSubPost
-          ? _value.isSubPost
-          : isSubPost // ignore: cast_nullable_to_non_nullable
-              as bool,
       enableComments: null == enableComments
           ? _value.enableComments
           : enableComments // ignore: cast_nullable_to_non_nullable
               as bool,
+      tag: freezed == tag
+          ? _value.tag
+          : tag // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -131,8 +131,8 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
       UserModel? creatorUser,
       List<String> likeByIds,
       @DateTimeStampConv() DateTime? timestamp,
-      bool isSubPost,
-      bool enableComments});
+      bool enableComments,
+      String? tag});
 
   @override
   $UserModelCopyWith<$Res>? get creatorUser;
@@ -154,8 +154,8 @@ class __$$_PostModelCopyWithImpl<$Res>
     Object? creatorUser = freezed,
     Object? likeByIds = null,
     Object? timestamp = freezed,
-    Object? isSubPost = null,
     Object? enableComments = null,
+    Object? tag = freezed,
   }) {
     return _then(_$_PostModel(
       textContent: null == textContent
@@ -178,14 +178,14 @@ class __$$_PostModelCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      isSubPost: null == isSubPost
-          ? _value.isSubPost
-          : isSubPost // ignore: cast_nullable_to_non_nullable
-              as bool,
       enableComments: null == enableComments
           ? _value.enableComments
           : enableComments // ignore: cast_nullable_to_non_nullable
               as bool,
+      tag: freezed == tag
+          ? _value.tag
+          : tag // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -200,8 +200,8 @@ class _$_PostModel implements _PostModel {
       this.creatorUser,
       final List<String> likeByIds = const [],
       @DateTimeStampConv() this.timestamp,
-      this.isSubPost = false,
-      this.enableComments = false})
+      this.enableComments = false,
+      this.tag})
       : _likeByIds = likeByIds;
 
   factory _$_PostModel.fromJson(Map<String, dynamic> json) =>
@@ -229,14 +229,13 @@ class _$_PostModel implements _PostModel {
   final DateTime? timestamp;
   @override
   @JsonKey()
-  final bool isSubPost;
-  @override
-  @JsonKey()
   final bool enableComments;
+  @override
+  final String? tag;
 
   @override
   String toString() {
-    return 'PostModel(textContent: $textContent, id: $id, creatorUser: $creatorUser, likeByIds: $likeByIds, timestamp: $timestamp, isSubPost: $isSubPost, enableComments: $enableComments)';
+    return 'PostModel(textContent: $textContent, id: $id, creatorUser: $creatorUser, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, tag: $tag)';
   }
 
   @override
@@ -253,10 +252,9 @@ class _$_PostModel implements _PostModel {
                 .equals(other._likeByIds, _likeByIds) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
-            (identical(other.isSubPost, isSubPost) ||
-                other.isSubPost == isSubPost) &&
             (identical(other.enableComments, enableComments) ||
-                other.enableComments == enableComments));
+                other.enableComments == enableComments) &&
+            (identical(other.tag, tag) || other.tag == tag));
   }
 
   @JsonKey(ignore: true)
@@ -268,8 +266,8 @@ class _$_PostModel implements _PostModel {
       creatorUser,
       const DeepCollectionEquality().hash(_likeByIds),
       timestamp,
-      isSubPost,
-      enableComments);
+      enableComments,
+      tag);
 
   @JsonKey(ignore: true)
   @override
@@ -292,8 +290,8 @@ abstract class _PostModel implements PostModel {
       final UserModel? creatorUser,
       final List<String> likeByIds,
       @DateTimeStampConv() final DateTime? timestamp,
-      final bool isSubPost,
-      final bool enableComments}) = _$_PostModel;
+      final bool enableComments,
+      final String? tag}) = _$_PostModel;
 
   factory _PostModel.fromJson(Map<String, dynamic> json) =
       _$_PostModel.fromJson;
@@ -310,9 +308,9 @@ abstract class _PostModel implements PostModel {
   @DateTimeStampConv()
   DateTime? get timestamp;
   @override
-  bool get isSubPost;
-  @override
   bool get enableComments;
+  @override
+  String? get tag;
   @override
   @JsonKey(ignore: true)
   _$$_PostModelCopyWith<_$_PostModel> get copyWith =>
