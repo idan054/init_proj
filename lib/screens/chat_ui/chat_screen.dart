@@ -26,10 +26,11 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  var messagesController = ScrollController();
   var sendController = TextEditingController();
   List<MessageModel> messages = [];
-  MessageModel? lastedMessage;
   Timestamp? timeStamp;
+  bool isInitMessages = true;
 
   // var splashLoader = true;
   // List<MessageModel> chatList = [];
@@ -40,15 +41,15 @@ class _ChatScreenState extends State<ChatScreen> {
   //   _loadOlderMessages().then((_) => messages.remove(messages.first));
   //   super.initState();
   // }
-  //
-  // Future _loadOlderMessages() async {
-  //   // splashLoader = true; setState(() {});
-  //   List olderMessages = await Database.advanced.handleGetModel(
-  //       context, ModelTypes.messages, messages,
-  //       collectionReference: 'chats/${widget.chatId}/messages');
-  //   if (olderMessages.isNotEmpty) messages = [...olderMessages];
-  //   setState(() {});
-  // }
+
+  Future _loadOlderMessages() async {
+    // splashLoader = true; setState(() {});
+    List olderMessages = await Database.advanced.handleGetModel(
+        context, ModelTypes.messages, messages,
+        collectionReference: 'chats/${widget.chatId}/messages');
+    if (olderMessages.isNotEmpty) messages = [...olderMessages];
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,24 +63,14 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Column(
           children: [
             StreamProvider<List<MessageModel>>.value(
-              value: Database.streamMessages(widget.chatId, timeStamp),
+              value: Database.streamMessages(widget.chatId, limit: isInitMessages ? 10 : 1),
               initialData: const [],
               builder: (context, child) {
                 print('START: builder()');
-                print('context.listenMessagesModelList ${context.listenMessagesModelList.length}');
-                // if(messages.isEmpty && context.listenMessagesModelList.isNotEmpty){
-                  messages = context.listenMessagesModelList;
-                // }
-                // messages = [...messages, ...context.listenMessagesModelList];
-
-                print('context.messagesModelList ${context.listenMessagesModelList.length}');
-                print('messages.length ${messages.length}');
-
-                // var newMessages = context.listenMessagesModelList;
-                // if (newMessages.isNotEmpty && lastedMessage != newMessages.last) {
-                //   messages.insert(0, newMessages.last); // .insert(0) = last // .add() = // first
-                //   lastedMessage = newMessages.last;
-                // }
+                var newMsgs = context.listenMessagesModelList;
+                if (newMsgs.isNotEmpty) {
+                  messages.isEmpty ? setInitMessages(newMsgs) : addLatestMessage(context);
+                }
 
                 return LazyLoadScrollView(
                   scrollOffset: 300,
@@ -89,14 +80,12 @@ class _ChatScreenState extends State<ChatScreen> {
                     if (messages.isNotEmpty) {
                       timeStamp = Timestamp.fromDate(messages.last.timestamp!);
                     }
-                    setState(() {});
-
-
                     // context.uniProvider.updateIsFeedLoading(true);
-                    // await _loadOlderMessages();
+                    await _loadOlderMessages();
                     // context.uniProvider.updateIsFeedLoading(false);
                   },
                   child: ListView.builder(
+                    controller: messagesController,
                     reverse: true,
                     // controller: ,
                     itemCount: messages.length,
@@ -112,6 +101,17 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+
+  void setInitMessages(List<MessageModel> newMsgs) {
+    messages = newMsgs;
+    isInitMessages = false;
+  }
+
+  void addLatestMessage(BuildContext context) {
+    var newMessage = context.listenMessagesModelList.first;
+    if (!(messages.contains(newMessage))) messages.insert(0, newMessage);
+    messagesController.jumpTo(0);
   }
 
   Widget buildTextField(BuildContext context, String chatId, UserModel otherUser) {
