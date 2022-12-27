@@ -29,24 +29,27 @@ class _ChatScreenState extends State<ChatScreen> {
   var sendController = TextEditingController();
   MessageModel? lastedMessage;
   List<MessageModel> messages = [];
+  var counter = 10;
 
   // var splashLoader = true;
   // List<MessageModel> chatList = [];
   //
-  @override
-  void initState() {
-    _loadOlderMessages().then((_) => messages.remove(messages.first));
-    super.initState();
-  }
 
-  Future _loadOlderMessages() async {
-    // splashLoader = true; setState(() {});
-    List olderMessages = await Database.advanced.handleGetModel(
-        context, ModelTypes.messages, messages,
-        collectionReference: 'chats/${widget.chatId}/messages');
-    if (olderMessages.isNotEmpty) messages = [...olderMessages];
-    setState(() {});
-  }
+
+  // @override
+  // void initState() {
+  //   _loadOlderMessages().then((_) => messages.remove(messages.first));
+  //   super.initState();
+  // }
+  //
+  // Future _loadOlderMessages() async {
+  //   // splashLoader = true; setState(() {});
+  //   List olderMessages = await Database.advanced.handleGetModel(
+  //       context, ModelTypes.messages, messages,
+  //       collectionReference: 'chats/${widget.chatId}/messages');
+  //   if (olderMessages.isNotEmpty) messages = [...olderMessages];
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +62,12 @@ class _ChatScreenState extends State<ChatScreen> {
         appBar: darkAppBar(context, title: widget.otherUser.email.toString()),
         body: Column(
           children: [
-            //! BETAA
             StreamProvider<List<MessageModel>>.value(
               value: Database.streamMessages(widget.chatId),
               initialData: const [],
               builder: (context, child) {
                 print('START: builder()');
+                messages = context.listenMessagesModelList;
                 print('context.messagesModelList ${context.listenMessagesModelList.length}');
 
                 // var newMessages = context.listenMessagesModelList;
@@ -92,9 +95,13 @@ class _ChatScreenState extends State<ChatScreen> {
                   scrollOffset: 300,
                   onEndOfPage: () async {
                     print('START: onEndOfPage()');
-                    context.uniProvider.updateIsFeedLoading(true);
-                    await _loadOlderMessages();
-                    context.uniProvider.updateIsFeedLoading(false);
+
+                    counter = counter + 10;
+                    setState(() {});
+
+                    // context.uniProvider.updateIsFeedLoading(true);
+                    // await _loadOlderMessages();
+                    // context.uniProvider.updateIsFeedLoading(false);
                   },
                   child: ListView.builder(
                     reverse: true,

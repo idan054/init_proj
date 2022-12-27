@@ -20,19 +20,24 @@ class FsAdvanced {
     print('START: handleGetModel() [$collectionRef]');
     var modelList = currList ?? [];
     var currUser = context.uniProvider.currUser;
-    DocumentSnapshot? startAtDoc;
 
-    // 1) Get Doc based ID:
-    /// Every model must have 'id' String variable!
+    Timestamp? timeStamp;
     if (currList != null && currList.isNotEmpty) {
-      startAtDoc = await db.collection(collectionRef).doc(currList.last.id).get();
+      // DocumentSnapshot? startAtDoc;
+      // startAtDoc = await db.collection(collectionRef).doc(currList.last.id).get(); // OLD VERSION
+
+      // Every Model must have 'timestamp'! (postModel, userModel etc...)
+      timeStamp = Timestamp.fromDate(currList.last.timestamp!);
     }
 
     // 2) Set modelList from Database snap:
-    print('Start fetch From: ${startAtDoc == null ? 'Most recent' : startAtDoc.id}');
-    var snap = await getDocsBasedModel(currUser.uid!, startAtDoc, modelType, collectionRef);
+    print('Start fetch From: ${timeStamp == null ? 'Most recent' : 'timeStamp'}');
+    var snap = await getDocsBasedModel(currUser.uid!, timeStamp, modelType, collectionRef);
+
+    // 3) .fromJson() To postModel, userModel etc...
     if (snap.docs.isNotEmpty) {
       var newItems = await docsToModelList(snap, modelType);
+
       modelList = [...modelList, ...newItems];
       print('✴️ SUMMARY: ${modelList.length} ${collectionRef.toUpperCase()}');
       return modelList;
@@ -43,33 +48,30 @@ class FsAdvanced {
   }
 
   // static Future<List<PostModel>?> getDocsEndBefore
-  Future<QuerySnapshot<Map<String, dynamic>>> getDocsBasedModel(String uid,
-      DocumentSnapshot? startAfterDoc, ModelTypes modelType, String collectionRef) async {
+  Future<QuerySnapshot<Map<String, dynamic>>> getDocsBasedModel(
+      String uid, Timestamp? timestamp, ModelTypes modelType, String collectionRef) async {
     print('START: getDocsBasedModel() - ${modelType.name}');
-    print(startAfterDoc == null
-        ? 'No startAfterDoc found! - Get most recent instead.'
-        : 'startAfterDoc ${startAfterDoc.id}');
+    print(timestamp == null
+        ? 'timestamp not found! - Get most recent instead.'
+        : 'timestamp: $timestamp');
 
     QuerySnapshot<Map<String, dynamic>>? docs;
     var reqBase = db.collection(collectionRef).orderBy('timestamp', descending: true).limit(8);
 
     switch (modelType) {
-      case ModelTypes.posts:
-      case ModelTypes.messages:
-      case ModelTypes.users:
-        docs = startAfterDoc == null
-            ? await reqBase.get()
-            : await reqBase.startAfterDocument(startAfterDoc).get();
+      case ModelTypes.posts: // Same as below V
+      case ModelTypes.messages: // Same as below V
+      case ModelTypes.users: // Same as below V
+        docs =
+            timestamp == null ? await reqBase.get() : await reqBase.startAfter([timestamp]).get();
         break;
       case ModelTypes.chats:
-        docs = startAfterDoc == null
-            ? await reqBase.where('usersIds', arrayContains: uid).get()
-            : await reqBase
-                .startAfterDocument(startAfterDoc)
-                .where('usersIds', arrayContains: uid)
-                .get();
+        reqBase = reqBase.where('usersIds', arrayContains: uid);
+        docs =
+            timestamp == null ? await reqBase.get() : await reqBase.startAfter([timestamp]).get();
         break;
     }
+
     return docs;
   }
 

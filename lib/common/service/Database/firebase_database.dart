@@ -16,7 +16,6 @@ import '../timestamp_convert.dart';
 import 'firebase_advanced.dart';
 import 'package:hive/hive.dart';
 
-
 //> MUST Be same as collection name!
 enum ModelTypes { posts, chats, messages, users }
 
@@ -48,10 +47,11 @@ class Database {
         .onError((error, stackTrace) => print('updateFirestore ERR - $error'));
   }
 
-  void addToBatch({required WriteBatch batch,
-    required String collection,
-    String? docName,
-    required Map<String, dynamic> toJson}) {
+  void addToBatch(
+      {required WriteBatch batch,
+      required String collection,
+      String? docName,
+      required Map<String, dynamic> toJson}) {
     batch.set(db.collection(collection).doc(docName), toJson, SetOptions(merge: true));
 
     db
@@ -71,16 +71,17 @@ class Database {
         .endBeforeDocument(endBeforeDoc)
         .where('usersIds', arrayContains: currUserId)
         .get()
-        .then((snap) =>
-        snap.docs.map((DocumentSnapshot snap) {
-          print('CHAT_DOC_ID: ${snap.id}');
-          // print(snap.data());
-          return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
-        }).toList());
+        .then((snap) => snap.docs.map((DocumentSnapshot snap) {
+              print('CHAT_DOC_ID: ${snap.id}');
+              // print(snap.data());
+              return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
+            }).toList());
   }
 
-  static Future<List<ChatModel>>? getChatsAfter(String currUserId,
-      DocumentSnapshot startAtDoc,) {
+  static Future<List<ChatModel>>? getChatsAfter(
+    String currUserId,
+    DocumentSnapshot startAtDoc,
+  ) {
     print('START: getChatsAfter()');
     print('startAtDoc ${startAtDoc.id}');
 
@@ -90,12 +91,11 @@ class Database {
         .startAtDocument(startAtDoc)
         .where('usersIds', arrayContains: currUserId)
         .get()
-        .then((snap) =>
-        snap.docs.map((DocumentSnapshot snap) {
-          print('CHAT_DOC_ID: ${snap.id}');
-          // print(snap.data());
-          return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
-        }).toList());
+        .then((snap) => snap.docs.map((DocumentSnapshot snap) {
+              print('CHAT_DOC_ID: ${snap.id}');
+              // print(snap.data());
+              return ChatModel.fromJson(snap.data() as Map<String, dynamic>);
+            }).toList());
   }
 
   static Stream<List<ChatModel>>? streamChats(String currUserId) {
@@ -153,19 +153,20 @@ class Database {
   // cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   // );
 
-  static Stream<List<MessageModel>>? streamMessages(String chatId) {
+  static Stream<List<MessageModel>>? streamMessages(String chatId, {DocumentSnapshot? docSnap}) {
     print('START: streamMessages()');
     print('chatId ${chatId}');
-    return db
+    var reqBase = db
         .collection('chats')
         .doc(chatId)
         .collection('messages')
         .orderBy('timestamp', descending: true)
-        .limit(1)
-    // .limit(1)
-        .snapshots()
-        .map((QuerySnapshot list) {
-          print('chats - list ${list.docs.length}');
+        .limit(8);
+
+    if (docSnap != null) reqBase = reqBase.startAfterDocument(docSnap);
+
+    return reqBase.snapshots().map((QuerySnapshot list) {
+      print('chats - list ${list.docs.length}');
       return list.docs.map((DocumentSnapshot snap) {
         print('MSG_DOC_ID: ${snap.id}');
         return MessageModel.fromJson(snap.data() as Map<String, dynamic>);
@@ -175,7 +176,6 @@ class Database {
     });
   }
 }
-
 
 // "timestamp": "__Timestamp__2022-10-10T20:54:17.572Z"
 // "timestamp": {"__time__": "2022-12-12T14:12:45.190999Z"}
