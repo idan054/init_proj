@@ -84,7 +84,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
           },
           itemBuilder: (context, index) {
             return LazyLoadScrollView(
-              scrollOffset: 1000,
+              scrollOffset: 1500,
               onEndOfPage: () async {
                 print('START: onEndOfPage()');
                 context.uniProvider.updateIsFeedLoading(true);

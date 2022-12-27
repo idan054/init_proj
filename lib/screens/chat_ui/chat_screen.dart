@@ -110,8 +110,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void addLatestMessage(BuildContext context) {
     var newMessage = context.listenMessagesModelList.first;
-    if (!(messages.contains(newMessage))) messages.insert(0, newMessage);
-    messagesController.jumpTo(0);
+    if (!(messages.contains(newMessage))) {
+      messages.insert(0, newMessage);
+      messagesController.jumpTo(0);
+    }
   }
 
   Widget buildTextField(BuildContext context, String chatId, UserModel otherUser) {

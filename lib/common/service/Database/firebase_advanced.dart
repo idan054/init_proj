@@ -39,6 +39,7 @@ class FsAdvanced {
       print('✴️ SUMMARY: ${modelList.length} ${collectionRef.toUpperCase()}');
       return modelList;
     } else {
+      print('✴️ SUMMARY: No new ${modelType.name} Found.');
       // throw Exception('No More $collectionRef Found!!!');
       return [];
     }
