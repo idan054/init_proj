@@ -29,8 +29,9 @@ class _MembersScreenState extends State<MembersScreen> {
             var users = context.listenUserModelList;
             // A list of active chats.
             var chats = context.uniProvider.chatList;
+
             // Remove users who already have chats.
-            users = _filterUsers(users, chats);
+            users = _filterUsers(users, chats); // TODO Chat if removable
 
             print('users.length ${users.length}');
             if (users.isEmpty || (users.length == 1)) {

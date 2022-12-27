@@ -14,43 +14,44 @@ import 'firebase_database.dart';
 class FsAdvanced {
   static final db = FirebaseFirestore.instance;
 
-  Future<List> handleGetModel(BuildContext context, ModelTypes modelType, List? currList) async {
-    print('START: handleGetModel()');
+  Future<List> handleGetModel(BuildContext context, ModelTypes modelType, List? currList,
+      {String? collectionReference}) async {
+    var collectionRef = collectionReference ?? modelType.name;
+    print('START: handleGetModel() [$collectionRef]');
     var modelList = currList ?? [];
-    var collectionName = modelType.name;
     var currUser = context.uniProvider.currUser;
     DocumentSnapshot? startAtDoc;
 
     // 1) Get Doc based ID:
     /// Every model must have 'id' String variable!
     if (currList != null && currList.isNotEmpty) {
-      startAtDoc = await db.collection(collectionName).doc(currList.last.id).get();
+      startAtDoc = await db.collection(collectionRef).doc(currList.last.id).get();
     }
 
     // 2) Set modelList from Database snap:
     print('Start fetch From: ${startAtDoc == null ? 'Most recent' : startAtDoc.id}');
-    var snap = await getDocsBasedModel(currUser.uid!, startAtDoc, modelType);
+    var snap = await getDocsBasedModel(currUser.uid!, startAtDoc, modelType, collectionRef);
     if (snap.docs.isNotEmpty) {
       var newItems = await docsToModelList(snap, modelType);
       modelList = [...modelList, ...newItems];
-      print('✴️ SUMMARY: ${modelList.length} ${collectionName.toUpperCase()}');
+      print('✴️ SUMMARY: ${modelList.length} ${collectionRef.toUpperCase()}');
       return modelList;
     } else {
-      // throw Exception('No More $collectionName Found!!!');
+      // throw Exception('No More $collectionRef Found!!!');
       return [];
     }
   }
 
   // static Future<List<PostModel>?> getDocsEndBefore
-  Future<QuerySnapshot<Map<String, dynamic>>> getDocsBasedModel(
-      String uid, DocumentSnapshot? startAfterDoc, ModelTypes modelType) async {
+  Future<QuerySnapshot<Map<String, dynamic>>> getDocsBasedModel(String uid,
+      DocumentSnapshot? startAfterDoc, ModelTypes modelType, String collectionRef) async {
     print('START: getDocsBasedModel() - ${modelType.name}');
     print(startAfterDoc == null
         ? 'No startAfterDoc found! - Get most recent instead.'
         : 'startAfterDoc ${startAfterDoc.id}');
 
     QuerySnapshot<Map<String, dynamic>>? docs;
-    var reqBase = db.collection(modelType.name).orderBy('timestamp', descending: true).limit(8);
+    var reqBase = db.collection(collectionRef).orderBy('timestamp', descending: true).limit(8);
 
     switch (modelType) {
       case ModelTypes.posts:

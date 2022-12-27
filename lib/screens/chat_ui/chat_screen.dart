@@ -6,6 +6,7 @@ import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/models/message/message_model.dart';
@@ -18,8 +19,7 @@ class ChatScreen extends StatefulWidget {
   final UserModel otherUser;
   final String chatId;
 
-  ChatScreen({required this.otherUser, required this.chatId, Key? key})
-      : super(key: key);
+  ChatScreen({required this.otherUser, required this.chatId, Key? key}) : super(key: key);
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -27,32 +27,30 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   var sendController = TextEditingController();
+  MessageModel? lastedMessage;
+  List<MessageModel> messages = [];
+
   // var splashLoader = true;
   // List<MessageModel> chatList = [];
   //
-  // @override
-  // void initState() {
-  //   _loadMore();
-  //   super.initState();
-  // }
-  //
-  // Future _loadMore() async {
-  //   // splashLoader = true; setState(() {});
-  //   chatList = await Database.advanced.handleGetDocs(context, ModelTypes.messages, latest: true) ?? [];
-  //   // chatList = await Database.getChats(context.uniProvider.currUser.uid!) ?? [];
-  //   splashLoader = false;
-  //   setState(() {});
-  // }
+  @override
+  void initState() {
+    _loadOlderMessages().then((_) => messages.remove(messages.first));
+    super.initState();
+  }
+
+  Future _loadOlderMessages() async {
+    // splashLoader = true; setState(() {});
+    List olderMessages = await Database.advanced.handleGetModel(
+        context, ModelTypes.messages, messages,
+        collectionReference: 'chats/${widget.chatId}/messages');
+    if (olderMessages.isNotEmpty) messages = [...olderMessages];
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     print('chatId ${widget.chatId}');
-    print('context.routeData.path ${context.routeData.path}');
-    // print('context.routeData.path ${context.routeData.queryParams}');
-    // print('context.routeData.path ${context.routeData.name}');
-    // print('context.routeData.path ${context.routeData.meta}');
-    String myurl = Uri.base.toString(); //get complete url
-    print('myurl ${myurl}');
 
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
@@ -61,12 +59,23 @@ class _ChatScreenState extends State<ChatScreen> {
         appBar: darkAppBar(context, title: widget.otherUser.email.toString()),
         body: Column(
           children: [
+            //! BETAA
             StreamProvider<List<MessageModel>>.value(
               value: Database.streamMessages(widget.chatId),
               initialData: const [],
               builder: (context, child) {
-                var messages = context.listenMessagesModelList;
+                print('START: builder()');
+                print('context.messagesModelList ${context.listenMessagesModelList.length}');
+
+                // var newMessages = context.listenMessagesModelList;
+                // if (newMessages.isNotEmpty && lastedMessage != newMessages.first) {
+                //   //   // Theres only 1 every time
+                //   messages.insert(0, newMessages.first); // last // .add() // first
+                //   lastedMessage = newMessages.first;
+                // }
+
                 print('messages.length ${messages.length}');
+
                 // print('messages ${messages.length}');
 
                 // WriteBatch messagesBatch = Database.db.batch();
@@ -79,12 +88,21 @@ class _ChatScreenState extends State<ChatScreen> {
                 // }
                 // messagesBatch.commit();
 
-                return ListView.builder(
-                  reverse: true,
-                  // controller: ,
-                  itemCount: messages.length,
-                  itemBuilder: (context, i) => buildBubble(
-                      context, messages[i], (i + 1) == messages.length),
+                return LazyLoadScrollView(
+                  scrollOffset: 300,
+                  onEndOfPage: () async {
+                    print('START: onEndOfPage()');
+                    context.uniProvider.updateIsFeedLoading(true);
+                    await _loadOlderMessages();
+                    context.uniProvider.updateIsFeedLoading(false);
+                  },
+                  child: ListView.builder(
+                    reverse: true,
+                    // controller: ,
+                    itemCount: messages.length,
+                    itemBuilder: (context, i) =>
+                        buildBubble(context, messages[i], (i + 1) == messages.length),
+                  ),
                 );
               },
             ).expanded(),
@@ -96,8 +114,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget buildTextField(
-      BuildContext context, String chatId, UserModel otherUser) {
+  Widget buildTextField(BuildContext context, String chatId, UserModel otherUser) {
     return StatefulBuilder(builder: (context, stfSetState) {
       bool includeHeb = sendController.text.isHebrew;
       return TextField(
@@ -119,9 +136,8 @@ class _ChatScreenState extends State<ChatScreen> {
           suffixIcon: Padding(
             padding: const EdgeInsets.all(8.0),
             child: CircleAvatar(
-              backgroundColor: sendController.text.isNotEmpty
-                  ? AppColors.white
-                  : AppColors.darkGrey,
+              backgroundColor:
+                  sendController.text.isNotEmpty ? AppColors.white : AppColors.darkGrey,
               child: IconButton(
                 icon: Icon(
                   Icons.send_rounded,
@@ -133,9 +149,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 onPressed: sendController.text.isNotEmpty
                     ? () {
                         ChatService().sendMessage(context,
-                            chatId: chatId,
-                            content: sendController.text,
-                            otherUser: otherUser);
+                            chatId: chatId, content: sendController.text, otherUser: otherUser);
                         sendController.clear();
                       }
                     : null,
@@ -147,15 +161,13 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
-  Widget buildBubble(
-      BuildContext context, MessageModel message, bool isLastMessage) {
-    print('START: buildBubble()');
+  Widget buildBubble(BuildContext context, MessageModel message, bool isLastMessage) {
+    // print('START: buildBubble()');
 
     bool currUser = message.fromId == context.uniProvider.currUser.uid;
     bool isHebrew = message.textContent!.isHebrew;
     return Row(
-      mainAxisAlignment:
-          currUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment: currUser ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: <Widget>[
         ConstrainedBox(
             constraints: BoxConstraints(maxWidth: context.width * 0.8),

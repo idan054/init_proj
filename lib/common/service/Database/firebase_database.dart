@@ -161,7 +161,7 @@ class Database {
         .doc(chatId)
         .collection('messages')
         .orderBy('timestamp', descending: true)
-        .limit(10)
+        .limit(1)
     // .limit(1)
         .snapshots()
         .map((QuerySnapshot list) {

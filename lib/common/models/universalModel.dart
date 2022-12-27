@@ -1,3 +1,4 @@
+import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/foundation.dart';
@@ -18,9 +19,15 @@ class UniProvider with ChangeNotifier {
     // return data;
   }
 
-  List<ChatModel>? chatList;
+  List<ChatModel> chatList = [];
   void updateChatList(List<ChatModel> data) {
     chatList = data;
+    notifyListeners();
+  }
+
+  List<MessageModel> messages = [];
+  void updateMessages(List<MessageModel> data) {
+    messages = data;
     notifyListeners();
   }
 

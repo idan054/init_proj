@@ -106,13 +106,13 @@ class PostBlock extends StatelessWidget {
     var currUser = context.uniProvider.currUser;
     var iconColor = Colors.white60;
 
-
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         '5 comments'
             .toText(color: AppColors.grey50, fontSize: 12)
-            .pOnly(left: 0, right: 12).customRowPadding
+            .pOnly(left: 0, right: 12)
+            .customRowPadding
         // .onTap(() {}, radius: 10)
         ,
         const Spacer(),
@@ -120,7 +120,9 @@ class PostBlock extends StatelessWidget {
           // Like Button
           buildHeartIcon(isLiked),
           // Divider
-          Container(height: 20, width: 2, color: AppColors.darkOutline50).customRowPadding.roundedFull,
+          Container(height: 20, width: 2, color: AppColors.darkOutline50)
+              .customRowPadding
+              .roundedFull,
           // Chat Button
           Row(
             children: [
@@ -132,8 +134,11 @@ class PostBlock extends StatelessWidget {
               .pOnly(
                 right: _rightPadding,
                 left: 12,
-              ).customRowPadding
-              .onTap(() {}, radius: 10)
+              )
+              .customRowPadding
+              .onTap(() {
+            ChatService.openChat(context, otherUser: post.creatorUser!);
+          }, radius: 10)
         ]
       ],
     );
@@ -145,7 +150,8 @@ class PostBlock extends StatelessWidget {
         opacity: isLiked ? 1.0 : 0.5,
         child: Assets.svg.icons.heartUntitledIcon
             .svg(height: 17, color: isLiked ? AppColors.likeRed : null)
-            .pOnly(left: 12, right: 12, bottom: 4).customRowPadding
+            .pOnly(left: 12, right: 12, bottom: 4)
+            .customRowPadding
             // .pad(12)
             .onTap(() {
           isLiked = !isLiked;

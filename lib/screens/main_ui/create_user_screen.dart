@@ -72,8 +72,9 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                       child: CircleAvatar(
                           radius: 30,
                           backgroundColor: AppColors.darkBg.withOpacity(0.33),
-                          child: Icons.collections.icon(size: 30, color:
-                               isProfilePicErr ? AppColors.errRed : AppColors.white)),
+                          child: Icons.collections.icon(
+                              size: 30,
+                              color: isProfilePicErr ? AppColors.errRed : AppColors.white)),
                     ).appearAll,
                   ),
                 ),
@@ -81,16 +82,16 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                         // hintText: '${currUser.name}',
                         hintText: 'Enter your name',
                         topLabel: 'What is your name?',
-                    topLabelStyle: isNameErr
-                        ? AppStyles.text16PxBold.errRed
-                        : AppStyles.text16PxBold.white,
+                        topLabelStyle: isNameErr
+                            ? AppStyles.text16PxBold.errRed
+                            : AppStyles.text16PxBold.white,
                         autofocus: true)
                     .py(20)
                     .appearAll,
 
                 //~ Continue Button:
                 wMainButton(context, title: 'Continue', onPressed: () {
-                  if(photoUploaded == false){
+                  if (photoUploaded == false) {
                     isProfilePicErr = true;
                     setState(() {});
                     return;
@@ -99,9 +100,9 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                     isNameErr = true;
                     setState(() {});
                     return;
-                  } else { // No name error:
-                    FirebaseAuth.instance.currentUser
-                        ?.updateDisplayName(nameController.text);
+                  } else {
+                    // No name error:
+                    FirebaseAuth.instance.currentUser?.updateDisplayName(nameController.text);
                     currUser = currUser.copyWith(name: nameController.text);
                     context.uniProvider.updateUser(currUser);
                     if ((currUser.name != null) && currUser.photoUrl != null) {
@@ -124,24 +125,20 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
 
   Future updateProfilePhoto(UserModel currUser) async {
     print('START: Icons.collections()');
-    var imagePath = await ImagePicker()
-        .pickImage(source: ImageSource.gallery)
-        .then((image) => image?.path);
+    var imagePath =
+        await ImagePicker().pickImage(source: ImageSource.gallery).then((image) => image?.path);
     var imageFile = File(imagePath!);
-    cleanSnack(context,
-        text: 'Update profile photo...', sec: 2, showSnackAction: false);
+    cleanSnack(context, text: 'Update profile photo...', sec: 2, showSnackAction: false);
 
-    var refFile = FirebaseStorage.instance.ref().child(
-        '${AuthService.auth.currentUser?.displayName}_Profile_${DateTime.now()}');
-    await refFile
-        .putFile(imageFile)
-        .then((_) {
-          photoUploaded = true;
-          isProfilePicErr = false;
-          cleanSnack(context, text: 'Updated successfully!', sec: 3);
-          setState(() {});
-        })
-        .catchError((e) => print('putFile $e'));
+    var refFile = FirebaseStorage.instance
+        .ref()
+        .child('${FirebaseAuth.instance.currentUser?.displayName}_Profile_${DateTime.now()}');
+    await refFile.putFile(imageFile).then((_) {
+      photoUploaded = true;
+      isProfilePicErr = false;
+      cleanSnack(context, text: 'Updated successfully!', sec: 3);
+      setState(() {});
+    }).catchError((e) => print('putFile $e'));
     var imageUrl = await refFile.getDownloadURL();
     FirebaseAuth.instance.currentUser?.updatePhotoURL(imageUrl);
     context.uniProvider.updateUser(currUser.copyWith(photoUrl: imageUrl));

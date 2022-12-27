@@ -12,8 +12,7 @@ import '../Database/firebase_database.dart';
 
 class AuthService {
   /// streamUsers() Available At [click.Database] // <<---
-  static final auth = FirebaseAuth.instance;
-  static final authUser = FirebaseAuth.instance.currentUser;
+  static User? authUser = FirebaseAuth.instance.currentUser;
 
   /// Google LOGIN
   static Future signInWithGoogle(BuildContext context, {alsoSignOut = false}) async {
@@ -26,7 +25,7 @@ class AuthService {
     }
 
     User? googleUser;
-    if (authUser?.uid == null) googleUser = await googleAuthAction;
+    if (authUser?.uid == null || alsoSignOut) googleUser = await googleAuthAction;
 
     //~ Check if User exist:
     var userEmail = authUser?.uid == null ? googleUser!.email : authUser!.email;
@@ -37,6 +36,7 @@ class AuthService {
         userData['gender'] == null ||
         userData['age'] == null ||
         userData['birthday'] == null) {
+      print('START:  New User:()');
       //~ New User:
       // This fix bug when user out while signup.
       if (googleUser?.uid == null) googleUser = await googleAuthAction;
@@ -51,6 +51,7 @@ class AuthService {
       context.router.replace(const CreateUserRoute());
     } else {
       //~ Exist User:
+      print('START:  Exist User:()');
       var currUser = UserModel.fromJson(userData);
       context.uniProvider.updateUser(currUser);
       context.router.replace(DashboardRoute());
@@ -62,10 +63,10 @@ class AuthService {
 
     // Sign in & Create user on firebase console
     final googleAuth = await googleUser!.authentication;
-    await auth.signInWithCredential(GoogleAuthProvider.credential(
+    await FirebaseAuth.instance.signInWithCredential(GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
-
-    return auth.currentUser;
+    authUser = FirebaseAuth.instance.currentUser;
+    return authUser;
   }
 }
 

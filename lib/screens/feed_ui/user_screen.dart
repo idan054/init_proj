@@ -175,7 +175,7 @@ class _UserScreenState extends State<UserScreen> {
                           creatorUser: user,
                           enableComments: true,
                           isSubPost: false,
-                          textContent: 'This is just A Test Off example user\'s post',
+                          textContent: 'EXAMPLE This is just A Test Off example user\'s post!!!',
                           likeByIds: [],
                           timestamp: DateTime.now(),
                         );
