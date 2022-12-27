@@ -153,7 +153,7 @@ class Database {
   // cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   // );
 
-  static Stream<List<MessageModel>>? streamMessages(String chatId, {DocumentSnapshot? docSnap}) {
+  static Stream<List<MessageModel>>? streamMessages(String chatId, Timestamp? timestamp) {
     print('START: streamMessages()');
     print('chatId ${chatId}');
     var reqBase = db
@@ -162,8 +162,7 @@ class Database {
         .collection('messages')
         .orderBy('timestamp', descending: true)
         .limit(8);
-
-    if (docSnap != null) reqBase = reqBase.startAfterDocument(docSnap);
+    if (timestamp != null) reqBase = reqBase.startAfter([timestamp]);
 
     return reqBase.snapshots().map((QuerySnapshot list) {
       print('chats - list ${list.docs.length}');

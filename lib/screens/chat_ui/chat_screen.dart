@@ -27,14 +27,13 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   var sendController = TextEditingController();
-  MessageModel? lastedMessage;
   List<MessageModel> messages = [];
-  var counter = 10;
+  MessageModel? lastedMessage;
+  Timestamp? timeStamp;
 
   // var splashLoader = true;
   // List<MessageModel> chatList = [];
   //
-
 
   // @override
   // void initState() {
@@ -63,41 +62,35 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Column(
           children: [
             StreamProvider<List<MessageModel>>.value(
-              value: Database.streamMessages(widget.chatId),
+              value: Database.streamMessages(widget.chatId, timeStamp),
               initialData: const [],
               builder: (context, child) {
                 print('START: builder()');
-                messages = context.listenMessagesModelList;
-                print('context.messagesModelList ${context.listenMessagesModelList.length}');
-
-                // var newMessages = context.listenMessagesModelList;
-                // if (newMessages.isNotEmpty && lastedMessage != newMessages.first) {
-                //   //   // Theres only 1 every time
-                //   messages.insert(0, newMessages.first); // last // .add() // first
-                //   lastedMessage = newMessages.first;
+                print('context.listenMessagesModelList ${context.listenMessagesModelList.length}');
+                // if(messages.isEmpty && context.listenMessagesModelList.isNotEmpty){
+                  messages = context.listenMessagesModelList;
                 // }
+                // messages = [...messages, ...context.listenMessagesModelList];
 
+                print('context.messagesModelList ${context.listenMessagesModelList.length}');
                 print('messages.length ${messages.length}');
 
-                // print('messages ${messages.length}');
-
-                // WriteBatch messagesBatch = Database.db.batch();
-                // for (var message in messages) {
-                //   if (message.toId == context.uniProvider.currUser.uid) {
-                //     // Todo make sure this works!
-                //     ChatService()
-                //         .setMessageRead(message, widget.chatId, messagesBatch);
-                //   }
+                // var newMessages = context.listenMessagesModelList;
+                // if (newMessages.isNotEmpty && lastedMessage != newMessages.last) {
+                //   messages.insert(0, newMessages.last); // .insert(0) = last // .add() = // first
+                //   lastedMessage = newMessages.last;
                 // }
-                // messagesBatch.commit();
 
                 return LazyLoadScrollView(
                   scrollOffset: 300,
                   onEndOfPage: () async {
                     print('START: onEndOfPage()');
 
-                    counter = counter + 10;
+                    if (messages.isNotEmpty) {
+                      timeStamp = Timestamp.fromDate(messages.last.timestamp!);
+                    }
                     setState(() {});
+
 
                     // context.uniProvider.updateIsFeedLoading(true);
                     // await _loadOlderMessages();
