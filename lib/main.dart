@@ -18,6 +18,74 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 
+void mainTest() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  printWhite('START main()!');
+
+  runApp(
+    MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => UniProvider()),
+          // Provider.value(value: StreamModel().serverClient),
+          // FutureProvider<List<Activity>?>.value(
+          //     value: StreamModel().getFeedActivities(), initialData: const []),
+        ],
+        // builder:(context, child) =>
+        child: MaterialApp(
+          home: MyHomePage(),
+        )),
+  );
+}
+
+class SomeWidget extends StatefulWidget {
+  const SomeWidget({Key? key}) : super(key: key);
+
+  @override
+  State<SomeWidget> createState() => _SomeWidgetState();
+}
+
+class _SomeWidgetState extends State<SomeWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      Provider.of<UniProvider>(context, listen: true).postUploaded.toString(),
+      style: Theme.of(context).textTheme.headline5,
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final counter = Provider.of<UniProvider>(context, listen: false);
+
+    print('build $this');
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Example'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text('You have pushed the button this many times:'),
+            SomeWidget(),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          var newValue = counter.postUploaded = !counter.postUploaded;
+          Provider.of<UniProvider>(context, listen: false).updatePostUploaded(newValue);
+        },
+        tooltip: 'Increment',
+        child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
 
 /// Add More Pre-Actions At [click.SplashScreen]
 void main() async {

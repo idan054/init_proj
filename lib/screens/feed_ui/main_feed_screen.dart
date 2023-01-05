@@ -16,11 +16,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
-
+import 'package:provider/provider.dart';
 import '../../common/models/post/post_model.dart';
+import '../../common/models/universalModel.dart';
+import '../../common/models/user/user_model.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/components/postBlock_sts.dart';
-import '../../widgets/components/riltopiaAppBar.dart';
 
 // Todo: Add ranks
 List<String> tags = [
@@ -44,6 +45,7 @@ class MainFeedScreen extends StatefulWidget {
 }
 
 class _MainFeedScreenState extends State<MainFeedScreen> {
+  var newTags = ['New', ...tags];
   var feedController = PageController();
   var chipsController = ScrollController();
   List<PostModel> postList = [];
@@ -57,9 +59,11 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     super.initState();
   }
 
-  Future _loadMore({bool resetList = false}) async {
+  Future _loadMore({bool refresh = false}) async {
+    print('START: _loadMore()');
+
     // splashLoader = true; setState(() {});
-    if (resetList) postList = [];
+    if (refresh) postList = [];
     List newPosts = await Database.advanced.handleGetModel(context, ModelTypes.posts, postList);
     if (newPosts.isNotEmpty) postList = [...newPosts];
     splashLoader = false;
@@ -69,7 +73,12 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
   @override
   Widget build(BuildContext context) {
     print('START: MainFeedScreen() ${context.routeData.path}');
-    // context.uniProvider.updateIsFeedLoading(false);
+    var postUploaded = context.listenUniProvider.postUploaded;
+    if (postUploaded) {
+      _loadMore(refresh: true);
+      context.uniProvider.postUploaded = false;
+      // context.uniProvider.updatePostUploaded(false); // Will rebuild
+    }
 
     return Scaffold(
         backgroundColor: AppColors.darkBg,
@@ -77,7 +86,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
         body: PageView.builder(
           controller: feedController,
           // dragStartBehavior: DragStartBehavior.down,
-          itemCount: tags.length,
+          itemCount: newTags.length,
           onPageChanged: (index) {
             tagIndex = index;
             setState(() {});
@@ -92,15 +101,13 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                 context.uniProvider.updateIsFeedLoading(false);
               },
               child: Builder(builder: (context) {
-                if (splashLoader) {
+                // return 'Sorry, no post found... \nTry again later!'.toText().center;
+
+                if (splashLoader || postList.isEmpty) {
                   // First time only
                   return const CircularProgressIndicator(
                           color: AppColors.primaryOriginal, strokeWidth: 7)
                       .center;
-                }
-
-                if (postList.isEmpty) {
-                  return 'Sorry, no post found... \nTry again later!'.toText().center;
                 }
 
                 return RefreshIndicator(
@@ -108,7 +115,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                     color: AppColors.primaryOriginal,
                     onRefresh: () async {
                       print('START: onRefresh()');
-                      await _loadMore(resetList: true);
+                      await _loadMore(refresh: true);
                     },
                     child: ListView(
                       children: [
@@ -133,7 +140,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
   }
 
   ListTile buildTagTitle() {
-    bool isNewTag = tags[tagIndex] == 'New';
+    bool isNewTag = newTags[tagIndex] == 'New';
 
     return ListTile(
       minVerticalPadding: 25,
@@ -151,37 +158,39 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               .pOnly(top: 3)
         ],
       ).pOnly(bottom: 15),
-      subtitle: tags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
+      subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
     );
   }
 
   AppBar buildRiltopiaAppBar(BuildContext context) {
     return AppBar(
       elevation: 2,
-      centerTitle: true,
       backgroundColor: AppColors.primaryDark,
-      leading: Transform.translate(
-        offset: const Offset(5, 0),
-        child: CircleAvatar(
-          backgroundColor: AppColors.darkGrey,
+      actions: [
+        CircleAvatar(
+          backgroundColor: AppColors.primaryDark,
           child: CircleAvatar(
-            radius: 20,
+            radius: 16,
             backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl!),
-            backgroundColor: AppColors.darkGrey,
+            backgroundColor: AppColors.darkOutline50,
           ),
-        ).px(10),
-      ).onTap(() {
-        context.router.push(const UserRoute());
-      }),
+        ).px(10).py(5).onTap(() {
+          context.router.push(const UserRoute());
+        })
+      ],
       title: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Assets.images.logoCircularRilTopiaLogo.image(height: 25),
+          Assets.images.logoCircularRilTopiaLogo.image(height: 27),
           10.horizontalSpace,
-          'RilTopia'.toText(),
+          'RilTopia'.toText(fontSize: 15),
         ],
       ),
-      actions: [Assets.svg.icons.bellUntitledIcon.svg().px(20).onTap(() {})],
+
+      // TODO ADD ON POST MVP ONLY (Notification page)
+      // actions: [Assets.svg.icons.bellUntitledIcon.svg().px(20).onTap(() {})],
+
+      // TODO ADD ON POST MVP ONLY (Tags Row)
       bottom: PreferredSize(
         preferredSize: const Size(00.0, 50.0),
         child: Card(
@@ -194,8 +203,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
   }
 
   SizedBox _feedChoiceList(BuildContext context) {
-    var newTags = ['New', ...tags];
-
     return SizedBox(
       height: 50.0,
       child: ListView(
@@ -212,6 +219,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               selected: isChipSelected,
               onSelect: (bool newSelection) {
                 if (newSelection) tagIndex = i;
+                context.uniProvider.updateSelectedTag(newTags[i]);
                 feedController.jumpToPage(tagIndex);
                 // feedController.animateToPage(selectedTag!, duration: 250.milliseconds, curve: Curves.easeIn);
                 setState(() {});
@@ -225,7 +233,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 }
 
 Widget buildChoiceChip(BuildContext context,
-    {bool showClose = false,
+    {bool showCloseIcon = false,
+    Widget? customIcon,
+    Color? selectedColor,
     required bool selected,
     ValueChanged<bool>? onSelect,
     required Widget label}) {
@@ -239,8 +249,10 @@ Widget buildChoiceChip(BuildContext context,
           shape: 10.roundedShape,
           selected: selected,
           backgroundColor: AppColors.darkOutline,
-          selectedColor: AppColors.white,
-          side: BorderSide(width: 2.0, color: selected ? AppColors.white : AppColors.darkOutline50),
+          selectedColor: selectedColor ?? AppColors.white,
+          side: BorderSide(
+              width: 1.5,
+              color: selectedColor ?? (selected ? AppColors.white : AppColors.darkOutline50)),
           // side: BorderSide.none,
           labelStyle: AppStyles.text14PxRegular.copyWith(
               color: selected ? AppColors.primaryDark : AppColors.white,
@@ -248,7 +260,11 @@ Widget buildChoiceChip(BuildContext context,
               // fontWeight: FontWeight.bold,
               fontSize: 12),
           label: label,
-          avatar: showClose && selected ? Icons.close_rounded.icon(color: AppColors.primaryDark) : null,
+          // disabledColor: selected ? AppColors.primaryDark : AppColors.primaryDark,
+          avatar: customIcon ??
+              (showCloseIcon && selected
+                  ? Assets.svg.icons.iconClose.svg(color: AppColors.primaryDark)
+                  : null),
           onSelected: onSelect),
     ),
   );

@@ -2,15 +2,12 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter/services.dart';
 import '../../common/models/post/post_model.dart';
 import '../../common/models/user/user_model.dart';
 import '../../common/service/Feed/feed_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/themes/app_styles.dart';
-import '../../widgets/components/riltopiaAppBar.dart';
 import '../../widgets/my_widgets.dart';
 import 'main_feed_screen.dart';
 
@@ -22,31 +19,50 @@ class CreatePostScreen extends StatefulWidget {
 }
 
 class _CreatePostScreenState extends State<CreatePostScreen> {
-  bool isAddTag = false;
+  var postController = TextEditingController();
+  bool isComments = false;
+  bool isTagScreen = false;
   int? tagIndex;
+
+  @override
+  void initState() {
+    isTagScreen = context.uniProvider.selectedTag != 'New';
+    isComments = isTagScreen;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     print('START: CreatePostScreen()');
+    print('isTagAdded $isComments');
+    var textDir = postController.text.isHebrew ? TextDirection.rtl : TextDirection.ltr;
+    var selectedTag = context.uniProvider.selectedTag;
 
     return Container(
       decoration: BoxDecoration(
         color: AppColors.darkOutline,
-        borderRadius: BorderRadius.only(
-          topLeft: 20.circular,
-          topRight: 20.circular,
-        ),
+        borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
       ),
       margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Column(
-        // mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min,
         children: [
+          if (isTagScreen)
+            '#$selectedTag'
+                .toText(color: AppColors.darkOutline50)
+                .pOnly(left: 10, top: 10)
+                .centerLeft,
           TextField(
-            onChanged: (val) => setState(() {print('STATE SET');}),
+            maxLines: 11,
+            minLines: 1,
             autofocus: true,
-            keyboardType: TextInputType.multiline,
+            textDirection: textDir,
+            controller: postController,
             keyboardAppearance: Brightness.dark,
-            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            style: AppStyles.text16PxRegular.copyWith(color: AppColors.white),
+            onChanged: (val) => setState(() {}),
+            // inputFormatters: [LengthLimitingTextInputFormatter(350)],
             decoration: InputDecoration(
               filled: true,
               hintText: 'Share your Ril thoughts...',
@@ -56,62 +72,98 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             ),
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Expanded(
-                child: isAddTag
-                    ? _tagsChoiceList(context)
-                    : buildChoiceChip(
-                        context,
-                        label: const Text('Add tag'),
-                        selected: isAddTag,
-                        onSelect: (bool newSelection) {
-                          isAddTag = !isAddTag;
-                          setState(() {});
-                        },
-                      ).centerLeft,
-              ),
-              Container(
-                height: 35,
-                width: 35,
-                color: AppColors.darkOutline50,
-                child: Assets.svg.icons.dmPlaneUntitledIcon.svg().pad(7.5),
-              ).rounded(radius: 10).px(15)
+              buildChoiceChip(context,
+                      customIcon: isComments
+                          ? Assets.svg.icons.commentUntitledIcon
+                              .svg(height: 15, color: AppColors.white)
+                          : Assets.svg.icons.dmPlaneUntitledIcon
+                              .svg(height: 15, color: AppColors.darkOutline50),
+                      selectedColor: AppColors.darkOutline50,
+                      label: (isComments ? 'With comments' : 'Reply only')
+                          .toText(color: isComments ? AppColors.white : AppColors.darkOutline50),
+                      onSelect: (bool newSelection) {
+                isComments = !isComments;
+                // setState(() {});
+              }, selected: isComments)
+                  .centerLeft
+                  .pOnly(left: 5),
+
+              // Expanded(
+              //   child: isTagAdded
+              //       ? _tagsChoiceList(context)
+              //       : buildChoiceChip(context, label: const Text('Add tag'),
+              //               onSelect: (bool newSelection) {
+              //           isTagAdded = !isTagAdded;
+              //           setState(() {});
+              //         }, selected: isTagAdded)
+              //           .centerLeft
+              //           .pOnly(left: 5),
+              // ),
+
+              const Spacer(),
+              buildSendButton()
             ],
-          ),
+          ).pOnly(bottom: 5),
         ],
       ),
     );
   }
 
-  SizedBox _tagsChoiceList(BuildContext context) {
-    return SizedBox(
-      height: 50.0,
-      child: ListView(
-        scrollDirection: Axis.horizontal,
-        children: List<Widget>.generate(
-          tags.length,
-          (int i) {
-            var isChipSelected = tagIndex == i;
+  Widget buildSendButton() {
+    UserModel currUser = context.uniProvider.currUser;
 
-            return buildChoiceChip(
-              context,
-              label: Text(tags[i]),
-              showClose: true,
-              selected: isChipSelected,
-              onSelect: (bool newSelection) {
-                if (newSelection) {
-                  tagIndex = i;
-                } else {
-                  isAddTag = false;
-                }
-                setState(() {});
-              },
-            );
-          },
-        ).toList(),
-      ),
-    );
+    return Container(
+      height: 35,
+      width: 35,
+      color: AppColors.darkOutline50,
+      child: Assets.svg.icons.iconSendButton.svg().pad(7.5),
+    ).rounded(radius: 10).px(10).pOnly(top: 5, bottom: 5).onTap(() {
+      var post = PostModel(
+        textContent: postController.text,
+        id: '${currUser.email}${UniqueKey()}',
+        creatorUser: currUser,
+        timestamp: DateTime.now(),
+        enableComments: isComments,
+      );
+      context.uniProvider.updatePostUploaded(true);
+      FeedService.uploadPost(context, post);
+      context.router.pop();
+    }, radius: 10).pOnly(right: 5);
   }
+
+// SizedBox _tagsChoiceList(BuildContext context) {
+//   return SizedBox(
+//     height: 50.0,
+//     child: ListView(
+//       scrollDirection: Axis.horizontal,
+//       children: List<Widget>.generate(
+//         tags.length,
+//         (int i) {
+//           var isChipSelected = tagIndex == i;
+//
+//           return buildChoiceChip(
+//             context,
+//             label: Text(tags[i]),
+//             showCloseIcon: true,
+//             selected: isChipSelected,
+//             onSelect: (bool newSelection) {
+//               if (newSelection) {
+//                 tagIndex = i;
+//               } else {
+//                 tagIndex = null; // To do not remember selection.
+//
+//                 isTagAdded = false;
+//               }
+//               setState(() {});
+//             },
+//           );
+//         },
+//       ).toList(),
+//     ),
+//   );
+// }
 }
 
 Widget quickCrossFade(bool value,

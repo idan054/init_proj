@@ -38,6 +38,10 @@ class $AssetsImagesGen {
   AssetGenImage get logoCircularRilTopiaLogo =>
       const AssetGenImage('assets/images/LogoCircularRilTopiaLogo.png');
 
+  /// File path: assets/images/comments-off-PNG.png
+  AssetGenImage get commentsOffPNG =>
+      const AssetGenImage('assets/images/comments-off-PNG.png');
+
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
 
@@ -50,8 +54,13 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/minecloudLogo.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [logoCircularRilTopiaLogo, logo, mapPlaceholder, minecloudLogo];
+  List<AssetGenImage> get values => [
+        logoCircularRilTopiaLogo,
+        commentsOffPNG,
+        logo,
+        mapPlaceholder,
+        minecloudLogo
+      ];
 }
 
 class $AssetsSvgGen {
@@ -255,6 +264,14 @@ class $AssetsSvgGen {
 class $AssetsSvgIconsGen {
   const $AssetsSvgIconsGen();
 
+  /// File path: assets/svg/icons/Icon-close.svg
+  SvgGenImage get iconClose =>
+      const SvgGenImage('assets/svg/icons/Icon-close.svg');
+
+  /// File path: assets/svg/icons/Icon-send-Button.svg
+  SvgGenImage get iconSendButton =>
+      const SvgGenImage('assets/svg/icons/Icon-send-Button.svg');
+
   /// File path: assets/svg/icons/arrow_back_left.svg
   SvgGenImage get arrowBackLeft =>
       const SvgGenImage('assets/svg/icons/arrow_back_left.svg');
@@ -270,6 +287,10 @@ class $AssetsSvgIconsGen {
   /// File path: assets/svg/icons/comment-untitled-icon.svg
   SvgGenImage get commentUntitledIcon =>
       const SvgGenImage('assets/svg/icons/comment-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/comments-Off.svg
+  SvgGenImage get commentsOff =>
+      const SvgGenImage('assets/svg/icons/comments-Off.svg');
 
   /// File path: assets/svg/icons/date_time_calender.svg
   SvgGenImage get dateTimeCalender =>
@@ -299,6 +320,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get manProfile =>
       const SvgGenImage('assets/svg/icons/man_profile.svg');
 
+  /// File path: assets/svg/icons/message-comments-Lines.svg
+  SvgGenImage get messageCommentsLines =>
+      const SvgGenImage('assets/svg/icons/message-comments-Lines.svg');
+
   /// File path: assets/svg/icons/plusAdd-untitled-icon.svg
   SvgGenImage get plusAddUntitledIcon =>
       const SvgGenImage('assets/svg/icons/plusAdd-untitled-icon.svg');
@@ -313,10 +338,13 @@ class $AssetsSvgIconsGen {
 
   /// List of all assets
   List<SvgGenImage> get values => [
+        iconClose,
+        iconSendButton,
         arrowBackLeft,
         bellUntitledIcon,
         chatBubblesUntitledIcon,
         commentUntitledIcon,
+        commentsOff,
         dateTimeCalender,
         dmPlaneUntitledIcon,
         groupMultiPeople,
@@ -324,6 +352,7 @@ class $AssetsSvgIconsGen {
         homeUntitledIcon,
         homeSolidUntitledIcon,
         manProfile,
+        messageCommentsLines,
         plusAddUntitledIcon,
         shareClassicUntitledIcon,
         shieldTickUntitledIcon

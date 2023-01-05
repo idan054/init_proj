@@ -24,15 +24,18 @@ extension IconDataX on IconData {
 
 extension WidgetX on Widget {
   // My extension:
-  InkWell onTap(GestureTapCallback? onTap, {double radius = 99}) => InkWell(
-      // overlayColor: MaterialStateProperty.all(Colors.yellow),
-      //   splashColor: Colors.yellow,
-      //   focusColor: Colors.yellow,
-      //   highlightColor: Colors.yellow,
-      //   hoverColor: Colors.yellow,
-      borderRadius: BorderRadius.circular(radius),
-      onTap: onTap,
-      child: this);
+  Widget onTap(GestureTapCallback? onTap, {double radius = 99}) => Material(
+        color: Colors.transparent,
+        child: InkWell(
+            // overlayColor: MaterialStateProperty.all(Colors.yellow),
+            //   splashColor: Colors.yellow,
+            //   focusColor: Colors.yellow,
+            //   highlightColor: Colors.yellow,
+            //   hoverColor: Colors.yellow,
+            borderRadius: BorderRadius.circular(radius),
+            onTap: onTap,
+            child: this),
+      );
 
   Directionality isHebrewDirectionality(String text) => Directionality(
       textDirection: text.isHebrew ? TextDirection.rtl : TextDirection.ltr, child: this);
@@ -169,5 +172,6 @@ extension WidgetX on Widget {
         child: this,
       );
 
-  Padding get customRowPadding => Padding(padding: const EdgeInsets.only(top: 15, bottom: 12), child: this);
+  Padding get customRowPadding =>
+      Padding(padding: const EdgeInsets.only(top: 15, bottom: 12), child: this);
 }

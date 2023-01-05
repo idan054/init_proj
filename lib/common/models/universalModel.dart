@@ -1,11 +1,26 @@
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
-import 'package:flutter/foundation.dart';
 
 import 'chat/chat_model.dart';
 
+import 'package:flutter/foundation.dart';
+
 class UniProvider with ChangeNotifier {
+
+  bool postUploaded = false;
+  void updatePostUploaded(bool data, {bool notify = true}) {
+    postUploaded = data;
+    if(notify) notifyListeners();
+  }
+
+  String? selectedTag = 'New';
+  void updateSelectedTag(String data) {
+    selectedTag = data;
+    notifyListeners();
+  }
+
+
   String? startAtDocId;
   void updateStartAtDocId(String data) {
     startAtDocId = data;

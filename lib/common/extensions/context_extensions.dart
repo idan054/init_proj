@@ -12,9 +12,19 @@ extension ContextX on BuildContext {
   //> context.router.push(route)   //   push
 
   // My Models
-  UniProvider get uniProvider => Provider.of<UniProvider>(this, listen: false);
 
+  // Use Hot restart while switch between those!
+  UniProvider get uniProvider => Provider.of<UniProvider>(this, listen: false);
   UniProvider get listenUniProvider => Provider.of<UniProvider>(this);
+
+  // A Section:
+  // context.uniProvider.postUploaded; // current value.
+  // context.listenUniProvider.postUploaded; // current value & rebuild when B2 used
+
+  // B Section:
+  // context.uniProvider.postUploaded = false; // NOT notify listener
+  // context.uniProvider.updatePostUploaded(true, notify: false); // NOT notify listener
+  // context.uniProvider.updatePostUploaded(true); // notify listener
 
 //
   List<UserModel> get userModelList =>

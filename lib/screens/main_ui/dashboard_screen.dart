@@ -120,6 +120,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       showModalBottomSheet(
                           backgroundColor: Colors.transparent,
                           barrierColor: Colors.black54,
+                          isScrollControlled: true,
                           context: context,
                           builder: (context) {
                             return const CreatePostScreen();
@@ -137,7 +138,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
 
 // TO COMPLEX FOR MVP!!
 //! DO NOT USE!
@@ -168,4 +168,3 @@ class _DashboardScreenState extends State<DashboardScreen> {
 //   });
 // }
 }
-

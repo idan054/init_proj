@@ -22,7 +22,7 @@ import '../../screens/feed_ui/user_screen.dart';
 import '../../screens/main_ui/dashboard_screen.dart';
 import 'dart:io';
 
-var _rightPadding = 15.0; //> It set this way for the Pressing Area Size!
+
 // Also look for 'customRowPadding' With CTRL + SHIFT + F
 
 class PostBlock extends StatelessWidget {
@@ -49,7 +49,7 @@ class PostBlock extends StatelessWidget {
                       textDirection:
                           post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
                       style: AppStyles.text16PxRegular.copyWith(color: AppColors.white))
-                  .pOnly(right: 5 + _rightPadding)
+                  .pOnly(right: 20)
                   .advancedSizedBox(context, maxWidth: true),
               buildActionRow(context),
             ],
@@ -63,7 +63,8 @@ class PostBlock extends StatelessWidget {
   Widget buildProfile() {
     var postDiff = DateTime.now().difference(post.timestamp!);
     var postAgo =
-        postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec' : '${postDiff.inMinutes} min';
+        postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec ago' : '${postDiff.inMinutes} min ago';
+    if(postDiff.inSeconds == 0) postAgo = 'Just now';
 
     return SizedBox(
       height: 65,
@@ -76,7 +77,7 @@ class PostBlock extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             // '2 min ago · Gaming'
-            '$postAgo ago · Gaming'
+            '$postAgo · Gaming'
                 .toText(color: AppColors.grey50, fontSize: 12)
                 .pOnly(right: 10, top: 4, bottom: 10)
                 .onTap(() {}, radius: 10), // TODO Add move to Tag
@@ -93,10 +94,10 @@ class PostBlock extends StatelessWidget {
           ],
         ),
         trailing: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50).pad(18).onTap(() {
-          print('POST SETTINGS CLICKED');
+          print('Y SETTINGS CLICKED');
         }, radius: 10),
       ).pad(0).onTap(() {
-        print('POST SETTINGS CLICKED');
+        print('X SETTINGS CLICKED');
       }, radius: 5),
     );
   }
@@ -117,22 +118,25 @@ class PostBlock extends StatelessWidget {
         ,
         const Spacer(),
         if (post.creatorUser!.uid != currUser.uid) ...[
-          // Like Button
-          buildHeartIcon(isLiked),
-          // Divider
-          Container(height: 20, width: 2, color: AppColors.darkOutline50)
-              .customRowPadding
-              .roundedFull,
+
+          // TODO ADD ON POST MVP ONLY (Send like)
+          // // Like Button
+          // buildHeartIcon(isLiked),
+          // // Divider
+          // Container(height: 20, width: 2, color: AppColors.darkOutline50)
+          //     .customRowPadding
+          //     .roundedFull,
+
           // Chat Button
           Row(
             children: [
               Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: iconColor),
               10.horizontalSpace,
-              'Chat'.toText(fontSize: 12, color: iconColor),
+              'Reply'.toText(fontSize: 12, color: iconColor),
             ],
           )
               .pOnly(
-                right: _rightPadding,
+                right: 20,
                 left: 12,
               )
               .customRowPadding
