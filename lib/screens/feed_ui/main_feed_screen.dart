@@ -80,63 +80,77 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       // context.uniProvider.updatePostUploaded(false); // Will rebuild
     }
 
-    return Scaffold(
-        backgroundColor: AppColors.darkBg,
-        appBar: buildRiltopiaAppBar(context),
-        body: PageView.builder(
-          controller: feedController,
-          // dragStartBehavior: DragStartBehavior.down,
-          itemCount: newTags.length,
-          onPageChanged: (index) {
-            tagIndex = index;
-            setState(() {});
-          },
-          itemBuilder: (context, index) {
-            return LazyLoadScrollView(
-              scrollOffset: 1500,
-              onEndOfPage: () async {
-                print('START: onEndOfPage()');
-                context.uniProvider.updateIsFeedLoading(true);
-                await _loadMore();
-                context.uniProvider.updateIsFeedLoading(false);
-              },
-              child: Builder(builder: (context) {
-                // return 'Sorry, no post found... \nTry again later!'.toText().center;
+    return DefaultTabController(
+      length: 2,
+      initialIndex: 1,
+      child: Scaffold(
+          backgroundColor: AppColors.darkBg,
+          appBar: buildRiltopiaAppBar(
+            context,
+            bottom: TabBar(
+              indicator: UnderlineTabIndicator(
+                  borderSide: const BorderSide(width: 2.5, color: AppColors.primaryOriginal),
+                  insets: 30.horizontal),
+              labelStyle: AppStyles.text14PxRegular,
+              indicatorColor: AppColors.primaryOriginal,
+              tabs: const [
+                Tab(text: 'Latest'),
+                Tab(text: 'Questions'),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              buildFeed(context),
+              buildFeed(context),
+            ],
+          )),
+    );
+  }
 
-                if (splashLoader || postList.isEmpty) {
-                  // First time only
-                  return const CircularProgressIndicator(
-                          color: AppColors.primaryOriginal, strokeWidth: 7)
-                      .center;
-                }
+  Widget buildFeed(BuildContext context) {
+    return LazyLoadScrollView(
+      scrollOffset: 1500,
+      onEndOfPage: () async {
+        print('START: onEndOfPage()');
+        context.uniProvider.updateIsFeedLoading(true);
+        await _loadMore();
+        context.uniProvider.updateIsFeedLoading(false);
+      },
+      child: Builder(builder: (context) {
+        // return 'Sorry, no post found... \nTry again later!'.toText().center;
 
-                return RefreshIndicator(
-                    backgroundColor: AppColors.darkGrey,
-                    color: AppColors.primaryOriginal,
-                    onRefresh: () async {
-                      print('START: onRefresh()');
-                      await _loadMore(refresh: true);
-                    },
-                    child: ListView(
-                      children: [
-                        buildTagTitle(),
-                        2.verticalSpace,
-                        //   Expanded(child:
-                        ListView.builder(
-                          physics: const ScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: postList.length,
-                          itemBuilder: (BuildContext context, int i) =>
-                              // PostView(postList[i])
-                              PostBlock(postList[i]),
-                        ),
-                        //     )
-                      ],
-                    ));
-              }),
-            );
-          },
-        ));
+        if (splashLoader || postList.isEmpty) {
+          // First time only
+          return const CircularProgressIndicator(color: AppColors.primaryOriginal, strokeWidth: 7)
+              .center;
+        }
+
+        return RefreshIndicator(
+            backgroundColor: AppColors.darkGrey,
+            color: AppColors.primaryOriginal,
+            onRefresh: () async {
+              print('START: onRefresh()');
+              await _loadMore(refresh: true);
+            },
+            child: ListView(
+              children: [
+                buildTagTitle(),
+                2.verticalSpace,
+                //   Expanded(child:
+                ListView.builder(
+                  physics: const ScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: postList.length,
+                  itemBuilder: (BuildContext context, int i) =>
+                      // PostView(postList[i])
+                      PostBlock(postList[i]),
+                ),
+                //     )
+              ],
+            ));
+      }),
+    );
   }
 
   ListTile buildTagTitle() {
@@ -162,7 +176,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     );
   }
 
-  AppBar buildRiltopiaAppBar(BuildContext context) {
+  AppBar buildRiltopiaAppBar(BuildContext context, {PreferredSizeWidget? bottom}) {
     return AppBar(
       elevation: 2,
       backgroundColor: AppColors.primaryDark,
@@ -190,15 +204,16 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       // TODO ADD ON POST MVP ONLY (Notification page)
       // actions: [Assets.svg.icons.bellUntitledIcon.svg().px(20).onTap(() {})],
 
+      bottom: bottom,
       // TODO ADD ON POST MVP ONLY (Tags Row)
-      bottom: PreferredSize(
-        preferredSize: const Size(00.0, 50.0),
-        child: Card(
-          elevation: 0,
-          color: AppColors.primaryDark,
-          child: _feedChoiceList(context),
-        ),
-      ),
+      // bottom: PreferredSize(
+      //   preferredSize: const Size(00.0, 50.0),
+      //   child: Card(
+      //     elevation: 0,
+      //     color: AppColors.primaryDark,
+      //     child: _feedChoiceList(context),
+      //   ),
+      // ),
     );
   }
 
