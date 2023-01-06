@@ -63,7 +63,7 @@ class _ChatScreenState extends State<ChatScreen> {
         body: Column(
           children: [
             StreamProvider<List<MessageModel>>.value(
-              value: Database.streamMessages(widget.chatId, limit: isInitMessages ? 10 : 1),
+              value: Database.streamMessages(widget.chatId, limit: isInitMessages ? 25 : 1),
               initialData: const [],
               builder: (context, child) {
                 print('START: builder()');
@@ -104,11 +104,14 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void setInitMessages(List<MessageModel> newMsgs) {
+    print('START: setInitMessages()');
     messages = newMsgs;
     isInitMessages = false;
+    // _loadOlderMessages();
   }
 
   void addLatestMessage(BuildContext context) {
+    print('START: addLatestMessage()');
     var newMessage = context.listenMessagesModelList.first;
     if (!(messages.contains(newMessage))) {
       messages.insert(0, newMessage);
