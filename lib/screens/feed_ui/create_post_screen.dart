@@ -85,7 +85,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           .toText(color: isComments ? AppColors.white : AppColors.darkOutline50),
                       onSelect: (bool newSelection) {
                 isComments = !isComments;
-                // setState(() {});
+                setState(() {});
               }, selected: isComments)
                   .centerLeft
                   .pOnly(left: 5),

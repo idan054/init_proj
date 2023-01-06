@@ -189,7 +189,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             backgroundColor: AppColors.darkOutline50,
           ),
         ).px(10).py(5).onTap(() {
-          context.router.push(const UserRoute());
+          context.router.push(UserRoute(user: context.uniProvider.currUser));
         })
       ],
       title: Row(

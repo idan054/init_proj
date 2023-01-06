@@ -26,7 +26,9 @@ import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/components/postBlock_sts.dart';
 
 class UserScreen extends StatefulWidget {
-  const UserScreen({Key? key}) : super(key: key);
+  final UserModel user;
+
+  const UserScreen(this.user, {Key? key}) : super(key: key);
 
   @override
   State<UserScreen> createState() => _UserScreenState();
@@ -37,7 +39,9 @@ class _UserScreenState extends State<UserScreen> {
   Widget build(BuildContext context) {
     print('START: PostScreen()');
     var topPadding = 100.0;
-    var user = context.uniProvider.currUser;
+    var user = widget.user;
+    var currUser = context.uniProvider.currUser;
+    var isCurrUserProfile = currUser == user;
 
     return Theme(
       data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
@@ -120,46 +124,51 @@ class _UserScreenState extends State<UserScreen> {
                         'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
                       ),
                       24.verticalSpace,
-                      SizedBox(
-                        width: context.width * 0.5,
-                        height: 40,
-                        child: OutlinedButton.icon(
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            // side: const BorderSide(width: 2.0, color: AppColors.darkOutline),
-                            shape: 10.roundedShape,
+                      if (!isCurrUserProfile) ...[
+                        SizedBox(
+                          width: context.width * 0.5,
+                          height: 40,
+                          child: OutlinedButton.icon(
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              // side: const BorderSide(width: 2.0, color: AppColors.darkOutline),
+                              shape: 10.roundedShape,
+                            ),
+                            icon: Assets.svg.icons.dmPlaneUntitledIcon
+                                .svg(height: 17, color: AppColors.darkBg),
+                            label:
+                                'Send DM'.toText(fontSize: 13, color: AppColors.darkBg, bold: true),
+                            onPressed: () {},
                           ),
-                          icon: Assets.svg.icons.dmPlaneUntitledIcon
-                              .svg(height: 17, color: AppColors.darkBg),
-                          label:
-                              'Send DM'.toText(fontSize: 13, color: AppColors.darkBg, bold: true),
-                          onPressed: () {},
                         ),
-                      ),
-                      16.verticalSpace,
-                      Row(
-                        children: [
-                          Assets.svg.icons.groupMultiPeople
-                              .svg(width: 17, color: Colors.white70)
-                              .pOnly(right: 10),
-                          "You both interesting in Gaming... that's cool!"
-                              .toText(color: AppColors.grey50, fontSize: 12)
-                              .expanded(),
-                        ],
-                      ),
+                        16.verticalSpace,
+                        Row(
+                          children: [
+                            Assets.svg.icons.groupMultiPeople
+                                .svg(width: 17, color: Colors.white70)
+                                .pOnly(right: 10),
+                            "You both interesting in Gaming... that's cool!"
+                                .toText(color: AppColors.grey50, fontSize: 12)
+                                .expanded(),
+                          ],
+                        ),
+                      ],
                     ],
                   ).px(25),
-                  12.verticalSpace,
-                  const Divider(
-                    thickness: 2,
-                    color: AppColors.darkOutline,
+                  // const Divider(thickness: 2, color: AppColors.darkOutline),
+                  ClipRRect(
+                    borderRadius: BorderRadius.only(topLeft: 10.circular, topRight: 10.circular),
+                    child: Container(
+                      padding: 5.vertical,
+                      color: AppColors.primaryDark,
+                      child: Builder(builder: (context) {
+                        var title = isCurrUserProfile ? 'Your latest Rils' : "${user.name}'s Rils";
+                        return title.toText(fontSize: 18, medium: true).centerLeft.py(12).px(25);
+                        // .pOnly(bottom: 6);
+                      }),
+                    ),
                   ),
-                  "${user.name}'s Rils"
-                      .toText(fontSize: 18, medium: true)
-                      .centerLeft
-                      .py(12)
-                      .px(25)
-                      .pOnly(bottom: 4),
+                  2.verticalSpace,
                   // const Divider(
                   //   thickness: 2,
                   //   color: AppColors.darkOutline,
@@ -191,19 +200,19 @@ class _UserScreenState extends State<UserScreen> {
   }
 }
 
-  Widget buildChip(String label, {Widget? icon}) {
-    return Chip(
-      backgroundColor: AppColors.darkOutline,
-      elevation: 0,
-      shadowColor: Colors.transparent,
-      surfaceTintColor: Colors.transparent,
-      // side: BorderSide(width: 2.0, color: AppColors.transparent),
-      label: label.toText(fontSize: 13, color: Colors.white70),
-      avatar: icon,
-      shape: 10.roundedShape,
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-    );
-  }
+Widget buildChip(String label, {Widget? icon}) {
+  return Chip(
+    backgroundColor: AppColors.darkOutline,
+    elevation: 0,
+    shadowColor: Colors.transparent,
+    surfaceTintColor: Colors.transparent,
+    // side: BorderSide(width: 2.0, color: AppColors.transparent),
+    label: label.toText(fontSize: 13, color: Colors.white70),
+    avatar: icon,
+    shape: 10.roundedShape,
+    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  );
+}
 
 ExpandableText buildExpandableText(String text,
     {TextStyle? style, TextAlign? textAlign, TextDirection? textDirection, int? maxLines}) {

@@ -69,9 +69,13 @@ class AppRouter extends _i11.RootStackRouter {
       );
     },
     UserRoute.name: (routeData) {
+      final args = routeData.argsAs<UserRouteArgs>();
       return _i11.CustomPage<dynamic>(
         routeData: routeData,
-        child: const _i5.UserScreen(),
+        child: _i5.UserScreen(
+          args.user,
+          key: args.key,
+        ),
         opaque: true,
         barrierDismissible: false,
       );
@@ -240,14 +244,36 @@ class CreateUserRoute extends _i11.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.UserScreen]
-class UserRoute extends _i11.PageRouteInfo<void> {
-  const UserRoute()
-      : super(
+class UserRoute extends _i11.PageRouteInfo<UserRouteArgs> {
+  UserRoute({
+    required _i13.UserModel user,
+    _i12.Key? key,
+  }) : super(
           UserRoute.name,
           path: '/user-screen',
+          args: UserRouteArgs(
+            user: user,
+            key: key,
+          ),
         );
 
   static const String name = 'UserRoute';
+}
+
+class UserRouteArgs {
+  const UserRouteArgs({
+    required this.user,
+    this.key,
+  });
+
+  final _i13.UserModel user;
+
+  final _i12.Key? key;
+
+  @override
+  String toString() {
+    return 'UserRouteArgs{user: $user, key: $key}';
+  }
 }
 
 /// generated route for

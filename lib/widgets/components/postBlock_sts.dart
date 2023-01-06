@@ -22,7 +22,6 @@ import '../../screens/feed_ui/user_screen.dart';
 import '../../screens/main_ui/dashboard_screen.dart';
 import 'dart:io';
 
-
 // Also look for 'customRowPadding' With CTRL + SHIFT + F
 
 class PostBlock extends StatelessWidget {
@@ -64,10 +63,10 @@ class PostBlock extends StatelessWidget {
     var postDiff = DateTime.now().difference(post.timestamp!);
     var postAgo =
         postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec ago' : '${postDiff.inMinutes} min ago';
-    if(postDiff.inSeconds == 0) postAgo = 'Just now';
+    if (postDiff.inSeconds == 0) postAgo = 'Just now';
 
     return SizedBox(
-      height: 65,
+      height: 68,
       // height: 72, // 72: original size 60: min size
       child: ListTile(
         contentPadding: EdgeInsets.zero,
@@ -76,8 +75,8 @@ class PostBlock extends StatelessWidget {
         subtitle: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // '2 min ago · Gaming'
-            '$postAgo · Gaming'
+            // TODO ADD ON POST MVP ONLY (ago · Tag)
+            postAgo
                 .toText(color: AppColors.grey50, fontSize: 12)
                 .pOnly(right: 10, top: 4, bottom: 10)
                 .onTap(() {}, radius: 10), // TODO Add move to Tag
@@ -110,15 +109,15 @@ class PostBlock extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        post.enableComments ?
         '5 comments'
             .toText(color: AppColors.grey50, fontSize: 12)
             .pOnly(left: 0, right: 12)
             .customRowPadding
         // .onTap(() {}, radius: 10)
-        ,
+        : const SizedBox(height: 20),
         const Spacer(),
         if (post.creatorUser!.uid != currUser.uid) ...[
-
           // TODO ADD ON POST MVP ONLY (Send like)
           // // Like Button
           // buildHeartIcon(isLiked),
