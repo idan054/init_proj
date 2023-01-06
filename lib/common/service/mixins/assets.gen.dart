@@ -284,6 +284,14 @@ class $AssetsSvgIconsGen {
   SvgGenImage get chatBubblesUntitledIcon =>
       const SvgGenImage('assets/svg/icons/chatBubbles-untitled-icon.svg');
 
+  /// File path: assets/svg/icons/check-verified-outline.svg
+  SvgGenImage get checkVerifiedOutline =>
+      const SvgGenImage('assets/svg/icons/check-verified-outline.svg');
+
+  /// File path: assets/svg/icons/check_verified_solid.svg
+  SvgGenImage get checkVerifiedSolid =>
+      const SvgGenImage('assets/svg/icons/check_verified_solid.svg');
+
   /// File path: assets/svg/icons/comment-untitled-icon.svg
   SvgGenImage get commentUntitledIcon =>
       const SvgGenImage('assets/svg/icons/comment-untitled-icon.svg');
@@ -320,6 +328,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get manProfile =>
       const SvgGenImage('assets/svg/icons/man_profile.svg');
 
+  /// File path: assets/svg/icons/man_profile_outline.svg
+  SvgGenImage get manProfileOutline =>
+      const SvgGenImage('assets/svg/icons/man_profile_outline.svg');
+
   /// File path: assets/svg/icons/message-comments-Lines.svg
   SvgGenImage get messageCommentsLines =>
       const SvgGenImage('assets/svg/icons/message-comments-Lines.svg');
@@ -343,6 +355,8 @@ class $AssetsSvgIconsGen {
         arrowBackLeft,
         bellUntitledIcon,
         chatBubblesUntitledIcon,
+        checkVerifiedOutline,
+        checkVerifiedSolid,
         commentUntitledIcon,
         commentsOff,
         dateTimeCalender,
@@ -352,6 +366,7 @@ class $AssetsSvgIconsGen {
         homeUntitledIcon,
         homeSolidUntitledIcon,
         manProfile,
+        manProfileOutline,
         messageCommentsLines,
         plusAddUntitledIcon,
         shareClassicUntitledIcon,

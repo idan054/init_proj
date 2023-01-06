@@ -15,14 +15,14 @@ import '../../widgets/clean_snackbar.dart';
 import '../../widgets/components/genderAgeView_sts.dart';
 import '../../widgets/my_widgets.dart';
 
-class CreateUserScreen extends StatefulWidget {
-  const CreateUserScreen({Key? key}) : super(key: key);
+class CreateUserScreenOld extends StatefulWidget {
+  const CreateUserScreenOld({Key? key}) : super(key: key);
 
   @override
-  State<CreateUserScreen> createState() => _CreateUserScreenState();
+  State<CreateUserScreenOld> createState() => _CreateUserScreenOldState();
 }
 
-class _CreateUserScreenState extends State<CreateUserScreen> {
+class _CreateUserScreenOldState extends State<CreateUserScreenOld> {
   var editPageController = PageController(initialPage: 0);
   var nameController = TextEditingController();
   var ageController = TextEditingController();
@@ -116,7 +116,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
               ],
             ).center,
 
-            const GenderAgeView()
+            const GenderAgeViewOld()
           ],
         ),
       ),

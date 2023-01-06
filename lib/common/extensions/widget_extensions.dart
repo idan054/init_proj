@@ -24,17 +24,20 @@ extension IconDataX on IconData {
 
 extension WidgetX on Widget {
   // My extension:
-  Widget onTap(GestureTapCallback? onTap, {double radius = 99}) => Material(
-        color: Colors.transparent,
-        child: InkWell(
-            // overlayColor: MaterialStateProperty.all(Colors.yellow),
-            //   splashColor: Colors.yellow,
-            //   focusColor: Colors.yellow,
-            //   highlightColor: Colors.yellow,
-            //   hoverColor: Colors.yellow,
-            borderRadius: BorderRadius.circular(radius),
-            onTap: onTap,
-            child: this),
+  Widget onTap(GestureTapCallback? onTap, {double radius = 99}) => Theme(
+        data: ThemeData(canvasColor: Colors.transparent),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+              // overlayColor: MaterialStateProperty.all(Colors.yellow),
+              //   splashColor: Colors.yellow,
+              //   focusColor: Colors.yellow,
+              //   highlightColor: Colors.yellow,
+              //   hoverColor: Colors.yellow,
+              borderRadius: BorderRadius.circular(radius),
+              onTap: onTap,
+              child: this),
+        ),
       );
 
   Directionality isHebrewDirectionality(String text) => Directionality(

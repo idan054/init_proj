@@ -45,27 +45,29 @@ extension StringX on String {
   Text toText(
           {Color color = AppColors.white,
           double? fontSize,
+          TextAlign? textAlign,
           bool medium = false,
           bool bold = false,
           bool softWrap = false}) =>
       Text(this,
           softWrap: softWrap,
           maxLines: 2,
+          textAlign: textAlign,
           overflow: TextOverflow.ellipsis,
           style: bold
-              ? AppStyles.text14PxBold
-                  .copyWith(color: color, fontSize: fontSize ?? 14.sp,
-              // height: 1
-          ) // line spacing
+              ? AppStyles.text14PxBold.copyWith(
+                  color: color, fontSize: fontSize ?? 14.sp,
+                  // height: 1
+                ) // line spacing
               : medium
-                  ? AppStyles.text14PxMedium
-                      .copyWith(color: color, fontSize: fontSize ?? 14.sp,
-              // height: 1
-          )
+                  ? AppStyles.text14PxMedium.copyWith(
+                      color: color, fontSize: fontSize ?? 14.sp,
+                      // height: 1
+                    )
                   : AppStyles.text14PxRegular.copyWith(
                       color: color, fontSize: fontSize ?? 14.sp,
-              // height: 1
-          )); // line spacing
+                      // height: 1
+                    )); // line spacing
 
   Text get testText => Text(
         this,

@@ -17,6 +17,8 @@ class AuthService {
   /// Google LOGIN
   static Future signInWithGoogle(BuildContext context, {alsoSignOut = false}) async {
     print('START: signInWithGoogle()');
+    context.router.replace(const OnBoardingRoute());
+    return;
 
     // When signInWithGoogle Button Clicked.
     if (alsoSignOut) {
@@ -48,7 +50,7 @@ class AuthService {
         photoUrl: googleUser.photoURL,
       );
       context.uniProvider.updateUser(user);
-      context.router.replace(const CreateUserRoute());
+      context.router.replace(const CreateUserRouteOld());
     } else {
       //~ Exist User:
       print('START:  Exist User:()');

@@ -192,14 +192,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
           context.router.push(UserRoute(user: context.uniProvider.currUser));
         })
       ],
-      title: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Assets.images.logoCircularRilTopiaLogo.image(height: 27),
-          10.horizontalSpace,
-          'RilTopia'.toText(fontSize: 15),
-        ],
-      ),
+      title: riltopiaHorizontalLogo(),
 
       // TODO ADD ON POST MVP ONLY (Notification page)
       // actions: [Assets.svg.icons.bellUntitledIcon.svg().px(20).onTap(() {})],
@@ -245,6 +238,17 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       ),
     );
   }
+}
+
+Row riltopiaHorizontalLogo({double ratio = 1.0}) {
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Assets.images.logoCircularRilTopiaLogo.image(height: 27 * ratio),
+      10.horizontalSpace,
+      'RilTopia'.toText(fontSize: 15 * ratio),
+    ],
+  );
 }
 
 Widget buildChoiceChip(BuildContext context,

@@ -10,14 +10,14 @@ import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
 import '../../widgets/my_widgets.dart';
 
-class GenderAgeView extends StatefulWidget {
-  const GenderAgeView({Key? key}) : super(key: key);
+class GenderAgeViewOld extends StatefulWidget {
+  const GenderAgeViewOld({Key? key}) : super(key: key);
 
   @override
-  State<GenderAgeView> createState() => _GenderAgeViewState();
+  State<GenderAgeViewOld> createState() => _GenderAgeViewOldState();
 }
 
-class _GenderAgeViewState extends State<GenderAgeView> {
+class _GenderAgeViewOldState extends State<GenderAgeViewOld> {
   var ageController = TextEditingController();
   int? userAge;
   DateTime? bDay;

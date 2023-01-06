@@ -105,12 +105,12 @@ class _UserScreenState extends State<UserScreen> {
                               badgeColor: AppColors.darkOutline50,
                               // stackFit: StackFit.loose,
                               // shape:
-                              child: buildChip('Gaming')),
+                              child: buildRilChip('Gaming')),
                           18.horizontalSpace,
-                          buildChip('${user.gender?.name}',
+                          buildRilChip('${user.gender?.name}',
                               icon: Assets.svg.icons.manProfile.svg()),
                           18.horizontalSpace,
-                          buildChip('${user.age} y.o',
+                          buildRilChip('${user.age} y.o',
                               icon: Assets.svg.icons.dateTimeCalender.svg()),
                         ],
                       ),
@@ -200,17 +200,20 @@ class _UserScreenState extends State<UserScreen> {
   }
 }
 
-Widget buildChip(String label, {Widget? icon}) {
-  return Chip(
-    backgroundColor: AppColors.darkOutline,
-    elevation: 0,
-    shadowColor: Colors.transparent,
-    surfaceTintColor: Colors.transparent,
-    // side: BorderSide(width: 2.0, color: AppColors.transparent),
-    label: label.toText(fontSize: 13, color: Colors.white70),
-    avatar: icon,
-    shape: 10.roundedShape,
-    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+Widget buildRilChip(String label, {Widget? icon}) {
+  return Theme(
+    data: ThemeData(canvasColor: Colors.transparent),
+    child: Chip(
+      backgroundColor: AppColors.darkOutline,
+      elevation: 0,
+      shadowColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
+      // side: BorderSide(width: 2.0, color: AppColors.transparent),
+      label: label.toText(fontSize: 13, color: Colors.white70),
+      avatar: icon,
+      shape: 10.roundedShape,
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    ),
   );
 }
 
