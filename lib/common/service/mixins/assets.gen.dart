@@ -38,6 +38,10 @@ class $AssetsImagesGen {
   AssetGenImage get logoCircularRilTopiaLogo =>
       const AssetGenImage('assets/images/LogoCircularRilTopiaLogo.png');
 
+  /// File path: assets/images/check-verified-image.png
+  AssetGenImage get checkVerifiedImage =>
+      const AssetGenImage('assets/images/check-verified-image.png');
+
   /// File path: assets/images/comments-off-PNG.png
   AssetGenImage get commentsOffPNG =>
       const AssetGenImage('assets/images/comments-off-PNG.png');
@@ -56,6 +60,7 @@ class $AssetsImagesGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         logoCircularRilTopiaLogo,
+        checkVerifiedImage,
         commentsOffPNG,
         logo,
         mapPlaceholder,
@@ -272,6 +277,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get iconSendButton =>
       const SvgGenImage('assets/svg/icons/Icon-send-Button.svg');
 
+  /// File path: assets/svg/icons/arrow-narrow-left.svg
+  SvgGenImage get arrowNarrowLeft =>
+      const SvgGenImage('assets/svg/icons/arrow-narrow-left.svg');
+
   /// File path: assets/svg/icons/arrow_back_left.svg
   SvgGenImage get arrowBackLeft =>
       const SvgGenImage('assets/svg/icons/arrow_back_left.svg');
@@ -279,6 +288,9 @@ class $AssetsSvgIconsGen {
   /// File path: assets/svg/icons/bell-untitled-icon.svg
   SvgGenImage get bellUntitledIcon =>
       const SvgGenImage('assets/svg/icons/bell-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/camera.svg
+  SvgGenImage get camera => const SvgGenImage('assets/svg/icons/camera.svg');
 
   /// File path: assets/svg/icons/chatBubbles-untitled-icon.svg
   SvgGenImage get chatBubblesUntitledIcon =>
@@ -340,6 +352,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get plusAddUntitledIcon =>
       const SvgGenImage('assets/svg/icons/plusAdd-untitled-icon.svg');
 
+  /// File path: assets/svg/icons/settings-01.svg
+  SvgGenImage get settings01 =>
+      const SvgGenImage('assets/svg/icons/settings-01.svg');
+
   /// File path: assets/svg/icons/shareClassic-untitled-icon.svg
   SvgGenImage get shareClassicUntitledIcon =>
       const SvgGenImage('assets/svg/icons/shareClassic-untitled-icon.svg');
@@ -352,8 +368,10 @@ class $AssetsSvgIconsGen {
   List<SvgGenImage> get values => [
         iconClose,
         iconSendButton,
+        arrowNarrowLeft,
         arrowBackLeft,
         bellUntitledIcon,
+        camera,
         chatBubblesUntitledIcon,
         checkVerifiedOutline,
         checkVerifiedSolid,
@@ -369,6 +387,7 @@ class $AssetsSvgIconsGen {
         manProfileOutline,
         messageCommentsLines,
         plusAddUntitledIcon,
+        settings01,
         shareClassicUntitledIcon,
         shieldTickUntitledIcon
       ];

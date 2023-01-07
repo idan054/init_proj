@@ -100,6 +100,11 @@ extension WidgetX on Widget {
 
   Center get center => Center(child: this);
 
+  Widget surround(double value) => CircleAvatar(
+    backgroundColor: Colors.green,
+    child: this,
+  );
+
   Padding pad(double value) => Padding(
         padding: EdgeInsets.all(value),
         child: this,

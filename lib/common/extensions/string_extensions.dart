@@ -47,11 +47,12 @@ extension StringX on String {
           double? fontSize,
           TextAlign? textAlign,
           bool medium = false,
+          int maxLines = 2,
           bool bold = false,
           bool softWrap = false}) =>
       Text(this,
           softWrap: softWrap,
-          maxLines: 2,
+          maxLines: maxLines,
           textAlign: textAlign,
           overflow: TextOverflow.ellipsis,
           style: bold

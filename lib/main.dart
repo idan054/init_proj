@@ -1,4 +1,5 @@
 
+import 'package:camera/camera.dart';
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
@@ -18,73 +19,19 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 
-void mainTest() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  printWhite('START main()!');
+import 'delete_me.dart';
 
-  runApp(
-    MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => UniProvider()),
-          // Provider.value(value: StreamModel().serverClient),
-          // FutureProvider<List<Activity>?>.value(
-          //     value: StreamModel().getFeedActivities(), initialData: const []),
-        ],
-        // builder:(context, child) =>
-        child: MaterialApp(
-          home: MyHomePage(),
-        )),
-  );
-}
-
-class SomeWidget extends StatefulWidget {
-  const SomeWidget({Key? key}) : super(key: key);
-
-  @override
-  State<SomeWidget> createState() => _SomeWidgetState();
-}
-
-class _SomeWidgetState extends State<SomeWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      Provider.of<UniProvider>(context, listen: true).postUploaded.toString(),
-      style: Theme.of(context).textTheme.headline5,
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final counter = Provider.of<UniProvider>(context, listen: false);
-
-    print('build $this');
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Example'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            SomeWidget(),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          var newValue = counter.postUploaded = !counter.postUploaded;
-          Provider.of<UniProvider>(context, listen: false).updatePostUploaded(newValue);
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
+// List<CameraDescription> cameras = <CameraDescription>[];
+// Future<void> mainT() async {
+//   // Fetch the available cameras before initializing the app.
+//   try {
+//     WidgetsFlutterBinding.ensureInitialized();
+//     cameras = await availableCameras();
+//   } on CameraException catch (e) {
+//     // _logError(e.code, e.description);
+//   }
+//   runApp(const MaterialApp(home: CameraExampleHome()));
+// }
 
 
 /// Add More Pre-Actions At [click.SplashScreen]
@@ -104,7 +51,9 @@ void main() async {
           //     value: StreamModel().getFeedActivities(), initialData: const []),
         ],
         // builder:(context, child) =>
+
         child: const App()),
+
   );
 }
 
