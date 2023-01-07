@@ -26,15 +26,29 @@ import '../../widgets/components/postBlock_sts.dart';
 // Todo: Add ranks
 List<String> tags = [
   'Gaming',
+  'Art',
   'Sport',
   'Music',
   'Netflix',
+  'Study',
+  'Work',
+  'Tech',
+  'Travel',
+  'Cars',
+  'Nature',
+  'Architecture',
+  'Paint',
+  'Anime',
+  'Health',
+  'Memes',
+  'Food',
+  'Animals',
+  'News',
+  'Politics',
+  'Writing',
   'TV',
-  'Gaming 2',
-  'Sport 2',
-  'Music 2',
-  'Netflix 2',
-  'TV 2',
+  'Science',
+  'Fashion',
 ];
 
 class MainFeedScreen extends StatefulWidget {
@@ -255,11 +269,13 @@ Widget buildChoiceChip(BuildContext context,
     {bool showCloseIcon = false,
     Widget? customIcon,
     Color? selectedColor,
+    double? padding,
+    bool isUnselectedBorder = true,
     required bool selected,
     ValueChanged<bool>? onSelect,
     required Widget label}) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 6.0),
+    padding: (padding ?? 6).horizontal,
     child: Theme(
       data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
       child: ChoiceChip(
@@ -267,11 +283,15 @@ Widget buildChoiceChip(BuildContext context,
           shadowColor: Colors.transparent,
           shape: 10.roundedShape,
           selected: selected,
+          materialTapTargetSize: (padding != null) ? MaterialTapTargetSize.shrinkWrap : null,
+          padding: (padding != null) ? 0.all : null,
           backgroundColor: AppColors.darkOutline,
           selectedColor: selectedColor ?? AppColors.white,
-          side: BorderSide(
-              width: 1.5,
-              color: selectedColor ?? (selected ? AppColors.white : AppColors.darkOutline50)),
+          side: !isUnselectedBorder
+              ? null
+              : BorderSide(
+                  width: 1.5,
+                  color: selectedColor ?? (selected ? AppColors.white : AppColors.grey50)),
           // side: BorderSide.none,
           labelStyle: AppStyles.text14PxRegular.copyWith(
               color: selected ? AppColors.primaryDark : AppColors.white,

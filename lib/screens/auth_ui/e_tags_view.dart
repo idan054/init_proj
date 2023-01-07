@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/my_widgets.dart';
 import '../feed_ui/main_feed_screen.dart';
+import '../feed_ui/user_screen.dart';
 import 'a_onboarding_screen.dart';
 
 class TagsView extends StatelessWidget {
@@ -19,29 +20,35 @@ class TagsView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        200.verticalSpace,
-        'Choose interests, so\neveryone will know you better'.toText(fontSize: 18, medium: true),
-        50.verticalSpace,
-        Badge(
-          position: BadgePosition.bottomEnd(bottom: 0, end: 0),
-          badgeColor: AppColors.grey50,
-          padding: 10.all,
-          badgeContent:
-          Assets.svg.icons.plusAddUntitledIcon.svg(height: 20, color: AppColors.darkBg),
-          child: CircleAvatar(
-            radius: 60,
-            backgroundColor: AppColors.darkOutline50,
-            child: CircleAvatar(
-              backgroundColor: AppColors.darkBg,
-              radius: 57,
-              child: Assets.svg.icons.manProfileOutline.svg(height: 55),
-            ),
-          ),
-        ).onTap(() {}),
-        20.verticalSpace,
-        'Add a profile picture'.toText(fontSize: 13, medium: true),
-        50.verticalSpace,
-        rilTextField(label: 'Nickname', hint: 'What is your name?')
+        190.verticalSpace,
+        'Choose interests, so\neveryone will know you better'
+            .toText(textAlign: TextAlign.center, fontSize: 18, medium: true),
+        40.verticalSpace,
+        Wrap(
+          // alignment: WrapAlignment.center,
+          spacing: 0,
+          runSpacing: 11,
+          children: [
+            // for (int i = 0; i < 15; i++) ...[
+            for (int i = 0; i < tags.length; i++) ...[
+              Builder(builder: (context) {
+                var isSelected = false;
+                return StatefulBuilder(builder: (context, stfState) {
+                  return buildChoiceChip(context,
+                      selectedColor: AppColors.darkOutline50,
+                      isUnselectedBorder: false,
+                      padding: 4,
+                      label: '${tags[i]}'
+                          .toText(color: isSelected ? AppColors.white : AppColors.grey50, fontSize: 14),
+                      onSelect: (bool newSelection) {
+                    isSelected = !isSelected;
+                    stfState(() {});
+                  }, selected: isSelected);
+                });
+              })
+            ]
+          ],
+        ).px(25),
       ],
     );
   }

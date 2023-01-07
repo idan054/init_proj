@@ -82,7 +82,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               .svg(height: 15, color: AppColors.darkOutline50),
                       selectedColor: AppColors.darkOutline50,
                       label: (isComments ? 'With comments' : 'Reply only')
-                          .toText(color: isComments ? AppColors.white : AppColors.darkOutline50),
+                          .toText(color: isComments ? AppColors.white : AppColors.grey50),
                       onSelect: (bool newSelection) {
                 isComments = !isComments;
                 setState(() {});

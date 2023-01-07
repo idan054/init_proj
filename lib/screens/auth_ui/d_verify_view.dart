@@ -69,9 +69,12 @@ class _VerifyViewState extends State<VerifyView> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        200.verticalSpace,
+        190.verticalSpace,
         'Quick verify, so\neveryone will trust you'
             .toText(fontSize: 18, medium: true, textAlign: TextAlign.center),
+        10.verticalSpace,
+        // "This what makes us a reliable & safe place".toText(color: AppColors.grey50, fontSize: 11),
+        "And you will know every member is Ril".toText(color: AppColors.grey50, fontSize: 11),
         40.verticalSpace,
         SizedBox(
           height: 200,
@@ -106,17 +109,17 @@ class _VerifyViewState extends State<VerifyView> {
             ],
           ).px(40),
         ),
-        30.verticalSpace,
+        20.verticalSpace,
         StatefulBuilder(builder: (context, stfSetState) {
           return ListTile(
-            title: 'Verified members only'.toText(fontSize: 13, medium: true),
-            isThreeLine: true,
             horizontalTitleGap: 0,
             contentPadding: EdgeInsets.zero,
-            // visualDensity: VisualDensity.compact,
-            subtitle:
-                'Show only Rils of verified members'.toText(color: AppColors.grey50, fontSize: 11),
             leading: Assets.svg.icons.checkVerifiedOutline.svg(height: 25, color: AppColors.grey50),
+            // visualDensity: VisualDensity.compact,
+            title: 'Show verified members only'.toText(fontSize: 13),
+
+            // title: 'Verified members only'.toText(fontSize: 13, medium: true),
+            // subtitle: 'Show only Rils of verified members'.toText(color: AppColors.grey50, fontSize: 11),
             trailing: Switch.adaptive(
               // activeColor: AppColors.darkOutline,
               // activeTrackColor: AppColors.grey50,

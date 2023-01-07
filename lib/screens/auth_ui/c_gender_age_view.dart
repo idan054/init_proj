@@ -28,7 +28,11 @@ class GenderAgeView extends StatelessWidget {
         'A bit about yourself'.toText(fontSize: 18, medium: true),
         75.verticalSpace,
         // 'Who are you'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
-        'When were you born?'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
+        // 'When were you born?'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
+        rilDropdownField(items, dropdownvalue),
+        // rilTextField(label: 'Gender', hint: 'Choose your gender...'),
+        55.verticalSpace,
+        'When is your birthday?'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
         18.verticalSpace,
         Row(
           children: [
@@ -37,9 +41,15 @@ class GenderAgeView extends StatelessWidget {
             rilTextField(label: 'Year', hint: 'YYYY', px: 5).expanded(),
           ],
         ).px(15),
-        // rilTextField(label: 'Gender', hint: 'Choose your gender...'),
-        86.verticalSpace,
-        rilDropdownField(items, dropdownvalue),
+        20.verticalSpace,
+        ListTile(
+            horizontalTitleGap: 0,
+            contentPadding: EdgeInsets.zero,
+            leading: Assets.svg.icons.shieldTickUntitledIcon.svg(height: 27, color: Colors.white60),
+            title: "For a safe community, you can't edit your Age & Gender later"
+                .toText(fontSize: 12, color: AppColors.grey50)
+                .centerLeft
+        ).px(25),
       ],
     );
   }
@@ -72,7 +82,7 @@ class GenderAgeView extends StatelessWidget {
               );
             }).toList(),
             onChanged: (String? newValue) {
-                dropdownValue = newValue!;
+              dropdownValue = newValue!;
               stfSetState(() {});
             },
           ),

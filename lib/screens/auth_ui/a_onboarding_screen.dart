@@ -64,78 +64,83 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
 
   Widget buildTopBar(BuildContext context) {
     return Column(
+      children: [
+        90.verticalSpace,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            90.verticalSpace,
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                10.horizontalSpace,
-                IconButton(
-                    icon: Assets.svg.icons.arrowNarrowLeft.svg(color: AppColors.darkOutline50),
-                    onPressed: () {
-                      if (_tabController!.index == 0) {
-                        context.router.replaceAll([const LoginRoute()]);
-                      } else {
-                        _tabController!.animateTo(_tabController!.index - 1);
-                      }
-                    }),
-                const Spacer(),
-                riltopiaHorizontalLogo(ratio: 1.2),
-                const Spacer(),
-                // PlaceHolder:
-                Opacity(
-                    opacity: 0.0,
-                    child: IconButton(
-                        icon: Assets.svg.icons.arrowNarrowLeft.svg(color: AppColors.white),
-                        onPressed: () {})),
-                10.horizontalSpace,
-              ],
-            ),
-            50.verticalSpace,
+            10.horizontalSpace,
+            IconButton(
+                icon: Assets.svg.icons.arrowNarrowLeft.svg(color: AppColors.darkOutline50),
+                onPressed: () {
+                  if (_tabController!.index == 0) {
+                    context.router.replaceAll([const LoginRoute()]);
+                  } else {
+                    _tabController!.animateTo(_tabController!.index - 1);
+                  }
+                }),
+            const Spacer(),
+            riltopiaHorizontalLogo(ratio: 1.2),
+            const Spacer(),
+            // PlaceHolder:
+            Opacity(
+                opacity: 0.0,
+                child: IconButton(
+                    icon: Assets.svg.icons.arrowNarrowLeft.svg(color: AppColors.white),
+                    onPressed: () {})),
+            10.horizontalSpace,
           ],
-        ).center;
+        ),
+        50.verticalSpace,
+      ],
+    ).center;
   }
 
   Builder buildPageIndicator() {
     return Builder(builder: (context) {
-          bool verifyView = _tabController!.index == 2;
-          return Positioned(
-            bottom: verifyView ? 60 : 100,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                TabPageSelector(
-                  controller: _tabController,
-                  indicatorSize: 8,
-                  selectedColor: AppColors.white,
-                  color: AppColors.darkOutline50,
-                  borderStyle: BorderStyle.none,
-                ).center,
-                25.verticalSpace,
-                wMainButton(context,
-                    radius: 99,
-                    isWide: true,
-                    title: 'Next',
-                    color: AppColors.white,
-                    textColor: AppColors.darkBg, onPressed: () {
-                  _tabController!.animateTo(_tabController!.index + 1);
-                }),
-                if (verifyView)
-                  Column(
-                    children: [
-                      const SizedBox(height: 20),
-                      SizedBox(
-                              height: 20,
-                              child: 'Thanks, I don’t want verification'
-                                  .toText(fontSize: 15, color: AppColors.darkOutline50))
-                          .appearOpacity,
-                    ],
-                  )
-              ],
-            ),
-          );
-        });
+      bool verifyView = _tabController!.index == 2;
+      return Positioned(
+        bottom: verifyView ? 60 : 100,
+        left: 0,
+        right: 0,
+        child: Column(
+          children: [
+            TabPageSelector(
+              controller: _tabController,
+              indicatorSize: 8,
+              selectedColor: AppColors.white,
+              color: AppColors.darkOutline50,
+              borderStyle: BorderStyle.none,
+            ).center,
+            25.verticalSpace,
+            wMainButton(context,
+                radius: 99,
+                isWide: true,
+                title: _tabController!.index == 3 ? "Let's Start!" : 'Next ',
+                color: AppColors.white,
+                textColor: AppColors.darkBg, onPressed: () {
+              if (_tabController!.index == 3) {
+                context.router.replace(DashboardRoute());
+              } else {
+                _tabController!.animateTo(_tabController!.index + 1);
+              }
+            }),
+            if (verifyView)
+              // TODO Add R U SURE
+              Column(
+                children: [
+                  const SizedBox(height: 20),
+                  SizedBox(
+                      height: 20,
+                      child: 'Thanks, I don’t want verification'
+                          .toText(fontSize: 15, color: AppColors.darkOutline50))
+                  // .appearOpacity
+                ],
+              )
+          ],
+        ),
+      );
+    });
   }
 }
 
