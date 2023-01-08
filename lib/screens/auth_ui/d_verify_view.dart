@@ -66,75 +66,77 @@ class _VerifyViewState extends State<VerifyView> {
   Widget build(BuildContext context) {
     bool verifiedOnly = true;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        190.verticalSpace,
-        'Quick verify, so\neveryone will trust you'
-            .toText(fontSize: 18, medium: true, textAlign: TextAlign.center),
-        10.verticalSpace,
-        // "This what makes us a reliable & safe place".toText(color: AppColors.grey50, fontSize: 11),
-        "And you will know every member is Ril".toText(color: AppColors.grey50, fontSize: 11),
-        40.verticalSpace,
-        SizedBox(
-          height: 200,
-          child: Row(
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              StatefulBuilder(builder: (context, stfState) {
-                var camAvailable = camController != null && camController!.value.isInitialized;
-                var imageAvailable = capturedImage != null;
-                return Stack(
-                  children: [
-                    Container(
-                            color: AppColors.darkOutline50,
-                            height: 240,
-                            width: 140,
-                            child: imageAvailable
-                                ? Image.file(File(capturedImage!.path)).appearScale
-                                : camAvailable
-                                    ? CameraWidget(camController!)
-                                    : buildCameraPlaceHolder())
-                        .rounded(radius: 10)
-                        .onTap(() {
-                      initCamera(stfState);
-                    }),
-                    if (camAvailable) buildTakeShotButton(imageAvailable, stfState, camAvailable)
-                  ],
-                );
-              }),
-              // Spacer(),
-              25.horizontalSpace,
-              buildGenderAgeTags(),
-            ],
-          ).px(40),
-        ),
-        20.verticalSpace,
-        StatefulBuilder(builder: (context, stfSetState) {
-          return ListTile(
-            horizontalTitleGap: 0,
-            contentPadding: EdgeInsets.zero,
-            leading: Assets.svg.icons.checkVerifiedOutline.svg(height: 25, color: AppColors.grey50),
-            // visualDensity: VisualDensity.compact,
-            title: 'Show verified members only'.toText(fontSize: 13),
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          190.verticalSpace,
+          'Quick verify, so\neveryone will trust you'
+              .toText(fontSize: 18, medium: true, textAlign: TextAlign.center),
+          10.verticalSpace,
+          // "This what makes us a reliable & safe place".toText(color: AppColors.grey50, fontSize: 11),
+          "And you will know every member is Ril".toText(color: AppColors.grey50, fontSize: 11),
+          40.verticalSpace,
+          SizedBox(
+            height: 200,
+            child: Row(
+              // mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                StatefulBuilder(builder: (context, stfState) {
+                  var camAvailable = camController != null && camController!.value.isInitialized;
+                  var imageAvailable = capturedImage != null;
+                  return Stack(
+                    children: [
+                      Container(
+                              color: AppColors.darkOutline50,
+                              height: 240,
+                              width: 140,
+                              child: imageAvailable
+                                  ? Image.file(File(capturedImage!.path)).appearScale
+                                  : camAvailable
+                                      ? CameraWidget(camController!)
+                                      : buildCameraPlaceHolder())
+                          .rounded(radius: 10)
+                          .onTap(() {
+                        initCamera(stfState);
+                      }),
+                      if (camAvailable) buildTakeShotButton(imageAvailable, stfState, camAvailable)
+                    ],
+                  );
+                }),
+                // Spacer(),
+                25.horizontalSpace,
+                buildGenderAgeTags(),
+              ],
+            ).px(40),
+          ),
+          20.verticalSpace,
+          StatefulBuilder(builder: (context, stfSetState) {
+            return ListTile(
+              horizontalTitleGap: 0,
+              contentPadding: EdgeInsets.zero,
+              leading: Assets.svg.icons.checkVerifiedOutline.svg(height: 25, color: AppColors.grey50),
+              // visualDensity: VisualDensity.compact,
+              title: 'Show verified members only'.toText(fontSize: 13),
 
-            // title: 'Verified members only'.toText(fontSize: 13, medium: true),
-            // subtitle: 'Show only Rils of verified members'.toText(color: AppColors.grey50, fontSize: 11),
-            trailing: Switch.adaptive(
-              // activeColor: AppColors.darkOutline,
-              // activeTrackColor: AppColors.grey50,
+              // title: 'Verified members only'.toText(fontSize: 13, medium: true),
+              // subtitle: 'Show only Rils of verified members'.toText(color: AppColors.grey50, fontSize: 11),
+              trailing: Switch.adaptive(
+                // activeColor: AppColors.darkOutline,
+                // activeTrackColor: AppColors.grey50,
 
-              // inactiveThumbColor: AppColors.darkOutline,
-              // inactiveTrackColor: AppColors.primaryDark,
-              value: verifiedOnly,
-              onChanged: (bool value) {
-                verifiedOnly = value;
-                stfSetState(() {});
-              },
-            ),
-          ).px(25);
-        }),
-      ],
+                // inactiveThumbColor: AppColors.darkOutline,
+                // inactiveTrackColor: AppColors.primaryDark,
+                value: verifiedOnly,
+                onChanged: (bool value) {
+                  verifiedOnly = value;
+                  stfSetState(() {});
+                },
+              ),
+            ).px(25);
+          }),
+        ],
+      ),
     );
   }
 

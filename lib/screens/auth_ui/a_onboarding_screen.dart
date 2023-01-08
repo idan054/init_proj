@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:flutter/material.dart';
@@ -96,11 +98,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
     ).center;
   }
 
-  Builder buildPageIndicator() {
+  Widget buildPageIndicator() {
+    if (MediaQuery.of(context).viewInsets.bottom != 0.0) {
+      return const Offstage();
+    }
+
     return Builder(builder: (context) {
-      bool verifyView = _tabController!.index == 2;
+      bool verify_d_View = _tabController!.index == 2;
+      bool tags_e_View = _tabController!.index == 3;
       return Positioned(
-        bottom: verifyView ? 60 : 100,
+        bottom: verify_d_View ? 60 : 100,
         left: 0,
         right: 0,
         child: Column(
@@ -116,16 +123,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
             wMainButton(context,
                 radius: 99,
                 isWide: true,
-                title: _tabController!.index == 3 ? "Let's Start!" : 'Next ',
+                title: tags_e_View ? "Let's Start!" : 'Next ',
                 color: AppColors.white,
                 textColor: AppColors.darkBg, onPressed: () {
-              if (_tabController!.index == 3) {
+              if (tags_e_View) {
                 context.router.replace(DashboardRoute());
               } else {
                 _tabController!.animateTo(_tabController!.index + 1);
               }
             }),
-            if (verifyView)
+            if (verify_d_View)
               // TODO Add R U SURE
               Column(
                 children: [
