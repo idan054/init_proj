@@ -155,8 +155,22 @@ var fieldBorderDeco = OutlineInputBorder(
     borderSide: const BorderSide(color: AppColors.darkOutline50, width: 2),
     borderRadius: BorderRadius.circular(10));
 
-Widget rilTextField({required String label, required String hint, double px = 20}) {
+var fieldFocusBorderDeco = OutlineInputBorder(
+    borderSide: const BorderSide(color: AppColors.grey50, width: 2.5),
+    borderRadius: BorderRadius.circular(10));
+
+Widget rilTextField(
+    {required String label,
+    required String hint,
+    double px = 20,
+    FocusNode? focusNode,
+    TextInputType? keyboardType,
+    void Function(String)? onChanged}) {
   return TextField(
+          focusNode: focusNode,
+          onChanged: onChanged,
+          style: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
+          keyboardType: keyboardType,
           decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.always,
               labelText: label,
@@ -164,6 +178,6 @@ Widget rilTextField({required String label, required String hint, double px = 20
               labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.darkOutline50),
               hintStyle: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
               enabledBorder: fieldBorderDeco,
-              focusedBorder: fieldBorderDeco))
+              focusedBorder: fieldFocusBorderDeco))
       .px(px);
 }

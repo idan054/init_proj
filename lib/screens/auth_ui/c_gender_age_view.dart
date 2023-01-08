@@ -11,16 +11,22 @@ import '../../widgets/my_widgets.dart';
 import '../feed_ui/main_feed_screen.dart';
 import 'a_onboarding_screen.dart';
 
-class GenderAgeView extends StatelessWidget {
+class GenderAgeView extends StatefulWidget {
   const GenderAgeView({Key? key}) : super(key: key);
 
   @override
+  State<GenderAgeView> createState() => _GenderAgeViewState();
+}
+
+class _GenderAgeViewState extends State<GenderAgeView> {
+  var items = ['Male', 'Female', '🏳️‍🌈 Other'];
+  String dropdownVal = '';
+  var dayNode = FocusNode();
+  var monthNode = FocusNode();
+  var yearNode = FocusNode();
+
+  @override
   Widget build(BuildContext context) {
-    String dropdownvalue = 'Item 1';
-
-    // List of items in our dropdown menu
-    var items = ['Male', 'Female', '🏳️‍🌈 Other'];
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -30,27 +36,58 @@ class GenderAgeView extends StatelessWidget {
           75.verticalSpace,
           // 'Who are you'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
           // 'When were you born?'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
-          rilDropdownField(items, dropdownvalue),
+          rilDropdownField(items, dropdownVal),
           // rilTextField(label: 'Gender', hint: 'Choose your gender...'),
           55.verticalSpace,
           'When is your birthday?'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
           18.verticalSpace,
           Row(
             children: [
-              rilTextField(label: 'Day', hint: 'DD', px: 5).sizedBox(85, null),
-              rilTextField(label: 'Month', hint: 'MM', px: 5).sizedBox(85, null),
-              rilTextField(label: 'Year', hint: 'YYYY', px: 5).expanded(),
+              rilTextField(
+                px: 5,
+                label: 'Day',
+                hint: 'DD',
+                keyboardType: TextInputType.number,
+                focusNode: dayNode,
+                onChanged: (val) {
+                  print('val.length == 2 ${val.length == 2}');
+                  if (val.length == 2) FocusScope.of(context).requestFocus(monthNode);
+                },
+              ).sizedBox(85, null),
+              rilTextField(
+                px: 5,
+                label: 'Month',
+                hint: 'MM',
+                keyboardType: TextInputType.number,
+                focusNode: monthNode,
+                onChanged: (val) {
+                  if (val.isEmpty) FocusScope.of(context).requestFocus(dayNode);
+                  if (val.length == 2) FocusScope.of(context).requestFocus(yearNode);
+                },
+              ).sizedBox(85, null),
+              rilTextField(
+                px: 5,
+                label: 'Year',
+                hint: 'YYYY',
+                keyboardType: TextInputType.number,
+                focusNode: yearNode,
+                onChanged: (val) {
+                  if (val.isEmpty) FocusScope.of(context).requestFocus(monthNode);
+                  if (val.length == 4) FocusScope.of(context).unfocus();
+                },
+              ).expanded(),
             ],
           ).px(15),
           20.verticalSpace,
           ListTile(
-              horizontalTitleGap: 0,
-              contentPadding: EdgeInsets.zero,
-              leading: Assets.svg.icons.shieldTickUntitledIcon.svg(height: 27, color: Colors.white60),
-              title: "For a safe community, you can't edit your gender & birthday later"
-                  .toText(fontSize: 12, color: AppColors.grey50)
-                  .centerLeft
-          ).px(25),
+                  horizontalTitleGap: 0,
+                  contentPadding: EdgeInsets.zero,
+                  leading: Assets.svg.icons.shieldTickUntitledIcon
+                      .svg(height: 27, color: Colors.white60),
+                  title: "For a safe community, you can't edit your gender & birthday later"
+                      .toText(fontSize: 12, color: AppColors.grey50)
+                      .centerLeft)
+              .px(25),
         ],
       ),
     );
