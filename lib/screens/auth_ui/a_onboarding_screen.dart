@@ -3,12 +3,14 @@
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../common/routes/app_router.gr.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
+import '../../widgets/clean_snackbar.dart';
 import '../../widgets/my_widgets.dart';
 import '../feed_ui/main_feed_screen.dart';
 import 'b_name_profile_view.dart';
@@ -104,6 +106,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
     }
 
     return Builder(builder: (context) {
+      bool nameProfile_b_View = _tabController!.index == 0;
+      bool genderAge_c_View = _tabController!.index == 1;
       bool verify_d_View = _tabController!.index == 2;
       bool tags_e_View = _tabController!.index == 3;
       return Positioned(
@@ -126,6 +130,16 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                 title: tags_e_View ? "Let's Start!" : 'Next ',
                 color: AppColors.white,
                 textColor: AppColors.darkBg, onPressed: () {
+              var currUser = context.uniProvider.currUser;
+
+              var nameErr = currUser.name == null || currUser.name!.isEmpty;
+              var imageErr = currUser.photoUrl == null || currUser.photoUrl!.isEmpty;
+
+              if (nameErr || imageErr) {
+                context.uniProvider.updateErrFound(true);
+                return; // AKA ERR;
+              }
+
               if (tags_e_View) {
                 context.router.replace(DashboardRoute());
               } else {
@@ -159,11 +173,16 @@ var fieldFocusBorderDeco = OutlineInputBorder(
     borderSide: const BorderSide(color: AppColors.grey50, width: 2.5),
     borderRadius: BorderRadius.circular(10));
 
+var fieldErrBorderDeco = OutlineInputBorder(
+    borderSide: const BorderSide(color: AppColors.errRed, width: 2.5),
+    borderRadius: BorderRadius.circular(10));
+
 Widget rilTextField(
     {required String label,
     required String hint,
     double px = 20,
     FocusNode? focusNode,
+    String? errorText,
     TextInputType? keyboardType,
     void Function(String)? onChanged}) {
   return TextField(
@@ -175,8 +194,11 @@ Widget rilTextField(
               floatingLabelBehavior: FloatingLabelBehavior.always,
               labelText: label,
               hintText: hint,
-              labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.darkOutline50),
+              labelStyle: AppStyles.text16PxMedium
+                  .copyWith(color: errorText != null ? AppColors.errRed : AppColors.darkOutline50),
               hintStyle: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
+              errorText: errorText,
+              errorBorder: fieldErrBorderDeco,
               enabledBorder: fieldBorderDeco,
               focusedBorder: fieldFocusBorderDeco))
       .px(px);

@@ -64,6 +64,8 @@ dependencies:
 
   permission_handler: ^10.2.0
   video_player: ^2.4.10
+  another_flushbar: ^1.12.29
+  shimmer: ^2.0.0
 
 #dependency_overrides:
 #  camera:

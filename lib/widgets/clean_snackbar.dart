@@ -1,9 +1,30 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
-cleanSnack(
-  BuildContext context, {
+Widget rilFlushBar(BuildContext context, String text,
+    {Color bgColor = AppColors.grey50, Color textColor = AppColors
+        .darkBg, int? duration, bool isShimmer = false}) {
+  return Flushbar(
+    backgroundColor: bgColor,
+    flushbarStyle: FlushbarStyle.FLOATING,
+    flushbarPosition: FlushbarPosition.TOP,
+    margin: const EdgeInsets.only(left: 30, right: 30, top: 40),
+    borderRadius: BorderRadius.all(10.circular),
+    isDismissible: false,
+    duration: (duration ?? 3).seconds,
+    // titleText: "Hello Hero".toText(color: AppColors.darkBg, medium: true, fontSize: 16),
+    messageText: Shimmer.fromColors(
+        baseColor: textColor,
+        highlightColor: isShimmer ? AppColors.grey50 : textColor,
+        child: text.toText(color: textColor, medium: true, fontSize: 14)),
+  )
+    ..show(context);
+}
+
+cleanSnack(BuildContext context, {
   required String text,
   Color? color,
   Color? textColor,
@@ -21,20 +42,17 @@ cleanSnack(
       text,
       textAlign: TextAlign.center,
       style: TextStyle(
-          color: textColor ?? AppColors.greyLight,
-          fontSize: 16,
-          fontWeight: FontWeight.bold),
+          color: textColor ?? AppColors.greyLight, fontSize: 16, fontWeight: FontWeight.bold),
     ),
     action: showSnackAction
         ? (customAction ??
-            SnackBarAction(
-              label: 'close',
-              onPressed: () =>
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar(),
-            ))
+        SnackBarAction(
+          label: 'close',
+          onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+        ))
         : SnackBarAction(
-            label: '',
-            onPressed: () {},
-          ),
+      label: '',
+      onPressed: () {},
+    ),
   ));
 }

@@ -27,6 +27,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
 
   @override
   Widget build(BuildContext context) {
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

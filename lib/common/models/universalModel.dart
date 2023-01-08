@@ -7,6 +7,11 @@ import 'chat/chat_model.dart';
 import 'package:flutter/foundation.dart';
 
 class UniProvider with ChangeNotifier {
+  bool errFound = false;
+  void updateErrFound(bool data, {bool notify = true}) {
+    errFound = data;
+    if(notify) notifyListeners();
+  }
 
   bool postUploaded = false;
   void updatePostUploaded(bool data, {bool notify = true}) {
