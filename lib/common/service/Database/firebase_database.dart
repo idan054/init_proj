@@ -16,6 +16,8 @@ import '../timestamp_convert.dart';
 import 'firebase_advanced.dart';
 import 'package:hive/hive.dart';
 
+enum FilterTypes { postsByUser }
+
 //> MUST Be same as collection name!
 enum ModelTypes { posts, chats, messages, users }
 

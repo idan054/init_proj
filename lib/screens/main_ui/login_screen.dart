@@ -26,59 +26,45 @@ class _LoginScreenState extends State<LoginScreen> {
     //   Timer(250.milliseconds, () => AuthService.signInWithGoogle(context));
     // }
 
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          stops: [0.1, 0.5],
-          colors: [
-            AppColors.primaryOriginal,
-            AppColors.darkBg,
-          ],
-        ),
-      ),
-      child: Scaffold(
-        backgroundColor: AppColors.transparent,
-        body: Column(
-          children: [
-            150.verticalSpace,
-            riltopiaLogo(),
-            Text(
-              'A Social Chat App', // STR
-              textAlign: TextAlign.center,
-              style: AppStyles.text20PxRegular
-                  .copyWith(color: AppColors.white, fontFamily: FontFamily.rilTopia),
-            ),
-            250.verticalSpace,
-            // googleLoginButton(),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Start Share & Chat', // STR
-                  textAlign: TextAlign.center,
-                  style: AppStyles.text20PxRegular
-                      .copyWith(color: AppColors.white, fontFamily: FontFamily.rilTopia),
-                ).px(55),
-                10.verticalSpace,
-                wMainButton(context,
-                    radius: 8,
-                    isWide: true,
-                    title: 'join with Google',
-                    icon: Assets.svg.gLogoIcon.svg(height: 25),
-                    color: AppColors.white,
-                    textColor: AppColors.darkBg,
-                    onPressed: () async =>
-                        await AuthService.signInWithGoogle(context, alsoSignOut: true)).appearAll,
+    return Scaffold(
+      backgroundColor: AppColors.darkBg,
+      body: Column(
+        children: [
+          const Spacer(flex: 25),
+          riltopiaHorizontalLogo(ratio: 2.2, showSubText: true),
+          30.verticalSpace,
+          // const Spacer(flex: 80),
+          const Placeholder(fallbackHeight: 450),
+          // googleLoginButton(),
+          30.verticalSpace,
+          wMainButton(context,
+              radius: 99,
+              isWide: true,
+              title: 'Join with Google',
+              icon: Assets.svg.gLogoIcon.svg(height: 25),
+              color: AppColors.white,
+              textColor: AppColors.darkBg,
+              onPressed: () async =>
+                  await AuthService.signInWithGoogle(context, signUpScenario: true)).appearAll,
+          const Spacer(flex: 5),
+          RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(
+              children: <TextSpan>[
+                TextSpan(
+                    text: "By Join with Google, you agree to our ",
+                    style: AppStyles.text14PxRegular),
+                TextSpan(text: '\nTerms & Conditions', style: AppStyles.text14PxBold
+                    // .copyWith(decoration: TextDecoration.underline)
+                    ),
               ],
             ),
-            const Spacer(
-              flex: 7,
-            ),
-          ],
-        ).center,
-      ),
+          ).onTap(() {
+            // TODO Add Terms & Conditions Link
+          }),
+          const Spacer(flex: 15),
+        ],
+      ).center,
     );
   }
 

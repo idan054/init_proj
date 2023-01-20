@@ -1,7 +1,9 @@
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../common/service/mixins/assets.gen.dart';
 import '../common/themes/app_styles.dart';
 
 export 'bottom_sheet.dart';
@@ -66,25 +68,43 @@ Widget wMainButton(BuildContext context,
     Color color = AppColors.primaryOriginal,
     Color borderColor = AppColors.transparent,
     Color textColor = AppColors.white,
-    required VoidCallback onPressed}) {
+    required VoidCallback? onPressed}) {
   return TextButton.icon(
           style: TextButton.styleFrom(
               backgroundColor: color,
               shape: RoundedRectangleBorder(
-                side: BorderSide(
-                  width: 2,
-                  color: borderColor,
-                ),
+                side: BorderSide(width: 2, color: borderColor),
                 borderRadius: BorderRadius.circular(radius), // <-- Radius
               )),
           onPressed: onPressed,
           icon: icon ?? const Offstage(),
           label: Text(
             title,
-            style: AppStyles.text20PxBold.copyWith(color: textColor),
+            style: AppStyles.text18PxBold.copyWith(color: textColor),
           ).offset(icon == null ? -5 : 0, 0))
       .advancedSizedBox(context, width: width ?? context.width, height: 55)
       .px(width == null ? (isWide ? 55 : 85) : 0);
+}
+
+// New logo
+Row riltopiaHorizontalLogo({double ratio = 1.0, bool showSubText = false}) {
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Assets.images.logoCircularRilTopiaLogo.image(height: 27 * ratio),
+      10.horizontalSpace,
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          'RilTopia'.toText(fontSize: 15 * ratio),
+          if (showSubText) ...[
+            3.verticalSpace,
+            ' A Social Chat App'.toText(fontSize: 6 * ratio),
+          ]
+        ],
+      )
+    ],
+  );
 }
 
 Widget riltopiaLogo({double fontSize = 52, bool shadowActive = true}) {

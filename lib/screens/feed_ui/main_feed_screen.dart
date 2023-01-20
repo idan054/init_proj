@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
+import '../../common/extensions/color_printer.dart';
 import '../../common/models/post/post_model.dart';
 import '../../common/models/universalModel.dart';
 import '../../common/models/user/user_model.dart';
@@ -126,10 +127,10 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     return LazyLoadScrollView(
       scrollOffset: 1500,
       onEndOfPage: () async {
-        print('START: onEndOfPage()');
-        context.uniProvider.updateIsFeedLoading(true);
+        printGreen('START: main_feed_screen.dart onEndOfPage()');
+        // context.uniProvider.updateIsLoading(true);
         await _loadMore();
-        context.uniProvider.updateIsFeedLoading(false);
+        // context.uniProvider.updateIsLoading(false);
       },
       child: Builder(builder: (context) {
         // return 'Sorry, no post found... \nTry again later!'.toText().center;
@@ -252,17 +253,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       ),
     );
   }
-}
-
-Row riltopiaHorizontalLogo({double ratio = 1.0}) {
-  return Row(
-    mainAxisSize: MainAxisSize.min,
-    children: [
-      Assets.images.logoCircularRilTopiaLogo.image(height: 27 * ratio),
-      10.horizontalSpace,
-      'RilTopia'.toText(fontSize: 15 * ratio),
-    ],
-  );
 }
 
 Widget buildChoiceChip(BuildContext context,

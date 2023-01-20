@@ -53,9 +53,9 @@ class _GenderAgeViewOldState extends State<GenderAgeViewOld> {
             shrinkWrap: true,
             children: [
               const SizedBox(width: 55),
-              genderButton(stfSetState, 'Boy', GenderTypes.boy).appearAll,
-              genderButton(stfSetState, 'Girl', GenderTypes.girl).px(15).appearAll,
-              genderButton(stfSetState, 'LGBTQ+', GenderTypes.lgbt).appearAll,
+              // genderButton(stfSetState, 'Boy', GenderTypes.boy).appearAll,
+              // genderButton(stfSetState, 'Girl', GenderTypes.girl).px(15).appearAll,
+              // genderButton(stfSetState, 'LGBTQ+', GenderTypes.lgbt).appearAll,
               const SizedBox(width: 25),
             ],
           ).advancedSizedBox(context, width: context.width, height: 55);

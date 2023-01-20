@@ -15,30 +15,28 @@ class AuthService {
   static User? authUser = FirebaseAuth.instance.currentUser;
 
   /// Google LOGIN
-  static Future signInWithGoogle(BuildContext context, {alsoSignOut = false}) async {
+  static Future signInWithGoogle(BuildContext context, {bool signUpScenario = false}) async {
     print('START: signInWithGoogle()');
-    context.router.replace(const OnBoardingRoute());
-    return;
 
-    // When signInWithGoogle Button Clicked.
-    if (alsoSignOut) {
+    // autoLogin for when user casually come back to the app
+    if (signUpScenario) {
       await FirebaseAuth.instance.signOut();
       await GoogleSignIn().signOut();
     }
 
     User? googleUser;
-    if (authUser?.uid == null || alsoSignOut) googleUser = await googleAuthAction;
+    if (authUser?.uid == null || signUpScenario) googleUser = await googleAuthAction;
 
     //~ Check if User exist:
     var userEmail = authUser?.uid == null ? googleUser!.email : authUser!.email;
     print('userEmail $userEmail');
     var userData = await Database.docData('users/$userEmail');
-    // print('userData $userData');
+    print('userData $userData');
     if (userData == null ||
         userData['gender'] == null ||
         userData['age'] == null ||
         userData['birthday'] == null) {
-      print('START:  New User:()');
+      print('START:  New User:');
       //~ New User:
       // This fix bug when user out while signup.
       if (googleUser?.uid == null) googleUser = await googleAuthAction;
@@ -46,14 +44,14 @@ class AuthService {
       var user = context.uniProvider.currUser.copyWith(
         uid: googleUser!.uid,
         email: googleUser.email,
-        name: googleUser.displayName,
-        photoUrl: googleUser.photoURL,
+        // name: googleUser.displayName,
+        // photoUrl: googleUser.photoURL, // DEFAULT
       );
       context.uniProvider.updateUser(user);
-      context.router.replace(const CreateUserRouteOld());
+      context.router.replace(signUpScenario ? const OnBoardingRoute() : const LoginRoute());
     } else {
       //~ Exist User:
-      print('START:  Exist User:()');
+      print('START:  Exist User:');
       var currUser = UserModel.fromJson(userData);
       context.uniProvider.updateUser(currUser);
       context.router.replace(DashboardRoute());

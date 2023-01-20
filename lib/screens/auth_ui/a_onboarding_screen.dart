@@ -1,16 +1,19 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../common/routes/app_router.gr.dart';
+import '../../common/service/Database/firebase_database.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
 import '../../widgets/clean_snackbar.dart';
+import '../../widgets/my_dialog.dart';
 import '../../widgets/my_widgets.dart';
 import '../feed_ui/main_feed_screen.dart';
 import 'b_name_profile_view.dart';
@@ -32,7 +35,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
 
   @override
   void initState() {
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabController!.addListener(_handleTabSelection);
     super.initState();
   }
@@ -48,16 +51,19 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
       backgroundColor: AppColors.darkBg,
       body: Stack(
         children: [
-          TabBarView(
-            controller: _tabController,
-            // This needed to make sure user fill the info.
-            physics: const NeverScrollableScrollPhysics(),
-            children: [
-              const NameProfileView(),
-              const GenderAgeView(),
-              VerifyView(_tabController!),
-              const TagsView(),
-            ],
+          Form(
+            key: formKey,
+            child: TabBarView(
+              controller: _tabController,
+              // This needed to make sure user fill the info.
+              physics: const NeverScrollableScrollPhysics(),
+              children: const [
+                NameProfileView(),
+                GenderAgeView(),
+                // VerifyView(_tabController!), // TODO ADD ON POST MVP ONLY: VerifyView()
+                TagsView(),
+              ],
+            ),
           ),
           buildTopBar(context),
           buildPageIndicator(),
@@ -101,6 +107,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
   }
 
   Widget buildPageIndicator() {
+    // var isLoading = context.listenUniProvider.isLoading; // This will auto rebuild if err found.
+
     if (MediaQuery.of(context).viewInsets.bottom != 0.0) {
       return const Offstage();
     }
@@ -108,8 +116,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
     return Builder(builder: (context) {
       bool nameProfile_b_View = _tabController!.index == 0;
       bool genderAge_c_View = _tabController!.index == 1;
-      bool verify_d_View = _tabController!.index == 2;
-      bool tags_e_View = _tabController!.index == 3;
+      bool verify_d_View = _tabController!.index == 404; // AKA unavailable yet..
+      bool tags_e_View = _tabController!.index == 2;
       return Positioned(
         bottom: verify_d_View ? 60 : 100,
         left: 0,
@@ -127,30 +135,59 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
             wMainButton(context,
                 radius: 99,
                 isWide: true,
+                // title: isLoading ? 'Loading... ' : tags_e_View ? "Let's Start!" : 'Next ',
                 title: tags_e_View ? "Let's Start!" : 'Next ',
                 color: AppColors.white,
                 textColor: AppColors.darkBg, onPressed: () {
+              context.uniProvider.updateErrFound(false);
+
+              // Image validation
               var currUser = context.uniProvider.currUser;
+              var imageErr = nameProfile_b_View && (currUser.photoUrl == null || currUser.photoUrl!.isEmpty);
+              var tagsErr = tags_e_View && (currUser.tags.isEmpty);
+              if (imageErr || tagsErr) context.uniProvider.updateErrFound(true);
 
-              var nameErr = currUser.name == null || currUser.name!.isEmpty;
-              var imageErr = currUser.photoUrl == null || currUser.photoUrl!.isEmpty;
-
-              if (nameErr || imageErr) {
-                context.uniProvider.updateErrFound(true);
+              // formKey - Name, Age, Gender validation
+              var validState = formKey.currentState!.validate();
+              if (!validState || imageErr || tagsErr) {
                 return; // AKA ERR;
               }
 
-              if (tags_e_View) {
-                context.router.replace(DashboardRoute());
-              } else {
-                _tabController!.animateTo(_tabController!.index + 1);
+              if (genderAge_c_View) {
+                var user = context.uniProvider.currUser;
+                var gender = user.gender == GenderTypes.other ? '🏳️‍🌈 Other' : user.gender?.name;
+                var title = "You're ${user.age} y.o $gender";
+                showRilDialog(context,
+                    title: title,
+                    desc: "You can't change your age & gender later",
+                    secondaryBtn: TextButton(
+                        child: 'Confirm'.toText(color: AppColors.primaryLight),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Future.delayed(150.milliseconds)
+                              .then((_) => _tabController!.animateTo(_tabController!.index + 1));
+                        }));
+                return;
               }
+
+              if (tags_e_View) {
+                // print('currUser ${currUser.toJson()}');
+                Database().updateFirestore(
+                    collection: 'users',
+                    docName: '${currUser.email}',
+                    toJson: context.uniProvider.currUser.toJson());
+                context.router.replace(DashboardRoute());
+                return;
+              }
+
+              // Default
+              _tabController!.animateTo(_tabController!.index + 1);
             }),
             if (verify_d_View)
-              // TODO Add R U SURE
               Column(
                 children: [
                   const SizedBox(height: 20),
+                  // TODO Add R U SURE POPUP
                   SizedBox(
                       height: 20,
                       child: 'Thanks, I don’t want verification'
@@ -164,6 +201,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
     });
   }
 }
+
+final formKey = GlobalKey<FormState>();
 
 var fieldBorderDeco = OutlineInputBorder(
     borderSide: const BorderSide(color: AppColors.darkOutline50, width: 2),
@@ -182,22 +221,28 @@ Widget rilTextField(
     required String hint,
     double px = 20,
     FocusNode? focusNode,
-    String? errorText,
+    // String? errorText,
+    int? maxLength,
     TextInputType? keyboardType,
+    TextEditingController? controller,
+    FormFieldValidator? validator,
     void Function(String)? onChanged}) {
-  return TextField(
+  return TextFormField(
+          validator: validator,
+          controller: controller,
           focusNode: focusNode,
           onChanged: onChanged,
+          maxLength: maxLength,
           style: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
           keyboardType: keyboardType,
           decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.always,
               labelText: label,
               hintText: hint,
-              labelStyle: AppStyles.text16PxMedium
-                  .copyWith(color: errorText != null ? AppColors.errRed : AppColors.darkOutline50),
+              // labelStyle: AppStyles.text16PxMedium.copyWith(color: errorText != null ? AppColors.errRed : AppColors.darkOutline50),
+              labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.darkOutline50),
               hintStyle: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
-              errorText: errorText,
+              // errorText: errorText,
               errorBorder: fieldErrBorderDeco,
               enabledBorder: fieldBorderDeco,
               focusedBorder: fieldFocusBorderDeco))

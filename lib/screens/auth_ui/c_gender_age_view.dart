@@ -6,6 +6,7 @@ import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../common/models/user/user_model.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/my_widgets.dart';
 import '../feed_ui/main_feed_screen.dart';
@@ -21,12 +22,24 @@ class GenderAgeView extends StatefulWidget {
 class _GenderAgeViewState extends State<GenderAgeView> {
   var items = ['Male', 'Female', '🏳️‍🌈 Other'];
   String dropdownVal = '';
+  var dayController = TextEditingController();
+  var monthController = TextEditingController();
+  var yearController = TextEditingController();
+
   var dayNode = FocusNode();
   var monthNode = FocusNode();
   var yearNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
+    var isErr = context.listenUniProvider.errFound; // This will auto rebuild if err found.
+
+    // bool genderErr = false;
+    // bool ageErr = false;
+    // if (isErr) {
+    //   var genderErr = currUser.gender == null;
+    //   var ageErr = currUser.age == null;
+    // }
 
     return SingleChildScrollView(
       child: Column(
@@ -50,9 +63,20 @@ class _GenderAgeViewState extends State<GenderAgeView> {
                 hint: 'DD',
                 keyboardType: TextInputType.number,
                 focusNode: dayNode,
+                maxLength: 2,
+                controller: dayController,
+                validator: (value) {
+                  if (dayController.text.isEmpty ||
+                      dayController.text.length != 2 ||
+                      int.parse(dayController.text) >= 32) {
+                    return 'DD Format';
+                  }
+                  return null;
+                },
+                // errorText:? '': null,
                 onChanged: (val) {
-                  print('val.length == 2 ${val.length == 2}');
                   if (val.length == 2) FocusScope.of(context).requestFocus(monthNode);
+                  updateUserAge();
                 },
               ).sizedBox(85, null),
               rilTextField(
@@ -61,40 +85,91 @@ class _GenderAgeViewState extends State<GenderAgeView> {
                 hint: 'MM',
                 keyboardType: TextInputType.number,
                 focusNode: monthNode,
+                maxLength: 2,
+                controller: monthController,
+                validator: (value) {
+                  print('monthController.text ${monthController.text}');
+                  if (monthController.text.isEmpty ||
+                      monthController.text.length != 2 ||
+                      int.parse(monthController.text) >= 13) {
+                    return 'MM Format';
+                  }
+                  return null;
+                },
+                // errorText:? '': null,
                 onChanged: (val) {
                   if (val.isEmpty) FocusScope.of(context).requestFocus(dayNode);
                   if (val.length == 2) FocusScope.of(context).requestFocus(yearNode);
+                  updateUserAge();
                 },
               ).sizedBox(85, null),
               rilTextField(
                 px: 5,
                 label: 'Year',
                 hint: 'YYYY',
-                keyboardType: TextInputType.number,
+                maxLength: 4,
                 focusNode: yearNode,
+                keyboardType: TextInputType.number,
+                controller: yearController,
+                validator: (value) {
+                  if (yearController.text.isEmpty || yearController.text.length != 4) {
+                    return 'YYYY Format';
+                  }
+                  return null;
+                },
+                // errorText:? '': null,
                 onChanged: (val) {
                   if (val.isEmpty) FocusScope.of(context).requestFocus(monthNode);
                   if (val.length == 4) FocusScope.of(context).unfocus();
+                  updateUserAge();
                 },
               ).expanded(),
             ],
           ).px(15),
           20.verticalSpace,
-          ListTile(
-                  horizontalTitleGap: 0,
-                  contentPadding: EdgeInsets.zero,
-                  leading: Assets.svg.icons.shieldTickUntitledIcon
-                      .svg(height: 27, color: Colors.white60),
-                  title: "For a safe community, you can't edit your gender & birthday later"
-                      .toText(fontSize: 12, color: AppColors.grey50)
-                      .centerLeft)
-              .px(25),
+          // ListTile(
+          //         horizontalTitleGap: 0,
+          //         contentPadding: EdgeInsets.zero,
+          //         leading: Assets.svg.icons.shieldTickUntitledIcon
+          //             .svg(height: 27, color: Colors.white60),
+          //         title: "For a safe community,\nyou can't edit those details"
+          //             .toText(fontSize: 12, color: AppColors.grey50)
+          //             .centerLeft)
+          //     .px(25),
         ],
       ),
     );
   }
 
+  void updateUserAge() {
+    print('START: updateUserAge()');
+    var currUser = context.uniProvider.currUser;
+
+    if (yearController.text.isEmpty ||
+        yearController.text.length != 4 ||
+        monthController.text.isEmpty ||
+        monthController.text.length != 2 ||
+        dayController.text.isEmpty ||
+        dayController.text.length != 2) {
+      return;
+    }
+    var year = int.parse(yearController.text);
+    var month = int.parse(monthController.text);
+    var day = int.parse(dayController.text);
+    var bDay = DateTime(year, month, day);
+    var age = (bDay.difference(DateTime.now()).inDays / ~365).round();
+    // print('bDay $bDay');
+    // print('age $age');
+
+    context.uniProvider.updateUser(currUser.copyWith(
+      age: age,
+      birthday: bDay,
+    ));
+  }
+
   StatefulBuilder rilDropdownField(List<String> items, String dropdownValue) {
+    var currUser = context.uniProvider.currUser;
+
     return StatefulBuilder(builder: (context, stfSetState) {
       return Container(
         margin: 20.horizontal,
@@ -102,11 +177,15 @@ class _GenderAgeViewState extends State<GenderAgeView> {
           padding: 20.horizontal,
           alignedDropdown: true,
           child: DropdownButtonFormField(
+            validator: (value) {
+              return value == null ? '' : null;
+            },
             isExpanded: true,
             icon: const Icon(Icons.keyboard_arrow_down),
             decoration: InputDecoration(
               focusedBorder: fieldBorderDeco,
               enabledBorder: fieldBorderDeco,
+              errorBorder: fieldErrBorderDeco,
               floatingLabelBehavior: FloatingLabelBehavior.always,
               labelText: 'Gender',
               hintText: 'What is your gender',
@@ -123,6 +202,9 @@ class _GenderAgeViewState extends State<GenderAgeView> {
             }).toList(),
             onChanged: (String? newValue) {
               dropdownValue = newValue!;
+              var index = items.indexWhere((item) => item == newValue);
+              var gender = GenderTypes.values[index];
+              context.uniProvider.updateUser(currUser.copyWith(gender: gender));
               stfSetState(() {});
             },
           ),

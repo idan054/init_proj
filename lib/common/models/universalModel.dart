@@ -6,7 +6,23 @@ import 'chat/chat_model.dart';
 
 import 'package:flutter/foundation.dart';
 
+// class OnBoardingProvider with ChangeNotifier {
+//
+// }
+
 class UniProvider with ChangeNotifier {
+  String? status;
+  void updateStatus(String? data) {
+    status = data;
+    notifyListeners();
+  }
+
+  bool isLoading = false;
+  void updateIsLoading(bool data) {
+    isLoading = data;
+    notifyListeners();
+  }
+
   bool errFound = false;
   void updateErrFound(bool data, {bool notify = true}) {
     errFound = data;
@@ -57,12 +73,6 @@ class UniProvider with ChangeNotifier {
   //   postsList = data;
   //   notifyListeners();
   // }
-
-  bool isFeedLoading = false;
-  void updateIsFeedLoading(bool data) {
-    isFeedLoading = data;
-    notifyListeners();
-  }
 
 // PostModel? lastedUploadedPost;
 // void updatePostUploaded(PostModel data) {

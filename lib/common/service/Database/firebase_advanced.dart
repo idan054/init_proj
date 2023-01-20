@@ -15,7 +15,7 @@ class FsAdvanced {
   static final db = FirebaseFirestore.instance;
 
   Future<List> handleGetModel(BuildContext context, ModelTypes modelType, List? currList,
-      {String? collectionReference}) async {
+      {String? collectionReference, FilterTypes? filter}) async {
     var collectionRef = collectionReference ?? modelType.name;
     print('START: handleGetModel() [$collectionRef]');
     var modelList = currList ?? [];
@@ -29,7 +29,8 @@ class FsAdvanced {
 
     // 1/2) Set modelList from Database snap:
     print('Start fetch From: ${timeStamp == null ? 'Most recent' : 'timeStamp'}');
-    var snap = await getDocsBasedModel(currUser.uid!, timeStamp, modelType, collectionRef);
+    var snap =
+        await getDocsBasedModel(currUser.uid!, timeStamp, modelType, collectionRef, filter: filter);
 
     // 2/2) .fromJson() To postModel, userModel etc...
     if (snap.docs.isNotEmpty) {
@@ -47,7 +48,8 @@ class FsAdvanced {
 
   // 1/2
   Future<QuerySnapshot<Map<String, dynamic>>> getDocsBasedModel(
-      String uid, Timestamp? timestamp, ModelTypes modelType, String collectionRef) async {
+      String uid, Timestamp? timestamp, ModelTypes modelType, String collectionRef,
+      {FilterTypes? filter}) async {
     print('START: getDocsBasedModel() - ${modelType.name}');
     print(timestamp == null
         ? 'timestamp not found! - Get most recent instead.'
@@ -58,16 +60,19 @@ class FsAdvanced {
     if (timestamp != null) reqBase = reqBase.startAfter([timestamp]);
 
     switch (modelType) {
-      case ModelTypes.posts:    // Same as below V
-      case ModelTypes.messages: // Same as below V
-      case ModelTypes.users:    // Same as below V
-        docs = await reqBase.get();
+      case ModelTypes.messages: // Nothing special
+      case ModelTypes.users: // Nothing special
+        break;
+      case ModelTypes.posts:
+        if (filter == FilterTypes.postsByUser) {
+          reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid);
+        }
         break;
       case ModelTypes.chats:
         reqBase = reqBase.where('usersIds', arrayContains: uid);
-        docs = await reqBase.get();
         break;
     }
+    docs = await reqBase.get();
     return docs;
   }
 

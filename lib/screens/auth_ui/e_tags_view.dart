@@ -17,13 +17,25 @@ class TagsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var selectedTags = <String>[];
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           190.verticalSpace,
-          'Choose interests, so\neveryone will know you better'
-              .toText(textAlign: TextAlign.center, fontSize: 18, medium: true),
+          Builder(builder: (context) {
+            var isTagsErr =
+                context.listenUniProvider.errFound; // This will auto rebuild if err found.
+            return (isTagsErr
+                    ? 'Choose at least one interest'
+                    : 'Choose interests, so\nothers will know you better')
+                .toText(
+                    textAlign: TextAlign.center,
+                    fontSize: 18,
+                    medium: true,
+                    color: isTagsErr ? AppColors.errRed : AppColors.white);
+          }),
           40.verticalSpace,
           Wrap(
             // alignment: WrapAlignment.center,
@@ -39,12 +51,16 @@ class TagsView extends StatelessWidget {
                         selectedColor: AppColors.darkOutline50,
                         isUnselectedBorder: false,
                         padding: 4,
-                        label: tags[i]
-                            .toText(color: isSelected ? AppColors.white : AppColors.grey50, fontSize: 14),
-                        onSelect: (bool newSelection) {
+                        selected: isSelected,
+                        label: tags[i].toText(
+                            color: isSelected ? AppColors.white : AppColors.grey50,
+                            fontSize: 14), onSelect: (bool newSelection) {
                       isSelected = !isSelected;
+                      isSelected ? selectedTags.add(tags[i]) : selectedTags.remove(tags[i]);
+                      var currUser = context.uniProvider.currUser;
+                      context.uniProvider.updateUser(currUser.copyWith(tags: selectedTags));
                       stfState(() {});
-                    }, selected: isSelected);
+                    });
                   });
                 })
               ]

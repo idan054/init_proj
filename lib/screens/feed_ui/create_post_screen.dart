@@ -123,6 +123,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       var post = PostModel(
         textContent: postController.text,
         id: '${currUser.email}${UniqueKey()}',
+        //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
+        // details will be update if user edit his info
         creatorUser: currUser,
         timestamp: DateTime.now(),
         enableComments: isComments,

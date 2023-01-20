@@ -23,6 +23,7 @@ mixin _$UserModel {
   String? get name => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
   String? get uid => throw _privateConstructorUsedError;
+  List<String> get tags => throw _privateConstructorUsedError;
   int? get age => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
   GenderTypes? get gender => throw _privateConstructorUsedError;
@@ -44,6 +45,7 @@ abstract class $UserModelCopyWith<$Res> {
       {String? name,
       String? email,
       String? uid,
+      List<String> tags,
       int? age,
       String? photoUrl,
       GenderTypes? gender,
@@ -66,6 +68,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? name = freezed,
     Object? email = freezed,
     Object? uid = freezed,
+    Object? tags = null,
     Object? age = freezed,
     Object? photoUrl = freezed,
     Object? gender = freezed,
@@ -84,6 +87,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String?,
+      tags: null == tags
+          ? _value.tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       age: freezed == age
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
@@ -115,6 +122,7 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       {String? name,
       String? email,
       String? uid,
+      List<String> tags,
       int? age,
       String? photoUrl,
       GenderTypes? gender,
@@ -135,6 +143,7 @@ class __$$_UserModelCopyWithImpl<$Res>
     Object? name = freezed,
     Object? email = freezed,
     Object? uid = freezed,
+    Object? tags = null,
     Object? age = freezed,
     Object? photoUrl = freezed,
     Object? gender = freezed,
@@ -153,6 +162,10 @@ class __$$_UserModelCopyWithImpl<$Res>
           ? _value.uid
           : uid // ignore: cast_nullable_to_non_nullable
               as String?,
+      tags: null == tags
+          ? _value._tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
       age: freezed == age
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
@@ -181,10 +194,12 @@ class _$_UserModel implements _UserModel {
       {this.name,
       this.email,
       this.uid,
+      final List<String> tags = const [],
       this.age,
       this.photoUrl,
       this.gender,
-      @DateTimeStampConv() this.birthday});
+      @DateTimeStampConv() this.birthday})
+      : _tags = tags;
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserModelFromJson(json);
@@ -195,6 +210,15 @@ class _$_UserModel implements _UserModel {
   final String? email;
   @override
   final String? uid;
+  final List<String> _tags;
+  @override
+  @JsonKey()
+  List<String> get tags {
+    if (_tags is EqualUnmodifiableListView) return _tags;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tags);
+  }
+
   @override
   final int? age;
   @override
@@ -207,7 +231,7 @@ class _$_UserModel implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email, uid: $uid, age: $age, photoUrl: $photoUrl, gender: $gender, birthday: $birthday)';
+    return 'UserModel(name: $name, email: $email, uid: $uid, tags: $tags, age: $age, photoUrl: $photoUrl, gender: $gender, birthday: $birthday)';
   }
 
   @override
@@ -218,6 +242,7 @@ class _$_UserModel implements _UserModel {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.uid, uid) || other.uid == uid) &&
+            const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.age, age) || other.age == age) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
@@ -229,7 +254,15 @@ class _$_UserModel implements _UserModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, name, email, uid, age, photoUrl, gender, birthday);
+      runtimeType,
+      name,
+      email,
+      uid,
+      const DeepCollectionEquality().hash(_tags),
+      age,
+      photoUrl,
+      gender,
+      birthday);
 
   @JsonKey(ignore: true)
   @override
@@ -250,6 +283,7 @@ abstract class _UserModel implements UserModel {
       {final String? name,
       final String? email,
       final String? uid,
+      final List<String> tags,
       final int? age,
       final String? photoUrl,
       final GenderTypes? gender,
@@ -264,6 +298,8 @@ abstract class _UserModel implements UserModel {
   String? get email;
   @override
   String? get uid;
+  @override
+  List<String> get tags;
   @override
   int? get age;
   @override

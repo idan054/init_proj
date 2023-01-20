@@ -27,18 +27,20 @@ class NameProfileView extends StatefulWidget {
 class _NameProfileViewState extends State<NameProfileView> {
   XFile? image;
   bool isPhotoUploaded = false;
+  var nameController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
-    var isErr = context.listenUniProvider.errFound; // This will auto rebuild if err found.
+    var isImageErr = context.listenUniProvider.errFound; // This will auto rebuild if err found.
     var currUser = context.uniProvider.currUser;
 
-    bool nameErr = false;
-    bool imageErr = false;
-    if (isErr) {
-      nameErr = currUser.name == null || currUser.name!.isEmpty;
-      imageErr = currUser.photoUrl == null || currUser.photoUrl!.isEmpty;
-    }
+    // bool nameErr = false;
+    // bool imageErr = false;
+    // if (isErr) {
+      // nameErr = currUser.name == null || currUser.name!.isEmpty;
+      // imageErr = currUser.photoUrl == null || currUser.photoUrl!.isEmpty;
+    // }
 
     return SingleChildScrollView(
       child: Column(
@@ -49,13 +51,13 @@ class _NameProfileViewState extends State<NameProfileView> {
           50.verticalSpace,
           Badge(
             position: BadgePosition.bottomEnd(bottom: 0, end: 0),
-            badgeColor: imageErr ? AppColors.errRed : AppColors.grey50,
+            badgeColor: isImageErr ? AppColors.errRed : AppColors.grey50,
             padding: 10.all,
             badgeContent:
                 Assets.svg.icons.plusAddUntitledIcon.svg(height: 20, color: AppColors.darkBg),
             child: CircleAvatar(
               radius: 60,
-              backgroundColor: imageErr ? AppColors.errRed : AppColors.darkOutline50,
+              backgroundColor: isImageErr ? AppColors.errRed : AppColors.darkOutline50,
               child: CircleAvatar(
                 backgroundColor: AppColors.darkBg,
                 backgroundImage: image == null ? null : FileImage(File(image!.path)),
@@ -66,10 +68,10 @@ class _NameProfileViewState extends State<NameProfileView> {
           ).onTap(() async {
             final ImagePicker picker = ImagePicker();
             image = await picker.pickImage(source: ImageSource.gallery);
-            rilFlushBar(context, 'Uploading photo...', isShimmer: true);
+            // context.uniProvider.updateIsLoading(true);
             setState(() {});
-
             var imageUrl = await uploadProfilePhoto(currUser, File(image!.path));
+            // context.uniProvider.updateIsLoading(false);
             context.uniProvider.updateUser(currUser.copyWith(photoUrl: imageUrl));
           }),
           20.verticalSpace,
@@ -78,7 +80,12 @@ class _NameProfileViewState extends State<NameProfileView> {
           rilTextField(
             label: 'Nickname',
             hint: 'What is your name?',
-            errorText: nameErr ? '' : null,
+            controller: nameController,
+            validator: (value) {
+              if (nameController.text.isEmpty) return '';
+              return null;
+            },
+            // errorText: nameErr ? '' : null,
             onChanged: (val) => context.uniProvider.updateUser(currUser.copyWith(name: val)),
           )
         ],
@@ -88,7 +95,7 @@ class _NameProfileViewState extends State<NameProfileView> {
 
   Future<String> uploadProfilePhoto(UserModel currUser, File image) async {
     print('START: uploadProfilePhoto()');
-
+    // rilFlushBar(context, 'Uploading photo...', duration: 2, isShimmer: true);
     // cleanSnack(context, text: 'Update profile photo...', sec: 2, showSnackAction: false);
 
     var refFile = FirebaseStorage.instance
@@ -97,7 +104,7 @@ class _NameProfileViewState extends State<NameProfileView> {
 
     await refFile.putFile(image).then((_) {
       isPhotoUploaded = true;
-      rilFlushBar(context, 'photo uploaded successfully!', duration: 2, isShimmer: false);
+      // rilFlushBar(context, 'Uploaded successfully', duration: 1, isShimmer: false);
     }).catchError((e) => print('putFile ERR: $e'));
 
     var imageUrl = await refFile.getDownloadURL();

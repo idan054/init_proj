@@ -1,11 +1,11 @@
-// ignore_for_file: invalid_annotation_target
+// ignore_for_file: invalid_annotation_target, constant_identifier_names
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../convertors.dart';
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
-enum GenderTypes { boy, girl, lgbt }
+enum GenderTypes { male, female, other}
 
 
 // flutter pub run build_runner build --delete-conflicting-outputs
@@ -20,6 +20,7 @@ class UserModel with _$UserModel {
     int? age,
     String? photoUrl,
     GenderTypes? gender,
+    @Default([]) List<String> tags,
     @DateTimeStampConv() DateTime? birthday,
   }) = _UserModel;
 

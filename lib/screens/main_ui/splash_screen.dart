@@ -39,9 +39,10 @@ class _SplashScreenState extends State<SplashScreen> with AfterLayout {
   @override
   void afterFirstLayout(BuildContext context) {
     userLogged = FirebaseAuth.instance.currentUser?.uid != null;
-    splashInit(context).then((_) => userLogged
-        ? context.router.replaceAll([DashboardRoute()])
-        : context.router.replaceAll([const LoginRoute()]));
+    splashInit(context);
+        // .then((_) => userLogged
+        // ? context.router.replaceAll([DashboardRoute()])
+        // : context.router.replaceAll([const LoginRoute()]));
   }
 
   @override
