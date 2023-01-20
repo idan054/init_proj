@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable, no_leading_underscores_for_local_identifiers
+
 import 'dart:async';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,12 +16,16 @@ import 'firebase_database.dart';
 class FsAdvanced {
   static final db = FirebaseFirestore.instance;
 
-  Future<List> handleGetModel(BuildContext context, ModelTypes modelType, List? currList,
-      {String? collectionReference, FilterTypes? filter}) async {
+  Future<List> handleGetModel(
+    ModelTypes modelType,
+    List? currList, {
+    String? collectionReference,
+    FilterTypes? filter,
+    String? uid,
+  }) async {
     var collectionRef = collectionReference ?? modelType.name;
     print('START: handleGetModel() [$collectionRef]');
     var modelList = currList ?? [];
-    var currUser = context.uniProvider.currUser;
 
     Timestamp? timeStamp;
     if (currList != null && currList.isNotEmpty) {
@@ -29,8 +35,7 @@ class FsAdvanced {
 
     // 1/2) Set modelList from Database snap:
     print('Start fetch From: ${timeStamp == null ? 'Most recent' : 'timeStamp'}');
-    var snap =
-        await getDocsBasedModel(currUser.uid!, timeStamp, modelType, collectionRef, filter: filter);
+    var snap = await getDocsBasedModel(uid, timeStamp, modelType, collectionRef, filter: filter);
 
     // 2/2) .fromJson() To postModel, userModel etc...
     if (snap.docs.isNotEmpty) {
@@ -48,7 +53,7 @@ class FsAdvanced {
 
   // 1/2
   Future<QuerySnapshot<Map<String, dynamic>>> getDocsBasedModel(
-      String uid, Timestamp? timestamp, ModelTypes modelType, String collectionRef,
+      String? uid, Timestamp? timestamp, ModelTypes modelType, String collectionRef,
       {FilterTypes? filter}) async {
     print('START: getDocsBasedModel() - ${modelType.name}');
     print(timestamp == null
@@ -65,11 +70,11 @@ class FsAdvanced {
         break;
       case ModelTypes.posts:
         if (filter == FilterTypes.postsByUser) {
-          reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid);
+          reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid!);
         }
         break;
       case ModelTypes.chats:
-        reqBase = reqBase.where('usersIds', arrayContains: uid);
+        reqBase = reqBase.where('usersIds', arrayContains: uid!);
         break;
     }
     docs = await reqBase.get();

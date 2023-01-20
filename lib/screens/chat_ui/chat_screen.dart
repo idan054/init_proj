@@ -45,7 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Future _loadOlderMessages() async {
     // splashLoader = true; setState(() {});
     List olderMessages = await Database.advanced.handleGetModel(
-        context, ModelTypes.messages, messages,
+        ModelTypes.messages, messages,
         collectionReference: 'chats/${widget.chatId}/messages');
     if (olderMessages.isNotEmpty) messages = [...olderMessages];
     setState(() {});

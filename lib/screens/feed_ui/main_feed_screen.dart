@@ -79,7 +79,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
     // splashLoader = true; setState(() {});
     if (refresh) postList = [];
-    List newPosts = await Database.advanced.handleGetModel(context, ModelTypes.posts, postList);
+    List newPosts = await Database.advanced.handleGetModel(ModelTypes.posts, postList);
     if (newPosts.isNotEmpty) postList = [...newPosts];
     splashLoader = false;
     setState(() {});

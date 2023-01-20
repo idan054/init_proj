@@ -34,7 +34,11 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
   Future _loadMore() async {
     // splashLoader = true; setState(() {});
     var updatedList = <ChatModel>[
-      ...await Database.advanced.handleGetModel(context, ModelTypes.chats, chatList)
+      ...await Database.advanced.handleGetModel(
+        ModelTypes.chats,
+        chatList,
+        uid: context.uniProvider.currUser.uid,
+      )
     ];
     print('updatedList ${updatedList.length}');
     if (updatedList.isNotEmpty) chatList = updatedList;
@@ -65,7 +69,8 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
         body: Builder(builder: (context) {
           if (splashLoader) {
             // First time only
-            return const CircularProgressIndicator(color: AppColors.primaryOriginal, strokeWidth: 7).center;
+            return const CircularProgressIndicator(color: AppColors.primaryOriginal, strokeWidth: 7)
+                .center;
           }
 
           if (chatList.isEmpty) {

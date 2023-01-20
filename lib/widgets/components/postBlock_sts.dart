@@ -37,7 +37,7 @@ class PostBlock extends StatelessWidget {
       color: AppColors.primaryDark,
       child: Column(
         children: [
-          buildProfile(), // Doesn't require 55 Left padding.
+          buildProfile(context), // Doesn't require 55 Left padding.
           Column(
             children: [
               buildExpandableText(
@@ -59,7 +59,7 @@ class PostBlock extends StatelessWidget {
     ).onTap(() {}, radius: 10);
   }
 
-  Widget buildProfile() {
+  Widget buildProfile(BuildContext context) {
     var postDiff = DateTime.now().difference(post.timestamp!);
     var postAgo =
         postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec ago' : '${postDiff.inMinutes} min ago';
@@ -79,7 +79,7 @@ class PostBlock extends StatelessWidget {
             postAgo
                 .toText(color: AppColors.grey50, fontSize: 12)
                 .pOnly(right: 10, top: 4, bottom: 10)
-                .onTap(() {}, radius: 10), // TODO Add move to Tag
+                // .onTap(() {}, radius: 10), // TODO Add move to Tag
           ],
         ),
         leading: Stack(
@@ -93,10 +93,11 @@ class PostBlock extends StatelessWidget {
           ],
         ),
         trailing: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50).pad(18).onTap(() {
-          print('Y SETTINGS CLICKED');
+          print('SETTINGS CLICKED');
         }, radius: 10),
       ).pad(0).onTap(() {
-        print('X SETTINGS CLICKED');
+        print('PROFILE CLICKED');
+        context.router.push(UserRoute(user: post.creatorUser!));
       }, radius: 5),
     );
   }

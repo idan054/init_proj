@@ -53,8 +53,12 @@ class _UserScreenState extends State<UserScreen> {
 
     // splashLoader = true; setState(() {});
     if (refresh) postList = [];
-    List newPosts = await Database.advanced
-        .handleGetModel(context, ModelTypes.posts, postList, filter: FilterTypes.postsByUser);
+    List newPosts = await Database.advanced.handleGetModel(
+      ModelTypes.posts,
+      postList,
+      filter: FilterTypes.postsByUser,
+      uid: widget.user.uid,
+    );
 
     if (newPosts.isNotEmpty) postList = [...newPosts];
     print('postList ${postList.length}');
@@ -226,6 +230,7 @@ Widget buildBottomProfile(BuildContext context, UserModel user) {
                 .expanded(),
           ],
         ),
+        if (!isCurrUserProfile) 16.verticalSpace,
       ],
     ],
   ).px(25);
