@@ -1,6 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 import '../../common/models/post/post_model.dart';
+import '../../common/service/Database/firebase_database.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/mixins/fonts.gen.dart';
 import '../../common/themes/app_colors.dart';
@@ -21,6 +23,9 @@ import '../../common/themes/app_styles.dart';
 import '../../screens/feed_ui/user_screen.dart';
 import '../../screens/main_ui/dashboard_screen.dart';
 import 'dart:io';
+
+import '../clean_snackbar.dart';
+import '../my_dialog.dart';
 
 // Also look for 'customRowPadding' With CTRL + SHIFT + F
 
@@ -79,7 +84,7 @@ class PostBlock extends StatelessWidget {
             postAgo
                 .toText(color: AppColors.grey50, fontSize: 12)
                 .pOnly(right: 10, top: 4, bottom: 10)
-                // .onTap(() {}, radius: 10), // TODO Add move to Tag
+            // .onTap(() {}, radius: 10), // TODO Add move to Tag
           ],
         ),
         leading: Stack(
@@ -94,6 +99,30 @@ class PostBlock extends StatelessWidget {
         ),
         trailing: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50).pad(18).onTap(() {
           print('SETTINGS CLICKED');
+          showRilDialog(context,
+              title: 'Report this Ril?',
+              desc: '"${post.textContent}"',
+              secondaryBtn: TextButton(
+                  child: 'Report'.toText(color: AppColors.primaryLight),
+                  onPressed: () {
+                    var nameEndAt = post.textContent.length < 20 ? post.textContent.length : 20;
+                    var docName = post.textContent.substring(0, nameEndAt).toString() +
+                        UniqueKey().toString();
+
+                    Database().updateFirestore(
+                      collection: 'reports',
+                      docName: docName,
+                      toJson: {
+                        'reportAt': Timestamp.fromDate(DateTime.now()),
+                        'reportedBy': context.uniProvider.currUser.uid,
+                        'textContent': post.textContent,
+                        'status': 'New',
+                        'post': post.toJson()
+                      },
+                    );
+                    Navigator.of(context).pop();
+                    rilFlushBar(context, 'Thanks, We\'ll handle it asap');
+                  }));
         }, radius: 10),
       ).pad(0).onTap(() {
         print('PROFILE CLICKED');
@@ -110,13 +139,13 @@ class PostBlock extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        post.enableComments ?
-        '5 comments'
-            .toText(color: AppColors.grey50, fontSize: 12)
-            .pOnly(left: 0, right: 12)
-            .customRowPadding
-        // .onTap(() {}, radius: 10)
-        : const SizedBox(height: 20),
+        post.enableComments
+            ? '5 comments'
+                .toText(color: AppColors.grey50, fontSize: 12)
+                .pOnly(left: 0, right: 12)
+                .customRowPadding
+            // .onTap(() {}, radius: 10)
+            : const SizedBox(height: 20),
         const Spacer(),
         if (post.creatorUser!.uid != currUser.uid) ...[
           // TODO ADD ON POST MVP ONLY (Send like)

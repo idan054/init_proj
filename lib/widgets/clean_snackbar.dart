@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 Widget rilFlushBar(BuildContext context, String text,
-    {Color bgColor = AppColors.grey50, Color textColor = AppColors
-        .darkBg, int? duration, bool isShimmer = false}) {
+    {Color bgColor = AppColors.darkOutline50, Color textColor = AppColors
+        .white, int? duration, bool isShimmer = false}) {
   return Flushbar(
     backgroundColor: bgColor,
     flushbarStyle: FlushbarStyle.FLOATING,
@@ -18,7 +18,7 @@ Widget rilFlushBar(BuildContext context, String text,
     // titleText: "Hello Hero".toText(color: AppColors.darkBg, medium: true, fontSize: 16),
     messageText: Shimmer.fromColors(
         baseColor: textColor,
-        highlightColor: isShimmer ? AppColors.grey50 : textColor,
+        highlightColor: isShimmer ? AppColors.darkOutline50 : textColor,
         child: text.toText(color: textColor, medium: true, fontSize: 14)),
   )
     ..show(context);
