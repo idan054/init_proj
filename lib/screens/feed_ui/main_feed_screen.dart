@@ -195,6 +195,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     return AppBar(
       elevation: 2,
       backgroundColor: AppColors.primaryDark,
+      title: riltopiaHorizontalLogo(ratio: 1.15),
       actions: [
         CircleAvatar(
           backgroundColor: AppColors.primaryDark,
@@ -207,7 +208,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
           context.router.push(UserRoute(user: context.uniProvider.currUser));
         })
       ],
-      title: riltopiaHorizontalLogo(),
 
       // TODO ADD ON POST MVP ONLY (Notification page)
       // actions: [Assets.svg.icons.bellUntitledIcon.svg().px(20).onTap(() {})],

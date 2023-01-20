@@ -320,6 +320,9 @@ class $AssetsSvgIconsGen {
   SvgGenImage get dmPlaneUntitledIcon =>
       const SvgGenImage('assets/svg/icons/dmPlane-untitled-icon.svg');
 
+  /// File path: assets/svg/icons/flag-03.svg
+  SvgGenImage get flag03 => const SvgGenImage('assets/svg/icons/flag-03.svg');
+
   /// File path: assets/svg/icons/group_multi_people.svg
   SvgGenImage get groupMultiPeople =>
       const SvgGenImage('assets/svg/icons/group_multi_people.svg');
@@ -364,6 +367,9 @@ class $AssetsSvgIconsGen {
   SvgGenImage get shieldTickUntitledIcon =>
       const SvgGenImage('assets/svg/icons/shieldTick-untitled-icon.svg');
 
+  /// File path: assets/svg/icons/trash-03.svg
+  SvgGenImage get trash03 => const SvgGenImage('assets/svg/icons/trash-03.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
         iconClose,
@@ -379,6 +385,7 @@ class $AssetsSvgIconsGen {
         commentsOff,
         dateTimeCalender,
         dmPlaneUntitledIcon,
+        flag03,
         groupMultiPeople,
         heartUntitledIcon,
         homeUntitledIcon,
@@ -389,7 +396,8 @@ class $AssetsSvgIconsGen {
         plusAddUntitledIcon,
         settings01,
         shareClassicUntitledIcon,
-        shieldTickUntitledIcon
+        shieldTickUntitledIcon,
+        trash03
       ];
 }
 

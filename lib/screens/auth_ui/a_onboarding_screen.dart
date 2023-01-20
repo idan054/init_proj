@@ -52,7 +52,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
       body: Stack(
         children: [
           Form(
-            key: formKey,
+            key: registerFormKey,
             child: TabBarView(
               controller: _tabController,
               // This needed to make sure user fill the info.
@@ -148,7 +148,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
               if (imageErr || tagsErr) context.uniProvider.updateErrFound(true);
 
               // formKey - Name, Age, Gender validation
-              var validState = formKey.currentState!.validate();
+              var validState = registerFormKey.currentState!.validate();
               if (!validState || imageErr || tagsErr) {
                 return; // AKA ERR;
               }
@@ -159,7 +159,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                 var title = "You're ${user.age} y.o $gender";
                 showRilDialog(context,
                     title: title,
-                    desc: "You can't change your age & gender later",
+                    desc: "You can't change your age & gender later".toText(fontSize: 13),
                     secondaryBtn: TextButton(
                         child: 'Confirm'.toText(color: AppColors.primaryLight),
                         onPressed: () {
@@ -202,7 +202,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
   }
 }
 
-final formKey = GlobalKey<FormState>();
+final registerFormKey = GlobalKey<FormState>();
 
 var fieldBorderDeco = OutlineInputBorder(
     borderSide: const BorderSide(color: AppColors.darkOutline50, width: 2),
@@ -218,7 +218,7 @@ var fieldErrBorderDeco = OutlineInputBorder(
 
 Widget rilTextField(
     {required String label,
-    required String hint,
+    String? hint,
     double px = 20,
     FocusNode? focusNode,
     // String? errorText,

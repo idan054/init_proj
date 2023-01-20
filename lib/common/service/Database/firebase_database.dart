@@ -37,6 +37,10 @@ class Database {
 
   static final advanced = FsAdvanced();
 
+  void deleteDoc({required String collection, String? docName}) {
+    db.collection(collection).doc(docName).delete();
+  }
+
   static Future<Map<String, dynamic>?> docData(String documentPath) =>
       db.doc(documentPath).get().then((doc) => doc.data());
 

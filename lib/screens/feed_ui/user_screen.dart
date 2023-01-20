@@ -1,8 +1,10 @@
 import 'dart:developer';
 
 import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/models/user/user_model.dart';
+import 'package:example/screens/auth_ui/a_onboarding_screen.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:example/common/extensions/extensions.dart';
@@ -15,7 +17,7 @@ import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:example/main.dart';
-
+import 'package:collection/collection.dart'; // You have to add this manually,
 // import 'package:example/common/service/Auth/firebase_database.dart';
 import 'package:example/widgets/components/postViewOld_sts.dart';
 import 'package:example/widgets/my_widgets.dart';
@@ -25,8 +27,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import '../../common/models/post/post_model.dart';
+import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
+import '../../widgets/clean_snackbar.dart';
 import '../../widgets/components/postBlock_sts.dart';
+import '../../widgets/my_dialog.dart';
 
 class UserScreen extends StatefulWidget {
   final UserModel user;
@@ -101,7 +106,7 @@ class _UserScreenState extends State<UserScreen> {
                         itemCount: postList.length,
                         itemBuilder: (BuildContext context, int i) {
                           // PostView(postList[i])
-                          return PostBlock(postList[i]);
+                          return PostBlock(postList[i], isOnUserPage: true);
                         }),
                   ],
                 ),
@@ -146,17 +151,80 @@ class _UserScreenState extends State<UserScreen> {
           CircleAvatar(
             radius: 15,
             backgroundColor: AppColors.darkOutline50,
-            child: Assets.svg.moreVert.svg(height: 18, color: AppColors.white),
-          ).onTap(() {}),
+            child: PopupMenuButton(
+                icon: Assets.svg.moreVert.svg(height: 18, color: AppColors.white),
+                shape: 10.roundedShape,
+                color: AppColors.darkOutline50,
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                      onTap: () => reportUserPopup(context, widget.user),
+                      child: 'Report member'.toText(),
+                    ),
+                    PopupMenuItem(
+                      child: 'Block member'.toText(),
+                    ),
+                  ];
+                }),
+          ),
         ],
       ).px(20),
     );
+  }
+
+  void reportUserPopup(BuildContext context, UserModel user) {
+    var reasonController = TextEditingController();
+    final reportFormKey = GlobalKey<FormState>();
+
+    Future.delayed(150.milliseconds).then((_) {
+      String userName = '${user.name}';
+      showRilDialog(context,
+          title: 'Report "$userName"',
+          desc: Form(
+            key: reportFormKey,
+            child: rilTextField(
+              px: 0,
+              label: 'Reason why',
+              controller: reasonController,
+              validator: (value) {
+                return '$value'.isEmpty ? '' : null;
+              },
+            ),
+          ),
+          barrierDismissible: true,
+          secondaryBtn: TextButton(
+              onPressed: () {
+                var validState = reportFormKey.currentState!.validate();
+                if(!validState) return;
+
+                var nameEndAt = userName.length < 20 ? userName.length : 20;
+                var docName = userName.substring(0, nameEndAt).toString() + UniqueKey().toString();
+
+                Database().updateFirestore(
+                  collection: 'reports/Reported users/users',
+                  docName: docName,
+                  toJson: {
+                    'reportAt': Timestamp.fromDate(DateTime.now()),
+                    'reportedBy': context.uniProvider.currUser.uid,
+                    'reasonWhy': reasonController.text,
+                    'userName': userName,
+                    'status': 'New',
+                    'type': 'User',
+                    'user': user.toJson()
+                  },
+                );
+                Navigator.of(context).pop();
+                rilFlushBar(context, 'Thanks, We\'ll handle it asap');
+              },
+              child: 'Report'.toText(color: AppColors.primaryLight)));
+    });
   }
 }
 
 Widget buildBottomProfile(BuildContext context, UserModel user) {
   var currUser = context.uniProvider.currUser;
-  var isCurrUserProfile = currUser == user;
+  var isCurrUser = currUser.uid == user.uid;
+  var showTagsRow = false;
 
   return Column(
     children: [
@@ -176,25 +244,42 @@ Widget buildBottomProfile(BuildContext context, UserModel user) {
       ),
       16.verticalSpace,
       '${user.name}'.toText(fontSize: 18, medium: true),
-      20.verticalSpace,
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Badge(
-              badgeContent: '+2'.toText(fontSize: 10, color: Colors.white70, medium: true),
-              padding: const EdgeInsets.all(5),
-              elevation: 0,
-              badgeColor: AppColors.darkOutline50,
-              // stackFit: StackFit.loose,
-              // shape:
-              child: buildRilChip('Gaming')),
-          18.horizontalSpace,
-          buildRilChip('${user.gender?.name}', icon: Assets.svg.icons.manProfile.svg()),
-          18.horizontalSpace,
-          buildRilChip('${user.age} y.o', icon: Assets.svg.icons.dateTimeCalender.svg()),
-        ],
-      ),
-      20.verticalSpace,
+      8.verticalSpace,
+      StatefulBuilder(builder: (context, stfSetState) {
+        return showTagsRow
+            ? buildTagsRow(user, onClose: () {
+                showTagsRow = !showTagsRow;
+                stfSetState(() {});
+              })
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  user.tags.isEmpty
+                      ? const Offstage()
+                      : user.tags.length == 1
+                          ? buildRilChip(user.tags.first)
+                          : Badge(
+                                  badgeContent: '+${user.tags.length - 1}'
+                                      .toText(fontSize: 10, color: Colors.white70, medium: true),
+                                  padding: const EdgeInsets.all(5),
+                                  elevation: 0,
+                                  badgeColor: AppColors.darkOutline50,
+                                  // stackFit: StackFit.loose,
+                                  // shape:
+                                  child: buildRilChip(user.tags.first))
+                              .pad(7)
+                              .onTap(() {
+                              showTagsRow = !showTagsRow;
+                              stfSetState(() {});
+                            }, radius: 12),
+                  12.horizontalSpace,
+                  buildRilChip('${user.gender?.name}', icon: Assets.svg.icons.manProfile.svg()),
+                  12.horizontalSpace,
+                  buildRilChip('${user.age} y.o', icon: Assets.svg.icons.dateTimeCalender.svg()),
+                ],
+              );
+      }),
+      8.verticalSpace,
       buildExpandableText(
         'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
         'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
@@ -203,8 +288,8 @@ Widget buildBottomProfile(BuildContext context, UserModel user) {
         'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
         'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
       ),
-      24.verticalSpace,
-      if (!isCurrUserProfile) ...[
+      16.verticalSpace,
+      if (!isCurrUser) ...[
         SizedBox(
           width: context.width * 0.5,
           height: 40,
@@ -216,24 +301,55 @@ Widget buildBottomProfile(BuildContext context, UserModel user) {
             ),
             icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: AppColors.darkBg),
             label: 'Send DM'.toText(fontSize: 13, color: AppColors.darkBg, bold: true),
-            onPressed: () {},
+            onPressed: () {
+              ChatService.openChat(context, otherUser: user);
+            },
           ),
         ),
-        16.verticalSpace,
-        Row(
-          children: [
-            Assets.svg.icons.groupMultiPeople
-                .svg(width: 17, color: Colors.white70)
-                .pOnly(right: 10),
-            "You both interesting in Gaming... that's cool!"
-                .toText(color: AppColors.grey50, fontSize: 12)
-                .expanded(),
-          ],
-        ),
-        if (!isCurrUserProfile) 16.verticalSpace,
+        8.verticalSpace,
+        Builder(builder: (context) {
+          var commonTag = user.tags.firstWhereOrNull((tag) => currUser.tags.contains(tag));
+          return commonTag == null
+              ? const Offstage()
+              : Row(
+                  children: [
+                    Assets.svg.icons.groupMultiPeople
+                        .svg(width: 17, color: Colors.white70)
+                        .pOnly(right: 10),
+                    "You both interesting in $commonTag... that's cool!"
+                        .toText(color: AppColors.grey50, fontSize: 12)
+                        .expanded(),
+                  ],
+                );
+        }),
+        if (!isCurrUser) 16.verticalSpace,
       ],
     ],
   ).px(25);
+}
+
+Widget buildTagsRow(UserModel user, {GestureTapCallback? onClose}) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      // Text('${user.name}\'s interests', style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50))
+      //     .pOnly(left: 12),
+      SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            buildRilChip('<').pad(7).onTap(onClose, radius: 12),
+            4.horizontalSpace,
+            for (var tag in user.tags) ...[
+              buildRilChip(tag),
+              12.horizontalSpace,
+            ],
+          ],
+        ),
+      ),
+    ],
+  );
 }
 
 Widget buildRilChip(String label, {Widget? icon}) {

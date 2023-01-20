@@ -1,4 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, sort_child_properties_last
 
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,8 +31,9 @@ import '../my_dialog.dart';
 
 class PostBlock extends StatelessWidget {
   final PostModel post;
+  final bool isOnUserPage;
 
-  const PostBlock(this.post, {Key? key}) : super(key: key);
+  const PostBlock(this.post, {this.isOnUserPage = false, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class PostBlock extends StatelessWidget {
       color: AppColors.primaryDark,
       child: Column(
         children: [
-          buildProfile(context), // Doesn't require 55 Left padding.
+          buildProfile(context, isOnUserPage), // Doesn't require 55 Left padding.
           Column(
             children: [
               buildExpandableText(
@@ -64,7 +65,10 @@ class PostBlock extends StatelessWidget {
     ).onTap(() {}, radius: 10);
   }
 
-  Widget buildProfile(BuildContext context) {
+  Widget buildProfile(BuildContext context, bool isOnUserPage) {
+    var currUser = context.uniProvider.currUser;
+    var isCurrUser = currUser.uid == post.creatorUser!.uid;
+
     var postDiff = DateTime.now().difference(post.timestamp!);
     var postAgo =
         postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec ago' : '${postDiff.inMinutes} min ago';
@@ -97,38 +101,85 @@ class PostBlock extends StatelessWidget {
             buildOnlineBadge(),
           ],
         ),
-        trailing: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50).pad(18).onTap(() {
-          print('SETTINGS CLICKED');
-          showRilDialog(context,
-              title: 'Report this Ril?',
-              desc: '"${post.textContent}"',
-              secondaryBtn: TextButton(
-                  child: 'Report'.toText(color: AppColors.primaryLight),
-                  onPressed: () {
-                    var nameEndAt = post.textContent.length < 20 ? post.textContent.length : 20;
-                    var docName = post.textContent.substring(0, nameEndAt).toString() +
-                        UniqueKey().toString();
-
-                    Database().updateFirestore(
-                      collection: 'reports',
-                      docName: docName,
-                      toJson: {
-                        'reportAt': Timestamp.fromDate(DateTime.now()),
-                        'reportedBy': context.uniProvider.currUser.uid,
-                        'textContent': post.textContent,
-                        'status': 'New',
-                        'post': post.toJson()
-                      },
-                    );
-                    Navigator.of(context).pop();
-                    rilFlushBar(context, 'Thanks, We\'ll handle it asap');
-                  }));
-        }, radius: 10),
-      ).pad(0).onTap(() {
-        print('PROFILE CLICKED');
-        context.router.push(UserRoute(user: post.creatorUser!));
-      }, radius: 5),
+        // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
+        trailing: PopupMenuButton(
+            icon: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50),
+            shape: 10.roundedShape,
+            color: AppColors.darkOutline50,
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  child: (isCurrUser ? 'Delete Ril' : 'Report Ril').toText(),
+                  onTap: isCurrUser
+                      //> Open DELETE POPUP
+                      ? () {
+                          print('SETTINGS DELETE CLICKED');
+                          deleteRilPopup(context);
+                        }
+                      //> Open Report POPUP
+                      : () async {
+                          print('SETTINGS REPORT CLICKED');
+                          reportRilPopup(context);
+                        },
+                ),
+              ];
+            }),
+      ).pad(0).onTap(
+          isOnUserPage
+              ? null
+              : () {
+                  print('PROFILE CLICKED');
+                  context.router.push(UserRoute(user: post.creatorUser!));
+                },
+          radius: 5),
     );
+  }
+
+  void reportRilPopup(BuildContext context) {
+    Future.delayed(150.milliseconds).then((_) {
+      showRilDialog(context,
+          title: 'Report this Ril?',
+          desc: '"${post.textContent}"'.toText(fontSize: 13),
+          barrierDismissible: true,
+          secondaryBtn: TextButton(
+              onPressed: () {
+                var nameEndAt = post.textContent.length < 20 ? post.textContent.length : 20;
+                var docName =
+                    post.textContent.substring(0, nameEndAt).toString() + UniqueKey().toString();
+
+                Database().updateFirestore(
+                  collection: 'reports/Reported rils/rils',
+                  docName: docName,
+                  toJson: {
+                    'reportAt': Timestamp.fromDate(DateTime.now()),
+                    'reportedBy': context.uniProvider.currUser.uid,
+                    'textContent': post.textContent,
+                    'status': 'New',
+                    'type': 'Ril',
+                    'post': post.toJson()
+                  },
+                );
+                Navigator.of(context).pop();
+                rilFlushBar(context, 'Thanks, We\'ll handle it asap');
+              },
+              child: 'Report'.toText(color: AppColors.primaryLight)));
+    });
+  }
+
+  void deleteRilPopup(BuildContext context) {
+    Future.delayed(150.milliseconds).then((_) {
+      showRilDialog(context,
+          title: 'Delete your Ril?',
+          desc: '"${post.textContent}"'.toText(fontSize: 13),
+          barrierDismissible: true,
+          secondaryBtn: TextButton(
+              onPressed: () {
+                Database().deleteDoc(collection: 'posts', docName: post.id);
+                Navigator.of(context).pop();
+                rilFlushBar(context, 'Your Ril has been deleted forever');
+              },
+              child: 'Delete'.toText(color: AppColors.primaryLight)));
+    });
   }
 
   Widget buildActionRow(BuildContext context) {

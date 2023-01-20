@@ -6,7 +6,7 @@ import 'message/message_model.dart';
 
 class Sample{
 static final user = UserModel(
-    gender: GenderTypes.girl,
+    gender: GenderTypes.male,
     age: 19,
     name: 'Dan',
     photoUrl: 'PHOTO',

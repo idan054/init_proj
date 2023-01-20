@@ -10,14 +10,16 @@ import '../common/service/mixins/assets.gen.dart';
 Future<void> showRilDialog(
   BuildContext context, {
   required String title,
-  required String desc,
+  required Widget desc,
+  bool barrierDismissible = false,
   Widget? secondaryBtn,
   bool showCancelBtn = true,
 }) async {
   return showDialog<void>(
     context: context,
-    barrierDismissible: false, // user must tap button!
-    barrierColor: Colors.transparent,
+    barrierDismissible: barrierDismissible, // user must tap button!
+    // barrierColor: Colors.transparent,
+    barrierColor: Colors.white.withOpacity(0.02), // AKA 2%
     builder: (BuildContext context) {
       return BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
@@ -30,7 +32,7 @@ Future<void> showRilDialog(
             children: [
               title.toText(fontSize: 16, medium: true),
               16.verticalSpace,
-              desc.toText(fontSize: 13),
+              desc,
               // 16.verticalSpace,
               // Row(
               //   children: [

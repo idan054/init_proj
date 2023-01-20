@@ -66,6 +66,7 @@ dependencies:
   video_player: ^2.4.10
   another_flushbar: ^1.12.29
   shimmer: ^2.0.0
+  collection: ^1.16.0
 
 #dependency_overrides:
 #  camera:
