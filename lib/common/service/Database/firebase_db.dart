@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import '../Auth/auth_services.dart' as auth;
 import '../Chat/chat_services.dart' as chat;
 import '../timestamp_convert.dart';
-import 'firebase_advanced.dart';
+import 'db_advanced.dart';
 import 'package:hive/hive.dart';
 
 enum FilterTypes { postsByUser }

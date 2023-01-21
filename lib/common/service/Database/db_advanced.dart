@@ -11,7 +11,7 @@ import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/service/hive_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'firebase_database.dart';
+import 'firebase_db.dart';
 
 class FsAdvanced {
   static final db = FirebaseFirestore.instance;

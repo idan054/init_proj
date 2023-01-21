@@ -3,6 +3,7 @@ import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/post/post_model.dart';
+import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../../common/models/message/message_model.dart';
 import '../../common/models/user/user_model.dart';
-import '../../common/service/Database/firebase_database.dart';
+import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/themes/app_strings.dart';
@@ -93,7 +94,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   style: AppStyles.text18PxSemiBold.white,
                 ),
               ],
-            )),
+            ).pOnly(right: 10).onTap(() {
+              context.router.push(UserRoute(user: widget.otherUser));
+            })),
         body: Column(
           children: [
             StreamProvider<List<MessageModel>>.value(

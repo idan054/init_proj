@@ -10,15 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
-import 'package:example/common/service/Database/firebase_database.dart';
-import 'package:example/common/service/Database/firebase_database.dart';
-import 'package:example/common/service/Database/firebase_database.dart';
+import 'package:example/common/service/Database/firebase_db.dart';
+import 'package:example/common/service/Database/firebase_db.dart';
+import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:example/main.dart';
 import 'package:collection/collection.dart'; // You have to add this manually,
-// import 'package:example/common/service/Auth/firebase_database.dart';
+// import 'package:example/common/service/Auth/firebase_db.dart';
 import 'package:example/widgets/components/postViewOld_sts.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/gestures.dart';
@@ -184,10 +184,10 @@ class _UserScreenState extends State<UserScreen> {
                         onTap: () => reportUserPopup(context, widget.user),
                         child: 'Report member'.toText(),
                       ),
-                      PopupMenuItem(
-                        // TODO LATER LIST: Add Block user action
-                        child: 'Block member'.toText(),
-                      ),
+                      // PopupMenuItem(
+                      //   // TODO LATER LIST: Add Block user action
+                      //   child: 'Block member'.toText(),
+                      // ),
                     ]
                   ];
                 }),
@@ -309,6 +309,7 @@ class _UserScreenState extends State<UserScreen> {
 
           return Column(
             children: [
+              !haveBio && !isCurrUser ? const Offstage() :
               buildExpandableText(haveBio ? '${user.bio}' : 'Edit your bio',
                       // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
                       // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '

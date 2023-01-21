@@ -88,12 +88,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               children: [
                 buildChoiceChip(context,
                         customIcon: isComments
-                            ? Assets.svg.icons.commentUntitledIcon
+                            ? Assets.svg.icons.messageCommentsLines
                                 .svg(height: 15, color: AppColors.white)
                             : Assets.svg.icons.dmPlaneUntitledIcon
                                 .svg(height: 15, color: AppColors.grey50),
                         selectedColor: AppColors.darkOutline50,
-                        label: (isComments ? 'With comments' : 'Reply only')
+                        label: (isComments ? 'With comments' : 'Reply style') // Reply only
                             .toText(color: isComments ? AppColors.white : AppColors.grey50),
                         onSelect: (bool newSelection) {
                   isComments = !isComments;

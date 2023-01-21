@@ -15,7 +15,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 import '../../common/models/post/post_model.dart';
-import '../../common/service/Database/firebase_database.dart';
+import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/mixins/fonts.gen.dart';
 import '../../common/themes/app_colors.dart';
@@ -189,10 +189,16 @@ class PostBlock extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         post.enableComments
-            ? '5 comments'
-                .toText(color: AppColors.grey50, fontSize: 12)
-                .pOnly(left: 0, right: 12)
-                .customRowPadding
+            ? Row(
+                children: [
+                  Assets.svg.icons.commentsOff.svg(height: 13, color: AppColors.grey50),
+                  const SizedBox(width: 7),
+                  'available soon'
+                      .toText(color: AppColors.grey50, fontSize: 12)
+                      .pOnly(right: 12, bottom: 5)
+                      .customRowPadding,
+                ],
+              )
             // .onTap(() {}, radius: 10)
             : const SizedBox(height: 20),
         const Spacer(),

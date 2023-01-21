@@ -1,15 +1,15 @@
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
-import 'package:example/common/service/Database/firebase_database.dart';
-import 'package:example/common/service/Database/firebase_database.dart';
-import 'package:example/common/service/Database/firebase_database.dart';
+import 'package:example/common/service/Database/firebase_db.dart';
+import 'package:example/common/service/Database/firebase_db.dart';
+import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:example/main.dart';
 
-// import 'package:example/common/service/Auth/firebase_database.dart';
+// import 'package:example/common/service/Auth/firebase_db.dart';
 import 'package:example/widgets/components/postViewOld_sts.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:example/widgets/my_widgets.dart';
@@ -22,6 +22,7 @@ import '../../common/extensions/color_printer.dart';
 import '../../common/models/post/post_model.dart';
 import '../../common/models/universalModel.dart';
 import '../../common/models/user/user_model.dart';
+import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/components/postBlock_sts.dart';
 
@@ -118,7 +119,19 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
           body: TabBarView(
             children: [
               buildFeed(context),
-              buildFeed(context),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  'Available soon. meanwhile...'.toText(),
+                  Text(
+                    'Tell us what you think!',
+                    style: AppStyles.text14PxRegular.copyWith(
+                        color: AppColors.grey50, decoration: TextDecoration.underline),
+                  ).py(7).px(14).onTap(() {
+                    ChatService.chatWithUs(context);
+                  }, radius: 4)
+                ],
+              ).center,
             ],
           )),
     );
@@ -247,15 +260,16 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                   height: 50,
                   // height: 72, // 72: original size 60: min size
                   child: ListTile(
-                      contentPadding: EdgeInsets.zero,
-                      horizontalTitleGap: 0,
-                      title:
-                      'Chat with us'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
-                      leading: Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.grey50))
+                          contentPadding: EdgeInsets.zero,
+                          horizontalTitleGap: 0,
+                          title: 'Chat with us'
+                              .toText(fontSize: 14, medium: true, color: AppColors.grey50),
+                          leading:
+                              Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.grey50))
                       .pad(0)
                       .onTap(() {
-                        // TODO LATER LIST: 'Chat with us' Static chat
-
+                    Navigator.pop(context);
+                    ChatService.chatWithUs(context);
                   }, radius: 5),
                 ),
 
@@ -274,7 +288,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                     context.router.replaceAll([const LoginRoute()]);
                   }, radius: 5),
                 ),
-
               ],
             ),
             barrierDismissible: true,
@@ -346,7 +359,7 @@ Widget buildChoiceChip(BuildContext context,
       child: ChoiceChip(
           elevation: 0,
           shadowColor: Colors.transparent,
-          shape: 10.roundedShape,
+          shape: 7.roundedShape,
           selected: selected,
           materialTapTargetSize: (padding != null) ? MaterialTapTargetSize.shrinkWrap : null,
           padding: (padding != null) ? 0.all : null,

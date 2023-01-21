@@ -8,7 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../common/routes/app_router.gr.dart';
-import '../../common/service/Database/firebase_database.dart';
+import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';

@@ -9,8 +9,8 @@ import 'package:intl/intl.dart';
 import '../../../screens/chat_ui/chat_screen.dart' as screen;
 import '../../models/post/post_model.dart';
 import '../../models/user/user_model.dart';
-import '../Database/firebase_database.dart';
-import '../Database/firebase_database.dart' as click;
+import '../Database/firebase_db.dart';
+import '../Database/firebase_db.dart' as click;
 
 // ChatService Usage At [screen.ChatScreen] // <<---
 // streamMessages() Available At [click.Database] // <<---
@@ -40,6 +40,23 @@ class ChatService {
     print('chatId ${chatId}');
     return context.router
         .push(ChatRoute(otherUser: otherUser, chatId: chatId, postReply: postReply));
+  }
+
+  static void chatWithUs(BuildContext context) {
+    ChatService.openChat(context,
+        otherUser: UserModel(
+            uid: 'IVGr0VcKbhOg5jK23r9DTzvGhar2',
+            age: 20,
+            name: 'Riltopia Team',
+            gender: GenderTypes.other,
+            photoUrl:
+                'https://firebasestorage.googleapis.com/v0/b/biton-messanger.appspot.com/o/The%20Biton_Profile_2023-01-21%2023%3A05%3A48.369962?alt=media&token=62ab2f84-8d74-4b7f-8e79-5f1a0bee85fc',
+            email: 'idanbit80@gmail.com',
+            bio: 'Tell us what u think!',
+            isOnline: true,
+            tags: ['Tech'],
+            birthday: DateTime.fromMillisecondsSinceEpoch(1041552000) // 03.01.03
+            ));
   }
 
   void sendMessage(
