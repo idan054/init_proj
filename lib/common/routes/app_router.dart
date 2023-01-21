@@ -6,14 +6,14 @@ import 'package:example/screens/feed_ui/main_feed_screen.dart';
 
 import '../../screens/auth_ui/c_gender_age_view.dart';
 import '../../screens/auth_ui/d_verify_view.dart';
-import '../../screens/auth_ui/e_tags_view.dart';
+import '../../screens/auth_ui/e_tags_view_screen.dart';
 import '../../screens/chat_ui/chat_screen.dart';
 import '../../screens/chat_ui/chats_list_screen.dart.dart';
 import '../../screens/chat_ui/members_screen.dart';
-import '../../screens/feed_ui/user_screen.dart';
-import '../../screens/main_ui/create_user_screen.dart';
+import '../../screens/user_ui/edit_user_screen.dart';
+import '../../screens/user_ui/user_screen.dart';
 import '../../screens/main_ui/dashboard_screen.dart';
-import '../../screens/main_ui/login_screen.dart';
+import '../../screens/auth_ui/login_screen.dart';
 import '../../screens/main_ui/splash_screen.dart';
 import 'app_router.dart';
 export 'package:auto_route/auto_route.dart';
@@ -28,24 +28,29 @@ export 'package:auto_route/auto_route.dart';
 @AdaptiveAutoRouter(
   replaceInRouteName: 'Screen,Route', // <-----
   routes: [
-    //~ Main Screens:
-    CustomRoute(page: SplashScreen, initial: true),
-    CustomRoute(page: DashboardScreen),
-    CustomRoute(page: LoginScreen),
-
-    CustomRoute(page: OnBoardingScreen), // New Signup
-
-    CustomRoute(page: CreateUserScreenOld),
-    CustomRoute(page: UserScreen),
+    //~ Auth Screens:
+    CustomRoute(page: LoginScreen), // Google login
+    CustomRoute(page: OnBoardingScreen), // Signup views
 
     //~ Chat Screens:
+    CustomRoute(page: ChatScreen),
     CustomRoute(page: ChatsListScreen),
     CustomRoute(page: MembersScreen),
-    CustomRoute(page: ChatScreen),
 
     //~ Feed Screens:
     CustomRoute(page: MainFeedScreen),
     CustomRoute(page: CreatePostScreen),
+
+    //~ Main Screens:
+    CustomRoute(page: SplashScreen, initial: true),
+    CustomRoute(page: DashboardScreen),
+
+    //~ User Screens:
+    CustomRoute(page: UserScreen),
+    CustomRoute(page: EditUserScreen),
+    CustomRoute(page: TagsViewScreen),
+
+
   ],
 )
 class $AppRouter {}

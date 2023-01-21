@@ -235,6 +235,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                     // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
                   ).pad(0).onTap(() {
                     print('PROFILE CLICKED');
+                    Navigator.pop(context);
                     context.router.push(UserRoute(user: currUser));
                   }, radius: 5),
                 ),

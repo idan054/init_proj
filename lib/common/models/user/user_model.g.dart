@@ -10,9 +10,10 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
       name: json['name'] as String?,
       email: json['email'] as String?,
       uid: json['uid'] as String?,
+      bio: json['bio'] as String?,
       age: json['age'] as int?,
       photoUrl: json['photoUrl'] as String?,
-      onlineUser: json['onlineUser'] as bool?,
+      isOnline: json['isOnline'] as bool?,
       gender: $enumDecodeNullable(_$GenderTypesEnumMap, json['gender']),
       tags:
           (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
@@ -26,9 +27,10 @@ Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
       'name': instance.name,
       'email': instance.email,
       'uid': instance.uid,
+      'bio': instance.bio,
       'age': instance.age,
       'photoUrl': instance.photoUrl,
-      'onlineUser': instance.onlineUser,
+      'isOnline': instance.isOnline,
       'gender': _$GenderTypesEnumMap[instance.gender],
       'tags': instance.tags,
       'birthday': const DateTimeStampConv().toJson(instance.birthday),

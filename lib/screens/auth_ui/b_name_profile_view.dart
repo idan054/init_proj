@@ -29,7 +29,6 @@ class _NameProfileViewState extends State<NameProfileView> {
   bool isPhotoUploaded = false;
   var nameController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     var isImageErr = context.listenUniProvider.errFound; // This will auto rebuild if err found.
@@ -38,8 +37,8 @@ class _NameProfileViewState extends State<NameProfileView> {
     // bool nameErr = false;
     // bool imageErr = false;
     // if (isErr) {
-      // nameErr = currUser.name == null || currUser.name!.isEmpty;
-      // imageErr = currUser.photoUrl == null || currUser.photoUrl!.isEmpty;
+    // nameErr = currUser.name == null || currUser.name!.isEmpty;
+    // imageErr = currUser.photoUrl == null || currUser.photoUrl!.isEmpty;
     // }
 
     return SingleChildScrollView(
@@ -70,7 +69,11 @@ class _NameProfileViewState extends State<NameProfileView> {
             image = await picker.pickImage(source: ImageSource.gallery);
             // context.uniProvider.updateIsLoading(true);
             setState(() {});
-            var imageUrl = await uploadProfilePhoto(currUser, File(image!.path));
+            var imageUrl = await uploadProfilePhoto(
+              currUser,
+              File(image!.path),
+              thenAction: (_) => isPhotoUploaded = true,
+            );
             // context.uniProvider.updateIsLoading(false);
             context.uniProvider.updateUser(currUser.copyWith(photoUrl: imageUrl));
           }),
@@ -92,23 +95,21 @@ class _NameProfileViewState extends State<NameProfileView> {
       ),
     );
   }
+}
 
-  Future<String> uploadProfilePhoto(UserModel currUser, File image) async {
-    print('START: uploadProfilePhoto()');
-    // rilFlushBar(context, 'Uploading photo...', duration: 2, isShimmer: true);
-    // cleanSnack(context, text: 'Update profile photo...', sec: 2, showSnackAction: false);
+Future<String> uploadProfilePhoto(UserModel currUser, File image,
+    {required Function(TaskSnapshot) thenAction}) async {
+  print('START: uploadProfilePhoto()');
+  // rilFlushBar(context, 'Uploading photo...', duration: 2, isShimmer: true);
+  // cleanSnack(context, text: 'Update profile photo...', sec: 2, showSnackAction: false);
 
-    var refFile = FirebaseStorage.instance
-        .ref()
-        .child('${FirebaseAuth.instance.currentUser?.displayName}_Profile_${DateTime.now()}');
+  var refFile = FirebaseStorage.instance
+      .ref()
+      .child('${FirebaseAuth.instance.currentUser?.displayName}_Profile_${DateTime.now()}');
 
-    await refFile.putFile(image).then((_) {
-      isPhotoUploaded = true;
-      // rilFlushBar(context, 'Uploaded successfully', duration: 1, isShimmer: false);
-    }).catchError((e) => print('putFile ERR: $e'));
+  await refFile.putFile(image).then(thenAction).catchError((e) => print('putFile ERR: $e'));
 
-    var imageUrl = await refFile.getDownloadURL();
-    FirebaseAuth.instance.currentUser?.updatePhotoURL(imageUrl);
-    return imageUrl;
-  }
+  var imageUrl = await refFile.getDownloadURL();
+  FirebaseAuth.instance.currentUser?.updatePhotoURL(imageUrl);
+  return imageUrl;
 }

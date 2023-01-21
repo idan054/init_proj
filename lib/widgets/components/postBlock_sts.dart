@@ -20,7 +20,7 @@ import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/mixins/fonts.gen.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
-import '../../screens/feed_ui/user_screen.dart';
+import '../../screens/user_ui/user_screen.dart';
 import '../../screens/main_ui/dashboard_screen.dart';
 import 'dart:io';
 

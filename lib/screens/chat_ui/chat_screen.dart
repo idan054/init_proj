@@ -20,7 +20,7 @@ import '../../common/themes/app_strings.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/components/postBlock_sts.dart';
 import '../feed_ui/create_post_screen.dart';
-import '../feed_ui/user_screen.dart';
+import '../user_ui/user_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   final UserModel otherUser;

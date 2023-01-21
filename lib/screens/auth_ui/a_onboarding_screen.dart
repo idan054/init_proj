@@ -19,7 +19,7 @@ import '../feed_ui/main_feed_screen.dart';
 import 'b_name_profile_view.dart';
 import 'c_gender_age_view.dart';
 import 'd_verify_view.dart';
-import 'e_tags_view.dart';
+import 'e_tags_view_screen.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                 NameProfileView(),
                 GenderAgeView(),
                 // VerifyView(_tabController!), // TODO ADD ON POST MVP ONLY: VerifyView()
-                TagsView(),
+                TagsViewScreen(),
               ],
             ),
           ),
@@ -143,7 +143,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
 
               // Image validation
               var currUser = context.uniProvider.currUser;
-              var imageErr = nameProfile_b_View && (currUser.photoUrl == null || currUser.photoUrl!.isEmpty);
+              var imageErr =
+                  nameProfile_b_View && (currUser.photoUrl == null || currUser.photoUrl!.isEmpty);
               var tagsErr = tags_e_View && (currUser.tags.isEmpty);
               if (imageErr || tagsErr) context.uniProvider.updateErrFound(true);
 
@@ -223,7 +224,10 @@ Widget rilTextField(
     FocusNode? focusNode,
     // String? errorText,
     int? maxLength,
+    int? maxLines,
+    int? minLines,
     TextInputType? keyboardType,
+    TextAlign? textAlign,
     TextEditingController? controller,
     FormFieldValidator? validator,
     void Function(String)? onChanged}) {
@@ -232,7 +236,10 @@ Widget rilTextField(
           controller: controller,
           focusNode: focusNode,
           onChanged: onChanged,
+          maxLines: maxLines,
+          minLines: minLines,
           maxLength: maxLength,
+          textAlign: textAlign ?? TextAlign.start,
           style: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
           keyboardType: keyboardType,
           decoration: InputDecoration(

@@ -15,7 +15,7 @@ import 'package:permission_handler/permission_handler.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/my_widgets.dart';
 import '../feed_ui/main_feed_screen.dart';
-import '../feed_ui/user_screen.dart';
+import '../user_ui/user_screen.dart';
 import 'a_onboarding_screen.dart';
 
 class VerifyView extends StatefulWidget {

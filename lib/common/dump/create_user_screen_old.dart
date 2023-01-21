@@ -2,18 +2,19 @@ import 'dart:io';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/service/Auth/auth_services.dart';
+import 'package:example/common/themes/app_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../common/models/user/user_model.dart';
-import '../../common/routes/app_router.gr.dart';
-import '../../common/themes/app_colors.dart';
-import '../../common/themes/app_styles.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/clean_snackbar.dart';
 import '../../widgets/components/genderAgeView_sts.dart';
 import '../../widgets/my_widgets.dart';
+import '../models/user/user_model.dart';
+import '../routes/app_router.gr.dart';
+import '../themes/app_styles.dart';
+
 
 class CreateUserScreenOld extends StatefulWidget {
   const CreateUserScreenOld({Key? key}) : super(key: key);

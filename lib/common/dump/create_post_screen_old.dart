@@ -1,15 +1,23 @@
+import 'dart:io';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
+import 'package:example/common/service/Auth/auth_services.dart';
 import 'package:example/common/themes/app_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../common/models/post/post_model.dart';
-import '../../common/models/user/user_model.dart';
-import '../../common/service/Feed/feed_services.dart';
-import '../../common/themes/app_styles.dart';
+import 'package:image_picker/image_picker.dart';
+import '../../widgets/app_bar.dart';
+import '../../widgets/clean_snackbar.dart';
+import '../../widgets/components/genderAgeView_sts.dart';
 import '../../widgets/my_widgets.dart';
+import '../models/post/post_model.dart';
+import '../models/user/user_model.dart';
+import '../routes/app_router.gr.dart';
+import '../service/Feed/feed_services.dart';
+import '../themes/app_styles.dart';
 
 class CreatePostScreenOld extends StatefulWidget {
   const CreatePostScreenOld({Key? key}) : super(key: key);
