@@ -222,7 +222,7 @@ class PostBlock extends StatelessWidget {
               )
               .customRowPadding
               .onTap(() {
-            ChatService.openChat(context, otherUser: post.creatorUser!);
+            ChatService.openChat(context, otherUser: post.creatorUser!, postReply: post);
           }, radius: 10)
         ]
       ],

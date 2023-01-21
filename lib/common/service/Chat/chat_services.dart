@@ -7,6 +7,7 @@ import 'package:example/common/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../screens/chat_ui/chat_screen.dart' as screen;
+import '../../models/post/post_model.dart';
 import '../../models/user/user_model.dart';
 import '../Database/firebase_database.dart';
 import '../Database/firebase_database.dart' as click;
@@ -15,7 +16,7 @@ import '../Database/firebase_database.dart' as click;
 // streamMessages() Available At [click.Database] // <<---
 
 class ChatService {
-  static Future openChat(BuildContext context, {required UserModel otherUser}) async {
+  static Future openChat(BuildContext context, {required UserModel otherUser, PostModel? postReply}) async {
     print('START: openChat()');
     var currUser = context.uniProvider.currUser;
 
@@ -36,7 +37,7 @@ class ChatService {
       chatId = snap.docs.first.id;
     }
     print('chatId ${chatId}');
-    return context.router.push(ChatRoute(otherUser: otherUser, chatId: chatId));
+    return context.router.push(ChatRoute(otherUser: otherUser, chatId: chatId, postReply: postReply));
   }
 
   void sendMessage(BuildContext context,

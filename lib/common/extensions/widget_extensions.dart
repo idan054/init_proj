@@ -51,6 +51,21 @@ extension WidgetX on Widget {
 
   ClipRRect get roundedFull => ClipRRect(borderRadius: BorderRadius.circular(999), child: this);
 
+  ClipRRect roundedOnly({
+    required double bottomLeft,
+    required double topLeft,
+    required double topRight,
+    required double bottomRight,
+  }) =>
+      ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(bottomLeft),
+            topLeft: Radius.circular(topLeft),
+            topRight: Radius.circular(topRight),
+            bottomRight: Radius.circular(bottomRight),
+          ),
+          child: this);
+
   ClipRRect rounded({double? radius}) =>
       ClipRRect(borderRadius: BorderRadius.circular(radius ?? 99), child: this);
 
@@ -101,9 +116,9 @@ extension WidgetX on Widget {
   Center get center => Center(child: this);
 
   Widget surround(double value) => CircleAvatar(
-    backgroundColor: Colors.green,
-    child: this,
-  );
+        backgroundColor: Colors.green,
+        child: this,
+      );
 
   Padding pad(double value) => Padding(
         padding: EdgeInsets.all(value),
