@@ -26,6 +26,7 @@ mixin _$MessageModel {
   String? get fromId => throw _privateConstructorUsedError;
   String? get toId => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
+  PostModel? get postReply => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
   bool? get read => throw _privateConstructorUsedError;
@@ -48,8 +49,11 @@ abstract class $MessageModelCopyWith<$Res> {
       String? fromId,
       String? toId,
       String? createdAt,
+      PostModel? postReply,
       @DateTimeStampConv() DateTime? timestamp,
       bool? read});
+
+  $PostModelCopyWith<$Res>? get postReply;
 }
 
 /// @nodoc
@@ -70,6 +74,7 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
     Object? fromId = freezed,
     Object? toId = freezed,
     Object? createdAt = freezed,
+    Object? postReply = freezed,
     Object? timestamp = freezed,
     Object? read = freezed,
   }) {
@@ -94,6 +99,10 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String?,
+      postReply: freezed == postReply
+          ? _value.postReply
+          : postReply // ignore: cast_nullable_to_non_nullable
+              as PostModel?,
       timestamp: freezed == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -103,6 +112,18 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
           : read // ignore: cast_nullable_to_non_nullable
               as bool?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PostModelCopyWith<$Res>? get postReply {
+    if (_value.postReply == null) {
+      return null;
+    }
+
+    return $PostModelCopyWith<$Res>(_value.postReply!, (value) {
+      return _then(_value.copyWith(postReply: value) as $Val);
+    });
   }
 }
 
@@ -120,8 +141,12 @@ abstract class _$$_MessageModelCopyWith<$Res>
       String? fromId,
       String? toId,
       String? createdAt,
+      PostModel? postReply,
       @DateTimeStampConv() DateTime? timestamp,
       bool? read});
+
+  @override
+  $PostModelCopyWith<$Res>? get postReply;
 }
 
 /// @nodoc
@@ -140,6 +165,7 @@ class __$$_MessageModelCopyWithImpl<$Res>
     Object? fromId = freezed,
     Object? toId = freezed,
     Object? createdAt = freezed,
+    Object? postReply = freezed,
     Object? timestamp = freezed,
     Object? read = freezed,
   }) {
@@ -164,6 +190,10 @@ class __$$_MessageModelCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as String?,
+      postReply: freezed == postReply
+          ? _value.postReply
+          : postReply // ignore: cast_nullable_to_non_nullable
+              as PostModel?,
       timestamp: freezed == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -177,7 +207,8 @@ class __$$_MessageModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_MessageModel implements _MessageModel {
   const _$_MessageModel(
       {this.id,
@@ -185,6 +216,7 @@ class _$_MessageModel implements _MessageModel {
       this.fromId,
       this.toId,
       this.createdAt,
+      this.postReply,
       @DateTimeStampConv() this.timestamp,
       this.read});
 
@@ -203,6 +235,8 @@ class _$_MessageModel implements _MessageModel {
   @override
   final String? createdAt;
   @override
+  final PostModel? postReply;
+  @override
   @DateTimeStampConv()
   final DateTime? timestamp;
   @override
@@ -210,7 +244,7 @@ class _$_MessageModel implements _MessageModel {
 
   @override
   String toString() {
-    return 'MessageModel(id: $id, textContent: $textContent, fromId: $fromId, toId: $toId, createdAt: $createdAt, timestamp: $timestamp, read: $read)';
+    return 'MessageModel(id: $id, textContent: $textContent, fromId: $fromId, toId: $toId, createdAt: $createdAt, postReply: $postReply, timestamp: $timestamp, read: $read)';
   }
 
   @override
@@ -225,6 +259,8 @@ class _$_MessageModel implements _MessageModel {
             (identical(other.toId, toId) || other.toId == toId) &&
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
+            (identical(other.postReply, postReply) ||
+                other.postReply == postReply) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
             (identical(other.read, read) || other.read == read));
@@ -232,8 +268,8 @@ class _$_MessageModel implements _MessageModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, textContent, fromId, toId, createdAt, timestamp, read);
+  int get hashCode => Object.hash(runtimeType, id, textContent, fromId, toId,
+      createdAt, postReply, timestamp, read);
 
   @JsonKey(ignore: true)
   @override
@@ -256,6 +292,7 @@ abstract class _MessageModel implements MessageModel {
       final String? fromId,
       final String? toId,
       final String? createdAt,
+      final PostModel? postReply,
       @DateTimeStampConv() final DateTime? timestamp,
       final bool? read}) = _$_MessageModel;
 
@@ -272,6 +309,8 @@ abstract class _MessageModel implements MessageModel {
   String? get toId;
   @override
   String? get createdAt;
+  @override
+  PostModel? get postReply;
   @override
   @DateTimeStampConv()
   DateTime? get timestamp;

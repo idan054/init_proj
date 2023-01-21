@@ -26,6 +26,7 @@ import 'dart:io';
 
 import '../clean_snackbar.dart';
 import '../my_dialog.dart';
+import 'package:intl/intl.dart' as intl;
 
 // Also look for 'customRowPadding' With CTRL + SHIFT + F
 
@@ -69,13 +70,9 @@ class PostBlock extends StatelessWidget {
     var currUser = context.uniProvider.currUser;
     var isCurrUser = currUser.uid == post.creatorUser!.uid;
 
-    var postDiff = DateTime.now().difference(post.timestamp!);
-    var postAgo =
-        postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec ago' : '${postDiff.inMinutes} min ago';
-    if (postDiff.inSeconds == 0) postAgo = 'Just now';
+    var postAgo = postTime(post.timestamp!);
 
-    return
-      SizedBox(
+    return SizedBox(
       height: 68,
       // height: 72, // 72: original size 60: min size
       child: ListTile(
@@ -309,4 +306,19 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
     _animationController.dispose();
     super.dispose();
   }
+}
+
+String postTime(DateTime time) {
+  var postDiff = DateTime.now().difference(time);
+  var postAgo =
+      postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec ago' : '${postDiff.inMinutes} min ago';
+  if (postDiff.inSeconds == 0) postAgo = 'Just now';
+  if (2 < postDiff.inHours && postDiff.inHours < 24) {
+    postAgo = '${postDiff.inHours} hours ago';
+  } else if (postDiff.inHours > 24) {
+    // postAgo = intl.DateFormat('yMMMMEEEEd').format(post.timestamp!);
+    postAgo = intl.DateFormat('MMMM d, y').format(time);
+  }
+
+  return postAgo;
 }

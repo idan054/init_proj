@@ -29,7 +29,7 @@ class FsAdvanced {
 
     Timestamp? timeStamp;
     if (currList != null && currList.isNotEmpty) {
-      // Every Model must have 'timestamp'! (postModel, userModel etc...)
+      //Todo: Every Model must have 'timestamp'! (postModel, userModel etc...)
       timeStamp = Timestamp.fromDate(currList.last.timestamp!);
     }
 

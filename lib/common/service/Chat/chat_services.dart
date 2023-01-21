@@ -16,7 +16,8 @@ import '../Database/firebase_database.dart' as click;
 // streamMessages() Available At [click.Database] // <<---
 
 class ChatService {
-  static Future openChat(BuildContext context, {required UserModel otherUser, PostModel? postReply}) async {
+  static Future openChat(BuildContext context,
+      {required UserModel otherUser, PostModel? postReply}) async {
     print('START: openChat()');
     var currUser = context.uniProvider.currUser;
 
@@ -26,7 +27,7 @@ class ChatService {
 
     var snap = await reqBase.where('usersIds', isEqualTo: userIds).get();
     if (snap.docs.isEmpty) {
-    // Check the reversed option.
+      // Check the reversed option.
       snap = await reqBase.where('usersIds', isEqualTo: userIds.reversed.toList()).get();
     }
 
@@ -37,11 +38,17 @@ class ChatService {
       chatId = snap.docs.first.id;
     }
     print('chatId ${chatId}');
-    return context.router.push(ChatRoute(otherUser: otherUser, chatId: chatId, postReply: postReply));
+    return context.router
+        .push(ChatRoute(otherUser: otherUser, chatId: chatId, postReply: postReply));
   }
 
-  void sendMessage(BuildContext context,
-      {required String chatId, required String content, required UserModel otherUser}) {
+  void sendMessage(
+    BuildContext context, {
+    required String chatId,
+    required String content,
+    required UserModel otherUser,
+    PostModel? postReply,
+  }) {
     print('START: sendMessage()');
 
     var fromId = context.uniProvider.currUser.uid;
@@ -61,6 +68,7 @@ class ChatService {
       toId: toId!,
       createdAt: createdAtStr,
       timestamp: timeStamp,
+      postReply: postReply,
     );
 
     var chatData = ChatModel(

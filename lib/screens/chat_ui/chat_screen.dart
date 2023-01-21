@@ -7,6 +7,7 @@ import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 
@@ -39,16 +40,18 @@ class _ChatScreenState extends State<ChatScreen> {
   List<MessageModel> messages = [];
   Timestamp? timeStamp;
   bool isInitMessages = true;
+  PostModel? post;
 
   // var splashLoader = true;
   // List<MessageModel> chatList = [];
   //
 
-  // @override
-  // void initState() {
-  //   _loadOlderMessages().then((_) => messages.remove(messages.first));
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    post = widget.postReply;
+    // _loadOlderMessages().then((_) => messages.remove(messages.first));
+    super.initState();
+  }
 
   Future _loadOlderMessages() async {
     // splashLoader = true; setState(() {});
@@ -150,15 +153,14 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-
   Widget buildTextField(BuildContext context, String chatId, UserModel otherUser) {
     bool includeHeb = sendController.text.isHebrew;
-    var post = widget.postReply;
+
     return StatefulBuilder(builder: (context, stfSetState) {
       return Column(
         children: [
           if (post != null)
-            buildReplyContainer(post!, onTap: () {
+            buildReplyField(post!, onTap: () {
               post = null;
               stfSetState(() {});
             }),
@@ -172,10 +174,11 @@ class _ChatScreenState extends State<ChatScreen> {
             minLines: 1,
             maxLines: 5,
             textAlign: includeHeb ? TextAlign.end : TextAlign.start,
-            cursorColor: AppColors.primaryOriginal,
+            cursorColor: AppColors.white,
             onChanged: (val) => stfSetState(() {}),
             decoration: InputDecoration(
               filled: true,
+              // fillColor: AppColors.primaryLight,
               fillColor: AppColors.darkOutline50,
               hintStyle: AppStyles.text14PxRegular.greyLight,
               focusedBorder: InputBorder.none,
@@ -183,85 +186,45 @@ class _ChatScreenState extends State<ChatScreen> {
               suffixIcon: buildSendButton(
                 isActive: sendController.text.isNotEmpty,
                 onTap: () {
-                  ChatService().sendMessage(context,
-                      chatId: chatId, content: sendController.text, otherUser: otherUser);
+                  ChatService().sendMessage(
+                    context,
+                    chatId: chatId,
+                    content: sendController.text,
+                    otherUser: otherUser,
+                    postReply: post,
+                  );
                   sendController.clear();
+                  post = null;
+                  stfSetState(() {});
                 },
               ),
             ),
           )
               .roundedOnly(
-            bottomLeft: 10,
-            topLeft: post != null ? 3 : 10,
-            topRight: post != null ? 3 : 10,
-            bottomRight: 10,
-          )
+                bottomLeft: 10,
+                topLeft: post != null ? 3 : 10,
+                topRight: post != null ? 3 : 10,
+                bottomRight: 10,
+              )
               .pOnly(bottom: 6),
         ],
       ).px(8);
     });
   }
 
-  Widget buildReplyContainer(PostModel post, {GestureTapCallback? onTap}) {
+  Widget buildReplyField(PostModel post, {GestureTapCallback? onTap}) {
     return Builder(builder: (context) {
-      var postDiff = DateTime.now().difference(post.timestamp!);
-      var postAgo = postDiff.inSeconds < 60
-          ? '${postDiff.inSeconds} sec ago'
-          : '${postDiff.inMinutes} min ago';
-      if (postDiff.inSeconds == 0) postAgo = 'Just now';
       return Container(
-          color: AppColors.darkOutline50,
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-          child: Column(
-            children: [
-              5.verticalSpace,
-              Row(
-                // mainAxisSize: MainAxisSize.min,
-                children: [
-                  Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 20,
-                        backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
-                        backgroundColor: AppColors.darkOutline,
-                      ),
-                      buildOnlineBadge(),
-                    ],
-                  ),
-                  10.horizontalSpace,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      '${post.creatorUser?.name}'
-                          .toText(fontSize: 14, bold: true, color: AppColors.white),
-                      postAgo
-                          .toText(color: AppColors.grey50, fontSize: 11)
-                          .pOnly(right: 10, top: 0, bottom: 0),
-                    ],
-                  ),
-                  // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
-                  const Spacer(),
-                  // .onTap(() {}, radius: 10), // TODO Add move to Tag
-                  // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
-                  Assets.svg.close.svg(height: 17, color: AppColors.grey50).pad(13).onTap(
-                      onTap, radius: 10),
-                  // 10.horizontalSpace,
-                ],
-              ),
-              4.verticalSpace,
-              buildExpandableText(
-                // 'Example : let’s try to think of an topic or fdsk conte tou fc words as possible... I think I’ve already ',
-                  post.textContent,
-                  maxLines: 4,
-                  textAlign: post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
-                  textDirection:
-                  post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
-                  style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50))
-                  .advancedSizedBox(context, maxWidth: true)
-                  .pOnly(left: 50, bottom: 5, right: 45)
-            ],
-          )).roundedOnly(
+              color: AppColors.darkOutline50,
+              // color: AppColors.primaryLight,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              child: buildReplyProfile(context, post,
+                  actionButton: Icons.close_rounded
+                      .icon(size: 22, color: AppColors.grey50)
+                      // Assets.svg.close.svg(height: 17, color: AppColors.grey50)
+                      .pad(13)
+                      .onTap(onTap, radius: 10)))
+          .roundedOnly(
         bottomLeft: 3,
         topLeft: 10,
         topRight: 10,
@@ -270,45 +233,144 @@ class _ChatScreenState extends State<ChatScreen> {
     });
   }
 
+  Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionButton}) {
+    var name = '${post.creatorUser?.name}';
+    var shortName = name.length > 13 ? name.substring(0, 13) + '...'.toString() : name;
+    var postAgo = postTime(post.timestamp!);
+    return Column(
+      children: [
+        5.verticalSpace,
+        Row(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
+                  backgroundColor: AppColors.darkOutline,
+                ),
+                // buildOnlineBadge(),
+              ],
+            ),
+            10.horizontalSpace,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                shortName.toText(fontSize: 14, bold: true, color: AppColors.white, softWrap: false),
+                postAgo
+                    .toText(color: AppColors.grey50, fontSize: 11)
+                    .pOnly(right: 10, top: 0, bottom: 0),
+              ],
+            ),
+            // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
+            const Spacer(),
+            // .onTap(() {}, radius: 10), // TODO Add move to Tag
+            // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
+            actionButton ?? const Offstage()
+            // 10.horizontalSpace,
+          ],
+        ),
+        4.verticalSpace,
+        buildExpandableText(
+                // 'Example : let’s try to think of an topic or fdsk conte tou fc words as possible... I think I’ve already ',
+                post.textContent,
+                maxLines: 4,
+                textAlign: post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
+                textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+                style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50))
+            .advancedSizedBox(context, maxWidth: true)
+            .pOnly(left: 50, bottom: 5, right: 45)
+      ],
+    );
+  }
+
   Widget buildBubble(BuildContext context, MessageModel message, bool isLastMessage) {
     // print('START: buildBubble()');
 
     bool currUser = message.fromId == context.uniProvider.currUser.uid;
     bool isHebrew = message.textContent!.isHebrew;
+
     return Row(
       mainAxisAlignment: currUser ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: <Widget>[
-        ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: context.width * 0.8),
-            child: Container(
-              // elevation: 0,
-                padding: const EdgeInsets.only(top: 8, right: 12, left: 12, bottom: 6),
-                margin: 5.horizontal,
-                decoration: BoxDecoration(
-                    color: currUser ? AppColors.primaryLight : AppColors.darkOutline50,
-                    borderRadius: BorderRadius.only(
-                      bottomRight: 10.circular,
-                      topRight: (currUser ? 3 : 10).circular,
-                      topLeft: (currUser ? 10 : 3).circular,
-                      bottomLeft: 10.circular,
-                    )),
-                // padding: const BubbleEdges.all(8.0),
-                // nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,
-                // nipRadius: 0,
-                // showNip: false,
+        Column(
+          children: [
+            if (message.postReply != null)
+              buildReplyBubble(context, currUser, message).px(6).pOnly(top: 4),
+            ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: context.width * 0.8),
+                    // child: Bubble(
+                    child: Container(
+                        // elevation: 0,
+                        padding: const EdgeInsets.only(top: 8, right: 12, left: 12, bottom: 6),
+                        margin: 5.horizontal,
+                        decoration: BoxDecoration(
+                            color: currUser ? AppColors.primaryLight : AppColors.darkOutline50,
+                            borderRadius: BorderRadius.only(
+                              bottomRight: 10.circular,
+                              topRight: message.postReply != null
+                                  ? 3.circular
+                                  : (currUser ? 3 : 10).circular,
+                              topLeft: message.postReply != null
+                                  ? 3.circular
+                                  : (currUser ? 10 : 3).circular,
+                              bottomLeft: 10.circular,
+                            )),
+                        // padding: const BubbleEdges.all(8.0),
+                        // nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,
+                        // nipRadius: 0,
+                        // showNip: false,
 
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(message.textContent!,
-                        textAlign: isHebrew ? TextAlign.end : TextAlign.start,
-                        style: AppStyles.text16PxRegular.white),
-                    5.verticalSpace,
-                    Text(message.createdAt!.substring(9, 14),
-                        style: AppStyles.text10PxRegular.copyWith(color: AppColors.greyLight))
-                  ],
-                ))).px(6).py(4)
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (message.postReply != null) Row(), // AKA Expanded
+                            Text(message.textContent!,
+                                textAlign: isHebrew ? TextAlign.end : TextAlign.start,
+                                style: AppStyles.text16PxRegular.white),
+                            5.verticalSpace,
+                            Text(message.createdAt!.substring(9, 14),
+                                style:
+                                    AppStyles.text10PxRegular.copyWith(color: AppColors.greyLight))
+                          ],
+                        ))).px(6).pOnly(
+                  bottom: 4,
+                  top: message.postReply != null ? 2.5 : 4,
+                ),
+          ],
+        )
       ],
     );
+  }
+
+  ConstrainedBox buildReplyBubble(BuildContext context, bool currUser, MessageModel message) {
+    return ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: context.width * 0.8),
+        // child: Bubble(
+        child: Container(
+            // elevation: 0,
+            padding: const EdgeInsets.only(top: 8, right: 12, left: 12, bottom: 6),
+            margin: 5.horizontal,
+            decoration: BoxDecoration(
+                color: currUser ? AppColors.primaryLight : AppColors.darkOutline50,
+                borderRadius: BorderRadius.only(
+                  bottomRight: 3.circular,
+                  topRight: (currUser ? 3 : 10).circular,
+                  topLeft: (currUser ? 10 : 3).circular,
+                  bottomLeft: 3.circular,
+                )),
+            // padding: const BubbleEdges.all(8.0),
+            // nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,
+            // nipRadius: 0,
+            // showNip: false,
+            child: buildReplyProfile(
+              context,
+              message.postReply!,
+              actionButton: 'View Ril'.toText(medium: true).pad(13).onTap(() {
+                // TODO LATER LIST: Add View Ril Reply OnTap
+              }, radius: 10),
+            )));
   }
 }

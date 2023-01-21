@@ -305,13 +305,13 @@ class _UserScreenState extends State<UserScreen> {
                       height: 42,
                       child: OutlinedButton.icon(
                         style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          side: const BorderSide(width: 2.0, color: AppColors.primaryLight2),
+                          backgroundColor: AppColors.primaryLight2,
+                          // side: const BorderSide(width: 2.0, color: AppColors.primaryLight2),
                           // foregroundColor: AppColors.darkOutline,
-                          shape: 10.roundedShape,
+                          shape: 8.roundedShape,
                         ),
-                        icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: AppColors.primaryLight2),
-                        label: 'Reply bio'.toText(fontSize: 13, color: AppColors.primaryLight2, bold: true),
+                        icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: AppColors.darkBg),
+                        label: 'Reply bio'.toText(fontSize: 13, color: AppColors.darkBg, bold: true),
                         onPressed: () {
                           // TODO LATER LIST: Add Reply bio action
                           ChatService.openChat(context, otherUser: user);
@@ -326,13 +326,15 @@ class _UserScreenState extends State<UserScreen> {
                       width: context.width * 0.5,
                       height: 40,
                       child: OutlinedButton.icon(
+
                         style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          // side: const BorderSide(width: 2.0, color: AppColors.darkOutline),
-                          shape: 10.roundedShape,
+                          // backgroundColor: AppColors.primaryLight2,
+                          backgroundColor: AppColors.transparent,
+                          side: const BorderSide(width: 2.0, color: AppColors.primaryLight2),
+                          shape: 8.roundedShape,
                         ),
-                        icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: AppColors.darkBg),
-                        label: 'Send DM'.toText(fontSize: 13, color: AppColors.darkBg, bold: true),
+                        icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: AppColors.primaryLight2),
+                        label: 'Send DM'.toText(fontSize: 13, color: AppColors.primaryLight2, bold: true),
                         onPressed: () {
                           ChatService.openChat(context, otherUser: user);
                         },
