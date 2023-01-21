@@ -74,7 +74,8 @@ class PostBlock extends StatelessWidget {
         postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec ago' : '${postDiff.inMinutes} min ago';
     if (postDiff.inSeconds == 0) postAgo = 'Just now';
 
-    return SizedBox(
+    return
+      SizedBox(
       height: 68,
       // height: 72, // 72: original size 60: min size
       child: ListTile(
@@ -84,7 +85,7 @@ class PostBlock extends StatelessWidget {
         subtitle: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // TODO ADD ON POST MVP ONLY (ago · Tag)
+            // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
             postAgo
                 .toText(color: AppColors.grey50, fontSize: 12)
                 .pOnly(right: 10, top: 4, bottom: 10)
@@ -247,12 +248,12 @@ class PostBlock extends StatelessWidget {
   }
 }
 
-Positioned buildOnlineBadge({bool doubleSize = false}) {
+Positioned buildOnlineBadge({double ratio = 1.0}) {
   return Positioned(
     bottom: 0,
     right: 0,
     child: CircleAvatar(
-      radius: doubleSize ? 12 : 7,
+      radius: 6.5 * ratio,
       backgroundColor: AppColors.primaryDark,
       child:
           // STATIC VERSION:
@@ -262,15 +263,15 @@ Positioned buildOnlineBadge({bool doubleSize = false}) {
           // ),
 
           // LIVE VERSION:
-          BlinkingOnlineBadge(doubleSize: doubleSize),
+          BlinkingOnlineBadge(ratio: ratio),
     ),
   );
 }
 
 class BlinkingOnlineBadge extends StatefulWidget {
-  final bool doubleSize;
+  final double ratio;
 
-  const BlinkingOnlineBadge({this.doubleSize = false, Key? key}) : super(key: key);
+  const BlinkingOnlineBadge({this.ratio = 1.0, Key? key}) : super(key: key);
 
   @override
   _BlinkingOnlineBadgeState createState() => _BlinkingOnlineBadgeState();
@@ -289,7 +290,7 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
 
   @override
   Widget build(BuildContext context) {
-    var size = widget.doubleSize ? 7.5 : 4.0;
+    var size = widget.ratio * 4.0;
     return CircleAvatar(
       radius: size,
       backgroundColor: AppColors.green.withOpacity(0.20),

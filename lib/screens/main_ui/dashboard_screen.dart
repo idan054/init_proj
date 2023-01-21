@@ -63,7 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _pageController = PageController(initialPage: widget.dashboardPage.index);
 
     return Scaffold(
-      backgroundColor: AppColors.darkBg,
+      backgroundColor: AppColors.primaryDark,
       body: PageView(
           controller: _pageController,
           // physics: const NeverScrollableScrollPhysics(), // disable swipe
@@ -79,13 +79,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(color: AppColors.darkBg, height: 3, width: double.maxFinite),
+                Container(color: AppColors.darkOutline, height: 2, width: double.maxFinite),
                 SizedBox(
                   height: 55,
                   child: BottomNavigationBar(
                     selectedFontSize: 0,
                     unselectedFontSize: 0,
                     backgroundColor: AppColors.primaryDark,
+                    // backgroundColor: AppColors.darkBg,
                     currentIndex: sItem.index,
                     onTap: (i) {
                       _handleIndexChanged(i, true);
@@ -106,9 +107,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         icon: Assets.svg.icons.chatBubblesUntitledIcon
                             .svg(color: AppColors.grey50)
                             .pOnly(left: 15),
-                        activeIcon: Assets.svg.icons.chatBubblesUntitledIcon
-                            .svg(color: AppColors.white)
-                            .pOnly(left: 15),
+                        activeIcon: Assets.images.chatBubblesSolid.image(height: 22).pOnly(left: 15),
                       ),
                     ],
                   ),
@@ -119,7 +118,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onPressed: () {
                       showModalBottomSheet(
                           backgroundColor: Colors.transparent,
-                          barrierColor: Colors.black54,
+                          // barrierColor: Colors.black54,
+                          // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
+                          barrierColor: Colors.black.withOpacity(0.00),
+                          // AKA 2%
                           isScrollControlled: true,
                           context: context,
                           builder: (context) {

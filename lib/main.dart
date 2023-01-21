@@ -80,6 +80,7 @@ class _AppState extends State<App> {
       return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle.dark.copyWith(
           systemNavigationBarColor: AppColors.primaryDark,
+          // systemNavigationBarColor: AppColors.darkBg,
           systemNavigationBarIconBrightness: Brightness.dark,
           statusBarIconBrightness: Brightness.dark,
           statusBarColor: Colors.transparent,

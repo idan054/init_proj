@@ -9,7 +9,7 @@ import '../common/service/mixins/assets.gen.dart';
 
 Future<void> showRilDialog(
   BuildContext context, {
-  required String title,
+  required String? title,
   required Widget desc,
   bool barrierDismissible = false,
   Widget? secondaryBtn,
@@ -19,7 +19,7 @@ Future<void> showRilDialog(
     context: context,
     barrierDismissible: barrierDismissible, // user must tap button!
     // barrierColor: Colors.transparent,
-    barrierColor: Colors.white.withOpacity(0.02), // AKA 2%
+    barrierColor: Colors.black.withOpacity(0.15),
     builder: (BuildContext context) {
       return BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
@@ -30,8 +30,10 @@ Future<void> showRilDialog(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              title.toText(fontSize: 16, medium: true),
-              16.verticalSpace,
+              if (title != null) ...[
+                title.toText(fontSize: 16, medium: true),
+                16.verticalSpace,
+              ],
               desc,
               // 16.verticalSpace,
               // Row(

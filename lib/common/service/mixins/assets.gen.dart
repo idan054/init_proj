@@ -38,6 +38,10 @@ class $AssetsImagesGen {
   AssetGenImage get logoCircularRilTopiaLogo =>
       const AssetGenImage('assets/images/LogoCircularRilTopiaLogo.png');
 
+  /// File path: assets/images/chatBubblesSolid.png
+  AssetGenImage get chatBubblesSolid =>
+      const AssetGenImage('assets/images/chatBubblesSolid.png');
+
   /// File path: assets/images/check-verified-image.png
   AssetGenImage get checkVerifiedImage =>
       const AssetGenImage('assets/images/check-verified-image.png');
@@ -60,12 +64,33 @@ class $AssetsImagesGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         logoCircularRilTopiaLogo,
+        chatBubblesSolid,
         checkVerifiedImage,
         commentsOffPNG,
         logo,
         mapPlaceholder,
         minecloudLogo
       ];
+}
+
+class $AssetsRivGen {
+  const $AssetsRivGen();
+
+  /// File path: assets/riv/rilMan.riv
+  String get rilMan => 'assets/riv/rilMan.riv';
+
+  /// File path: assets/riv/rilManBlackWhite.riv
+  String get rilManBlackWhite => 'assets/riv/rilManBlackWhite.riv';
+
+  /// File path: assets/riv/rilWhiteman.riv
+  String get rilWhiteman => 'assets/riv/rilWhiteman.riv';
+
+  /// File path: assets/riv/rilmanblackwhitefaster.riv
+  String get rilmanblackwhitefaster => 'assets/riv/rilmanblackwhitefaster.riv';
+
+  /// List of all assets
+  List<String> get values =>
+      [rilMan, rilManBlackWhite, rilWhiteman, rilmanblackwhitefaster];
 }
 
 class $AssetsSvgGen {
@@ -292,6 +317,10 @@ class $AssetsSvgIconsGen {
   /// File path: assets/svg/icons/camera.svg
   SvgGenImage get camera => const SvgGenImage('assets/svg/icons/camera.svg');
 
+  /// File path: assets/svg/icons/chatBubbles-solid-icon.svg
+  SvgGenImage get chatBubblesSolidIcon =>
+      const SvgGenImage('assets/svg/icons/chatBubbles-solid-icon.svg');
+
   /// File path: assets/svg/icons/chatBubbles-untitled-icon.svg
   SvgGenImage get chatBubblesUntitledIcon =>
       const SvgGenImage('assets/svg/icons/chatBubbles-untitled-icon.svg');
@@ -339,6 +368,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get homeSolidUntitledIcon =>
       const SvgGenImage('assets/svg/icons/homeSolid-untitled-icon.svg');
 
+  /// File path: assets/svg/icons/log-out-01.svg
+  SvgGenImage get logOut01 =>
+      const SvgGenImage('assets/svg/icons/log-out-01.svg');
+
   /// File path: assets/svg/icons/man_profile.svg
   SvgGenImage get manProfile =>
       const SvgGenImage('assets/svg/icons/man_profile.svg');
@@ -378,6 +411,7 @@ class $AssetsSvgIconsGen {
         arrowBackLeft,
         bellUntitledIcon,
         camera,
+        chatBubblesSolidIcon,
         chatBubblesUntitledIcon,
         checkVerifiedOutline,
         checkVerifiedSolid,
@@ -390,6 +424,7 @@ class $AssetsSvgIconsGen {
         heartUntitledIcon,
         homeUntitledIcon,
         homeSolidUntitledIcon,
+        logOut01,
         manProfile,
         manProfileOutline,
         messageCommentsLines,
@@ -404,9 +439,17 @@ class $AssetsSvgIconsGen {
 class Assets {
   Assets._();
 
+  static const AssetGenImage defaultIcon =
+      AssetGenImage('assets/Default-Icon.png');
   static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const AssetGenImage messagesIcon =
+      AssetGenImage('assets/messages_icon.png');
+  static const $AssetsRivGen riv = $AssetsRivGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
+
+  /// List of all assets
+  List<AssetGenImage> get values => [defaultIcon, messagesIcon];
 }
 
 class AssetGenImage {

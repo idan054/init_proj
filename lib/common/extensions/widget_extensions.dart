@@ -29,7 +29,7 @@ extension WidgetX on Widget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-              // overlayColor: MaterialStateProperty.all(Colors.yellow),
+              // overlayColor: MaterialStateProperty.all(Colors.white12),
               //   splashColor: Colors.yellow,
               //   focusColor: Colors.yellow,
               //   highlightColor: Colors.yellow,
@@ -49,7 +49,7 @@ extension WidgetX on Widget {
 
   Directionality get ltr => Directionality(textDirection: TextDirection.ltr, child: this);
 
-  ClipRRect get roundedFull => ClipRRect(borderRadius: BorderRadius.circular(99), child: this);
+  ClipRRect get roundedFull => ClipRRect(borderRadius: BorderRadius.circular(999), child: this);
 
   ClipRRect rounded({double? radius}) =>
       ClipRRect(borderRadius: BorderRadius.circular(radius ?? 99), child: this);

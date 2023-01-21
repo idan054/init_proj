@@ -11,6 +11,7 @@ import 'package:example/main.dart';
 
 // import 'package:example/common/service/Auth/firebase_database.dart';
 import 'package:example/widgets/components/postViewOld_sts.dart';
+import 'package:example/widgets/my_dialog.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -99,8 +100,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       length: 2,
       initialIndex: 1,
       child: Scaffold(
-          backgroundColor: AppColors.darkBg,
-          appBar: buildRiltopiaAppBar(
+          backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.darkOutline,
+          appBar: _buildRiltopiaAppBar(
             context,
             bottom: TabBar(
               indicator: UnderlineTabIndicator(
@@ -137,7 +138,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
         if (splashLoader || postList.isEmpty) {
           // First time only
-          return const CircularProgressIndicator(color: AppColors.primaryOriginal, strokeWidth: 7)
+          return const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3)
               .center;
         }
 
@@ -151,7 +152,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             child: ListView(
               children: [
                 buildTagTitle(),
-                2.verticalSpace,
+                1.verticalSpace,
                 //   Expanded(child:
                 ListView.builder(
                   physics: const ScrollPhysics(),
@@ -191,11 +192,15 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     );
   }
 
-  AppBar buildRiltopiaAppBar(BuildContext context, {PreferredSizeWidget? bottom}) {
+  AppBar _buildRiltopiaAppBar(BuildContext context, {PreferredSizeWidget? bottom}) {
+    var currUser = context.uniProvider.currUser;
+
     return AppBar(
       elevation: 2,
       backgroundColor: AppColors.primaryDark,
-      title: riltopiaHorizontalLogo(ratio: 1.15),
+      // backgroundColor: AppColors.darkBg,
+      title: riltopiaHorizontalLogo(ratio: 1.15).pOnly(bottom: 5, right: 5, left: 5, top: 5),
+      // .onTap(() {}, radius: 8),
       actions: [
         CircleAvatar(
           backgroundColor: AppColors.primaryDark,
@@ -205,7 +210,76 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             backgroundColor: AppColors.darkOutline50,
           ),
         ).px(10).py(5).onTap(() {
-          context.router.push(UserRoute(user: context.uniProvider.currUser));
+          showRilDialog(
+            context,
+            title: null,
+            desc: Column(
+              children: [
+                //~ Profile
+                SizedBox(
+                  height: 68,
+                  // height: 72, // 72: original size 60: min size
+                  child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    // title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.grey50),
+                    title:
+                        '${currUser.name}'.toText(fontSize: 14, bold: true, color: AppColors.white),
+                    subtitle: 'SEE YOUR PROFILE'
+                        .toText(color: AppColors.grey50, fontSize: 12)
+                        .pOnly(right: 10, top: 4, bottom: 10),
+                    leading: CircleAvatar(
+                      radius: 20,
+                      backgroundImage: NetworkImage('${currUser.photoUrl}'),
+                      backgroundColor: AppColors.darkOutline,
+                    ),
+                    // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
+                  ).pad(0).onTap(() {
+                    print('PROFILE CLICKED');
+                    context.router.push(UserRoute(user: currUser));
+                  }, radius: 5),
+                ),
+                // TODO ADD ON POST MVP ONLY: Add Edit Tags https://prnt.sc/6wXKp7BfpcKx
+                const Divider(thickness: 2.5, color: AppColors.darkOutline).py(10),
+
+                //~ Chat with us
+                SizedBox(
+                  height: 50,
+                  // height: 72, // 72: original size 60: min size
+                  child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      horizontalTitleGap: 0,
+                      title:
+                      'Chat with us'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
+                      leading: Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.grey50))
+                      .pad(0)
+                      .onTap(() {
+                        // TODO LATER LIST: 'Chat with us' Static chat
+
+                  }, radius: 5),
+                ),
+
+                //~ Log out
+                SizedBox(
+                  height: 50,
+                  // height: 72, // 72: original size 60: min size
+                  child: ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          horizontalTitleGap: 0,
+                          title:
+                              'Log out'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
+                          leading: Assets.svg.icons.logOut01.svg(color: AppColors.grey50))
+                      .pad(0)
+                      .onTap(() {
+                    context.router.replaceAll([const LoginRoute()]);
+                  }, radius: 5),
+                ),
+
+              ],
+            ),
+            barrierDismissible: true,
+            showCancelBtn: false,
+          );
+          // context.router.push(UserRoute(user: context.uniProvider.currUser));
         })
       ],
 
@@ -213,7 +287,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       // actions: [Assets.svg.icons.bellUntitledIcon.svg().px(20).onTap(() {})],
 
       bottom: bottom,
-      // TODO ADD ON POST MVP ONLY (Tags Row)
+      // TODO ADD ON POST MVP ONLY (Tags Row at Main Page)
       // bottom: PreferredSize(
       //   preferredSize: const Size(00.0, 50.0),
       //   child: Card(

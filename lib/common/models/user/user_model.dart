@@ -19,6 +19,8 @@ class UserModel with _$UserModel {
     String? uid,
     int? age,
     String? photoUrl,
+    bool? onlineUser,
+    // int? userScore, // Example: 0 = Block Forever.
     GenderTypes? gender,
     @Default([]) List<String> tags,
     @DateTimeStampConv() DateTime? birthday,

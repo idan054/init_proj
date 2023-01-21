@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/themes/app_colors.dart';
@@ -38,101 +40,104 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     var textDir = postController.text.isHebrew ? TextDirection.rtl : TextDirection.ltr;
     var selectedTag = context.uniProvider.selectedTag;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.darkOutline,
-        borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
-      ),
-      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (isTagScreen)
-            '#$selectedTag'
-                .toText(color: AppColors.darkOutline50)
-                .pOnly(left: 10, top: 10)
-                .centerLeft,
-          TextField(
-            maxLines: 11,
-            minLines: 1,
-            autofocus: true,
-            textDirection: textDir,
-            controller: postController,
-            keyboardAppearance: Brightness.dark,
-            keyboardType: TextInputType.multiline,
-            style: AppStyles.text16PxRegular.copyWith(color: AppColors.white),
-            onChanged: (val) => setState(() {}),
-            // inputFormatters: [LengthLimitingTextInputFormatter(350)],
-            decoration: InputDecoration(
-              filled: true,
-              hintText: 'Share your Ril thoughts...',
-              hintStyle: AppStyles.text16PxRegular.copyWith(color: AppColors.grey50),
-              fillColor: Colors.transparent,
-              border: InputBorder.none,
+    return BackdropFilter(
+      // filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+      filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.darkOutline,
+          borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.99),
+              offset: const Offset(0.0, 1.5), //(x,y)
+              blurRadius: 4.0,
             ),
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              buildChoiceChip(context,
-                      customIcon: isComments
-                          ? Assets.svg.icons.commentUntitledIcon
-                              .svg(height: 15, color: AppColors.white)
-                          : Assets.svg.icons.dmPlaneUntitledIcon
-                              .svg(height: 15, color: AppColors.darkOutline50),
-                      selectedColor: AppColors.darkOutline50,
-                      label: (isComments ? 'With comments' : 'Reply only')
-                          .toText(color: isComments ? AppColors.white : AppColors.grey50),
-                      onSelect: (bool newSelection) {
-                isComments = !isComments;
-                setState(() {});
-              }, selected: isComments)
-                  .centerLeft
-                  .pOnly(left: 5),
+          ],
+        ),
+        margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (isTagScreen)
+              '#$selectedTag'
+                  .toText(color: AppColors.darkOutline50)
+                  .pOnly(left: 10, top: 10)
+                  .centerLeft,
+            TextField(
+              maxLines: 11,
+              minLines: 1,
+              autofocus: true,
+              textDirection: textDir,
+              controller: postController,
+              keyboardAppearance: Brightness.dark,
+              keyboardType: TextInputType.multiline,
+              style: AppStyles.text16PxRegular.copyWith(color: AppColors.white),
+              onChanged: (val) => setState(() {}),
+              // inputFormatters: [LengthLimitingTextInputFormatter(350)],
+              decoration: InputDecoration(
+                filled: true,
+                hintText: 'Share your Ril thoughts...',
+                hintStyle: AppStyles.text16PxRegular.copyWith(color: AppColors.grey50),
+                fillColor: Colors.transparent,
+                border: InputBorder.none,
+              ),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                buildChoiceChip(context,
+                        customIcon: isComments
+                            ? Assets.svg.icons.commentUntitledIcon
+                                .svg(height: 15, color: AppColors.white)
+                            : Assets.svg.icons.dmPlaneUntitledIcon
+                                .svg(height: 15, color: AppColors.grey50),
+                        selectedColor: AppColors.darkOutline50,
+                        label: (isComments ? 'With comments' : 'Reply only')
+                            .toText(color: isComments ? AppColors.white : AppColors.grey50),
+                        onSelect: (bool newSelection) {
+                  isComments = !isComments;
+                  setState(() {});
+                }, selected: isComments)
+                    .centerLeft
+                    .pOnly(left: 5),
 
-              // Expanded(
-              //   child: isTagAdded
-              //       ? _tagsChoiceList(context)
-              //       : buildChoiceChip(context, label: const Text('Add tag'),
-              //               onSelect: (bool newSelection) {
-              //           isTagAdded = !isTagAdded;
-              //           setState(() {});
-              //         }, selected: isTagAdded)
-              //           .centerLeft
-              //           .pOnly(left: 5),
-              // ),
+                // Expanded(
+                //   child: isTagAdded
+                //       ? _tagsChoiceList(context)
+                //       : buildChoiceChip(context, label: const Text('Add tag'),
+                //               onSelect: (bool newSelection) {
+                //           isTagAdded = !isTagAdded;
+                //           setState(() {});
+                //         }, selected: isTagAdded)
+                //           .centerLeft
+                //           .pOnly(left: 5),
+                // ),
 
-              const Spacer(),
-              buildSendButton()
-            ],
-          ).pOnly(bottom: 5),
-        ],
+                const Spacer(),
+                buildSendButton(
+                  onTap: () {
+                    UserModel currUser = context.uniProvider.currUser;
+                    var post = PostModel(
+                      textContent: postController.text,
+                      id: '${currUser.email}${UniqueKey()}',
+                      //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
+                      // details will be update if user edit his info
+                      creatorUser: currUser,
+                      timestamp: DateTime.now(),
+                      enableComments: isComments,
+                    );
+                    context.uniProvider.updatePostUploaded(true);
+                    FeedService.uploadPost(context, post);
+                    context.router.pop();
+                  }
+                )
+              ],
+            ).pOnly(bottom: 5),
+          ],
+        ),
       ),
     );
-  }
-
-  Widget buildSendButton() {
-    UserModel currUser = context.uniProvider.currUser;
-
-    return Container(
-      height: 35,
-      width: 35,
-      color: AppColors.darkOutline50,
-      child: Assets.svg.icons.iconSendButton.svg().pad(7.5),
-    ).rounded(radius: 10).px(10).pOnly(top: 5, bottom: 5).onTap(() {
-      var post = PostModel(
-        textContent: postController.text,
-        id: '${currUser.email}${UniqueKey()}',
-        //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
-        // details will be update if user edit his info
-        creatorUser: currUser,
-        timestamp: DateTime.now(),
-        enableComments: isComments,
-      );
-      context.uniProvider.updatePostUploaded(true);
-      FeedService.uploadPost(context, post);
-      context.router.pop();
-    }, radius: 10).pOnly(right: 5);
   }
 
 // SizedBox _tagsChoiceList(BuildContext context) {
@@ -166,6 +171,20 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 //     ),
 //   );
 // }
+}
+
+Widget buildSendButton({GestureTapCallback? onTap, bool isActive = true}) {
+
+  return Opacity(
+    opacity: isActive ? 1.0 : 0.3,
+    child: Container(
+      height: 35,
+      width: 35,
+      // color: AppColors.grey50,
+      color: AppColors.transparent,
+      child: Assets.svg.icons.iconSendButton.svg().pad(7.5),
+    ).rounded(radius: 10).px(10).pOnly(top: 5, bottom: 5).onTap(isActive ? onTap : null, radius: 10).pOnly(right: 5),
+  );
 }
 
 Widget quickCrossFade(bool value,

@@ -44,6 +44,7 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   List<PostModel> postList = [];
+  var isBioExpanded = false;
 
   @override
   void initState() {
@@ -99,15 +100,18 @@ class _UserScreenState extends State<UserScreen> {
                     buildBottomProfile(context, user),
                     // const Divider(thickness: 2, color: AppColors.darkOutline),
                     buildPostsDivider(isCurrUserProfile, user),
-                    2.verticalSpace,
-                    ListView.builder(
-                        physics: const ScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: postList.length,
-                        itemBuilder: (BuildContext context, int i) {
-                          // PostView(postList[i])
-                          return PostBlock(postList[i], isOnUserPage: true);
-                        }),
+                    3.verticalSpace,
+                    Container(
+                      color:  AppColors.darkOutline,
+                      child: ListView.builder(
+                          physics: const ScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: postList.length,
+                          itemBuilder: (BuildContext context, int i) {
+                            // PostView(postList[i])
+                            return PostBlock(postList[i], isOnUserPage: true);
+                          }),
+                    ),
                   ],
                 ),
               )
@@ -162,6 +166,7 @@ class _UserScreenState extends State<UserScreen> {
                       child: 'Report member'.toText(),
                     ),
                     PopupMenuItem(
+                      // TODO LATER LIST: Add Block user action
                       child: 'Block member'.toText(),
                     ),
                   ];
@@ -195,7 +200,7 @@ class _UserScreenState extends State<UserScreen> {
           secondaryBtn: TextButton(
               onPressed: () {
                 var validState = reportFormKey.currentState!.validate();
-                if(!validState) return;
+                if (!validState) return;
 
                 var nameEndAt = userName.length < 20 ? userName.length : 20;
                 var docName = userName.substring(0, nameEndAt).toString() + UniqueKey().toString();
@@ -219,114 +224,148 @@ class _UserScreenState extends State<UserScreen> {
               child: 'Report'.toText(color: AppColors.primaryLight)));
     });
   }
-}
 
-Widget buildBottomProfile(BuildContext context, UserModel user) {
-  var currUser = context.uniProvider.currUser;
-  var isCurrUser = currUser.uid == user.uid;
-  var showTagsRow = false;
+  Widget buildBottomProfile(BuildContext context, UserModel user) {
+    var currUser = context.uniProvider.currUser;
+    var isCurrUser = currUser.uid == user.uid;
+    var showTagsRow = false;
 
-  return Column(
-    children: [
-      Stack(
-        children: [
-          CircleAvatar(
-            radius: 46,
-            backgroundColor: AppColors.darkOutline,
-            child: CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(user.photoUrl!),
-              backgroundColor: AppColors.darkGrey,
-            ).center,
-          ),
-          buildOnlineBadge(doubleSize: true),
-        ],
-      ),
-      16.verticalSpace,
-      '${user.name}'.toText(fontSize: 18, medium: true),
-      8.verticalSpace,
-      StatefulBuilder(builder: (context, stfSetState) {
-        return showTagsRow
-            ? buildTagsRow(user, onClose: () {
+    return Column(
+      children: [
+        Stack(
+          children: [
+            CircleAvatar(
+              radius: 46,
+              backgroundColor: AppColors.darkOutline,
+              child: CircleAvatar(
+                radius: 40,
+                backgroundImage: NetworkImage(user.photoUrl!),
+                backgroundColor: AppColors.darkGrey,
+              ).center,
+            ),
+            buildOnlineBadge(ratio: 1.8),
+          ],
+        ),
+        16.verticalSpace,
+        '${user.name}'.toText(fontSize: 18, medium: true),
+        8.verticalSpace,
+        StatefulBuilder(builder: (context, stfSetState) {
+          return showTagsRow
+              ? buildTagsRow(user, onClose: () {
+            showTagsRow = !showTagsRow;
+            stfSetState(() {});
+          })
+              : Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              user.tags.isEmpty
+                  ? const Offstage()
+                  : user.tags.length == 1
+                  ? buildRilChip(user.tags.first)
+                  : Badge(
+                  badgeContent: '+${user.tags.length - 1}'
+                      .toText(fontSize: 10, color: Colors.white70, medium: true),
+                  padding: const EdgeInsets.all(5),
+                  elevation: 0,
+                  badgeColor: AppColors.darkOutline50,
+                  // stackFit: StackFit.loose,
+                  // shape:
+                  child: buildRilChip(user.tags.first))
+                  .pad(7)
+                  .onTap(() {
                 showTagsRow = !showTagsRow;
                 stfSetState(() {});
-              })
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              }, radius: 12),
+              12.horizontalSpace,
+              buildRilChip('${user.gender?.name}', icon: Assets.svg.icons.manProfile.svg()),
+              12.horizontalSpace,
+              buildRilChip('${user.age} y.o', icon: Assets.svg.icons.dateTimeCalender.svg()),
+            ],
+          );
+        }),
+        8.verticalSpace,
+        StatefulBuilder(
+            builder: (context, stfSetState) {
+              return Column(
                 children: [
-                  user.tags.isEmpty
-                      ? const Offstage()
-                      : user.tags.length == 1
-                          ? buildRilChip(user.tags.first)
-                          : Badge(
-                                  badgeContent: '+${user.tags.length - 1}'
-                                      .toText(fontSize: 10, color: Colors.white70, medium: true),
-                                  padding: const EdgeInsets.all(5),
-                                  elevation: 0,
-                                  badgeColor: AppColors.darkOutline50,
-                                  // stackFit: StackFit.loose,
-                                  // shape:
-                                  child: buildRilChip(user.tags.first))
-                              .pad(7)
-                              .onTap(() {
-                              showTagsRow = !showTagsRow;
-                              stfSetState(() {});
-                            }, radius: 12),
-                  12.horizontalSpace,
-                  buildRilChip('${user.gender?.name}', icon: Assets.svg.icons.manProfile.svg()),
-                  12.horizontalSpace,
-                  buildRilChip('${user.age} y.o', icon: Assets.svg.icons.dateTimeCalender.svg()),
+                  buildExpandableText(
+                    'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
+                    onChanged: (val) {
+                      isBioExpanded = !isBioExpanded;
+                      stfSetState(() {});
+                    },
+                  ),
+                  12.verticalSpace,
+                  if (!isCurrUser && isBioExpanded)...[
+                    SizedBox(
+                      width: context.width * 0.5,
+                      height: 42,
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          side: const BorderSide(width: 2.0, color: AppColors.primaryLight2),
+                          // foregroundColor: AppColors.darkOutline,
+                          shape: 10.roundedShape,
+                        ),
+                        icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: AppColors.primaryLight2),
+                        label: 'Reply bio'.toText(fontSize: 13, color: AppColors.primaryLight2, bold: true),
+                        onPressed: () {
+                          // TODO LATER LIST: Add Reply bio action
+                          ChatService.openChat(context, otherUser: user);
+                        },
+                      ),
+                    ),
+                    12.verticalSpace,
+                  ],
+
+                  if (!isCurrUser && !isBioExpanded) ...[
+                    SizedBox(
+                      width: context.width * 0.5,
+                      height: 40,
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          // side: const BorderSide(width: 2.0, color: AppColors.darkOutline),
+                          shape: 10.roundedShape,
+                        ),
+                        icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: AppColors.darkBg),
+                        label: 'Send DM'.toText(fontSize: 13, color: AppColors.darkBg, bold: true),
+                        onPressed: () {
+                          ChatService.openChat(context, otherUser: user);
+                        },
+                      ),
+                    ),
+                    8.verticalSpace,
+                    Builder(builder: (context) {
+                      var commonTag = user.tags.firstWhereOrNull((tag) => currUser.tags.contains(tag));
+                      return commonTag == null
+                          ? const Offstage()
+                          : Row(
+                        children: [
+                          Assets.svg.icons.groupMultiPeople
+                              .svg(width: 17, color: Colors.white70)
+                              .pOnly(right: 10),
+                          "You both interesting in $commonTag... that's cool!"
+                              .toText(color: AppColors.grey50, fontSize: 12)
+                              .expanded(),
+                        ],
+                      );
+                    }),
+                    if (!isCurrUser) 8.verticalSpace,
+                  ],
                 ],
               );
-      }),
-      8.verticalSpace,
-      buildExpandableText(
-        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-        'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
-      ),
-      16.verticalSpace,
-      if (!isCurrUser) ...[
-        SizedBox(
-          width: context.width * 0.5,
-          height: 40,
-          child: OutlinedButton.icon(
-            style: OutlinedButton.styleFrom(
-              backgroundColor: Colors.white,
-              // side: const BorderSide(width: 2.0, color: AppColors.darkOutline),
-              shape: 10.roundedShape,
-            ),
-            icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: AppColors.darkBg),
-            label: 'Send DM'.toText(fontSize: 13, color: AppColors.darkBg, bold: true),
-            onPressed: () {
-              ChatService.openChat(context, otherUser: user);
-            },
-          ),
+            }
         ),
-        8.verticalSpace,
-        Builder(builder: (context) {
-          var commonTag = user.tags.firstWhereOrNull((tag) => currUser.tags.contains(tag));
-          return commonTag == null
-              ? const Offstage()
-              : Row(
-                  children: [
-                    Assets.svg.icons.groupMultiPeople
-                        .svg(width: 17, color: Colors.white70)
-                        .pOnly(right: 10),
-                    "You both interesting in $commonTag... that's cool!"
-                        .toText(color: AppColors.grey50, fontSize: 12)
-                        .expanded(),
-                  ],
-                );
-        }),
-        if (!isCurrUser) 16.verticalSpace,
       ],
-    ],
-  ).px(25);
+    ).px(25);
+  }
 }
+
+
 
 Widget buildTagsRow(UserModel user, {GestureTapCallback? onClose}) {
   return Column(
@@ -370,12 +409,18 @@ Widget buildRilChip(String label, {Widget? icon}) {
 }
 
 ExpandableText buildExpandableText(String text,
-    {TextStyle? style, TextAlign? textAlign, TextDirection? textDirection, int? maxLines}) {
+    {TextStyle? style,
+    TextAlign? textAlign,
+    TextDirection? textDirection,
+    int? maxLines,
+    ValueChanged<bool>? onChanged}) {
   return ExpandableText(text,
       maxLines: maxLines ?? 5,
       textAlign: textAlign ?? TextAlign.center,
+      onExpandedChanged: onChanged,
       expandText: 'Expand',
       collapseText: 'Collape',
+      linkColor: AppColors.primaryLight2,
       animation: true,
       animationDuration: 1000.milliseconds,
       textDirection: textDirection,

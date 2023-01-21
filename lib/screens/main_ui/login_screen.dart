@@ -19,6 +19,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     print('START: LoginScreen()');
@@ -40,12 +42,16 @@ class _LoginScreenState extends State<LoginScreen> {
           wMainButton(context,
               radius: 99,
               isWide: true,
-              title: 'Join with Google',
+              title: isLoading ? 'Loading...' : 'Join with Google',
               icon: Assets.svg.gLogoIcon.svg(height: 25),
               color: AppColors.white,
-              textColor: AppColors.darkBg,
-              onPressed: () async =>
-                  await AuthService.signInWithGoogle(context, signUpScenario: true)).appearAll,
+              textColor: AppColors.darkBg, onPressed: () async {
+            isLoading = true;
+            setState(() {});
+            await AuthService.signInWithGoogle(context, signUpScenario: true);
+            isLoading = false;
+            setState(() {});
+          }).appearAll,
           const Spacer(flex: 5),
           RichText(
             textAlign: TextAlign.center,

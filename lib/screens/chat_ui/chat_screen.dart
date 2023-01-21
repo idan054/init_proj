@@ -13,7 +13,10 @@ import '../../common/models/message/message_model.dart';
 import '../../common/models/user/user_model.dart';
 import '../../common/service/Database/firebase_database.dart';
 import '../../common/service/Chat/chat_services.dart';
+import '../../common/themes/app_strings.dart';
 import '../../widgets/app_bar.dart';
+import '../../widgets/components/postBlock_sts.dart';
+import '../feed_ui/create_post_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   final UserModel otherUser;
@@ -44,8 +47,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Future _loadOlderMessages() async {
     // splashLoader = true; setState(() {});
-    List olderMessages = await Database.advanced.handleGetModel(
-        ModelTypes.messages, messages,
+    List olderMessages = await Database.advanced.handleGetModel(ModelTypes.messages, messages,
         collectionReference: 'chats/${widget.chatId}/messages');
     if (olderMessages.isNotEmpty) messages = [...olderMessages];
     setState(() {});
@@ -58,8 +60,32 @@ class _ChatScreenState extends State<ChatScreen> {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        backgroundColor: AppColors.darkBg,
-        appBar: darkAppBar(context, title: widget.otherUser.email.toString()),
+        backgroundColor: AppColors.primaryDark,
+        appBar: darkAppBar(context,
+            // title: widget.otherUser.name.toString(),
+            title: null,
+            // centerTitle: true,
+            titleWidget: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Stack(
+                  children: [
+                    CircleAvatar(
+                        radius: 20,
+                        backgroundColor: Colors.grey,
+                        backgroundImage: NetworkImage(
+                            widget.otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
+                    buildOnlineBadge(ratio: 1.0)
+                  ],
+                ),
+                10.horizontalSpace,
+                Text(
+                  widget.otherUser.name ?? '',
+                  overflow: TextOverflow.ellipsis,
+                  style: AppStyles.text18PxSemiBold.white,
+                ),
+              ],
+            )),
         body: Column(
           children: [
             StreamProvider<List<MessageModel>>.value(
@@ -125,7 +151,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return TextField(
         // onTapOutside: (event) => setState(() => sendNode.unfocus()),
         controller: sendController,
-        style: AppStyles.text14PxRegular.white,
+        style: AppStyles.text16PxRegular.white,
         keyboardType: TextInputType.multiline,
         minLines: 1,
         maxLines: 5,
@@ -133,36 +159,21 @@ class _ChatScreenState extends State<ChatScreen> {
         cursorColor: AppColors.primaryOriginal,
         onChanged: (val) => stfSetState(() {}),
         decoration: InputDecoration(
-          hintStyle: AppStyles.text18PxRegular.white,
           filled: true,
-          fillColor: AppColors.darkGrey,
-          hintText: '',
+          fillColor: AppColors.darkOutline50,
+          hintStyle: AppStyles.text14PxRegular.greyLight,
           focusedBorder: InputBorder.none,
-          suffixIcon: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              backgroundColor:
-                  sendController.text.isNotEmpty ? AppColors.white : AppColors.darkGrey,
-              child: IconButton(
-                icon: Icon(
-                  Icons.send_rounded,
-                  size: 25,
-                  color: sendController.text.isNotEmpty
-                      ? AppColors.primaryOriginal
-                      : AppColors.primaryOriginal,
-                ),
-                onPressed: sendController.text.isNotEmpty
-                    ? () {
-                        ChatService().sendMessage(context,
-                            chatId: chatId, content: sendController.text, otherUser: otherUser);
-                        sendController.clear();
-                      }
-                    : null,
-              ),
-            ),
+          hintText: 'Write your message...',
+          suffixIcon: buildSendButton(
+            isActive: sendController.text.isNotEmpty,
+            onTap: () {
+              ChatService().sendMessage(context,
+                  chatId: chatId, content: sendController.text, otherUser: otherUser);
+              sendController.clear();
+            },
           ),
         ),
-      );
+      ).rounded(radius: 10).px(8).pOnly(bottom: 6);
     });
   }
 
@@ -176,21 +187,34 @@ class _ChatScreenState extends State<ChatScreen> {
       children: <Widget>[
         ConstrainedBox(
             constraints: BoxConstraints(maxWidth: context.width * 0.8),
-            child: Bubble(
-                color: currUser ? AppColors.primaryOriginal : AppColors.darkGrey,
-                elevation: 0,
-                padding: const BubbleEdges.all(6.0),
-                nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,
+            child: Container(
+                // elevation: 0,
+                padding: const EdgeInsets.only(top: 8, right: 12, left: 12, bottom: 6),
+                margin: 5.horizontal,
+                decoration: BoxDecoration(
+                    color: currUser ? AppColors.primaryLight : AppColors.darkOutline50,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: 10.circular,
+                      topRight: (currUser ? 3 : 10).circular,
+                      topLeft: (currUser ? 10 : 3).circular,
+                      bottomLeft: 10.circular,
+                    )),
+                // padding: const BubbleEdges.all(8.0),
+                // nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,
+                // nipRadius: 0,
+                // showNip: false,
+
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(message.textContent!,
                         textAlign: isHebrew ? TextAlign.end : TextAlign.start,
                         style: AppStyles.text16PxRegular.white),
+                    5.verticalSpace,
                     Text(message.createdAt!.substring(9, 14),
-                        style: AppStyles.text12PxRegular.greyLight)
+                        style: AppStyles.text10PxRegular.copyWith(color: AppColors.greyLight))
                   ],
-                ))).px(6).py(6)
+                ))).px(6).py(4)
       ],
     );
   }

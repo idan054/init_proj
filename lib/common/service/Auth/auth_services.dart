@@ -25,10 +25,11 @@ class AuthService {
     }
 
     User? googleUser;
-    if (authUser?.uid == null || signUpScenario) googleUser = await googleAuthAction;
+    if (authUser?.uid == null || signUpScenario) googleUser = await _googleAuthAction();
+    if (googleUser == null && signUpScenario) return;
 
     //~ Check if User exist:
-    var userEmail = authUser?.uid == null ? googleUser!.email : authUser!.email;
+    var userEmail = authUser?.uid == null ? googleUser?.email : authUser!.email;
     print('userEmail $userEmail');
     var userData = await Database.docData('users/$userEmail');
     print('userData $userData');
@@ -39,7 +40,7 @@ class AuthService {
       print('START:  New User:');
       //~ New User:
       // This fix bug when user out while signup.
-      if (googleUser?.uid == null) googleUser = await googleAuthAction;
+      if (googleUser?.uid == null) googleUser = await _googleAuthAction();
 
       var user = context.uniProvider.currUser.copyWith(
         uid: googleUser!.uid,
@@ -58,11 +59,12 @@ class AuthService {
     }
   }
 
-  static Future<User?> get googleAuthAction async {
+  static Future<User?> _googleAuthAction() async {
     final googleUser = await GoogleSignIn().signIn();
+    if (googleUser == null) return null;
 
     // Sign in & Create user on firebase console
-    final googleAuth = await googleUser!.authentication;
+    final googleAuth = await googleUser.authentication;
     await FirebaseAuth.instance.signInWithCredential(GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
     authUser = FirebaseAuth.instance.currentUser;

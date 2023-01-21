@@ -16,6 +16,7 @@ class AppColors {
 
   // Originals colors
   static const Color primaryLight = Color(0xff624b99);
+  static const Color primaryLight2 = Color(0xff655A72);
   static const Color primaryOriginal = Color(0xff621BEE);
   static const Color primaryDarkOriginal = Color(0xff4914B2);
   static const Color primaryShiny = Color(0xff8027CF);

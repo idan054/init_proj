@@ -67,6 +67,8 @@ dependencies:
   another_flushbar: ^1.12.29
   shimmer: ^2.0.0
   collection: ^1.16.0
+  rive: ^0.10.1
+  rive_splash_screen: ^0.1.1
 
 #dependency_overrides:
 #  camera:
@@ -114,6 +116,8 @@ flutter:
         - asset: assets/fonts/Lexend-Regular.ttf
 
   assets:
+    - assets/
+    - assets/riv/
     - assets/fonts/
     - assets/images/
     - assets/svg/
