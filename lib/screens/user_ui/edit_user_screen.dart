@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart';
 import 'package:camera/camera.dart';
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
@@ -18,6 +19,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../../common/models/user/user_model.dart';
+import '../../common/service/Database/firebase_advanced.dart';
 import '../../common/service/Database/firebase_database.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/clean_snackbar.dart';
@@ -77,7 +79,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
           centerTitle: true,
           backAction: () => _discardPopup(currUser),
           actions: [
-            'Save'.toText().px(14).center.onTap(() {
+            'Save'.toText().px(14).center.onTap(() async {
               tempName = null;
               tempBio == null;
               var updatedUser =
@@ -88,6 +90,30 @@ class _EditUserScreenState extends State<EditUserScreen> {
                   collection: 'users',
                   docName: '${updatedUser.email}',
                   toJson: updatedUser.toJson());
+
+              //! TODO Update all posts 'creatorUser' Map
+
+              // var userPosts = await Database.advanced.handleGetModel(
+              //   ModelTypes.posts, [],
+              //   filter: FilterTypes.postsByUser,
+              //   uid: widget.user.uid,
+              // );
+
+              var snap = await FsAdvanced.db
+                  .collection('posts')
+                  .orderBy('timestamp', descending: true)
+                  .where('creatorUser.uid', isEqualTo: updatedUser.uid).get();
+              List posts = await FsAdvanced().docsToModelList(snap, ModelTypes.posts);
+              for (PostModel post in posts){
+                var updatedPost = post.copyWith(creatorUser: updatedUser);
+                // print('posts.length ${posts.length}');
+                // print('updatedPost.toJson() ${updatedPost.toJson()}');
+                Database().updateFirestore(
+                    collection: 'posts',
+                    docName: updatedPost.id,
+                    toJson: updatedPost.toJson());
+                // return;
+              }
 
               context.router.replace(UserRoute(user: updatedUser, fromEditScreen: true));
             }, radius: 10).pOnly(right: 5)
@@ -161,8 +187,6 @@ class _EditUserScreenState extends State<EditUserScreen> {
         title: 'Discard changes?',
         desc: 'Your edit will not be saved'.toText(),
         barrierDismissible: true,
-
-
         secondaryBtn: TextButton(
             onPressed: () {
               tempName = null;
