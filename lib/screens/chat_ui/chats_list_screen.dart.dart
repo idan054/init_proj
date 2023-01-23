@@ -1,4 +1,5 @@
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/themes/app_strings.dart';
@@ -28,12 +29,23 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
 
   @override
   void initState() {
-    _loadMore();
+    // TODO: ADD ON POST MVP ONLY: Get 1 doc instead all users chat.
+    // this listener is based Database.streamUnreadCounter(context),
+    // add a 'lastMessageFromId' field in UserModel to get only the need to update doc!
+
+    // _loadMore();
+    //> Uncomment this to auto refresh chats when new message coming
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        context.uniProvider.addListener(() => _loadMore(refresh: true))
+    );
+
     super.initState();
   }
 
-  Future _loadMore() async {
-    // splashLoader = true; setState(() {});
+  Future _loadMore({bool refresh = false}) async {
+    print('START: CHAT _loadMore()');
+    splashLoader = true; setState(() {});
+    if (refresh) chatList = [];
     var updatedList = <ChatModel>[
       ...await Database.advanced.handleGetModel(
         ModelTypes.chats,
@@ -71,28 +83,32 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
           //       onPressed: () => context.router.push(const MembersRoute()))
           // ]
         ),
-        body: Builder(builder: (context) {
-          if (splashLoader) {
-            // First time only
-            return const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3)
-                .center;
-          }
+        body: Builder(
+            builder: (context) {
+              if (splashLoader) {
+                // First time only
+                return const CircularProgressIndicator(
+                  color: AppColors.primaryLight,
+                  strokeWidth: 3,
+                ).center;
+              }
 
-          if (chatList.isEmpty) {
-            return 'Start a new chat \nfrom the Feed!'.toText().center;
-          }
+              if (chatList.isEmpty) {
+                return 'Reply Ril to start new chat!'
+                    .toText(color: AppColors.grey50)
+                    .center;
+              }
 
-          return Container(
-            color: AppColors.primaryDark,
-            child: ListView(
-              children: [
-                10.verticalSpace,
-                ListView.builder(
+              return Container(
+                color: AppColors.primaryDark,
+                child: ListView.builder(
                   shrinkWrap: true,
                   itemCount: chatList.length,
                   itemBuilder: (context, i) {
                     if (chatList.isEmpty) {
-                      return 'Your chats will be show here'.toText().center;
+                      return 'Your conversations \nwill be show here'
+                          .toText()
+                          .center;
                     }
 
                     // var chatList = context.listenchatListModelList;
@@ -102,51 +118,77 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                     var chat = chatList[i];
                     var otherUser = chat.users!.firstWhere((user) => user.uid != currUser.uid);
 
-                    return Column(
-                      children: [
-                        ListTile(
-                          onTap: () => ChatService.openChat(context, otherUser: otherUser),
-                          horizontalTitleGap: 10,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                          trailing: Column(
-                            children: [
-                              10.verticalSpace,
-                              Text(
-                                chat.lastMessage?.createdAt!.substring(9, 14) ?? '',
-                                style: AppStyles.text12PxRegular.grey50,
-                              )
-                            ],
-                          ),
-                          leading: Stack(
-                            children: [
-                              CircleAvatar(
-                                  radius: 28,
-                                  backgroundColor: Colors.grey,
-                                  backgroundImage: NetworkImage(
-                                      otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
-                              buildOnlineBadge(ratio: 1.0)
-                            ],
-                          ),
-                          title: Text(
-                            otherUser.name ?? '',
-                            style: AppStyles.text16PxSemiBold.white,
-                          ),
-                          subtitle: Text(
-                            chat.lastMessage?.textContent ?? '',
-                            // textAlign: (chat.lastMessage?.textContent?.isHebrew ?? false) ? TextAlign.right : TextAlign.left,
-                            textAlign: TextAlign.left,
-                            maxLines: 2,
-                            style: AppStyles.text14PxRegular.copyWith(color: AppColors.greyLight),
-                          ),
-                        ).ltr.appearOpacity,
-                        const Divider(thickness: 2, color: AppColors.darkOutline),
-                      ],
-                    );
+                    return StatefulBuilder(builder: (context, stfSetState) {
+                      return ChatBlockSts(chat, otherUser, onTap: () {
+                        chat = chat.copyWith(unreadCounter: 0);
+                        chatList[i] = chat;
+                        stfSetState(() {});
+                        ChatService.openChat(context, otherUser: otherUser);
+                      });
+                    });
                   },
-                ),
-              ],
-            ),
-          );
-        }));
+                ).pOnly(top: 10),
+              );
+            }
+        ));
+  }
+}
+
+class ChatBlockSts extends StatelessWidget {
+  final GestureTapCallback? onTap;
+  final ChatModel chat;
+  final UserModel otherUser;
+
+  const ChatBlockSts(this.chat, this.otherUser, {this.onTap, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ListTile(
+          onTap: onTap,
+          horizontalTitleGap: 10,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+          trailing: Column(
+            children: [
+              10.verticalSpace,
+              Text(
+                chat.lastMessage?.createdAt!.substring(9, 14) ?? '',
+                style: AppStyles.text12PxRegular.grey50,
+              ),
+              10.verticalSpace,
+              if (chat.unreadCounter != null && chat.unreadCounter != 0)
+                CircleAvatar(
+                  radius: 10,
+                  backgroundColor: AppColors.errRed,
+                  child: chat.unreadCounter.toString().toText(fontSize: 12),
+                )
+            ],
+          ),
+          leading: Stack(
+            children: [
+              CircleAvatar(
+                  radius: 28,
+                  backgroundColor: Colors.grey,
+                  backgroundImage:
+                  NetworkImage(otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
+              buildOnlineBadge(ratio: 1.0)
+            ],
+          ),
+          title: Text(
+            otherUser.name ?? '',
+            style: AppStyles.text16PxSemiBold.white,
+          ),
+          subtitle: Text(
+            chat.lastMessage?.textContent ?? '',
+            // textAlign: (chat.lastMessage?.textContent?.isHebrew ?? false) ? TextAlign.right : TextAlign.left,
+            textAlign: TextAlign.left,
+            maxLines: 2,
+            style: AppStyles.text14PxRegular.copyWith(color: AppColors.greyLight),
+          ),
+        ).ltr.appearOpacity,
+        const Divider(thickness: 2, color: AppColors.darkOutline),
+      ],
+    );
   }
 }

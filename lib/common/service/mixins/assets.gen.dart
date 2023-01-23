@@ -38,6 +38,10 @@ class $AssetsImagesGen {
   AssetGenImage get logoCircularRilTopiaLogo =>
       const AssetGenImage('assets/images/LogoCircularRilTopiaLogo.png');
 
+  /// File path: assets/images/app_icon.png
+  AssetGenImage get appIcon =>
+      const AssetGenImage('assets/images/app_icon.png');
+
   /// File path: assets/images/chatBubblesSolid.png
   AssetGenImage get chatBubblesSolid =>
       const AssetGenImage('assets/images/chatBubblesSolid.png');
@@ -50,26 +54,18 @@ class $AssetsImagesGen {
   AssetGenImage get commentsOffPNG =>
       const AssetGenImage('assets/images/comments-off-PNG.png');
 
-  /// File path: assets/images/logo.png
-  AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
-
   /// File path: assets/images/map_placeholder.png
   AssetGenImage get mapPlaceholder =>
       const AssetGenImage('assets/images/map_placeholder.png');
 
-  /// File path: assets/images/minecloudLogo.png
-  AssetGenImage get minecloudLogo =>
-      const AssetGenImage('assets/images/minecloudLogo.png');
-
   /// List of all assets
   List<AssetGenImage> get values => [
         logoCircularRilTopiaLogo,
+        appIcon,
         chatBubblesSolid,
         checkVerifiedImage,
         commentsOffPNG,
-        logo,
-        mapPlaceholder,
-        minecloudLogo
+        mapPlaceholder
       ];
 }
 

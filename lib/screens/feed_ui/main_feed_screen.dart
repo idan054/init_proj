@@ -77,7 +77,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
   }
 
   Future _loadMore({bool refresh = false}) async {
-    print('START: _loadMore()');
+    print('START: FEED _loadMore()');
 
     // splashLoader = true; setState(() {});
     if (refresh) postList = [];
@@ -99,7 +99,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
 
     return DefaultTabController(
       length: 2,
-      initialIndex: 1,
+      initialIndex: 0,
       child: Scaffold(
           backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.darkOutline,
           appBar: _buildRiltopiaAppBar(
@@ -156,7 +156,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
         }
 
         return RefreshIndicator(
-            backgroundColor: AppColors.darkGrey,
+            backgroundColor: AppColors.darkBg,
             color: AppColors.primaryOriginal,
             onRefresh: () async {
               print('START: onRefresh()');
@@ -196,11 +196,13 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             Assets.svg.icons.shieldTickUntitledIcon.svg(color: Colors.white70),
             const SizedBox(width: 5),
           ],
-          (isNewTag ? 'EXPLORE 14-17 Y.O MEMBERS' : 'MEMBERS WHO INTERESTED IN')
+          // (isNewTag ? 'EXPLORE 14-17 Y.O MEMBERS' : 'MEMBERS WHO INTERESTED IN')
+          (isNewTag ? 'EXPLORE MEMBERS' : 'MEMBERS WHO INTERESTED IN')
               .toText(fontSize: 13, color: AppColors.grey50)
               .pOnly(top: 3)
         ],
-      ).pOnly(bottom: 15),
+      )
+       .pOnly(bottom: 15),
       subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
     );
   }

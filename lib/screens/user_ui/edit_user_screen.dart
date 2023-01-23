@@ -86,32 +86,29 @@ class _EditUserScreenState extends State<EditUserScreen> {
                   currUser.copyWith(name: nameController.text, bio: bioController.text);
               context.uniProvider.updateUser(updatedUser);
 
+              // TODO Update all chats 'creatorUser' Map
+
+              //! TODO Recommended: instead hundred of requests in every bio update
+              // just get doc by id reference + client cache isExist()
+
               Database().updateFirestore(
                   collection: 'users',
                   docName: '${updatedUser.email}',
                   toJson: updatedUser.toJson());
 
-              //! TODO Update all posts 'creatorUser' Map
-
-              // var userPosts = await Database.advanced.handleGetModel(
-              //   ModelTypes.posts, [],
-              //   filter: FilterTypes.postsByUser,
-              //   uid: widget.user.uid,
-              // );
-
               var snap = await FsAdvanced.db
                   .collection('posts')
                   .orderBy('timestamp', descending: true)
-                  .where('creatorUser.uid', isEqualTo: updatedUser.uid).get();
+                  .where('creatorUser.uid', isEqualTo: updatedUser.uid)
+                  .get();
+
               List posts = await FsAdvanced().docsToModelList(snap, ModelTypes.posts);
-              for (PostModel post in posts){
+              for (PostModel post in posts) {
                 var updatedPost = post.copyWith(creatorUser: updatedUser);
                 // print('posts.length ${posts.length}');
                 // print('updatedPost.toJson() ${updatedPost.toJson()}');
                 Database().updateFirestore(
-                    collection: 'posts',
-                    docName: updatedPost.id,
-                    toJson: updatedPost.toJson());
+                    collection: 'posts', docName: updatedPost.id, toJson: updatedPost.toJson());
                 // return;
               }
 
@@ -219,7 +216,11 @@ class _EditUserScreenState extends State<EditUserScreen> {
               }),
             )).pad(5).onTap(() async {
       final ImagePicker picker = ImagePicker();
-      selectedImage = await picker.pickImage(source: ImageSource.gallery);
+      selectedImage = await picker.pickImage(
+        source: ImageSource.gallery,
+        maxHeight: 400,
+        maxWidth: 400,
+      );
       // context.uniProvider.updateIsLoading(true);
       setState(() {});
       var imageUrl = await uploadProfilePhoto(

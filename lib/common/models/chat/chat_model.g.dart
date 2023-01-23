@@ -11,6 +11,7 @@ _$_ChatModel _$$_ChatModelFromJson(Map<String, dynamic> json) => _$_ChatModel(
       lastMessage: json['lastMessage'] == null
           ? null
           : MessageModel.fromJson(json['lastMessage'] as Map<String, dynamic>),
+      unreadCounter: json['unreadCounter'] as int?,
       usersIds: (json['usersIds'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),
@@ -28,6 +29,7 @@ Map<String, dynamic> _$$_ChatModelToJson(_$_ChatModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'lastMessage': instance.lastMessage?.toJson(),
+      'unreadCounter': instance.unreadCounter,
       'usersIds': instance.usersIds,
       'users': instance.users?.map((e) => e.toJson()).toList(),
       'messages': instance.messages?.map((e) => e.toJson()).toList(),

@@ -16,12 +16,28 @@ import '../Database/firebase_db.dart' as click;
 // streamMessages() Available At [click.Database] // <<---
 
 class ChatService {
-  static Future openChat(BuildContext context,
-      {required UserModel otherUser, PostModel? postReply}) async {
+  static Future openChat(
+    BuildContext context, {
+    required UserModel otherUser,
+    PostModel? postReply,
+    ChatModel? existChat,
+  }) async {
     print('START: openChat()');
+
+    //! todo existChat UnChecked Yet!
+    // if(existChat != null) {
+    //   context.router.push(ChatRoute(
+    //     otherUser: existChat.users,
+    //     postReply: postReply,
+    //     chatId: existChat.id.toString(),
+    //     chat: existChat,
+    //   ));
+    // }
+
     var currUser = context.uniProvider.currUser;
 
     String? chatId;
+    ChatModel? chat;
     var userIds = [currUser.uid, otherUser.uid];
     var reqBase = Database.db.collection('chats').limit(1);
 
@@ -35,11 +51,18 @@ class ChatService {
       // (Still empty..)
       chatId = '${currUser.email}-${otherUser.email}';
     } else {
-      chatId = snap.docs.first.id;
+      var chatDoc = snap.docs.first;
+      chatId = chatDoc.id;
+      chat = ChatModel.fromJson(chatDoc.data());
     }
-    print('chatId ${chatId}');
-    return context.router
-        .push(ChatRoute(otherUser: otherUser, chatId: chatId, postReply: postReply));
+    print('chatId $chatId');
+
+    return context.router.push(ChatRoute(
+      otherUser: otherUser,
+      postReply: postReply,
+      chatId: chatId,
+      chat: chat,
+    ));
   }
 
   static void chatWithUs(BuildContext context) {
@@ -95,15 +118,26 @@ class ChatService {
       users: [context.uniProvider.currUser, otherUser],
       usersIds: [context.uniProvider.currUser.uid!, otherUser.uid!],
     );
+    var chatJson = chatData.toJson();
+    chatJson['unreadCounter'] = FieldValue.increment(1); // to chat
 
     // Start a Batch requests.
     var sendMessageBatch = Database.db.batch();
 
     Database().addToBatch(
       batch: sendMessageBatch,
+      collection: 'users',
+      docName: otherUser.email,
+      toJson: {
+        'unreadCounter': FieldValue.increment(1), // Overall to user
+      },
+    );
+
+    Database().addToBatch(
+      batch: sendMessageBatch,
       collection: 'chats',
       docName: chatId,
-      toJson: chatData.toJson(),
+      toJson: chatJson,
     );
 
     Database().addToBatch(

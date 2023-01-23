@@ -22,6 +22,7 @@ ChatModel _$ChatModelFromJson(Map<String, dynamic> json) {
 mixin _$ChatModel {
   String? get id => throw _privateConstructorUsedError; // chat id
   MessageModel? get lastMessage => throw _privateConstructorUsedError;
+  int? get unreadCounter => throw _privateConstructorUsedError;
   List<String>? get usersIds => throw _privateConstructorUsedError;
   List<UserModel>? get users => throw _privateConstructorUsedError;
   List<MessageModel>? get messages => throw _privateConstructorUsedError;
@@ -42,6 +43,7 @@ abstract class $ChatModelCopyWith<$Res> {
   $Res call(
       {String? id,
       MessageModel? lastMessage,
+      int? unreadCounter,
       List<String>? usersIds,
       List<UserModel>? users,
       List<MessageModel>? messages,
@@ -65,6 +67,7 @@ class _$ChatModelCopyWithImpl<$Res, $Val extends ChatModel>
   $Res call({
     Object? id = freezed,
     Object? lastMessage = freezed,
+    Object? unreadCounter = freezed,
     Object? usersIds = freezed,
     Object? users = freezed,
     Object? messages = freezed,
@@ -79,6 +82,10 @@ class _$ChatModelCopyWithImpl<$Res, $Val extends ChatModel>
           ? _value.lastMessage
           : lastMessage // ignore: cast_nullable_to_non_nullable
               as MessageModel?,
+      unreadCounter: freezed == unreadCounter
+          ? _value.unreadCounter
+          : unreadCounter // ignore: cast_nullable_to_non_nullable
+              as int?,
       usersIds: freezed == usersIds
           ? _value.usersIds
           : usersIds // ignore: cast_nullable_to_non_nullable
@@ -121,6 +128,7 @@ abstract class _$$_ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
   $Res call(
       {String? id,
       MessageModel? lastMessage,
+      int? unreadCounter,
       List<String>? usersIds,
       List<UserModel>? users,
       List<MessageModel>? messages,
@@ -143,6 +151,7 @@ class __$$_ChatModelCopyWithImpl<$Res>
   $Res call({
     Object? id = freezed,
     Object? lastMessage = freezed,
+    Object? unreadCounter = freezed,
     Object? usersIds = freezed,
     Object? users = freezed,
     Object? messages = freezed,
@@ -157,6 +166,10 @@ class __$$_ChatModelCopyWithImpl<$Res>
           ? _value.lastMessage
           : lastMessage // ignore: cast_nullable_to_non_nullable
               as MessageModel?,
+      unreadCounter: freezed == unreadCounter
+          ? _value.unreadCounter
+          : unreadCounter // ignore: cast_nullable_to_non_nullable
+              as int?,
       usersIds: freezed == usersIds
           ? _value._usersIds
           : usersIds // ignore: cast_nullable_to_non_nullable
@@ -184,6 +197,7 @@ class _$_ChatModel implements _ChatModel {
   const _$_ChatModel(
       {this.id,
       this.lastMessage,
+      this.unreadCounter,
       final List<String>? usersIds,
       final List<UserModel>? users,
       final List<MessageModel>? messages,
@@ -200,6 +214,8 @@ class _$_ChatModel implements _ChatModel {
 // chat id
   @override
   final MessageModel? lastMessage;
+  @override
+  final int? unreadCounter;
   final List<String>? _usersIds;
   @override
   List<String>? get usersIds {
@@ -236,7 +252,7 @@ class _$_ChatModel implements _ChatModel {
 
   @override
   String toString() {
-    return 'ChatModel(id: $id, lastMessage: $lastMessage, usersIds: $usersIds, users: $users, messages: $messages, timestamp: $timestamp)';
+    return 'ChatModel(id: $id, lastMessage: $lastMessage, unreadCounter: $unreadCounter, usersIds: $usersIds, users: $users, messages: $messages, timestamp: $timestamp)';
   }
 
   @override
@@ -247,6 +263,8 @@ class _$_ChatModel implements _ChatModel {
             (identical(other.id, id) || other.id == id) &&
             (identical(other.lastMessage, lastMessage) ||
                 other.lastMessage == lastMessage) &&
+            (identical(other.unreadCounter, unreadCounter) ||
+                other.unreadCounter == unreadCounter) &&
             const DeepCollectionEquality().equals(other._usersIds, _usersIds) &&
             const DeepCollectionEquality().equals(other._users, _users) &&
             const DeepCollectionEquality().equals(other._messages, _messages) &&
@@ -260,6 +278,7 @@ class _$_ChatModel implements _ChatModel {
       runtimeType,
       id,
       lastMessage,
+      unreadCounter,
       const DeepCollectionEquality().hash(_usersIds),
       const DeepCollectionEquality().hash(_users),
       const DeepCollectionEquality().hash(_messages),
@@ -283,6 +302,7 @@ abstract class _ChatModel implements ChatModel {
   const factory _ChatModel(
       {final String? id,
       final MessageModel? lastMessage,
+      final int? unreadCounter,
       final List<String>? usersIds,
       final List<UserModel>? users,
       final List<MessageModel>? messages,
@@ -295,6 +315,8 @@ abstract class _ChatModel implements ChatModel {
   String? get id;
   @override // chat id
   MessageModel? get lastMessage;
+  @override
+  int? get unreadCounter;
   @override
   List<String>? get usersIds;
   @override

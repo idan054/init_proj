@@ -20,8 +20,57 @@ class GenderAgeView extends StatefulWidget {
 }
 
 class _GenderAgeViewState extends State<GenderAgeView> {
-  var items = ['Male', 'Female', '🏳️‍🌈 Other'];
-  String dropdownVal = '';
+  var genderItems = ['Male', 'Female', '🏳️‍🌈 Other'];
+  var daysItems = [
+    '01',
+    '02',
+    '03',
+    '04',
+    '05',
+    '06',
+    '07',
+    '08',
+    '09',
+    '10',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '17',
+    '18',
+    '19',
+    '20',
+    '21',
+    '22',
+    '23',
+    '24',
+    '25',
+    '26',
+    '27',
+    '28',
+    '29',
+    '30',
+    '31',
+  ];
+  var monthItems = [
+    '01',
+    '02',
+    '03',
+    '04',
+    '05',
+    '06',
+    '07',
+    '08',
+    '09',
+    '10',
+    '11',
+    '12',
+  ];
+  String selectedGender = '';
+  String selectedMonth = '';
+  String selectedDay = '';
   var dayController = TextEditingController();
   var monthController = TextEditingController();
   var yearController = TextEditingController();
@@ -33,6 +82,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
   @override
   Widget build(BuildContext context) {
     var isErr = context.listenUniProvider.errFound; // This will auto rebuild if err found.
+    var currUser = context.listenUniProvider.currUser; // This will auto rebuild if err found.
 
     // bool genderErr = false;
     // bool ageErr = false;
@@ -50,63 +100,38 @@ class _GenderAgeViewState extends State<GenderAgeView> {
           75.verticalSpace,
           // 'Who are you'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
           // 'When were you born?'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
-          rilDropdownField(items, dropdownVal),
+          rilDropdownField(label: 'Gender', hintText: 'What is your gender', genderItems,
+              onChanged: (String? newValue) {
+            selectedGender = newValue!;
+            var index = genderItems.indexWhere((item) => item == newValue);
+            var gender = GenderTypes.values[index];
+            context.uniProvider.updateUser(currUser.copyWith(gender: gender));
+            // stfSetState(() {});
+          }),
           // rilTextField(label: 'Gender', hint: 'Choose your gender...'),
           55.verticalSpace,
           'When is your birthday?'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
           18.verticalSpace,
           Row(
             children: [
+              rilDropdownField(label: 'DD', hintText: 'Day', margin: 0, daysItems,
+                  onChanged: (String? newValue) {
+                selectedDay = newValue!;
+                dayController.text = newValue;
+                updateUserAge();
+              }).sizedBox(95, 60),
+              10.horizontalSpace,
+              rilDropdownField(label: 'MM', hintText: 'Month', margin: 0, monthItems,
+                  onChanged: (String? newValue) {
+                selectedMonth = newValue!;
+                monthController.text = newValue;
+                updateUserAge();
+              }).sizedBox(95, 60),
+              10.horizontalSpace,
               rilTextField(
-                px: 5,
-                label: 'Day',
-                hint: 'DD',
-                keyboardType: TextInputType.number,
-                focusNode: dayNode,
-                maxLength: 2,
-                controller: dayController,
-                validator: (value) {
-                  if (dayController.text.isEmpty ||
-                      dayController.text.length != 2 ||
-                      int.parse(dayController.text) >= 32) {
-                    return 'DD Format';
-                  }
-                  return null;
-                },
-                // errorText:? '': null,
-                onChanged: (val) {
-                  if (val.length == 2) FocusScope.of(context).requestFocus(monthNode);
-                  updateUserAge();
-                },
-              ).sizedBox(85, null),
-              rilTextField(
-                px: 5,
-                label: 'Month',
-                hint: 'MM',
-                keyboardType: TextInputType.number,
-                focusNode: monthNode,
-                maxLength: 2,
-                controller: monthController,
-                validator: (value) {
-                  print('monthController.text ${monthController.text}');
-                  if (monthController.text.isEmpty ||
-                      monthController.text.length != 2 ||
-                      int.parse(monthController.text) >= 13) {
-                    return 'MM Format';
-                  }
-                  return null;
-                },
-                // errorText:? '': null,
-                onChanged: (val) {
-                  if (val.isEmpty) FocusScope.of(context).requestFocus(dayNode);
-                  if (val.length == 2) FocusScope.of(context).requestFocus(yearNode);
-                  updateUserAge();
-                },
-              ).sizedBox(85, null),
-              rilTextField(
-                px: 5,
-                label: 'Year',
-                hint: 'YYYY',
+                px: 0,
+                label: 'YYYY',
+                hint: 'Year',
                 maxLength: 4,
                 focusNode: yearNode,
                 keyboardType: TextInputType.number,
@@ -125,7 +150,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
                 },
               ).expanded(),
             ],
-          ).px(15),
+          ).px(20),
           20.verticalSpace,
           // ListTile(
           //         horizontalTitleGap: 0,
@@ -167,49 +192,44 @@ class _GenderAgeViewState extends State<GenderAgeView> {
     ));
   }
 
-  StatefulBuilder rilDropdownField(List<String> items, String dropdownValue) {
-    var currUser = context.uniProvider.currUser;
-
-    return StatefulBuilder(builder: (context, stfSetState) {
-      return Container(
-        margin: 20.horizontal,
-        child: ButtonTheme(
-          padding: 20.horizontal,
-          alignedDropdown: true,
-          child: DropdownButtonFormField(
-            validator: (value) {
-              return value == null ? '' : null;
-            },
-            isExpanded: true,
-            icon: const Icon(Icons.keyboard_arrow_down),
-            decoration: InputDecoration(
-              focusedBorder: fieldBorderDeco,
-              enabledBorder: fieldBorderDeco,
-              errorBorder: fieldErrBorderDeco,
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              labelText: 'Gender',
-              hintText: 'What is your gender',
-              labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.darkOutline50),
-              hintStyle: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
-            ),
-            dropdownColor: AppColors.primaryDark,
-            borderRadius: BorderRadius.all(10.circular),
-            items: items.map((String item) {
-              return DropdownMenuItem(
-                value: item,
-                child: item.toText(color: AppColors.white),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              dropdownValue = newValue!;
-              var index = items.indexWhere((item) => item == newValue);
-              var gender = GenderTypes.values[index];
-              context.uniProvider.updateUser(currUser.copyWith(gender: gender));
-              stfSetState(() {});
-            },
+  Widget rilDropdownField(
+    List<String> items, {
+    String? hintText,
+    ValueChanged<String?>? onChanged,
+    double margin = 20,
+    required String label,
+  }) {
+    return Container(
+      margin: margin.horizontal,
+      child: ButtonTheme(
+        padding: 20.horizontal,
+        alignedDropdown: true,
+        child: DropdownButtonFormField(
+          menuMaxHeight: 230,
+          validator: (value) => value == null ? '' : null,
+          isExpanded: true,
+          icon: const Icon(Icons.keyboard_arrow_down),
+          decoration: InputDecoration(
+            focusedBorder: fieldBorderDeco,
+            enabledBorder: fieldBorderDeco,
+            errorBorder: fieldErrBorderDeco,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            labelText: label,
+            hintText: hintText,
+            labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.darkOutline50),
+            hintStyle: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
           ),
+          dropdownColor: AppColors.primaryDark,
+          borderRadius: BorderRadius.all(10.circular),
+          items: items.map((String item) {
+            return DropdownMenuItem(
+              value: item,
+              child: item.toText(color: AppColors.white),
+            );
+          }).toList(),
+          onChanged: onChanged,
         ),
-      );
-    });
+      ),
+    );
   }
 }

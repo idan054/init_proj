@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/themes/app_colors.dart';
@@ -25,10 +26,11 @@ import '../user_ui/user_screen.dart';
 
 class ChatScreen extends StatefulWidget {
   final UserModel otherUser;
+  final ChatModel? chat;
   final PostModel? postReply;
   final String chatId;
 
-  ChatScreen({required this.otherUser, required this.chatId, this.postReply, Key? key})
+  ChatScreen({required this.otherUser, required this.chatId, this.postReply, this.chat, Key? key})
       : super(key: key);
 
   @override
@@ -50,8 +52,35 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     post = widget.postReply;
+    _clearChatUnreadMessages(context);
     // _loadOlderMessages().then((_) => messages.remove(messages.first));
     super.initState();
+  }
+
+  void _clearChatUnreadMessages(BuildContext context) {
+    var currUser = context.uniProvider.currUser;
+    var counter = widget.chat?.unreadCounter;
+    if (counter != null && counter != 0 && (currUser.unreadCounter ?? 0 - counter) >= 0) {
+      context.uniProvider
+          .updateUser(currUser.copyWith(unreadCounter: currUser.unreadCounter! - counter));
+
+      // From chat & user collections.
+      Database().updateFirestore(
+        collection: 'users',
+        docName: currUser.email,
+        toJson: {
+          'unreadCounter': FieldValue.increment(-counter), // Overall to user
+        },
+      );
+
+      Database().updateFirestore(
+        collection: 'chats',
+        docName: widget.chatId,
+        toJson: {
+          'unreadCounter': FieldValue.increment(-counter), // Overall to user
+        },
+      );
+    }
   }
 
   Future _loadOlderMessages() async {

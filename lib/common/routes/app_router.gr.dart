@@ -12,6 +12,7 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i13;
+import 'package:example/common/models/chat/chat_model.dart' as _i17;
 import 'package:example/common/models/post/post_model.dart' as _i16;
 import 'package:example/common/models/user/user_model.dart' as _i15;
 import 'package:example/screens/auth_ui/a_onboarding_screen.dart' as _i2;
@@ -58,6 +59,7 @@ class AppRouter extends _i13.RootStackRouter {
           otherUser: args.otherUser,
           chatId: args.chatId,
           postReply: args.postReply,
+          chat: args.chat,
           key: args.key,
         ),
         opaque: true,
@@ -241,6 +243,7 @@ class ChatRoute extends _i13.PageRouteInfo<ChatRouteArgs> {
     required _i15.UserModel otherUser,
     required String chatId,
     _i16.PostModel? postReply,
+    _i17.ChatModel? chat,
     _i14.Key? key,
   }) : super(
           ChatRoute.name,
@@ -249,6 +252,7 @@ class ChatRoute extends _i13.PageRouteInfo<ChatRouteArgs> {
             otherUser: otherUser,
             chatId: chatId,
             postReply: postReply,
+            chat: chat,
             key: key,
           ),
         );
@@ -261,6 +265,7 @@ class ChatRouteArgs {
     required this.otherUser,
     required this.chatId,
     this.postReply,
+    this.chat,
     this.key,
   });
 
@@ -270,11 +275,13 @@ class ChatRouteArgs {
 
   final _i16.PostModel? postReply;
 
+  final _i17.ChatModel? chat;
+
   final _i14.Key? key;
 
   @override
   String toString() {
-    return 'ChatRouteArgs{otherUser: $otherUser, chatId: $chatId, postReply: $postReply, key: $key}';
+    return 'ChatRouteArgs{otherUser: $otherUser, chatId: $chatId, postReply: $postReply, chat: $chat, key: $key}';
   }
 }
 

@@ -16,6 +16,7 @@ class ChatModel with _$ChatModel {
   const factory ChatModel({
     String? id, // chat id
     MessageModel? lastMessage,
+    int? unreadCounter,
     List<String>? usersIds,
     List<UserModel>? users,
     List<MessageModel>? messages,

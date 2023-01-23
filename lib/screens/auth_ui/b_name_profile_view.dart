@@ -66,7 +66,11 @@ class _NameProfileViewState extends State<NameProfileView> {
             ),
           ).onTap(() async {
             final ImagePicker picker = ImagePicker();
-            image = await picker.pickImage(source: ImageSource.gallery);
+            image = await picker.pickImage(
+              source: ImageSource.gallery,
+              maxHeight: 400,
+              maxWidth: 400,
+            );
             // context.uniProvider.updateIsLoading(true);
             setState(() {});
             var imageUrl = await uploadProfilePhoto(

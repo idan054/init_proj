@@ -56,7 +56,7 @@ class _UserScreenState extends State<UserScreen> {
 
   // User posts
   Future _loadMore({bool refresh = false}) async {
-    print('START: _loadMore()');
+    print('START: USER _loadMore()');
 
     // splashLoader = true; setState(() {});
     if (refresh) postList = [];
@@ -347,7 +347,15 @@ class _UserScreenState extends State<UserScreen> {
                     label: 'Reply bio'.toText(fontSize: 13, color: AppColors.darkBg, bold: true),
                     onPressed: () {
                       // TODO LATER LIST: Add Reply bio action
-                      ChatService.openChat(context, otherUser: user);
+                      var replyBio = PostModel(
+                        creatorUser: user,
+                        timestamp: DateTime.now(),
+                        id: 'bio-${user.email}-${UniqueKey()}',
+                        enableComments: false,
+                        likeByIds: [],
+                        textContent: '${user.bio}'
+                      );
+                      ChatService.openChat(context, otherUser: user, postReply: replyBio);
                     },
                   ),
                 ),

@@ -13,7 +13,7 @@ import '../../widgets/my_widgets.dart';
 
 Future splashInit(BuildContext context) async {
   // await Future.delayed(3.seconds);
-  await HiveServices.openBoxes();
+  // await HiveServices.openBoxes();
   // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
   //> First time:
   if (FirebaseAuth.instance.currentUser?.uid == null) {

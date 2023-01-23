@@ -244,6 +244,7 @@ Widget rilTextField(
           keyboardType: keyboardType,
           decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.always,
+              counterText: '',
               labelText: label,
               hintText: hint,
               // labelStyle: AppStyles.text16PxMedium.copyWith(color: errorText != null ? AppColors.errRed : AppColors.darkOutline50),

@@ -26,7 +26,8 @@ mixin _$UserModel {
   String? get bio => throw _privateConstructorUsedError;
   int? get age => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
-  bool? get isOnline =>
+  bool? get isOnline => throw _privateConstructorUsedError;
+  int? get unreadCounter =>
       throw _privateConstructorUsedError; // int? userScore, // Example: 0 = Block Forever.
   GenderTypes? get gender => throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
@@ -52,6 +53,7 @@ abstract class $UserModelCopyWith<$Res> {
       int? age,
       String? photoUrl,
       bool? isOnline,
+      int? unreadCounter,
       GenderTypes? gender,
       List<String> tags,
       @DateTimeStampConv() DateTime? birthday});
@@ -77,6 +79,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? age = freezed,
     Object? photoUrl = freezed,
     Object? isOnline = freezed,
+    Object? unreadCounter = freezed,
     Object? gender = freezed,
     Object? tags = null,
     Object? birthday = freezed,
@@ -110,6 +113,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
               as bool?,
+      unreadCounter: freezed == unreadCounter
+          ? _value.unreadCounter
+          : unreadCounter // ignore: cast_nullable_to_non_nullable
+              as int?,
       gender: freezed == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -141,6 +148,7 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       int? age,
       String? photoUrl,
       bool? isOnline,
+      int? unreadCounter,
       GenderTypes? gender,
       List<String> tags,
       @DateTimeStampConv() DateTime? birthday});
@@ -164,6 +172,7 @@ class __$$_UserModelCopyWithImpl<$Res>
     Object? age = freezed,
     Object? photoUrl = freezed,
     Object? isOnline = freezed,
+    Object? unreadCounter = freezed,
     Object? gender = freezed,
     Object? tags = null,
     Object? birthday = freezed,
@@ -197,6 +206,10 @@ class __$$_UserModelCopyWithImpl<$Res>
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
               as bool?,
+      unreadCounter: freezed == unreadCounter
+          ? _value.unreadCounter
+          : unreadCounter // ignore: cast_nullable_to_non_nullable
+              as int?,
       gender: freezed == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -225,6 +238,7 @@ class _$_UserModel implements _UserModel {
       this.age,
       this.photoUrl,
       this.isOnline,
+      this.unreadCounter,
       this.gender,
       final List<String> tags = const [],
       @DateTimeStampConv() this.birthday})
@@ -247,6 +261,8 @@ class _$_UserModel implements _UserModel {
   final String? photoUrl;
   @override
   final bool? isOnline;
+  @override
+  final int? unreadCounter;
 // int? userScore, // Example: 0 = Block Forever.
   @override
   final GenderTypes? gender;
@@ -265,7 +281,7 @@ class _$_UserModel implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email, uid: $uid, bio: $bio, age: $age, photoUrl: $photoUrl, isOnline: $isOnline, gender: $gender, tags: $tags, birthday: $birthday)';
+    return 'UserModel(name: $name, email: $email, uid: $uid, bio: $bio, age: $age, photoUrl: $photoUrl, isOnline: $isOnline, unreadCounter: $unreadCounter, gender: $gender, tags: $tags, birthday: $birthday)';
   }
 
   @override
@@ -282,6 +298,8 @@ class _$_UserModel implements _UserModel {
                 other.photoUrl == photoUrl) &&
             (identical(other.isOnline, isOnline) ||
                 other.isOnline == isOnline) &&
+            (identical(other.unreadCounter, unreadCounter) ||
+                other.unreadCounter == unreadCounter) &&
             (identical(other.gender, gender) || other.gender == gender) &&
             const DeepCollectionEquality().equals(other._tags, _tags) &&
             (identical(other.birthday, birthday) ||
@@ -299,6 +317,7 @@ class _$_UserModel implements _UserModel {
       age,
       photoUrl,
       isOnline,
+      unreadCounter,
       gender,
       const DeepCollectionEquality().hash(_tags),
       birthday);
@@ -326,6 +345,7 @@ abstract class _UserModel implements UserModel {
       final int? age,
       final String? photoUrl,
       final bool? isOnline,
+      final int? unreadCounter,
       final GenderTypes? gender,
       final List<String> tags,
       @DateTimeStampConv() final DateTime? birthday}) = _$_UserModel;
@@ -347,6 +367,8 @@ abstract class _UserModel implements UserModel {
   String? get photoUrl;
   @override
   bool? get isOnline;
+  @override
+  int? get unreadCounter;
   @override // int? userScore, // Example: 0 = Block Forever.
   GenderTypes? get gender;
   @override

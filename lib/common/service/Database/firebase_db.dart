@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
@@ -158,6 +159,25 @@ class Database {
   // persistenceEnabled: true,
   // cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   // );
+
+  static Stream<int?>? streamUnreadCounter(BuildContext context) {
+    var currUser = context.uniProvider.currUser;
+    print('START: streamUnreadCounter()');
+    var reqBase = db.collection('users').doc(currUser.email);
+    // if (timestamp != null) reqBase = reqBase.startAfter([timestamp]);
+
+    return reqBase.snapshots().map((docUpdate) {
+      print('USER_DOC_ID: ${docUpdate.id}');
+      print('USER_DOC_ID: unreadCounter:${docUpdate.data()?['unreadCounter']}');
+
+      var updatedUser = UserModel.fromJson(docUpdate.data() as Map<String, dynamic>);
+      context.uniProvider.updateUser(updatedUser);
+
+      return updatedUser.unreadCounter;
+    }).handleError((dynamic e) {
+      print('ERROR: streamUnreadCounter() E: $e');
+    });
+  }
 
   static Stream<List<MessageModel>>? streamMessages(String chatId, {required int limit}) {
     print('START: streamMessages()');

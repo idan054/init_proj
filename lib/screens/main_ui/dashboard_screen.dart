@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:badges/badges.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
@@ -12,9 +13,11 @@ import 'package:example/screens/feed_ui/main_feed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import '../../common/config.dart';
 import '../../common/routes/app_router.gr.dart';
+import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../feed_ui/create_post_screen.dart';
 
@@ -104,10 +107,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                       BottomNavigationBarItem(
                         label: '',
-                        icon: Assets.svg.icons.chatBubblesUntitledIcon
-                            .svg(color: AppColors.grey50)
-                            .pOnly(left: 15),
-                        activeIcon: Assets.images.chatBubblesSolid.image(height: 22).pOnly(left: 15),
+                        icon: notifyBubble(
+                          child: Assets.svg.icons.chatBubblesUntitledIcon
+                              .svg(color: AppColors.grey50)
+                              .pOnly(left: 15),
+                        ),
+                        activeIcon: notifyBubble(
+                            child:
+                                Assets.images.chatBubblesSolid.image(height: 22).pOnly(left: 15)),
                       ),
                     ],
                   ),
@@ -138,6 +145,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget notifyBubble({required Widget child}) {
+    // int? counter = context.listenUniProvider.currUser.unreadCounter;
+
+    // return StreamProvider<int?>(
+    return StreamBuilder<int?>( //> BETTER Because can handle stream Collection / Doc (!)
+      stream: Database.streamUnreadCounter(context),
+      initialData: 0,
+      builder: (context, snapshot) {
+        var counter = context.listenUniProvider.currUser.unreadCounter;
+        return counter == null || counter == 0
+            ? child
+            : Badge(
+                badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white70, medium: true),
+                padding: const EdgeInsets.all(5),
+                elevation: 0,
+                badgeColor: AppColors.errRed,
+                // stackFit: StackFit.loose,
+                // shape:
+                child: child);
+      },
     );
   }
 
