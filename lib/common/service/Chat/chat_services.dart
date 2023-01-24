@@ -57,12 +57,44 @@ class ChatService {
     }
     print('chatId $chatId');
 
-    return context.router.push(ChatRoute(
-      otherUser: otherUser,
-      postReply: postReply,
-      chatId: chatId,
-      chat: chat,
-    ));
+
+     return context.router.push(ChatRoute(
+        otherUser: otherUser,
+        postReply: postReply,
+        chatId: chatId,
+        chat: chat,
+      ));
+  }
+
+  static void clearUnread(userUnreadCounter, userEmail, ChatModel chat) {
+    print('START: clearUnread()');
+    // var currUser = context.uniProvider.currUser;
+    var unread = chat.unreadCounter;
+    print('unread ${unread}');
+
+    if (unread != null &&
+        unread != 0 &&
+        // decrease until 0
+        (userUnreadCounter ?? 0 - unread) >= 0) {
+      print('START: clearUnread() [if]');
+
+      // From chat & user collections.
+      Database().updateFirestore(
+        collection: 'users',
+        docName: userEmail,
+        toJson: {
+          'unreadCounter': FieldValue.increment(-unread), // Overall to user
+        },
+      );
+
+      Database().updateFirestore(
+        collection: 'chats',
+        docName: chat.id,
+        toJson: {
+          'unreadCounter': FieldValue.increment(-unread), // Overall to user
+        },
+      );
+    }
   }
 
   static void chatWithUs(BuildContext context) {
@@ -122,10 +154,23 @@ class ChatService {
     chatJson['unreadCounter'] = FieldValue.increment(1); // to chat
 
     // Start a Batch requests.
-    var sendMessageBatch = Database.db.batch();
+    // var sendMessageBatch = Database.db.batch();
 
-    Database().addToBatch(
-      batch: sendMessageBatch,
+    Database().updateFirestore(
+      // batch: sendMessageBatch,
+      collection: 'chats',
+      docName: chatId,
+      toJson: chatJson,
+    );
+
+    Database().updateFirestore(
+        // batch: sendMessageBatch,
+        collection: 'chats/$chatId/messages',
+        docName: messageId,
+        toJson: messageData.toJson());
+
+    Database().updateFirestore(
+      // batch: sendMessageBatch,
       collection: 'users',
       docName: otherUser.email,
       toJson: {
@@ -133,19 +178,6 @@ class ChatService {
       },
     );
 
-    Database().addToBatch(
-      batch: sendMessageBatch,
-      collection: 'chats',
-      docName: chatId,
-      toJson: chatJson,
-    );
-
-    Database().addToBatch(
-        batch: sendMessageBatch,
-        collection: 'chats/$chatId/messages',
-        docName: messageId,
-        toJson: messageData.toJson());
-
-    sendMessageBatch.commit();
+    // sendMessageBatch.commit();
   }
 }

@@ -64,7 +64,8 @@ class Database {
     db
         .collection(collection)
         .doc(docName)
-        .set(toJson, SetOptions(merge: true))
+        .update(toJson)
+        // .set(toJson, SetOptions(merge: true))
         .onError((error, stackTrace) => print('addToBatch ERR - $error'));
   }
 

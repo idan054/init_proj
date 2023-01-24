@@ -16,7 +16,7 @@ class ChatModel with _$ChatModel {
   const factory ChatModel({
     String? id, // chat id
     MessageModel? lastMessage,
-    int? unreadCounter,
+    int? unreadCounter, // eachTime only 1 user have unreadCounter, checked by lastMessage
     List<String>? usersIds,
     List<UserModel>? users,
     List<MessageModel>? messages,

@@ -69,6 +69,7 @@ dependencies:
   collection: ^1.16.0
   rive: ^0.10.1
   rive_splash_screen: ^0.1.1
+  url_launcher: ^6.1.8
 
 #dependency_overrides:
 #  camera:

@@ -52,35 +52,8 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     post = widget.postReply;
-    _clearChatUnreadMessages(context);
     // _loadOlderMessages().then((_) => messages.remove(messages.first));
     super.initState();
-  }
-
-  void _clearChatUnreadMessages(BuildContext context) {
-    var currUser = context.uniProvider.currUser;
-    var counter = widget.chat?.unreadCounter;
-    if (counter != null && counter != 0 && (currUser.unreadCounter ?? 0 - counter) >= 0) {
-      context.uniProvider
-          .updateUser(currUser.copyWith(unreadCounter: currUser.unreadCounter! - counter));
-
-      // From chat & user collections.
-      Database().updateFirestore(
-        collection: 'users',
-        docName: currUser.email,
-        toJson: {
-          'unreadCounter': FieldValue.increment(-counter), // Overall to user
-        },
-      );
-
-      Database().updateFirestore(
-        collection: 'chats',
-        docName: widget.chatId,
-        toJson: {
-          'unreadCounter': FieldValue.increment(-counter), // Overall to user
-        },
-      );
-    }
   }
 
   Future _loadOlderMessages() async {

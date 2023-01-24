@@ -26,10 +26,11 @@ Future splashInit(BuildContext context) async {
   // await HiveServices.openBoxes();
   // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
 
-  var serverConfig = await getAppConfig(context);
-  var localConfig = context.uniProvider.localConfig; // getAppConfig() set localConfig.isUpdateAvailable!
-  if (serverConfig.statusCode != 200) return;
-  if (localConfig.isUpdateAvailable! && serverConfig.updateType == UpdateTypes.needed) return;
+  //~ TEMP COMMENT
+  // var serverConfig = await getAppConfig(context);
+  // var localConfig = context.uniProvider.localConfig; // getAppConfig() set localConfig.isUpdateAvailable!
+  // if (serverConfig.statusCode != 200) return;
+  // if (localConfig.isUpdateAvailable! && serverConfig.updateType == UpdateTypes.needed) return;
 
   //> First time:
   if (FirebaseAuth.instance.currentUser?.uid == null) {

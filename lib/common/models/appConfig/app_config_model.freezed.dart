@@ -28,6 +28,8 @@ mixin _$AppConfigModel {
   String? get whatsNew => throw _privateConstructorUsedError;
   UpdateTypes? get updateType => throw _privateConstructorUsedError;
   bool? get isUpdateAvailable => throw _privateConstructorUsedError;
+  String? get updateIosLink => throw _privateConstructorUsedError;
+  String? get updateAndroidLink => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,7 +51,9 @@ abstract class $AppConfigModelCopyWith<$Res> {
       int? publicVersionIos,
       String? whatsNew,
       UpdateTypes? updateType,
-      bool? isUpdateAvailable});
+      bool? isUpdateAvailable,
+      String? updateIosLink,
+      String? updateAndroidLink});
 }
 
 /// @nodoc
@@ -73,6 +77,8 @@ class _$AppConfigModelCopyWithImpl<$Res, $Val extends AppConfigModel>
     Object? whatsNew = freezed,
     Object? updateType = freezed,
     Object? isUpdateAvailable = freezed,
+    Object? updateIosLink = freezed,
+    Object? updateAndroidLink = freezed,
   }) {
     return _then(_value.copyWith(
       status: freezed == status
@@ -107,6 +113,14 @@ class _$AppConfigModelCopyWithImpl<$Res, $Val extends AppConfigModel>
           ? _value.isUpdateAvailable
           : isUpdateAvailable // ignore: cast_nullable_to_non_nullable
               as bool?,
+      updateIosLink: freezed == updateIosLink
+          ? _value.updateIosLink
+          : updateIosLink // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updateAndroidLink: freezed == updateAndroidLink
+          ? _value.updateAndroidLink
+          : updateAndroidLink // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -127,7 +141,9 @@ abstract class _$$_AppConfigModelCopyWith<$Res>
       int? publicVersionIos,
       String? whatsNew,
       UpdateTypes? updateType,
-      bool? isUpdateAvailable});
+      bool? isUpdateAvailable,
+      String? updateIosLink,
+      String? updateAndroidLink});
 }
 
 /// @nodoc
@@ -149,6 +165,8 @@ class __$$_AppConfigModelCopyWithImpl<$Res>
     Object? whatsNew = freezed,
     Object? updateType = freezed,
     Object? isUpdateAvailable = freezed,
+    Object? updateIosLink = freezed,
+    Object? updateAndroidLink = freezed,
   }) {
     return _then(_$_AppConfigModel(
       status: freezed == status
@@ -183,6 +201,14 @@ class __$$_AppConfigModelCopyWithImpl<$Res>
           ? _value.isUpdateAvailable
           : isUpdateAvailable // ignore: cast_nullable_to_non_nullable
               as bool?,
+      updateIosLink: freezed == updateIosLink
+          ? _value.updateIosLink
+          : updateIosLink // ignore: cast_nullable_to_non_nullable
+              as String?,
+      updateAndroidLink: freezed == updateAndroidLink
+          ? _value.updateAndroidLink
+          : updateAndroidLink // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -199,7 +225,9 @@ class _$_AppConfigModel implements _AppConfigModel {
       this.publicVersionIos,
       this.whatsNew,
       this.updateType,
-      this.isUpdateAvailable});
+      this.isUpdateAvailable,
+      this.updateIosLink,
+      this.updateAndroidLink});
 
   factory _$_AppConfigModel.fromJson(Map<String, dynamic> json) =>
       _$$_AppConfigModelFromJson(json);
@@ -220,10 +248,14 @@ class _$_AppConfigModel implements _AppConfigModel {
   final UpdateTypes? updateType;
   @override
   final bool? isUpdateAvailable;
+  @override
+  final String? updateIosLink;
+  @override
+  final String? updateAndroidLink;
 
   @override
   String toString() {
-    return 'AppConfigModel(status: $status, statusCode: $statusCode, osType: $osType, publicVersionAndroid: $publicVersionAndroid, publicVersionIos: $publicVersionIos, whatsNew: $whatsNew, updateType: $updateType, isUpdateAvailable: $isUpdateAvailable)';
+    return 'AppConfigModel(status: $status, statusCode: $statusCode, osType: $osType, publicVersionAndroid: $publicVersionAndroid, publicVersionIos: $publicVersionIos, whatsNew: $whatsNew, updateType: $updateType, isUpdateAvailable: $isUpdateAvailable, updateIosLink: $updateIosLink, updateAndroidLink: $updateAndroidLink)';
   }
 
   @override
@@ -244,7 +276,11 @@ class _$_AppConfigModel implements _AppConfigModel {
             (identical(other.updateType, updateType) ||
                 other.updateType == updateType) &&
             (identical(other.isUpdateAvailable, isUpdateAvailable) ||
-                other.isUpdateAvailable == isUpdateAvailable));
+                other.isUpdateAvailable == isUpdateAvailable) &&
+            (identical(other.updateIosLink, updateIosLink) ||
+                other.updateIosLink == updateIosLink) &&
+            (identical(other.updateAndroidLink, updateAndroidLink) ||
+                other.updateAndroidLink == updateAndroidLink));
   }
 
   @JsonKey(ignore: true)
@@ -258,7 +294,9 @@ class _$_AppConfigModel implements _AppConfigModel {
       publicVersionIos,
       whatsNew,
       updateType,
-      isUpdateAvailable);
+      isUpdateAvailable,
+      updateIosLink,
+      updateAndroidLink);
 
   @JsonKey(ignore: true)
   @override
@@ -283,7 +321,9 @@ abstract class _AppConfigModel implements AppConfigModel {
       final int? publicVersionIos,
       final String? whatsNew,
       final UpdateTypes? updateType,
-      final bool? isUpdateAvailable}) = _$_AppConfigModel;
+      final bool? isUpdateAvailable,
+      final String? updateIosLink,
+      final String? updateAndroidLink}) = _$_AppConfigModel;
 
   factory _AppConfigModel.fromJson(Map<String, dynamic> json) =
       _$_AppConfigModel.fromJson;
@@ -304,6 +344,10 @@ abstract class _AppConfigModel implements AppConfigModel {
   UpdateTypes? get updateType;
   @override
   bool? get isUpdateAvailable;
+  @override
+  String? get updateIosLink;
+  @override
+  String? get updateAndroidLink;
   @override
   @JsonKey(ignore: true)
   _$$_AppConfigModelCopyWith<_$_AppConfigModel> get copyWith =>

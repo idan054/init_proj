@@ -21,7 +21,7 @@ Future<AppConfigModel> getAppConfig(BuildContext context) async {
   //> Uncomment this to update server (& Edit uniProvider.localConfig)
   // Database().updateFirestore(collection: 'config', toJson: localConfig.toJson(), docName: 'appConfigDoc');
 
-  chekAppUpdate(context, localConfig, serverConfig);
+  chekForUpdate(context, localConfig, serverConfig);
   chekAppStatus(context, serverConfig);
   return serverConfig;
 }

@@ -5,8 +5,9 @@ import 'package:example/widgets/my_dialog.dart';
 import '../../models/appConfig/app_config_model.dart';
 import '../Database/firebase_db.dart';
 import 'dart:io' show Platform;
+import 'package:url_launcher/url_launcher.dart';
 
-void chekAppUpdate(
+void chekForUpdate(
   BuildContext context,
   AppConfigModel localConfig,
   AppConfigModel serverConfig,
@@ -17,6 +18,9 @@ void chekAppUpdate(
       Platform.isAndroid ? localConfig.publicVersionAndroid : localConfig.publicVersionIos;
   bool isUpdateNeeded = serverConfig.updateType == UpdateTypes.needed;
   var title = isUpdateNeeded ? 'Update needed' : 'Update found';
+  var updateLink = Uri.parse(
+    Platform.isAndroid ? serverConfig.updateAndroidLink ?? '' : serverConfig.updateIosLink ?? '',
+  );
 
   context.uniProvider
       .updateLocalConfig(localConfig.copyWith(isUpdateAvailable: serverVer != localVer));
@@ -31,8 +35,8 @@ void chekAppUpdate(
       desc: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          'Please update from V$localVer to V$serverVer\n'.toText(color: AppColors.grey50),
-          'Whats new?'
+          'Please update from V$localVer to V$serverVer'.toText(color: AppColors.grey50),
+          '\nWhats new?'
                   ' \n${serverConfig.whatsNew}'
               .toTextExpanded(
             maxLines: 5,
@@ -43,6 +47,7 @@ void chekAppUpdate(
       secondaryBtn: TextButton(
           child: 'Update now'.toText(color: AppColors.primaryLight),
           onPressed: () {
+            launchUrl(updateLink, mode: LaunchMode.externalApplication);
             Navigator.of(context).pop();
           }),
       barrierDismissible: serverConfig.updateType == UpdateTypes.recommended,

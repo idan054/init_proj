@@ -1,3 +1,6 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
@@ -25,9 +28,9 @@ class ChatsListScreen extends StatefulWidget {
 
 class _ChatsListScreenState extends State<ChatsListScreen> {
   var splashLoader = true;
+  bool initLoader = true;
   List<ChatModel> chatList = [];
   Future? listenLoadMore;
-
 
   @override
   void initState() {
@@ -37,24 +40,27 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
 
     // _loadMore();
 
-    listenLoadMore = _loadMore(refresh: true);
+    // listenLoadMore = _loadMore(refresh: true);
     //> Uncomment this to auto refresh chats when new message coming
     WidgetsBinding.instance.addPostFrameCallback((_) =>
-        context.uniProvider.addListener(() => listenLoadMore)
-    );
+        // context.uniProvider.addListener(() => listenLoadMore)
+        context.uniProvider.addListener(() => _loadMore(refresh: true)));
 
     super.initState();
   }
 
-  @override
-  void dispose() {
-        context.uniProvider.removeListener(() => listenLoadMore);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // context.uniProvider.removeListener(() => listenLoadMore);
+  //   super.dispose();
+  // }
 
   Future _loadMore({bool refresh = false}) async {
     print('START: CHAT _loadMore()');
-    splashLoader = true; setState(() {});
+    if (!mounted) return;
+    // await Future.delayed(100.milliseconds);
+    splashLoader = true;
+    setState(() {});
     if (refresh) chatList = [];
     var updatedList = <ChatModel>[
       ...await Database.advanced.handleGetModel(
@@ -65,11 +71,10 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     ];
     print('updatedList ${updatedList.length}');
     if (updatedList.isNotEmpty) chatList = updatedList;
+    // initLoader = false;
     splashLoader = false;
     setState(() {});
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,54 +100,53 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
           //       onPressed: () => context.router.push(const MembersRoute()))
           // ]
         ),
-        body: Builder(
-            builder: (context) {
-              if (splashLoader) {
-                // First time only
-                return const CircularProgressIndicator(
-                  color: AppColors.primaryLight,
-                  strokeWidth: 3,
-                ).center;
-              }
+        body: Builder(builder: (context) {
+          if (splashLoader) {
+            // First time only
+            return const CircularProgressIndicator(
+              color: AppColors.primaryLight,
+              strokeWidth: 3,
+            ).center;
+          }
 
-              if (chatList.isEmpty) {
-                return 'Reply Ril to start new chat!'
-                    .toText(color: AppColors.grey50)
-                    .center;
-              }
+          if (chatList.isEmpty) {
+            return 'Reply Ril to start new chat!'.toText(color: AppColors.grey50).center;
+          }
 
-              return Container(
-                color: AppColors.primaryDark,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: chatList.length,
-                  itemBuilder: (context, i) {
-                    if (chatList.isEmpty) {
-                      return 'Your conversations \nwill be show here'
-                          .toText()
-                          .center;
-                    }
+          return Container(
+            color: AppColors.primaryDark,
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: chatList.length,
+              itemBuilder: (context, i) {
+                if (chatList.isEmpty) {
+                  return 'Your conversations \nwill be show here'.toText().center;
+                }
 
-                    // var chatList = context.listenchatListModelList;
-                    // WidgetsBinding.instance.addPostFrameCallback(
-                    //         (_) => context.uniProvider.updateChatList(chatList));
+                // var chatList = context.listenchatListModelList;
+                // WidgetsBinding.instance.addPostFrameCallback(
+                //         (_) => context.uniProvider.updateChatList(chatList));
 
-                    var chat = chatList[i];
-                    var otherUser = chat.users!.firstWhere((user) => user.uid != currUser.uid);
+                var chat = chatList[i];
+                var otherUser = chat.users!.firstWhere((user) => user.uid != currUser.uid);
 
-                    return StatefulBuilder(builder: (context, stfSetState) {
-                      return ChatBlockSts(chat, otherUser, onTap: () {
-                        chat = chat.copyWith(unreadCounter: 0);
-                        chatList[i] = chat;
-                        stfSetState(() {});
-                        ChatService.openChat(context, otherUser: otherUser);
-                      });
-                    });
-                  },
-                ).pOnly(top: 10),
-              );
-            }
-        ));
+                return StatefulBuilder(builder: (_context, stfSetState) {
+                  return ChatBlockSts(chat, otherUser, onTap: () {
+                    var currUser = context.uniProvider.currUser;
+                    ChatService.clearUnread(currUser.unreadCounter, currUser.email, chat);
+                    chat = chat.copyWith(unreadCounter: 0);
+                    chatList[i] = chat;
+                    // stfSetState(() {});
+
+                    // var chatId = ChatService.openChat(context, otherUser: otherUser); // no need
+                    context.router
+                        .push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));
+                  });
+                });
+              },
+            ).pOnly(top: 10),
+          );
+        }));
   }
 }
 
@@ -155,6 +159,13 @@ class ChatBlockSts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var currUser = context.uniProvider.currUser;
+    // Make sure currUser doesn't send the last message
+    var showUnreadCount = (chat.lastMessage?.fromId != currUser.uid) &&
+        chat.unreadCounter != null &&
+        chat.unreadCounter != 0;
+    // print('showUnreadCount ${showUnreadCount}');
+
     return Column(
       children: [
         ListTile(
@@ -169,7 +180,7 @@ class ChatBlockSts extends StatelessWidget {
                 style: AppStyles.text12PxRegular.grey50,
               ),
               10.verticalSpace,
-              if (chat.unreadCounter != null && chat.unreadCounter != 0)
+              if (showUnreadCount)
                 CircleAvatar(
                   radius: 10,
                   backgroundColor: AppColors.errRed,
@@ -183,7 +194,7 @@ class ChatBlockSts extends StatelessWidget {
                   radius: 28,
                   backgroundColor: Colors.grey,
                   backgroundImage:
-                  NetworkImage(otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
+                      NetworkImage(otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
               buildOnlineBadge(ratio: 1.0)
             ],
           ),

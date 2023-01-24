@@ -16,6 +16,8 @@ _$_AppConfigModel _$$_AppConfigModelFromJson(Map<String, dynamic> json) =>
       whatsNew: json['whatsNew'] as String?,
       updateType: $enumDecodeNullable(_$UpdateTypesEnumMap, json['updateType']),
       isUpdateAvailable: json['isUpdateAvailable'] as bool?,
+      updateIosLink: json['updateIosLink'] as String?,
+      updateAndroidLink: json['updateAndroidLink'] as String?,
     );
 
 Map<String, dynamic> _$$_AppConfigModelToJson(_$_AppConfigModel instance) =>
@@ -28,6 +30,8 @@ Map<String, dynamic> _$$_AppConfigModelToJson(_$_AppConfigModel instance) =>
       'whatsNew': instance.whatsNew,
       'updateType': _$UpdateTypesEnumMap[instance.updateType],
       'isUpdateAvailable': instance.isUpdateAvailable,
+      'updateIosLink': instance.updateIosLink,
+      'updateAndroidLink': instance.updateAndroidLink,
     };
 
 const _$OsTypesEnumMap = {
