@@ -1,4 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 
 import 'dart:async';
 
@@ -10,16 +10,23 @@ import 'package:example/common/themes/app_colors.dart';
 import 'package:example/main.dart';
 import 'package:example/screens/chat_ui/chats_list_screen.dart.dart';
 import 'package:example/screens/feed_ui/main_feed_screen.dart';
+import 'package:example/screens/main_ui/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../common/config.dart';
+import '../../common/models/appConfig/app_config_model.dart';
 import '../../common/routes/app_router.gr.dart';
 import '../../common/service/Database/firebase_db.dart';
+import '../../common/service/config/a_get_server_config.dart';
+import '../../common/service/config/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
+import '../../widgets/my_dialog.dart';
 import '../feed_ui/create_post_screen.dart';
+import 'dart:io' show Platform;
+
 
 // enum TabItems { home, placeHolder, chat }
 enum TabItems { home, chat }
@@ -41,6 +48,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
+    var localConfig = context.uniProvider.localConfig;
+    var serverConfig = context.uniProvider.serverConfig;
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        chekAppUpdate(context, localConfig, serverConfig!)
+    );
     _pageController = PageController(initialPage: widget.dashboardPage.index);
     sItem = widget.dashboardPage;
 
@@ -114,7 +126,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         activeIcon: notifyBubble(
                             child:
-                                Assets.images.chatBubblesSolid.image(height: 22).pOnly(left: 15)),
+                            Assets.images.chatBubblesSolid.image(height: 22).pOnly(left: 15)),
                       ),
                     ],
                   ),
@@ -122,25 +134,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
             TextButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                          backgroundColor: Colors.transparent,
-                          // barrierColor: Colors.black54,
-                          // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
-                          barrierColor: Colors.black.withOpacity(0.00),
-                          // AKA 2%
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (context) {
-                            return const CreatePostScreen();
-                          });
-                    },
-                    child: Container(
-                            color: AppColors.primaryOriginal,
-                            height: 35,
-                            width: 35,
-                            child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
-                        .rounded(radius: 10))
+                onPressed: () {
+                  showModalBottomSheet(
+                      backgroundColor: Colors.transparent,
+                      // barrierColor: Colors.black54,
+                      // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
+                      barrierColor: Colors.black.withOpacity(0.00),
+                      // AKA 2%
+                      isScrollControlled: true,
+                      context: context,
+                      builder: (context) {
+                        return const CreatePostScreen();
+                      });
+                },
+                child: Container(
+                    color: AppColors.primaryOriginal,
+                    height: 35,
+                    width: 35,
+                    child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
+                    .rounded(radius: 10))
                 .center,
           ],
         ),
@@ -160,13 +172,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
         return counter == null || counter == 0
             ? child
             : Badge(
-                badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white70, medium: true),
-                padding: const EdgeInsets.all(5),
-                elevation: 0,
-                badgeColor: AppColors.errRed,
-                // stackFit: StackFit.loose,
-                // shape:
-                child: child);
+            badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white70, medium: true),
+            padding: const EdgeInsets.all(5),
+            elevation: 0,
+            badgeColor: AppColors.errRed,
+            // stackFit: StackFit.loose,
+            // shape:
+            child: child);
       },
     );
   }

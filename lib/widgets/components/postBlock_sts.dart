@@ -296,7 +296,7 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
     var size = widget.ratio * 4.0;
     return CircleAvatar(
       radius: size,
-      backgroundColor: AppColors.green.withOpacity(0.20),
+      backgroundColor: AppColors.greenOld,
       child: FadeTransition(
         opacity: _animationController,
         child: CircleAvatar(

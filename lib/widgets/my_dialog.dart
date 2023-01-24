@@ -11,9 +11,11 @@ Future<void> showRilDialog(
   BuildContext context, {
   required String? title,
   required Widget desc,
-  bool barrierDismissible = false,
   Widget? secondaryBtn,
   bool showCancelBtn = true,
+  double? verticalMargin,
+  double? horizontalMargin,
+  bool barrierDismissible = false,
 }) async {
   return showDialog<void>(
     context: context,
@@ -24,6 +26,7 @@ Future<void> showRilDialog(
       return BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
         child: AlertDialog(
+          insetPadding: EdgeInsets.symmetric(horizontal: horizontalMargin ?? 40.0, vertical: verticalMargin ?? 24.0),
           backgroundColor: AppColors.primaryDark,
           shape: 15.roundedShape,
           content: Column(

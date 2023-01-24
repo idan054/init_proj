@@ -26,6 +26,8 @@ class ChatsListScreen extends StatefulWidget {
 class _ChatsListScreenState extends State<ChatsListScreen> {
   var splashLoader = true;
   List<ChatModel> chatList = [];
+  Future? listenLoadMore;
+
 
   @override
   void initState() {
@@ -34,12 +36,20 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     // add a 'lastMessageFromId' field in UserModel to get only the need to update doc!
 
     // _loadMore();
+
+    listenLoadMore = _loadMore(refresh: true);
     //> Uncomment this to auto refresh chats when new message coming
     WidgetsBinding.instance.addPostFrameCallback((_) =>
-        context.uniProvider.addListener(() => _loadMore(refresh: true))
+        context.uniProvider.addListener(() => listenLoadMore)
     );
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+        context.uniProvider.removeListener(() => listenLoadMore);
+    super.dispose();
   }
 
   Future _loadMore({bool refresh = false}) async {
@@ -58,6 +68,8 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     splashLoader = false;
     setState(() {});
   }
+
+
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,10 @@
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import '../../screens/user_ui/user_screen.dart';
 
 extension StringNullX on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
@@ -69,6 +72,24 @@ extension StringX on String {
                       color: color, fontSize: fontSize ?? 14.sp,
                       // height: 1
                     )); // line spacing
+
+  ExpandableText toTextExpanded(
+    // String text,
+      {
+    TextStyle? style,
+    TextAlign? textAlign,
+    TextDirection? textDirection,
+    int? maxLines,
+    ValueChanged<bool>? onChanged,
+  }) =>
+      buildExpandableText(
+        this,
+        style: style,
+        textAlign: textAlign,
+        textDirection: textDirection,
+        maxLines: maxLines,
+        onChanged: onChanged,
+      ); // line spacing
 
   Text get testText => Text(
         this,

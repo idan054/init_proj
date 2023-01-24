@@ -1,9 +1,9 @@
+import 'package:example/common/models/appConfig/app_config_model.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
-
+import 'dart:io' show Platform;
 import 'chat/chat_model.dart';
-
 import 'package:flutter/foundation.dart';
 
 // class OnBoardingProvider with ChangeNotifier {
@@ -11,6 +11,28 @@ import 'package:flutter/foundation.dart';
 // }
 
 class UniProvider with ChangeNotifier {
+  AppConfigModel localConfig = AppConfigModel(
+    //~ ------------------- Edit this:
+    publicVersionAndroid: 4,        //~ |
+    publicVersionIos: 4,            //~ |
+    whatsNew: 'Heres what new!',    //~ |
+    updateType: UpdateTypes.needed, //~ |
+    //~ --------------------------------
+    // status: 'ok',
+    // statusCode: 200,
+    osType: Platform.isAndroid ? OsTypes.android : OsTypes.ios,
+  );
+  void updateLocalConfig(AppConfigModel data) {
+    localConfig = data;
+    notifyListeners();
+  }
+
+  AppConfigModel? serverConfig;
+  void updateServerConfig(AppConfigModel? data) {
+    serverConfig = data;
+    notifyListeners();
+  }
+
   String? status;
   void updateStatus(String? data) {
     status = data;

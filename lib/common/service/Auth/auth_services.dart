@@ -33,6 +33,7 @@ class AuthService {
     print('userEmail $userEmail');
     var userData = await Database.docData('users/$userEmail');
     print('userData $userData');
+
     if (userData == null ||
         userData['gender'] == null ||
         userData['age'] == null ||
