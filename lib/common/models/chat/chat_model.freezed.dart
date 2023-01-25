@@ -22,7 +22,8 @@ ChatModel _$ChatModelFromJson(Map<String, dynamic> json) {
 mixin _$ChatModel {
   String? get id => throw _privateConstructorUsedError; // chat id
   MessageModel? get lastMessage => throw _privateConstructorUsedError;
-  int? get unreadCounter => throw _privateConstructorUsedError;
+  int? get unreadCounter =>
+      throw _privateConstructorUsedError; // eachTime only 1 user have unreadCounter, checked by lastMessage
   List<String>? get usersIds => throw _privateConstructorUsedError;
   List<UserModel>? get users => throw _privateConstructorUsedError;
   List<MessageModel>? get messages => throw _privateConstructorUsedError;
@@ -216,7 +217,9 @@ class _$_ChatModel implements _ChatModel {
   final MessageModel? lastMessage;
   @override
   final int? unreadCounter;
+// eachTime only 1 user have unreadCounter, checked by lastMessage
   final List<String>? _usersIds;
+// eachTime only 1 user have unreadCounter, checked by lastMessage
   @override
   List<String>? get usersIds {
     final value = _usersIds;
@@ -317,7 +320,7 @@ abstract class _ChatModel implements ChatModel {
   MessageModel? get lastMessage;
   @override
   int? get unreadCounter;
-  @override
+  @override // eachTime only 1 user have unreadCounter, checked by lastMessage
   List<String>? get usersIds;
   @override
   List<UserModel>? get users;

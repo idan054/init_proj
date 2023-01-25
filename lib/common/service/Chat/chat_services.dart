@@ -79,7 +79,7 @@ class ChatService {
       print('START: clearUnread() [if]');
 
       // From chat & user collections.
-      Database().updateFirestore(
+      Database.updateFirestore(
         collection: 'users',
         docName: userEmail,
         toJson: {
@@ -87,7 +87,7 @@ class ChatService {
         },
       );
 
-      Database().updateFirestore(
+      Database.updateFirestore(
         collection: 'chats',
         docName: chat.id,
         toJson: {
@@ -156,20 +156,20 @@ class ChatService {
     // Start a Batch requests.
     // var sendMessageBatch = Database.db.batch();
 
-    Database().updateFirestore(
+    Database.updateFirestore(
       // batch: sendMessageBatch,
       collection: 'chats',
       docName: chatId,
       toJson: chatJson,
     );
 
-    Database().updateFirestore(
+    Database.updateFirestore(
         // batch: sendMessageBatch,
         collection: 'chats/$chatId/messages',
         docName: messageId,
         toJson: messageData.toJson());
 
-    Database().updateFirestore(
+    Database.updateFirestore(
       // batch: sendMessageBatch,
       collection: 'users',
       docName: otherUser.email,

@@ -145,7 +145,7 @@ class PostBlock extends StatelessWidget {
                 var docName =
                     post.textContent.substring(0, nameEndAt).toString() + UniqueKey().toString();
 
-                Database().updateFirestore(
+                Database.updateFirestore(
                   collection: 'reports/Reported rils/rils',
                   docName: docName,
                   toJson: {

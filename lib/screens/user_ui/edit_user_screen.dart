@@ -92,7 +92,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               // instead hundred of requests in every bio update
               // just get doc by id reference + client cache isExist()
 
-              Database().updateFirestore(
+              Database.updateFirestore(
                   collection: 'users',
                   docName: '${updatedUser.email}',
                   toJson: updatedUser.toJson());
@@ -108,7 +108,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 var updatedPost = post.copyWith(creatorUser: updatedUser);
                 // print('posts.length ${posts.length}');
                 // print('updatedPost.toJson() ${updatedPost.toJson()}');
-                Database().updateFirestore(
+                Database.updateFirestore(
                     collection: 'posts', docName: updatedPost.id, toJson: updatedPost.toJson());
                 // return;
               }

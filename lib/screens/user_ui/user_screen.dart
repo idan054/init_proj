@@ -225,7 +225,7 @@ class _UserScreenState extends State<UserScreen> {
                 var nameEndAt = userName.length < 20 ? userName.length : 20;
                 var docName = userName.substring(0, nameEndAt).toString() + UniqueKey().toString();
 
-                Database().updateFirestore(
+                Database.updateFirestore(
                   collection: 'reports/Reported users/users',
                   docName: docName,
                   toJson: {

@@ -5,6 +5,7 @@ import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/screens/main_ui/splash_screen.dart' as click;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,6 +40,23 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   printWhite('START main()!');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // FirebaseMessaging.instance.setAutoInitEnabled(true);
+
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // NotificationSettings settings = await messaging.requestPermission(
+  //   alert: true,
+  //   announcement: false,
+  //   badge: true,
+  //   carPlay: false,
+  //   criticalAlert: false,
+  //   provisional: false,
+  //   sound: true,
+  // );
+
+
+
   final dbDir = await getApplicationDocumentsDirectory();
   Hive.init(dbDir.path);
 

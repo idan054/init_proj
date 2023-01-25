@@ -42,7 +42,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
     if (appState == AppLifecycleState.resumed) {
       print('START: onAppResumed()');
-      Database().updateFirestore(
+      Database.updateFirestore(
         collection: 'config',
         docName: 'mainConfig',
         toJson: {'onlineUsers': FieldValue.arrayUnion(['X'])},
@@ -54,7 +54,7 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
         //  appState == AppLifecycleState.detached ||
         appState == AppLifecycleState.paused) {
       print('START: onAppPaused()');
-      Database().updateFirestore(
+      Database.updateFirestore(
         collection: 'config',
         docName: 'mainConfig',
         toJson: {'onlineUsers': FieldValue.arrayRemove(['X'])},

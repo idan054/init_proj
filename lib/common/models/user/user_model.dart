@@ -6,6 +6,7 @@ part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
 enum GenderTypes { male, female, other}
+enum UserTypes { normal, admin}
 
 
 // flutter pub run build_runner build --delete-conflicting-outputs
@@ -14,16 +15,18 @@ enum GenderTypes { male, female, other}
 class UserModel with _$UserModel {
   @JsonSerializable(explicitToJson: true) // This needed for sub classes Only
   const factory UserModel({
+    String? uid,
     String? name,
     String? email,
-    String? uid,
     String? bio,
+    String? fcm,
     int? age,
     String? photoUrl,
     bool? isOnline,
     int? unreadCounter,
     // int? userScore, // Example: 0 = Block Forever.
     GenderTypes? gender,
+    @Default(UserTypes.normal) UserTypes? userType,
     @Default([]) List<String> tags,
     @DateTimeStampConv() DateTime? birthday,
   }) = _UserModel;

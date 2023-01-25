@@ -45,7 +45,7 @@ class Database {
   static Future<Map<String, dynamic>?> docData(String documentPath) =>
       db.doc(documentPath).get().then((doc) => doc.data());
 
-  void updateFirestore(
+  static void updateFirestore(
       {required String collection, String? docName, required Map<String, dynamic> toJson}) {
     db
         .collection(collection)

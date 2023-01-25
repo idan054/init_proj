@@ -3,6 +3,7 @@ import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -25,42 +26,49 @@ class AuthService {
     }
 
     User? googleUser;
-    if (authUser?.uid == null || signUpScenario) googleUser = await _googleAuthAction();
+    if (authUser?.uid == null || signUpScenario) googleUser = await _googleAuthPopup();
     if (googleUser == null && signUpScenario) return;
 
     //~ Check if User exist:
     var userEmail = authUser?.uid == null ? googleUser?.email : authUser!.email;
-    print('userEmail $userEmail');
     var userData = await Database.docData('users/$userEmail');
-    print('userData $userData');
 
-    if (userData == null ||
-        userData['gender'] == null ||
-        userData['age'] == null ||
-        userData['birthday'] == null) {
-      print('START:  New User:');
-      //~ New User:
+    if (userData == null || userData['tags'] == null) {
+      printYellow('START:  New User:');
+
       // This fix bug when user out while signup.
-      if (googleUser?.uid == null) googleUser = await _googleAuthAction();
+      if (googleUser?.uid == null) googleUser = await _googleAuthPopup();
 
       var user = context.uniProvider.currUser.copyWith(
         uid: googleUser!.uid,
         email: googleUser.email,
-        // name: googleUser.displayName,
+        // name: googleUser.displayName, // DEFAULT
         // photoUrl: googleUser.photoURL, // DEFAULT
       );
       context.uniProvider.updateUser(user);
       context.router.replace(signUpScenario ? const OnBoardingRoute() : const LoginRoute());
     } else {
-      //~ Exist User:
-      print('START:  Exist User:');
+      printYellow('START:  Exist User:');
       var currUser = UserModel.fromJson(userData);
+
+      String? fcm = await FirebaseMessaging.instance.getToken();
+      print('fcm ${fcm}');
+      if (userData['fcm'] != fcm) {
+        Database.updateFirestore(
+            collection: 'users', docName: userData['email'], toJson: {'fcm': fcm});
+        currUser = currUser.copyWith(fcm: fcm);
+      }
+
       context.uniProvider.updateUser(currUser);
       context.router.replace(DashboardRoute());
     }
   }
 
-  static Future<User?> _googleAuthAction() async {
+  // static Future<User?> _setFcm() async {
+  //
+  // }
+
+  static Future<User?> _googleAuthPopup() async {
     final googleUser = await GoogleSignIn().signIn();
     if (googleUser == null) return null;
 

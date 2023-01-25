@@ -173,7 +173,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
 
               if (tags_e_View) {
                 // print('currUser ${currUser.toJson()}');
-                Database().updateFirestore(
+                Database.updateFirestore(
                     collection: 'users',
                     docName: '${currUser.email}',
                     toJson: context.uniProvider.currUser.toJson());

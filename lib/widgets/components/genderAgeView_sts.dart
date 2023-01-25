@@ -127,7 +127,7 @@ class _GenderAgeViewOldState extends State<GenderAgeViewOld> {
       if (genderAgeValid) {
         var currUser = context.uniProvider.currUser;
         currUser = currUser.copyWith(birthday: bDay, age: userAge, gender: selectedGender);
-        Database().updateFirestore(
+        Database.updateFirestore(
             collection: 'users',
             docName: '${currUser.email}',
             toJson: context.uniProvider.currUser.toJson());

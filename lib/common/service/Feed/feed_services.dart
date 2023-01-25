@@ -44,7 +44,7 @@ class FeedService {
   //   }
   //
   //   // todo use AddToBatch() + dispose() instead
-  //   Database().updateFirestore(
+  //   Database.updateFirestore(
   //     collection: 'posts',
   //     docName: post.id,
   //     toJson: post.toJson(),
@@ -55,7 +55,7 @@ class FeedService {
     print('START: uploadPost()');
     // var timeStamp = DateTime.now();
     // String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);
-    Database().updateFirestore(
+    Database.updateFirestore(
       collection: 'posts',
       docName: post.id,
       toJson: post.toJson(),
