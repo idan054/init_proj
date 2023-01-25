@@ -34,7 +34,7 @@ class AuthService {
     var userData = await Database.docData('users/$userEmail');
 
     if (userData == null || userData['tags'] == null) {
-      printYellow('START:  New User:');
+      printYellow('START User: New');
 
       // This fix bug when user out while signup.
       if (googleUser?.uid == null) googleUser = await _googleAuthPopup();
@@ -48,11 +48,11 @@ class AuthService {
       context.uniProvider.updateUser(user);
       context.router.replace(signUpScenario ? const OnBoardingRoute() : const LoginRoute());
     } else {
-      printYellow('START:  Exist User:');
+      printYellow('START User: Exist');
       var currUser = UserModel.fromJson(userData);
 
       String? fcm = await FirebaseMessaging.instance.getToken();
-      print('fcm ${fcm}');
+      print('fcm $fcm');
       if (userData['fcm'] != fcm) {
         Database.updateFirestore(
             collection: 'users', docName: userData['email'], toJson: {'fcm': fcm});

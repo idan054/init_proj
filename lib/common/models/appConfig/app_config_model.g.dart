@@ -9,6 +9,7 @@ part of 'app_config_model.dart';
 _$_AppConfigModel _$$_AppConfigModelFromJson(Map<String, dynamic> json) =>
     _$_AppConfigModel(
       status: json['status'] as String?,
+      adStatus: json['adStatus'] as String?,
       statusCode: json['statusCode'] as int?,
       osType: $enumDecodeNullable(_$OsTypesEnumMap, json['osType']),
       publicVersionAndroid: json['publicVersionAndroid'] as int?,
@@ -23,6 +24,7 @@ _$_AppConfigModel _$$_AppConfigModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_AppConfigModelToJson(_$_AppConfigModel instance) =>
     <String, dynamic>{
       'status': instance.status,
+      'adStatus': instance.adStatus,
       'statusCode': instance.statusCode,
       'osType': _$OsTypesEnumMap[instance.osType],
       'publicVersionAndroid': instance.publicVersionAndroid,

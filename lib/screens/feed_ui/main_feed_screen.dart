@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/appConfig/app_config_model.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
@@ -16,6 +19,7 @@ import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import '../../common/extensions/color_printer.dart';
@@ -125,8 +129,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                   'Available soon. meanwhile...'.toText(),
                   Text(
                     'Tell us what you think!',
-                    style: AppStyles.text14PxRegular.copyWith(
-                        color: AppColors.grey50, decoration: TextDecoration.underline),
+                    style: AppStyles.text14PxRegular
+                        .copyWith(color: AppColors.grey50, decoration: TextDecoration.underline),
                   ).py(7).px(14).onTap(() {
                     ChatService.chatWithUs(context);
                   }, radius: 4)
@@ -134,6 +138,36 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               ).center,
             ],
           )),
+    );
+  }
+
+  Widget getAd(BuildContext context) {
+    BannerAdListener bannerAdListener = BannerAdListener(onAdWillDismissScreen: (ad) {
+      ad.dispose();
+    }, onAdClosed: (ad) {
+      debugPrint("Ad Got Closeed");
+    });
+    BannerAd bannerAd = BannerAd(
+      size: AdSize.banner,
+      adUnitId: Platform.isAndroid
+          ? "ca-app-pub-3940256099942544/6300978111"
+          : "ca-app-pub-3940256099942544/2934735716",
+      listener: bannerAdListener,
+      request: const AdRequest(),
+    );
+
+    bannerAd.load();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        '${context.uniProvider.serverConfig?.adStatus}'.toText(color: AppColors.grey50, fontSize: 10),
+        SizedBox(
+          width: 320,
+          height: 50,
+          child: AdWidget(ad: bannerAd),
+        ),
+      ],
     );
   }
 
@@ -168,13 +202,19 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
                 1.verticalSpace,
                 //   Expanded(child:
                 ListView.builder(
-                  physics: const ScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: postList.length,
-                  itemBuilder: (BuildContext context, int i) =>
+                    physics: const ScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: postList.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
                       // PostView(postList[i])
-                      PostBlock(postList[i]),
-                ),
+                      return Column(
+                        children: [
+                          if (isShowAd) getAd(context),
+                          PostBlock(postList[i]),
+                        ],
+                      );
+                    }),
                 //     )
               ],
             ));
@@ -201,8 +241,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               .toText(fontSize: 13, color: AppColors.grey50)
               .pOnly(top: 3)
         ],
-      )
-       .pOnly(bottom: 15),
+      ).pOnly(bottom: 15),
       subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
     );
   }

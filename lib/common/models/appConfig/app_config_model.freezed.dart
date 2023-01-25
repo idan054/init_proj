@@ -21,6 +21,7 @@ AppConfigModel _$AppConfigModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AppConfigModel {
   String? get status => throw _privateConstructorUsedError;
+  String? get adStatus => throw _privateConstructorUsedError;
   int? get statusCode => throw _privateConstructorUsedError;
   OsTypes? get osType => throw _privateConstructorUsedError;
   int? get publicVersionAndroid => throw _privateConstructorUsedError;
@@ -45,6 +46,7 @@ abstract class $AppConfigModelCopyWith<$Res> {
   @useResult
   $Res call(
       {String? status,
+      String? adStatus,
       int? statusCode,
       OsTypes? osType,
       int? publicVersionAndroid,
@@ -70,6 +72,7 @@ class _$AppConfigModelCopyWithImpl<$Res, $Val extends AppConfigModel>
   @override
   $Res call({
     Object? status = freezed,
+    Object? adStatus = freezed,
     Object? statusCode = freezed,
     Object? osType = freezed,
     Object? publicVersionAndroid = freezed,
@@ -84,6 +87,10 @@ class _$AppConfigModelCopyWithImpl<$Res, $Val extends AppConfigModel>
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
+              as String?,
+      adStatus: freezed == adStatus
+          ? _value.adStatus
+          : adStatus // ignore: cast_nullable_to_non_nullable
               as String?,
       statusCode: freezed == statusCode
           ? _value.statusCode
@@ -135,6 +142,7 @@ abstract class _$$_AppConfigModelCopyWith<$Res>
   @useResult
   $Res call(
       {String? status,
+      String? adStatus,
       int? statusCode,
       OsTypes? osType,
       int? publicVersionAndroid,
@@ -158,6 +166,7 @@ class __$$_AppConfigModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? status = freezed,
+    Object? adStatus = freezed,
     Object? statusCode = freezed,
     Object? osType = freezed,
     Object? publicVersionAndroid = freezed,
@@ -172,6 +181,10 @@ class __$$_AppConfigModelCopyWithImpl<$Res>
       status: freezed == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
+              as String?,
+      adStatus: freezed == adStatus
+          ? _value.adStatus
+          : adStatus // ignore: cast_nullable_to_non_nullable
               as String?,
       statusCode: freezed == statusCode
           ? _value.statusCode
@@ -219,6 +232,7 @@ class __$$_AppConfigModelCopyWithImpl<$Res>
 class _$_AppConfigModel implements _AppConfigModel {
   const _$_AppConfigModel(
       {this.status,
+      this.adStatus,
       this.statusCode,
       this.osType,
       this.publicVersionAndroid,
@@ -234,6 +248,8 @@ class _$_AppConfigModel implements _AppConfigModel {
 
   @override
   final String? status;
+  @override
+  final String? adStatus;
   @override
   final int? statusCode;
   @override
@@ -255,7 +271,7 @@ class _$_AppConfigModel implements _AppConfigModel {
 
   @override
   String toString() {
-    return 'AppConfigModel(status: $status, statusCode: $statusCode, osType: $osType, publicVersionAndroid: $publicVersionAndroid, publicVersionIos: $publicVersionIos, whatsNew: $whatsNew, updateType: $updateType, isUpdateAvailable: $isUpdateAvailable, updateIosLink: $updateIosLink, updateAndroidLink: $updateAndroidLink)';
+    return 'AppConfigModel(status: $status, adStatus: $adStatus, statusCode: $statusCode, osType: $osType, publicVersionAndroid: $publicVersionAndroid, publicVersionIos: $publicVersionIos, whatsNew: $whatsNew, updateType: $updateType, isUpdateAvailable: $isUpdateAvailable, updateIosLink: $updateIosLink, updateAndroidLink: $updateAndroidLink)';
   }
 
   @override
@@ -264,6 +280,8 @@ class _$_AppConfigModel implements _AppConfigModel {
         (other.runtimeType == runtimeType &&
             other is _$_AppConfigModel &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.adStatus, adStatus) ||
+                other.adStatus == adStatus) &&
             (identical(other.statusCode, statusCode) ||
                 other.statusCode == statusCode) &&
             (identical(other.osType, osType) || other.osType == osType) &&
@@ -288,6 +306,7 @@ class _$_AppConfigModel implements _AppConfigModel {
   int get hashCode => Object.hash(
       runtimeType,
       status,
+      adStatus,
       statusCode,
       osType,
       publicVersionAndroid,
@@ -315,6 +334,7 @@ class _$_AppConfigModel implements _AppConfigModel {
 abstract class _AppConfigModel implements AppConfigModel {
   const factory _AppConfigModel(
       {final String? status,
+      final String? adStatus,
       final int? statusCode,
       final OsTypes? osType,
       final int? publicVersionAndroid,
@@ -330,6 +350,8 @@ abstract class _AppConfigModel implements AppConfigModel {
 
   @override
   String? get status;
+  @override
+  String? get adStatus;
   @override
   int? get statusCode;
   @override

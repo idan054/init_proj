@@ -16,6 +16,7 @@ Future<AppConfigModel> getAppConfig(BuildContext context) async {
   var jsonData = await Database.docData('config/appConfigDoc');
   var serverConfig = AppConfigModel.fromJson(jsonData ?? {});
   context.uniProvider.updateServerConfig(serverConfig);
+  print('context.uniProvider.serverConfig?.adStatus ${context.uniProvider.serverConfig?.adStatus}');
 
   var localConfig = context.uniProvider.localConfig;
   //> Uncomment this to update server (& Edit uniProvider.localConfig)

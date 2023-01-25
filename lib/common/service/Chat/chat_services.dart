@@ -4,6 +4,7 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../screens/chat_ui/chat_screen.dart' as screen;

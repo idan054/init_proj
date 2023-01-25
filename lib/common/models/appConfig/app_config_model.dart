@@ -16,6 +16,7 @@ class AppConfigModel with _$AppConfigModel {
   @JsonSerializable(explicitToJson: true) // This needed for sub classes Only
   const factory AppConfigModel({
     String? status,
+    String? adStatus,
     int? statusCode,
     OsTypes? osType,
     int? publicVersionAndroid,

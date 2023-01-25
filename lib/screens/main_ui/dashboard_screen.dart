@@ -50,10 +50,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;
-    //~ TEMP COMMENT
-    // WidgetsBinding.instance.addPostFrameCallback((_) =>
-    //     chekForUpdate(context, localConfig, serverConfig!)
-    // );
+
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+        chekForUpdate(context, localConfig, serverConfig!)
+    );
 
     _pageController = PageController(initialPage: widget.dashboardPage.index);
     sItem = widget.dashboardPage;
