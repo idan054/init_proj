@@ -27,6 +27,7 @@ mixin _$MessageModel {
   String? get toId => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
   PostModel? get postReply => throw _privateConstructorUsedError;
+  bool? get isPostComment => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
   bool? get read => throw _privateConstructorUsedError;
@@ -50,6 +51,7 @@ abstract class $MessageModelCopyWith<$Res> {
       String? toId,
       String? createdAt,
       PostModel? postReply,
+      bool? isPostComment,
       @DateTimeStampConv() DateTime? timestamp,
       bool? read});
 
@@ -75,6 +77,7 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
     Object? toId = freezed,
     Object? createdAt = freezed,
     Object? postReply = freezed,
+    Object? isPostComment = freezed,
     Object? timestamp = freezed,
     Object? read = freezed,
   }) {
@@ -103,6 +106,10 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
           ? _value.postReply
           : postReply // ignore: cast_nullable_to_non_nullable
               as PostModel?,
+      isPostComment: freezed == isPostComment
+          ? _value.isPostComment
+          : isPostComment // ignore: cast_nullable_to_non_nullable
+              as bool?,
       timestamp: freezed == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -142,6 +149,7 @@ abstract class _$$_MessageModelCopyWith<$Res>
       String? toId,
       String? createdAt,
       PostModel? postReply,
+      bool? isPostComment,
       @DateTimeStampConv() DateTime? timestamp,
       bool? read});
 
@@ -166,6 +174,7 @@ class __$$_MessageModelCopyWithImpl<$Res>
     Object? toId = freezed,
     Object? createdAt = freezed,
     Object? postReply = freezed,
+    Object? isPostComment = freezed,
     Object? timestamp = freezed,
     Object? read = freezed,
   }) {
@@ -194,6 +203,10 @@ class __$$_MessageModelCopyWithImpl<$Res>
           ? _value.postReply
           : postReply // ignore: cast_nullable_to_non_nullable
               as PostModel?,
+      isPostComment: freezed == isPostComment
+          ? _value.isPostComment
+          : isPostComment // ignore: cast_nullable_to_non_nullable
+              as bool?,
       timestamp: freezed == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -217,6 +230,7 @@ class _$_MessageModel implements _MessageModel {
       this.toId,
       this.createdAt,
       this.postReply,
+      this.isPostComment = false,
       @DateTimeStampConv() this.timestamp,
       this.read});
 
@@ -237,6 +251,9 @@ class _$_MessageModel implements _MessageModel {
   @override
   final PostModel? postReply;
   @override
+  @JsonKey()
+  final bool? isPostComment;
+  @override
   @DateTimeStampConv()
   final DateTime? timestamp;
   @override
@@ -244,7 +261,7 @@ class _$_MessageModel implements _MessageModel {
 
   @override
   String toString() {
-    return 'MessageModel(id: $id, textContent: $textContent, fromId: $fromId, toId: $toId, createdAt: $createdAt, postReply: $postReply, timestamp: $timestamp, read: $read)';
+    return 'MessageModel(id: $id, textContent: $textContent, fromId: $fromId, toId: $toId, createdAt: $createdAt, postReply: $postReply, isPostComment: $isPostComment, timestamp: $timestamp, read: $read)';
   }
 
   @override
@@ -261,6 +278,8 @@ class _$_MessageModel implements _MessageModel {
                 other.createdAt == createdAt) &&
             (identical(other.postReply, postReply) ||
                 other.postReply == postReply) &&
+            (identical(other.isPostComment, isPostComment) ||
+                other.isPostComment == isPostComment) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
             (identical(other.read, read) || other.read == read));
@@ -269,7 +288,7 @@ class _$_MessageModel implements _MessageModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, textContent, fromId, toId,
-      createdAt, postReply, timestamp, read);
+      createdAt, postReply, isPostComment, timestamp, read);
 
   @JsonKey(ignore: true)
   @override
@@ -293,6 +312,7 @@ abstract class _MessageModel implements MessageModel {
       final String? toId,
       final String? createdAt,
       final PostModel? postReply,
+      final bool? isPostComment,
       @DateTimeStampConv() final DateTime? timestamp,
       final bool? read}) = _$_MessageModel;
 
@@ -311,6 +331,8 @@ abstract class _MessageModel implements MessageModel {
   String? get createdAt;
   @override
   PostModel? get postReply;
+  @override
+  bool? get isPostComment;
   @override
   @DateTimeStampConv()
   DateTime? get timestamp;

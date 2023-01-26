@@ -69,8 +69,20 @@ class FsAdvanced {
       case ModelTypes.users: // Nothing special
         break;
       case ModelTypes.posts:
+
+        //~ Filters (query) REQUIRE an index. Check log to create it.
+
         if (filter == FilterTypes.postsByUser) {
           reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid!);
+        }
+        if (filter == FilterTypes.postWithComments) {
+          reqBase = reqBase.where('enableComments', isEqualTo: true);
+        }
+        if (filter == FilterTypes.postWithoutComments) {
+          reqBase = reqBase.where('enableComments', isEqualTo: false);
+        }
+        if (filter == FilterTypes.postConversionsOfUser) { // AKA conversion users
+          reqBase = reqBase.where('commentedUsersIds', arrayContains: uid!);
         }
         break;
       case ModelTypes.chats:

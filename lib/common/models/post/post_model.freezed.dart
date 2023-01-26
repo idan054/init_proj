@@ -20,14 +20,21 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$PostModel {
+  String? get tag => throw _privateConstructorUsedError;
+  UserModel? get creatorUser => throw _privateConstructorUsedError;
   String get textContent => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
-  UserModel? get creatorUser => throw _privateConstructorUsedError;
   List<String> get likeByIds => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
-  bool get enableComments => throw _privateConstructorUsedError;
-  String? get tag => throw _privateConstructorUsedError;
+  bool get enableComments =>
+      throw _privateConstructorUsedError; // @ColorIntConv() Color? colorCover,
+//~ Also use as comment, Comment variables:
+  String? get originalPostId => throw _privateConstructorUsedError;
+  int get commentsLength => throw _privateConstructorUsedError;
+  List<String> get commentedUsersIds =>
+      throw _privateConstructorUsedError; // AKA conversion users
+  List<PostModel>? get comments => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,13 +48,17 @@ abstract class $PostModelCopyWith<$Res> {
       _$PostModelCopyWithImpl<$Res, PostModel>;
   @useResult
   $Res call(
-      {String textContent,
-      String id,
+      {String? tag,
       UserModel? creatorUser,
+      String textContent,
+      String id,
       List<String> likeByIds,
       @DateTimeStampConv() DateTime? timestamp,
       bool enableComments,
-      String? tag});
+      String? originalPostId,
+      int commentsLength,
+      List<String> commentedUsersIds,
+      List<PostModel>? comments});
 
   $UserModelCopyWith<$Res>? get creatorUser;
 }
@@ -65,15 +76,27 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? tag = freezed,
+    Object? creatorUser = freezed,
     Object? textContent = null,
     Object? id = null,
-    Object? creatorUser = freezed,
     Object? likeByIds = null,
     Object? timestamp = freezed,
     Object? enableComments = null,
-    Object? tag = freezed,
+    Object? originalPostId = freezed,
+    Object? commentsLength = null,
+    Object? commentedUsersIds = null,
+    Object? comments = freezed,
   }) {
     return _then(_value.copyWith(
+      tag: freezed == tag
+          ? _value.tag
+          : tag // ignore: cast_nullable_to_non_nullable
+              as String?,
+      creatorUser: freezed == creatorUser
+          ? _value.creatorUser
+          : creatorUser // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
       textContent: null == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
@@ -82,10 +105,6 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      creatorUser: freezed == creatorUser
-          ? _value.creatorUser
-          : creatorUser // ignore: cast_nullable_to_non_nullable
-              as UserModel?,
       likeByIds: null == likeByIds
           ? _value.likeByIds
           : likeByIds // ignore: cast_nullable_to_non_nullable
@@ -98,10 +117,22 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
           ? _value.enableComments
           : enableComments // ignore: cast_nullable_to_non_nullable
               as bool,
-      tag: freezed == tag
-          ? _value.tag
-          : tag // ignore: cast_nullable_to_non_nullable
+      originalPostId: freezed == originalPostId
+          ? _value.originalPostId
+          : originalPostId // ignore: cast_nullable_to_non_nullable
               as String?,
+      commentsLength: null == commentsLength
+          ? _value.commentsLength
+          : commentsLength // ignore: cast_nullable_to_non_nullable
+              as int,
+      commentedUsersIds: null == commentedUsersIds
+          ? _value.commentedUsersIds
+          : commentedUsersIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      comments: freezed == comments
+          ? _value.comments
+          : comments // ignore: cast_nullable_to_non_nullable
+              as List<PostModel>?,
     ) as $Val);
   }
 
@@ -126,13 +157,17 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String textContent,
-      String id,
+      {String? tag,
       UserModel? creatorUser,
+      String textContent,
+      String id,
       List<String> likeByIds,
       @DateTimeStampConv() DateTime? timestamp,
       bool enableComments,
-      String? tag});
+      String? originalPostId,
+      int commentsLength,
+      List<String> commentedUsersIds,
+      List<PostModel>? comments});
 
   @override
   $UserModelCopyWith<$Res>? get creatorUser;
@@ -149,15 +184,27 @@ class __$$_PostModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? tag = freezed,
+    Object? creatorUser = freezed,
     Object? textContent = null,
     Object? id = null,
-    Object? creatorUser = freezed,
     Object? likeByIds = null,
     Object? timestamp = freezed,
     Object? enableComments = null,
-    Object? tag = freezed,
+    Object? originalPostId = freezed,
+    Object? commentsLength = null,
+    Object? commentedUsersIds = null,
+    Object? comments = freezed,
   }) {
     return _then(_$_PostModel(
+      tag: freezed == tag
+          ? _value.tag
+          : tag // ignore: cast_nullable_to_non_nullable
+              as String?,
+      creatorUser: freezed == creatorUser
+          ? _value.creatorUser
+          : creatorUser // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
       textContent: null == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
@@ -166,10 +213,6 @@ class __$$_PostModelCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      creatorUser: freezed == creatorUser
-          ? _value.creatorUser
-          : creatorUser // ignore: cast_nullable_to_non_nullable
-              as UserModel?,
       likeByIds: null == likeByIds
           ? _value._likeByIds
           : likeByIds // ignore: cast_nullable_to_non_nullable
@@ -182,10 +225,22 @@ class __$$_PostModelCopyWithImpl<$Res>
           ? _value.enableComments
           : enableComments // ignore: cast_nullable_to_non_nullable
               as bool,
-      tag: freezed == tag
-          ? _value.tag
-          : tag // ignore: cast_nullable_to_non_nullable
+      originalPostId: freezed == originalPostId
+          ? _value.originalPostId
+          : originalPostId // ignore: cast_nullable_to_non_nullable
               as String?,
+      commentsLength: null == commentsLength
+          ? _value.commentsLength
+          : commentsLength // ignore: cast_nullable_to_non_nullable
+              as int,
+      commentedUsersIds: null == commentedUsersIds
+          ? _value._commentedUsersIds
+          : commentedUsersIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      comments: freezed == comments
+          ? _value._comments
+          : comments // ignore: cast_nullable_to_non_nullable
+              as List<PostModel>?,
     ));
   }
 }
@@ -195,26 +250,34 @@ class __$$_PostModelCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$_PostModel implements _PostModel {
   const _$_PostModel(
-      {this.textContent = '',
-      this.id = '',
+      {this.tag,
       this.creatorUser,
+      this.textContent = '',
+      this.id = '',
       final List<String> likeByIds = const [],
       @DateTimeStampConv() this.timestamp,
       this.enableComments = false,
-      this.tag})
-      : _likeByIds = likeByIds;
+      this.originalPostId,
+      this.commentsLength = 0,
+      final List<String> commentedUsersIds = const [],
+      final List<PostModel>? comments = const []})
+      : _likeByIds = likeByIds,
+        _commentedUsersIds = commentedUsersIds,
+        _comments = comments;
 
   factory _$_PostModel.fromJson(Map<String, dynamic> json) =>
       _$$_PostModelFromJson(json);
 
+  @override
+  final String? tag;
+  @override
+  final UserModel? creatorUser;
   @override
   @JsonKey()
   final String textContent;
   @override
   @JsonKey()
   final String id;
-  @override
-  final UserModel? creatorUser;
   final List<String> _likeByIds;
   @override
   @JsonKey()
@@ -230,12 +293,39 @@ class _$_PostModel implements _PostModel {
   @override
   @JsonKey()
   final bool enableComments;
+// @ColorIntConv() Color? colorCover,
+//~ Also use as comment, Comment variables:
   @override
-  final String? tag;
+  final String? originalPostId;
+  @override
+  @JsonKey()
+  final int commentsLength;
+  final List<String> _commentedUsersIds;
+  @override
+  @JsonKey()
+  List<String> get commentedUsersIds {
+    if (_commentedUsersIds is EqualUnmodifiableListView)
+      return _commentedUsersIds;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_commentedUsersIds);
+  }
+
+// AKA conversion users
+  final List<PostModel>? _comments;
+// AKA conversion users
+  @override
+  @JsonKey()
+  List<PostModel>? get comments {
+    final value = _comments;
+    if (value == null) return null;
+    if (_comments is EqualUnmodifiableListView) return _comments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'PostModel(textContent: $textContent, id: $id, creatorUser: $creatorUser, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, tag: $tag)';
+    return 'PostModel(tag: $tag, creatorUser: $creatorUser, textContent: $textContent, id: $id, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, originalPostId: $originalPostId, commentsLength: $commentsLength, commentedUsersIds: $commentedUsersIds, comments: $comments)';
   }
 
   @override
@@ -243,31 +333,42 @@ class _$_PostModel implements _PostModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_PostModel &&
+            (identical(other.tag, tag) || other.tag == tag) &&
+            (identical(other.creatorUser, creatorUser) ||
+                other.creatorUser == creatorUser) &&
             (identical(other.textContent, textContent) ||
                 other.textContent == textContent) &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.creatorUser, creatorUser) ||
-                other.creatorUser == creatorUser) &&
             const DeepCollectionEquality()
                 .equals(other._likeByIds, _likeByIds) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
             (identical(other.enableComments, enableComments) ||
                 other.enableComments == enableComments) &&
-            (identical(other.tag, tag) || other.tag == tag));
+            (identical(other.originalPostId, originalPostId) ||
+                other.originalPostId == originalPostId) &&
+            (identical(other.commentsLength, commentsLength) ||
+                other.commentsLength == commentsLength) &&
+            const DeepCollectionEquality()
+                .equals(other._commentedUsersIds, _commentedUsersIds) &&
+            const DeepCollectionEquality().equals(other._comments, _comments));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      tag,
+      creatorUser,
       textContent,
       id,
-      creatorUser,
       const DeepCollectionEquality().hash(_likeByIds),
       timestamp,
       enableComments,
-      tag);
+      originalPostId,
+      commentsLength,
+      const DeepCollectionEquality().hash(_commentedUsersIds),
+      const DeepCollectionEquality().hash(_comments));
 
   @JsonKey(ignore: true)
   @override
@@ -285,23 +386,29 @@ class _$_PostModel implements _PostModel {
 
 abstract class _PostModel implements PostModel {
   const factory _PostModel(
-      {final String textContent,
-      final String id,
+      {final String? tag,
       final UserModel? creatorUser,
+      final String textContent,
+      final String id,
       final List<String> likeByIds,
       @DateTimeStampConv() final DateTime? timestamp,
       final bool enableComments,
-      final String? tag}) = _$_PostModel;
+      final String? originalPostId,
+      final int commentsLength,
+      final List<String> commentedUsersIds,
+      final List<PostModel>? comments}) = _$_PostModel;
 
   factory _PostModel.fromJson(Map<String, dynamic> json) =
       _$_PostModel.fromJson;
 
   @override
+  String? get tag;
+  @override
+  UserModel? get creatorUser;
+  @override
   String get textContent;
   @override
   String get id;
-  @override
-  UserModel? get creatorUser;
   @override
   List<String> get likeByIds;
   @override
@@ -309,8 +416,15 @@ abstract class _PostModel implements PostModel {
   DateTime? get timestamp;
   @override
   bool get enableComments;
+  @override // @ColorIntConv() Color? colorCover,
+//~ Also use as comment, Comment variables:
+  String? get originalPostId;
   @override
-  String? get tag;
+  int get commentsLength;
+  @override
+  List<String> get commentedUsersIds;
+  @override // AKA conversion users
+  List<PostModel>? get comments;
   @override
   @JsonKey(ignore: true)
   _$$_PostModelCopyWith<_$_PostModel> get copyWith =>

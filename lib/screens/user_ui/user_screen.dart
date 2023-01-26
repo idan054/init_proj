@@ -45,6 +45,7 @@ class UserScreen extends StatefulWidget {
 
 class _UserScreenState extends State<UserScreen> {
   List<PostModel> postList = [];
+  var activeFilter = FilterTypes.postsByUser;
   var isBioExpanded = false;
 
   @override
@@ -63,7 +64,7 @@ class _UserScreenState extends State<UserScreen> {
     List newPosts = await Database.advanced.handleGetModel(
       ModelTypes.posts,
       postList,
-      filter: FilterTypes.postsByUser,
+      filter: activeFilter,
       uid: widget.user.uid,
     );
 
@@ -98,32 +99,36 @@ class _UserScreenState extends State<UserScreen> {
               printGreen('START: user_screen.dart onEndOfPage()');
               await _loadMore();
             },
-            child: ListView(
-              children: [
-                buildTopProfile(topPadding, context, isCurrUserProfile),
-                Transform.translate(
-                  offset: Offset(0, -(topPadding * 0.50)),
-                  child: Column(
-                    children: [
-                      buildBottomProfile(context, user),
-                      // const Divider(thickness: 2, color: AppColors.darkOutline),
-                      buildPostsDivider(isCurrUserProfile, user),
-                      3.verticalSpace,
-                      Container(
-                        color: AppColors.darkOutline,
-                        child: ListView.builder(
-                            physics: const ScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: postList.length,
-                            itemBuilder: (BuildContext context, int i) {
-                              // PostView(postList[i])
-                              return PostBlock(postList[i], isOnUserPage: true);
-                            }),
-                      ),
-                    ],
-                  ),
-                )
-              ],
+            child: DefaultTabController(
+              length: 2,
+              initialIndex: 0,
+              child: ListView(
+                children: [
+                  buildTopProfile(topPadding, context, isCurrUserProfile),
+                  Transform.translate(
+                    offset: Offset(0, -(topPadding * 0.50)),
+                    child: Column(
+                      children: [
+                        buildBottomProfile(context, user),
+                        // const Divider(thickness: 2, color: AppColors.darkOutline),
+                        5.verticalSpace,
+                        buildPostsDivider(isCurrUserProfile, user),
+                        Container(
+                          color: AppColors.darkOutline,
+                          child: ListView.builder(
+                              physics: const ScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: postList.length,
+                              itemBuilder: (BuildContext context, int i) {
+                                // PostView(postList[i])
+                                return PostBlock(postList[i], isUserPage: true);
+                              }),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -138,8 +143,27 @@ class _UserScreenState extends State<UserScreen> {
         padding: 5.vertical,
         color: AppColors.primaryDark,
         child: Builder(builder: (context) {
-          var title = isCurrUserProfile ? 'Your latest Rils' : "${user.name}'s Rils";
-          return title.toText(fontSize: 18, medium: true).centerLeft.py(12).px(25);
+          var title = isCurrUserProfile ? 'Your Rils' : "${user.name}'s Rils";
+          // return title.toText(fontSize: 18, medium: true).centerLeft.py(12).px(25);
+          return TabBar(
+            indicator: UnderlineTabIndicator(
+                borderSide: const BorderSide(width: 2.5, color: AppColors.primaryOriginal),
+                insets: 30.horizontal),
+            labelStyle: AppStyles.text14PxRegular,
+            indicatorColor: AppColors.primaryOriginal,
+            tabs: [
+              Tab(text: '$title'),
+              Tab(text: 'Conversions'),
+              // Tab(text: 'Latest'),
+              // Tab(text: 'Questions'),
+            ],
+            onTap: (value) async {
+              if (value == 0) activeFilter = FilterTypes.postsByUser;
+              if (value == 1) activeFilter = FilterTypes.postConversionsOfUser;
+              context.uniProvider.updateFeedStatus(activeFilter);
+              await _loadMore(refresh: true);
+            },
+          );
           // .pOnly(bottom: 6);
         }),
       ),
@@ -381,7 +405,7 @@ class _UserScreenState extends State<UserScreen> {
                     },
                   ),
                 ),
-                8.verticalSpace,
+                12.verticalSpace,
                 Builder(builder: (context) {
                   var commonTag = user.tags.firstWhereOrNull((tag) => currUser.tags.contains(tag));
                   return commonTag == null
@@ -397,7 +421,7 @@ class _UserScreenState extends State<UserScreen> {
                           ],
                         );
                 }),
-                if (!isCurrUser) 8.verticalSpace,
+                if (!isCurrUser) 12.verticalSpace,
               ],
             ],
           );

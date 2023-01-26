@@ -6,7 +6,7 @@ part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
 enum GenderTypes { male, female, other}
-enum UserTypes { normal, admin}
+enum UserTypes { normal, admin, blocked}
 
 
 // flutter pub run build_runner build --delete-conflicting-outputs

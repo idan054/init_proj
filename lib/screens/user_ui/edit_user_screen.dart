@@ -89,7 +89,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               // TODO Update all chats 'creatorUser' Map
 
               //! TODO TODO ADD ON POST MVP ONLY: Edit user doc update
-              // instead hundred of requests in every bio update
+              // instead hundred of requests in every bio update (Update every made user comment, Ril...)
               // just get doc by id reference + client cache isExist()
 
               Database.updateFirestore(

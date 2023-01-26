@@ -17,7 +17,7 @@ import '../timestamp_convert.dart';
 import 'db_advanced.dart';
 import 'package:hive/hive.dart';
 
-enum FilterTypes { postsByUser }
+enum FilterTypes { postsByUser , postWithoutComments, postWithComments, postConversionsOfUser}
 
 //> MUST Be same as collection name!
 enum ModelTypes { posts, chats, messages, users }
@@ -179,6 +179,29 @@ class Database {
       print('ERROR: streamUnreadCounter() E: $e');
     });
   }
+
+  static Stream<List<PostModel>>? streamComments(String postId, {required int limit}) {
+    print('START: streamComments()');
+    print('chatId $postId');
+    var reqBase = db
+        .collection('posts')
+        .doc(postId)
+        .collection('comments')
+        .orderBy('timestamp', descending: true)
+        .limit(limit);
+    // if (timestamp != null) reqBase = reqBase.startAfter([timestamp]);
+
+    return reqBase.snapshots().map((QuerySnapshot list) {
+      print('post comments - list ${list.docs.length}');
+      return list.docs.map((DocumentSnapshot snap) {
+        print('POST_COMMENT_DOC_ID: ${snap.id}');
+        return PostModel.fromJson(snap.data() as Map<String, dynamic>);
+      }).toList();
+    }).handleError((dynamic e) {
+      print('ERROR: streamMessages() E: $e');
+    });
+  }
+
 
   static Stream<List<MessageModel>>? streamMessages(String chatId, {required int limit}) {
     print('START: streamMessages()');

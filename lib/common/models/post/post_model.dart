@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/common/models/message/message_model.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../convertors.dart';
@@ -13,15 +14,20 @@ part 'post_model.g.dart';
 class PostModel with _$PostModel {
   @JsonSerializable(explicitToJson: true) // This needed for sub classes only
   const factory PostModel({
+    String? tag,
+    UserModel? creatorUser,
     @Default('') String textContent,
     @Default('') String id,
-    UserModel? creatorUser,
     @Default([]) List<String> likeByIds,
     @DateTimeStampConv() DateTime? timestamp,
     @Default(false) bool enableComments,
-    String? tag,
-    // required List<CommentsModel> comments,
     // @ColorIntConv() Color? colorCover,
+
+    //~ Also use as comment, Comment variables:
+    String? originalPostId,
+    @Default(0) int commentsLength,
+    @Default([]) List<String> commentedUsersIds, // AKA conversion users
+    @Default([]) List<PostModel>? comments,
   }) = _PostModel;
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>

@@ -3,6 +3,7 @@
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Chat/chat_services.dart';
@@ -20,6 +21,7 @@ import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/mixins/fonts.gen.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
+import '../../screens/feed_ui/comments_chat_screen.dart';
 import '../../screens/user_ui/user_screen.dart';
 import '../../screens/main_ui/dashboard_screen.dart';
 import 'dart:io';
@@ -30,11 +32,17 @@ import 'package:intl/intl.dart' as intl;
 
 // Also look for 'customRowPadding' With CTRL + SHIFT + F
 
+// todo POST call creatorUser doc on initState
+// to make sure data is updated (not old after user edit)
+// also use users cubit so it will GET every user once each session
+
 class PostBlock extends StatelessWidget {
   final PostModel post;
-  final bool isOnUserPage;
+  final bool isUserPage;
+  final bool isConversion;
 
-  const PostBlock(this.post, {this.isOnUserPage = false, Key? key}) : super(key: key);
+  const PostBlock(this.post, {this.isUserPage = false, this.isConversion = false, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +52,7 @@ class PostBlock extends StatelessWidget {
       color: AppColors.primaryDark,
       child: Column(
         children: [
-          buildProfile(context, isOnUserPage), // Doesn't require 55 Left padding.
+          buildProfile(context, isUserPage), // Doesn't require 55 Left padding.
           Column(
             children: [
               buildExpandableText(
@@ -63,12 +71,37 @@ class PostBlock extends StatelessWidget {
           ).pOnly(left: 55)
         ],
       ).pOnly(left: 15),
-    ).onTap(() {}, radius: 10);
+    ).onTap(() {
+      isUserPage
+          ? Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Scaffold(
+                          body: CommentsChatScreen(
+                        post,
+                        isFullScreen: isUserPage,
+                      ))),
+            )
+          : showModalBottomSheet(
+              backgroundColor: Colors.transparent,
+              barrierColor: Colors.black38,
+              // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
+              // barrierColor: Colors.black.withOpacity(0.00),
+              // AKA 2%
+              isScrollControlled: true,
+              enableDrag: false,
+              context: context,
+              builder: (context) {
+                return CommentsChatScreen(post);
+                // return Offstage();
+              });
+    }, radius: 10);
   }
 
-  Widget buildProfile(BuildContext context, bool isOnUserPage) {
+  Widget buildProfile(BuildContext context, bool isUserPage) {
     var currUser = context.uniProvider.currUser;
     var isCurrUser = currUser.uid == post.creatorUser!.uid;
+    var isAdmin = currUser.userType == UserTypes.admin;
 
     var postAgo = postTime(post.timestamp!);
 
@@ -78,7 +111,8 @@ class PostBlock extends StatelessWidget {
       child: ListTile(
         contentPadding: EdgeInsets.zero,
         // title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.grey50),
-        title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.white),
+        title: '${post.creatorUser?.name}'
+            .toText(fontSize: 14, bold: true, color: AppColors.white, textAlign: TextAlign.left),
         subtitle: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -107,8 +141,13 @@ class PostBlock extends StatelessWidget {
             itemBuilder: (context) {
               return [
                 PopupMenuItem(
-                  child: (isCurrUser ? 'Delete Ril' : 'Report Ril').toText(),
-                  onTap: isCurrUser
+                  child: (isAdmin && !isCurrUser
+                          ? 'Admin Delete Ril'
+                          : isCurrUser
+                              ? 'Delete Ril'
+                              : 'Report Ril')
+                      .toText(),
+                  onTap: (isCurrUser || isAdmin)
                       //> Open DELETE POPUP
                       ? () {
                           print('SETTINGS DELETE CLICKED');
@@ -123,7 +162,7 @@ class PostBlock extends StatelessWidget {
               ];
             }),
       ).pad(0).onTap(
-          isOnUserPage
+          isUserPage
               ? null
               : () {
                   print('PROFILE CLICKED');
@@ -184,6 +223,8 @@ class PostBlock extends StatelessWidget {
     var isLiked = post.likeByIds.contains(context.uniProvider.currUser.uid);
     var currUser = context.uniProvider.currUser;
     var iconColor = Colors.white60;
+    var commentEmpty = post.commentsLength == 0;
+    var title = commentEmpty ? 'New' : '${post.commentsLength} comments';
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -191,9 +232,13 @@ class PostBlock extends StatelessWidget {
         post.enableComments
             ? Row(
                 children: [
-                  Assets.svg.icons.commentsOff.svg(height: 13, color: AppColors.grey50),
+                  (commentEmpty
+                          ? Assets.svg.icons.wisdomLightStar
+                          : Assets.svg.icons.commentUntitledIcon)
+                      .svg(height: 13, color: AppColors.grey50),
                   const SizedBox(width: 7),
-                  'available soon'
+                  // 'available soon'
+                  title
                       .toText(color: AppColors.grey50, fontSize: 12)
                       .pOnly(right: 12, bottom: 5)
                       .customRowPadding,
@@ -212,21 +257,32 @@ class PostBlock extends StatelessWidget {
           //     .roundedFull,
 
           // Chat Button
-          Row(
-            children: [
-              Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: iconColor),
-              10.horizontalSpace,
-              'Reply'.toText(fontSize: 12, color: iconColor),
-            ],
-          )
-              .pOnly(
-                right: 20,
-                left: 12,
-              )
-              .customRowPadding
-              .onTap(() {
-            ChatService.openChat(context, otherUser: post.creatorUser!, postReply: post);
-          }, radius: 10)
+          post.enableComments
+              ? const Offstage()
+              //~ Comment button
+              // Row(
+              //     children: [
+              //       Assets.svg.icons.messageCommentsLines.svg(height: 17, color: iconColor),
+              //       10.horizontalSpace,
+              //       'Answer'.toText(fontSize: 12, color: iconColor),
+              //     ],
+              //   ).pOnly(right: 20, left: 12).customRowPadding.onTap(
+              //   // onAnswerTap
+              //         () {
+              //
+              //   }
+              //   , radius: 10)
+
+              //~ Reply button
+              : Row(
+                  children: [
+                    Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: iconColor),
+                    10.horizontalSpace,
+                    'Reply'.toText(fontSize: 12, color: iconColor),
+                  ],
+                ).pOnly(right: 20, left: 12).customRowPadding.onTap(() {
+                  ChatService.openChat(context, otherUser: post.creatorUser!, postReply: post);
+                }, radius: 10)
         ]
       ],
     );

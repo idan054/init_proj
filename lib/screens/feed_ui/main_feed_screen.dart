@@ -29,8 +29,9 @@ import '../../common/models/user/user_model.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/components/postBlock_sts.dart';
+import 'comments_chat_screen.dart';
 
-// Todo: Add ranks
+// region tags
 List<String> tags = [
   'Gaming',
   'Art',
@@ -55,8 +56,9 @@ List<String> tags = [
   'Writing',
   'TV',
   'Science',
-  'Fashion',
+  'Fashion'
 ];
+// endregion tags
 
 class MainFeedScreen extends StatefulWidget {
   const MainFeedScreen({Key? key}) : super(key: key);
@@ -66,12 +68,13 @@ class MainFeedScreen extends StatefulWidget {
 }
 
 class _MainFeedScreenState extends State<MainFeedScreen> {
-  var newTags = ['New', ...tags];
-  var feedController = PageController();
-  var chipsController = ScrollController();
-  List<PostModel> postList = [];
-  var splashLoader = true;
   int tagIndex = 0;
+  var splashLoader = true;
+  List<PostModel> postList = [];
+  var activeFilter = FilterTypes.postWithoutComments;
+
+  // var feedController = PageController();
+  // var chipsController = ScrollController();
 
   @override
   void initState() {
@@ -83,13 +86,25 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
   Future _loadMore({bool refresh = false}) async {
     print('START: FEED _loadMore()');
 
-    // splashLoader = true; setState(() {});
-    if (refresh) postList = [];
-    List newPosts = await Database.advanced.handleGetModel(ModelTypes.posts, postList);
+    if (refresh) {
+      splashLoader = true;
+      postList = [];
+      setState(() {});
+    }
+
+    List newPosts =
+        await Database.advanced.handleGetModel(ModelTypes.posts, postList, filter: activeFilter);
     if (newPosts.isNotEmpty) postList = [...newPosts];
     splashLoader = false;
+
+    // Temp fix
     setState(() {});
+    Future.delayed(350.milliseconds).then((_) => setState(() {}));
+    Future.delayed(350.milliseconds).then((_) => setState(() {}));
   }
+
+  Widget loader() =>
+      const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3).center;
 
   @override
   Widget build(BuildContext context) {
@@ -115,29 +130,71 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               labelStyle: AppStyles.text14PxRegular,
               indicatorColor: AppColors.primaryOriginal,
               tabs: const [
-                Tab(text: 'Latest'),
-                Tab(text: 'Questions'),
+                Tab(text: 'Members'),
+                Tab(text: 'Conversions'),
+                // Tab(text: 'Latest'),
+                // Tab(text: 'Questions'),
               ],
+              onTap: (value) async {
+                if (value == 0) activeFilter = FilterTypes.postWithoutComments;
+                if (value == 1) activeFilter = FilterTypes.postWithComments;
+                context.uniProvider.updateFeedStatus(activeFilter);
+                await _loadMore(refresh: true);
+              },
             ),
           ),
-          body: TabBarView(
-            children: [
-              buildFeed(context),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  'Available soon. meanwhile...'.toText(),
-                  Text(
-                    'Tell us what you think!',
-                    style: AppStyles.text14PxRegular
-                        .copyWith(color: AppColors.grey50, decoration: TextDecoration.underline),
-                  ).py(7).px(14).onTap(() {
-                    ChatService.chatWithUs(context);
-                  }, radius: 4)
-                ],
-              ).center,
-            ],
-          )),
+          body:  buildFeed(context),
+      ),
+    );
+  }
+
+  Widget buildFeed(BuildContext context) {
+    print('START: buildFeed()');
+
+    return LazyLoadScrollView(
+      scrollOffset: 1500,
+      onEndOfPage: () async {
+        printGreen('START: main_feed_screen.dart onEndOfPage()');
+        // context.uniProvider.updateIsLoading(true);
+        await _loadMore();
+        // context.uniProvider.updateIsLoading(false);
+      },
+      child: Builder(builder: (context) {
+        // return 'Sorry, no post found... \nTry again later!'.toText().center;
+
+        if (splashLoader || postList.isEmpty) return loader();
+
+        return RefreshIndicator(
+            backgroundColor: AppColors.darkBg,
+            color: AppColors.primaryOriginal,
+            onRefresh: () async {
+              print('START: onRefresh()');
+              await _loadMore(refresh: true);
+            },
+            child: ListView(
+              children: [
+                buildTagTitle(),
+                1.verticalSpace,
+                //   Expanded(child:
+                ListView.builder(
+                    physics: const ScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: postList.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
+                      // PostView(postList[i])
+
+                      return Column(
+                        children: [
+                          //> if (isShowAd) getAd(context),
+                          PostBlock(postList[i]),
+                        ],
+                      );
+                    }).appearOpacity,
+                //     )
+              ],
+            ));
+      }),
     );
   }
 
@@ -161,7 +218,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        '${context.uniProvider.serverConfig?.adStatus}'.toText(color: AppColors.grey50, fontSize: 10),
+        '${context.uniProvider.serverConfig?.adStatus}'
+            .toText(color: AppColors.grey50, fontSize: 10),
         SizedBox(
           width: 320,
           height: 50,
@@ -171,59 +229,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     );
   }
 
-  Widget buildFeed(BuildContext context) {
-    return LazyLoadScrollView(
-      scrollOffset: 1500,
-      onEndOfPage: () async {
-        printGreen('START: main_feed_screen.dart onEndOfPage()');
-        // context.uniProvider.updateIsLoading(true);
-        await _loadMore();
-        // context.uniProvider.updateIsLoading(false);
-      },
-      child: Builder(builder: (context) {
-        // return 'Sorry, no post found... \nTry again later!'.toText().center;
-
-        if (splashLoader || postList.isEmpty) {
-          // First time only
-          return const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3)
-              .center;
-        }
-
-        return RefreshIndicator(
-            backgroundColor: AppColors.darkBg,
-            color: AppColors.primaryOriginal,
-            onRefresh: () async {
-              print('START: onRefresh()');
-              await _loadMore(refresh: true);
-            },
-            child: ListView(
-              children: [
-                buildTagTitle(),
-                1.verticalSpace,
-                //   Expanded(child:
-                ListView.builder(
-                    physics: const ScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: postList.length,
-                    itemBuilder: (BuildContext context, int i) {
-                      bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
-                      // PostView(postList[i])
-                      return Column(
-                        children: [
-                          if (isShowAd) getAd(context),
-                          PostBlock(postList[i]),
-                        ],
-                      );
-                    }),
-                //     )
-              ],
-            ));
-      }),
-    );
-  }
-
   ListTile buildTagTitle() {
-    bool isNewTag = newTags[tagIndex] == 'New';
+    // bool isQuestionsTag = newTags[tagIndex] == 'New';
+    bool isQuestionsTag = activeFilter == FilterTypes.postWithComments;
 
     return ListTile(
       minVerticalPadding: 25,
@@ -232,17 +240,21 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
       title: Row(
         children: [
-          if (isNewTag) ...[
-            Assets.svg.icons.shieldTickUntitledIcon.svg(color: Colors.white70),
-            const SizedBox(width: 5),
-          ],
+          isQuestionsTag
+              ? Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50, height: 14)
+              : Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50, height: 20),
+          // : Assets.svg.icons.shieldTickUntitledIcon.svg(color: Colors.white70),
+          const SizedBox(width: 7),
           // (isNewTag ? 'EXPLORE 14-17 Y.O MEMBERS' : 'MEMBERS WHO INTERESTED IN')
-          (isNewTag ? 'EXPLORE MEMBERS' : 'MEMBERS WHO INTERESTED IN')
+          // (isQuestionsTag ? 'HELP & SHARE YOUR WISDOM' : 'EXPLORE MEMBERS')
+          (isQuestionsTag ? 'JOIN PUBLIC CONVERSATION' : 'EXPLORE MEMBERS')
               .toText(fontSize: 13, color: AppColors.grey50)
               .pOnly(top: 3)
         ],
-      ).pOnly(bottom: 15),
-      subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
+      ).pOnly(bottom: isQuestionsTag ? 0 : 15),
+      // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
+      subtitle:
+          isQuestionsTag ? null : 'NEW'.toUpperCase().toText(fontSize: 18, medium: true).appearAll,
     );
   }
 
@@ -358,21 +370,21 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     return SizedBox(
       height: 50.0,
       child: ListView(
-        controller: chipsController,
+        // controller: chipsController,
         scrollDirection: Axis.horizontal,
         children: List<Widget>.generate(
-          newTags.length,
+          tags.length,
           (int i) {
             var isChipSelected = tagIndex == i;
 
             return buildChoiceChip(
               context,
-              label: Text(newTags[i]),
+              label: Text(tags[i]),
               selected: isChipSelected,
               onSelect: (bool newSelection) {
                 if (newSelection) tagIndex = i;
-                context.uniProvider.updateSelectedTag(newTags[i]);
-                feedController.jumpToPage(tagIndex);
+                context.uniProvider.updateSelectedTag(tags[i]);
+                // feedController.jumpToPage(tagIndex);
                 // feedController.animateToPage(selectedTag!, duration: 250.milliseconds, curve: Curves.easeIn);
                 setState(() {});
               },

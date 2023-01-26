@@ -7,11 +7,12 @@ part of 'post_model.dart';
 // **************************************************************************
 
 _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
-      textContent: json['textContent'] as String? ?? '',
-      id: json['id'] as String? ?? '',
+      tag: json['tag'] as String?,
       creatorUser: json['creatorUser'] == null
           ? null
           : UserModel.fromJson(json['creatorUser'] as Map<String, dynamic>),
+      textContent: json['textContent'] as String? ?? '',
+      id: json['id'] as String? ?? '',
       likeByIds: (json['likeByIds'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -19,16 +20,29 @@ _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
       timestamp:
           const DateTimeStampConv().fromJson(json['timestamp'] as Timestamp?),
       enableComments: json['enableComments'] as bool? ?? false,
-      tag: json['tag'] as String?,
+      originalPostId: json['originalPostId'] as String?,
+      commentsLength: json['commentsLength'] as int? ?? 0,
+      commentedUsersIds: (json['commentedUsersIds'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      comments: (json['comments'] as List<dynamic>?)
+              ?.map((e) => PostModel.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
     );
 
 Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
     <String, dynamic>{
+      'tag': instance.tag,
+      'creatorUser': instance.creatorUser?.toJson(),
       'textContent': instance.textContent,
       'id': instance.id,
-      'creatorUser': instance.creatorUser?.toJson(),
       'likeByIds': instance.likeByIds,
       'timestamp': const DateTimeStampConv().toJson(instance.timestamp),
       'enableComments': instance.enableComments,
-      'tag': instance.tag,
+      'originalPostId': instance.originalPostId,
+      'commentsLength': instance.commentsLength,
+      'commentedUsersIds': instance.commentedUsersIds,
+      'comments': instance.comments?.map((e) => e.toJson()).toList(),
     };

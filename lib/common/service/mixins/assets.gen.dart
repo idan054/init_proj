@@ -399,6 +399,10 @@ class $AssetsSvgIconsGen {
   /// File path: assets/svg/icons/trash-03.svg
   SvgGenImage get trash03 => const SvgGenImage('assets/svg/icons/trash-03.svg');
 
+  /// File path: assets/svg/icons/wisdom_light_star.svg
+  SvgGenImage get wisdomLightStar =>
+      const SvgGenImage('assets/svg/icons/wisdom_light_star.svg');
+
   /// List of all assets
   List<SvgGenImage> get values => [
         iconClose,
@@ -428,7 +432,8 @@ class $AssetsSvgIconsGen {
         settings01,
         shareClassicUntitledIcon,
         shieldTickUntitledIcon,
-        trash03
+        trash03,
+        wisdomLightStar
       ];
 }
 

@@ -56,7 +56,8 @@ extension StringX on String {
       Text(this,
           softWrap: softWrap,
           maxLines: maxLines,
-          textAlign: textAlign,
+          textAlign: textAlign ?? (isHebrew ? TextAlign.right : TextAlign.left),
+          textDirection: isHebrew ? TextDirection.rtl : TextDirection.ltr,
           overflow: TextOverflow.ellipsis,
           style: bold
               ? AppStyles.text14PxBold.copyWith(

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +8,6 @@ import '../Database/firebase_db.dart';
 /// streamMessages() Available At [click.Database] // <<---
 
 class FeedService {
-
   // void setPostLike(MessageModel message, String chatId, WriteBatch batch) {
   //   // Todo make sure it works!
   //   print('chatId ${chatId}');
@@ -18,7 +18,6 @@ class FeedService {
   //       docName: message.messageId,
   //       toJson: {'read': true});
   // }
-
 
   // void setPostLike(BuildContext context, PostModel post, bool isLiked) {
   //   print('START: setPostLike()');
@@ -50,6 +49,27 @@ class FeedService {
   //     toJson: post.toJson(),
   //   );
   // }
+  static void addComment(BuildContext context, PostModel comment, PostModel originalPost) {
+    print('START: addComment()');
+    var currUser = context.uniProvider.currUser;
+    // var timeStamp = DateTime.now();
+    // String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);
+
+    Database.updateFirestore(
+      collection: 'posts/${comment.originalPostId}/comments',
+      docName: comment.id,
+      toJson: comment.toJson(),
+    );
+
+    Map<String, dynamic> postData = {};
+    postData['commentsLength'] = FieldValue.increment(1);
+    if (!(originalPost.commentedUsersIds.contains(currUser.uid))) {
+      postData['commentedUsersIds'] = FieldValue.arrayUnion([currUser.uid]);
+    }
+
+    Database.updateFirestore(
+        collection: 'posts', docName: comment.originalPostId, toJson: postData);
+  }
 
   static void uploadPost(BuildContext context, PostModel post) {
     print('START: uploadPost()');

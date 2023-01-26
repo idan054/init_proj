@@ -52,4 +52,5 @@ const _$GenderTypesEnumMap = {
 const _$UserTypesEnumMap = {
   UserTypes.normal: 'normal',
   UserTypes.admin: 'admin',
+  UserTypes.blocked: 'blocked',
 };

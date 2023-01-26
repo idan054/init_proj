@@ -14,7 +14,8 @@ import '../../widgets/my_widgets.dart';
 import 'main_feed_screen.dart';
 
 class CreatePostScreen extends StatefulWidget {
-  const CreatePostScreen({Key? key}) : super(key: key);
+  final bool replyStyle;
+  const CreatePostScreen(this.replyStyle, {Key? key}) : super(key: key);
 
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();
@@ -23,13 +24,13 @@ class CreatePostScreen extends StatefulWidget {
 class _CreatePostScreenState extends State<CreatePostScreen> {
   var postController = TextEditingController();
   bool isComments = false;
-  bool isTagScreen = false;
+  // bool isTagScreen = false;
   int? tagIndex;
 
   @override
   void initState() {
-    isTagScreen = context.uniProvider.selectedTag != 'New';
-    isComments = isTagScreen;
+    // isTagScreen = context.uniProvider.selectedTag != 'New';
+    isComments = !widget.replyStyle;
     super.initState();
   }
 
@@ -59,11 +60,11 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            if (isTagScreen)
-              '#$selectedTag'
-                  .toText(color: AppColors.darkOutline50)
-                  .pOnly(left: 10, top: 10)
-                  .centerLeft,
+            // if (isTagScreen)
+            //   '#$selectedTag'
+            //       .toText(color: AppColors.darkOutline50)
+            //       .pOnly(left: 10, top: 10)
+            //       .centerLeft,
             TextField(
               maxLines: 11,
               minLines: 1,
@@ -75,9 +76,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               style: AppStyles.text16PxRegular.copyWith(color: AppColors.white),
               onChanged: (val) => setState(() {}),
               // inputFormatters: [LengthLimitingTextInputFormatter(350)],
+              cursorColor: Colors.white,
               decoration: InputDecoration(
                 filled: true,
-                hintText: 'Share your Ril thoughts...',
+                hintText: isComments ? 'Start a conversion about...' : 'Share your Ril thoughts...',
                 hintStyle: AppStyles.text16PxRegular.copyWith(color: AppColors.grey50),
                 fillColor: Colors.transparent,
                 border: InputBorder.none,
@@ -93,7 +95,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                             : Assets.svg.icons.dmPlaneUntitledIcon
                                 .svg(height: 15, color: AppColors.grey50),
                         selectedColor: AppColors.darkOutline50,
-                        label: (isComments ? 'With comments' : 'Reply style') // Reply only
+                        // label: (isComments ? 'With comments' : 'Reply style') // Reply only
+                        label: (isComments ? 'Conversion style' : 'Reply style') // Reply only
                             .toText(color: isComments ? AppColors.white : AppColors.grey50),
                         onSelect: (bool newSelection) {
                   isComments = !isComments;

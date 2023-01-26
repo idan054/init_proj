@@ -32,6 +32,10 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
   List<ChatModel> chatList = [];
   Future? listenLoadMore;
 
+  // todo POST call creatorUser doc on initState
+  // to make sure data is updated (not old after user edit)
+  // also use users cubit so it will GET every user once each session
+
   @override
   void initState() {
     // TODO: ADD ON POST MVP ONLY: Get 1 doc instead all users chat.
@@ -84,7 +88,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     return Scaffold(
         backgroundColor: AppColors.primaryDark,
         appBar: darkAppBar(
-          context, title: 'Conversations',
+          context, title: 'Chats',
           hideBackButton: true,
           //     backAction: () async {
           //   await FirebaseAuth.instance.signOut();

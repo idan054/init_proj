@@ -30,7 +30,7 @@ class ChatScreen extends StatefulWidget {
   final PostModel? postReply;
   final String chatId;
 
-  ChatScreen({required this.otherUser, required this.chatId, this.postReply, this.chat, Key? key})
+  const ChatScreen({required this.otherUser, required this.chatId, this.postReply, this.chat, Key? key})
       : super(key: key);
 
   @override
@@ -135,7 +135,29 @@ class _ChatScreenState extends State<ChatScreen> {
               },
             ).expanded(),
             4.verticalSpace,
-            buildTextField(context, widget.chatId, widget.otherUser)
+            StatefulBuilder(builder: (context, stfState) {
+              return buildTextField(context,
+                  stfSetState: stfState,
+                  post: post,
+                  hintText: 'Write your message...',
+                  postOnCloseReply: () {
+                    post = null;
+                    stfState(() {});
+                  },
+                  controller: sendController,
+                  onTap: () {
+                    ChatService().sendMessage(
+                      context,
+                      chatId: widget.chatId,
+                      content: sendController.text,
+                      otherUser: widget.otherUser,
+                      postReply: post,
+                    );
+                    sendController.clear();
+                    post = null;
+                    stfState(() {});
+                  });
+            }),
           ],
         ),
       ),
@@ -156,139 +178,6 @@ class _ChatScreenState extends State<ChatScreen> {
       messages.insert(0, newMessage);
       messagesController.jumpTo(0);
     }
-  }
-
-  Widget buildTextField(BuildContext context, String chatId, UserModel otherUser) {
-    bool includeHeb = sendController.text.isHebrew;
-
-    return StatefulBuilder(builder: (context, stfSetState) {
-      return Column(
-        children: [
-          if (post != null)
-            buildReplyField(post!, onTap: () {
-              post = null;
-              stfSetState(() {});
-            }),
-          3.verticalSpace,
-          TextField(
-            // onTapOutside: (event) => setState(() => sendNode.unfocus()),
-            autofocus: post != null,
-            controller: sendController,
-            style: AppStyles.text16PxRegular.white,
-            keyboardType: TextInputType.multiline,
-            minLines: 1,
-            maxLines: 5,
-            textAlign: includeHeb ? TextAlign.end : TextAlign.start,
-            cursorColor: AppColors.white,
-            onChanged: (val) => stfSetState(() {}),
-            decoration: InputDecoration(
-              filled: true,
-              // fillColor: AppColors.primaryLight,
-              fillColor: AppColors.darkOutline50,
-              hintStyle: AppStyles.text14PxRegular.greyLight,
-              focusedBorder: InputBorder.none,
-              hintText: 'Write your message...',
-              suffixIcon: buildSendButton(
-                isActive: sendController.text.isNotEmpty,
-                onTap: () {
-                  ChatService().sendMessage(
-                    context,
-                    chatId: chatId,
-                    content: sendController.text,
-                    otherUser: otherUser,
-                    postReply: post,
-                  );
-                  sendController.clear();
-                  post = null;
-                  stfSetState(() {});
-                },
-              ),
-            ),
-          )
-              .roundedOnly(
-                bottomLeft: 10,
-                topLeft: post != null ? 3 : 10,
-                topRight: post != null ? 3 : 10,
-                bottomRight: 10,
-              )
-              .pOnly(bottom: 6),
-        ],
-      ).px(8);
-    });
-  }
-
-  Widget buildReplyField(PostModel post, {GestureTapCallback? onTap}) {
-    return Builder(builder: (context) {
-      return Container(
-              color: AppColors.darkOutline50,
-              // color: AppColors.primaryLight,
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: buildReplyProfile(context, post,
-                  actionButton: Icons.close_rounded
-                      .icon(size: 22, color: AppColors.grey50)
-                      // Assets.svg.close.svg(height: 17, color: AppColors.grey50)
-                      .pad(13)
-                      .onTap(onTap, radius: 10)))
-          .roundedOnly(
-        bottomLeft: 3,
-        topLeft: 10,
-        topRight: 10,
-        bottomRight: 3,
-      );
-    });
-  }
-
-  Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionButton}) {
-    var name = '${post.creatorUser?.name}';
-    var shortName = name.length > 13 ? name.substring(0, 13) + '...'.toString() : name;
-    var postAgo = postTime(post.timestamp!);
-    return Column(
-      children: [
-        5.verticalSpace,
-        Row(
-          // mainAxisSize: MainAxisSize.min,
-          children: [
-            Stack(
-              children: [
-                CircleAvatar(
-                  radius: 20,
-                  backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
-                  backgroundColor: AppColors.darkOutline,
-                ),
-                // buildOnlineBadge(),
-              ],
-            ),
-            10.horizontalSpace,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                shortName.toText(fontSize: 14, bold: true, color: AppColors.white, softWrap: false),
-                postAgo
-                    .toText(color: AppColors.grey50, fontSize: 11)
-                    .pOnly(right: 10, top: 0, bottom: 0),
-              ],
-            ),
-            // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
-            const Spacer(),
-            // .onTap(() {}, radius: 10), // TODO Add move to Tag
-            // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
-            actionButton ?? const Offstage()
-            // 10.horizontalSpace,
-          ],
-        ),
-        4.verticalSpace,
-        buildExpandableText(
-                // 'Example : let’s try to think of an topic or fdsk conte tou fc words as possible... I think I’ve already ',
-                post.textContent,
-                maxLines: 4,
-                textAlign: post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
-                textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
-                style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50))
-            .advancedSizedBox(context, maxWidth: true)
-            .pOnly(left: 50, bottom: 5, right: 45)
-      ],
-    );
   }
 
   Widget buildBubble(BuildContext context, MessageModel message, bool isLastMessage) {
@@ -334,6 +223,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             if (message.postReply != null) Row(), // AKA Expanded
                             Text(message.textContent!,
                                 textAlign: isHebrew ? TextAlign.end : TextAlign.start,
+                                textDirection: isHebrew ? TextDirection.rtl : TextDirection.ltr,
                                 style: AppStyles.text16PxRegular.white),
                             5.verticalSpace,
                             Text(message.createdAt!.substring(9, 14),
@@ -378,4 +268,129 @@ class _ChatScreenState extends State<ChatScreen> {
               }, radius: 10),
             )));
   }
+}
+
+Widget buildReplyField(PostModel post, {GestureTapCallback? onTap}) {
+  return Builder(builder: (context) {
+    return Container(
+            color: AppColors.darkOutline50,
+            // color: AppColors.primaryLight,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            child: buildReplyProfile(context, post,
+                actionButton: Icons.close_rounded
+                    .icon(size: 22, color: AppColors.grey50)
+                    // Assets.svg.close.svg(height: 17, color: AppColors.grey50)
+                    .pad(13)
+                    .onTap(onTap, radius: 10)))
+        .roundedOnly(
+      bottomLeft: 3,
+      topLeft: 10,
+      topRight: 10,
+      bottomRight: 3,
+    );
+  });
+}
+
+Widget buildTextField(
+  BuildContext context, {
+  required TextEditingController controller,
+  required StateSetter stfSetState,
+  GestureTapCallback? onTap,
+  PostModel? post,
+  GestureTapCallback? postOnCloseReply,
+  String? hintText,
+}) {
+  bool includeHeb = controller.text.isHebrew;
+
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      if (post != null) buildReplyField(post, onTap: postOnCloseReply),
+      3.verticalSpace,
+      TextField(
+        // onTapOutside: (event) => setState(() => sendNode.unfocus()),
+        autofocus: post != null,
+        controller: controller,
+        style: AppStyles.text16PxRegular.white,
+        keyboardType: TextInputType.multiline,
+        minLines: 1,
+        maxLines: 5,
+        textAlign: controller.text.isEmpty
+            ? TextAlign.start
+            : includeHeb
+                ? TextAlign.end
+                : TextAlign.start,
+        cursorColor: AppColors.white,
+        onChanged: (val) => stfSetState(() {}),
+        decoration: InputDecoration(
+            filled: true,
+            // fillColor: AppColors.primaryLight,
+            fillColor: AppColors.darkOutline50,
+            hintStyle: AppStyles.text14PxRegular.greyLight,
+            focusedBorder: InputBorder.none,
+            hintText: hintText,
+            suffixIcon: buildSendButton(isActive: controller.text.isNotEmpty, onTap: onTap)),
+      )
+          .roundedOnly(
+            bottomLeft: 10,
+            topLeft: post != null ? 3 : 10,
+            topRight: post != null ? 3 : 10,
+            bottomRight: 10,
+          )
+          .pOnly(bottom: 6),
+    ],
+  ).px(8);
+}
+
+Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionButton}) {
+  var name = '${post.creatorUser?.name}';
+  var shortName = name.length > 13 ? name.substring(0, 13) + '...'.toString() : name;
+  var postAgo = postTime(post.timestamp!);
+  return Column(
+    children: [
+      5.verticalSpace,
+      Row(
+        // mainAxisSize: MainAxisSize.min,
+        children: [
+          Stack(
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
+                backgroundColor: AppColors.darkOutline,
+              ),
+              // buildOnlineBadge(),
+            ],
+          ),
+          10.horizontalSpace,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              shortName.toText(fontSize: 14, bold: true, color: AppColors.white, softWrap: false),
+              postAgo
+                  .toText(color: AppColors.grey50, fontSize: 11)
+                  .pOnly(right: 10, top: 0, bottom: 0),
+            ],
+          ),
+          // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
+          const Spacer(),
+          // .onTap(() {}, radius: 10), // TODO Add move to Tag
+          // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
+          actionButton ?? const Offstage()
+          // 10.horizontalSpace,
+        ],
+      ),
+      4.verticalSpace,
+      buildExpandableText(
+              // 'Example : let’s try to think of an topic or fdsk conte tou fc words as possible... I think I’ve already ',
+              post.textContent,
+              maxLines: 4,
+              textAlign: post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
+              textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+              style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50))
+          .advancedSizedBox(context, maxWidth: true)
+          .pOnly(left: 50, bottom: 5, right: 45)
+    ],
+  );
 }

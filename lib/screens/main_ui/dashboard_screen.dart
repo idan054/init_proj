@@ -83,8 +83,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       backgroundColor: AppColors.primaryDark,
       body: PageView(
           controller: _pageController,
-          // physics: const NeverScrollableScrollPhysics(), // disable swipe
-          onPageChanged: (i) => _handleIndexChanged(i, false),
+          physics: const NeverScrollableScrollPhysics(), // disable swipe
+          // onPageChanged: (i) => _handleIndexChanged(i, false),
           children: const <Widget>[
             MainFeedScreen(),
             ChatsListScreen(),
@@ -146,7 +146,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       isScrollControlled: true,
                       context: context,
                       builder: (context) {
-                        return const CreatePostScreen();
+                        var replyStyle = context.uniProvider.feedStatus == FilterTypes.postWithoutComments;
+                        print('replyStyle ${replyStyle}');
+                        return CreatePostScreen(replyStyle);
                       });
                 },
                 child: Container(

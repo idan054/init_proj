@@ -1,5 +1,6 @@
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
+import 'package:example/common/models/post/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,11 +41,12 @@ extension ContextX on BuildContext {
       Provider.of<List<MessageModel>>(this);
 
 //
-  List<ChatModel> get chatsModelList =>
-      Provider.of<List<ChatModel>>(this, listen: false);
+  List<ChatModel> get chatsModelList => Provider.of<List<ChatModel>>(this, listen: false);
 
-  List<ChatModel> get listenChatsModelList =>
-      Provider.of<List<ChatModel>>(this);
+  List<ChatModel> get listenChatsModelList => Provider.of<List<ChatModel>>(this);
+
+  List<PostModel> get commentPostModelList => Provider.of<List<PostModel>>(this, listen: false);
+  List<PostModel> get listenCommentPostModelList => Provider.of<List<PostModel>>(this);
 
   //width & height
   double get width => MediaQuery.of(this).size.width;
