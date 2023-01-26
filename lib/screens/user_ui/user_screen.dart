@@ -485,14 +485,16 @@ ExpandableText buildExpandableText(String text,
     TextAlign? textAlign,
     TextDirection? textDirection,
     int? maxLines,
-    ValueChanged<bool>? onChanged}) {
+    ValueChanged<bool>? onChanged,
+    Color? linkColor
+    }) {
   return ExpandableText(text,
       maxLines: maxLines ?? 5,
       textAlign: textAlign ?? TextAlign.center,
       onExpandedChanged: onChanged,
       expandText: 'Expand',
       collapseText: 'Collape',
-      linkColor: AppColors.primaryLight2,
+      linkColor: linkColor ?? AppColors.primaryLight2,
       animation: true,
       animationDuration: 1000.milliseconds,
       textDirection: textDirection,

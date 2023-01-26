@@ -161,7 +161,7 @@ class Database {
   // cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   // );
 
-  static Stream<int?>? streamUnreadCounter(BuildContext context) {
+  static Stream<int> streamUnreadCounter(BuildContext context) {
     var currUser = context.uniProvider.currUser;
     print('START: streamUnreadCounter()');
     var reqBase = db.collection('users').doc(currUser.email);
@@ -174,7 +174,7 @@ class Database {
       var updatedUser = UserModel.fromJson(docUpdate.data() as Map<String, dynamic>);
       context.uniProvider.updateUser(updatedUser);
 
-      return updatedUser.unreadCounter;
+      return updatedUser.unreadCounter ?? 0;
     }).handleError((dynamic e) {
       print('ERROR: streamUnreadCounter() E: $e');
     });

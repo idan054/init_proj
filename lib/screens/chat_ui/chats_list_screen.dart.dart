@@ -107,10 +107,8 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
         body: Builder(builder: (context) {
           if (splashLoader) {
             // First time only
-            return const CircularProgressIndicator(
-              color: AppColors.primaryLight,
-              strokeWidth: 3,
-            ).center;
+            return const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3)
+                .center;
           }
 
           if (chatList.isEmpty) {

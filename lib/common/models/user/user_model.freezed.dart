@@ -28,7 +28,7 @@ mixin _$UserModel {
   int? get age => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
   bool? get isOnline => throw _privateConstructorUsedError;
-  int? get unreadCounter =>
+  int get unreadCounter =>
       throw _privateConstructorUsedError; // int? userScore, // Example: 0 = Block Forever.
   GenderTypes? get gender => throw _privateConstructorUsedError;
   UserTypes? get userType => throw _privateConstructorUsedError;
@@ -56,7 +56,7 @@ abstract class $UserModelCopyWith<$Res> {
       int? age,
       String? photoUrl,
       bool? isOnline,
-      int? unreadCounter,
+      int unreadCounter,
       GenderTypes? gender,
       UserTypes? userType,
       List<String> tags,
@@ -84,7 +84,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? age = freezed,
     Object? photoUrl = freezed,
     Object? isOnline = freezed,
-    Object? unreadCounter = freezed,
+    Object? unreadCounter = null,
     Object? gender = freezed,
     Object? userType = freezed,
     Object? tags = null,
@@ -123,10 +123,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
               as bool?,
-      unreadCounter: freezed == unreadCounter
+      unreadCounter: null == unreadCounter
           ? _value.unreadCounter
           : unreadCounter // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       gender: freezed == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -163,7 +163,7 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       int? age,
       String? photoUrl,
       bool? isOnline,
-      int? unreadCounter,
+      int unreadCounter,
       GenderTypes? gender,
       UserTypes? userType,
       List<String> tags,
@@ -189,7 +189,7 @@ class __$$_UserModelCopyWithImpl<$Res>
     Object? age = freezed,
     Object? photoUrl = freezed,
     Object? isOnline = freezed,
-    Object? unreadCounter = freezed,
+    Object? unreadCounter = null,
     Object? gender = freezed,
     Object? userType = freezed,
     Object? tags = null,
@@ -228,10 +228,10 @@ class __$$_UserModelCopyWithImpl<$Res>
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
               as bool?,
-      unreadCounter: freezed == unreadCounter
+      unreadCounter: null == unreadCounter
           ? _value.unreadCounter
           : unreadCounter // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as int,
       gender: freezed == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
@@ -265,7 +265,7 @@ class _$_UserModel implements _UserModel {
       this.age,
       this.photoUrl,
       this.isOnline,
-      this.unreadCounter,
+      this.unreadCounter = 0,
       this.gender,
       this.userType = UserTypes.normal,
       final List<String> tags = const [],
@@ -292,7 +292,8 @@ class _$_UserModel implements _UserModel {
   @override
   final bool? isOnline;
   @override
-  final int? unreadCounter;
+  @JsonKey()
+  final int unreadCounter;
 // int? userScore, // Example: 0 = Block Forever.
   @override
   final GenderTypes? gender;
@@ -384,7 +385,7 @@ abstract class _UserModel implements UserModel {
       final int? age,
       final String? photoUrl,
       final bool? isOnline,
-      final int? unreadCounter,
+      final int unreadCounter,
       final GenderTypes? gender,
       final UserTypes? userType,
       final List<String> tags,
@@ -410,7 +411,7 @@ abstract class _UserModel implements UserModel {
   @override
   bool? get isOnline;
   @override
-  int? get unreadCounter;
+  int get unreadCounter;
   @override // int? userScore, // Example: 0 = Block Forever.
   GenderTypes? get gender;
   @override

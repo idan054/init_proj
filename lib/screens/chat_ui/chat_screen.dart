@@ -30,7 +30,8 @@ class ChatScreen extends StatefulWidget {
   final PostModel? postReply;
   final String chatId;
 
-  const ChatScreen({required this.otherUser, required this.chatId, this.postReply, this.chat, Key? key})
+  const ChatScreen(
+      {required this.otherUser, required this.chatId, this.postReply, this.chat, Key? key})
       : super(key: key);
 
   @override
@@ -263,9 +264,9 @@ class _ChatScreenState extends State<ChatScreen> {
             child: buildReplyProfile(
               context,
               message.postReply!,
-              actionButton: 'View Ril'.toText(medium: true).pad(13).onTap(() {
-                // TODO LATER LIST: Add View Ril Reply OnTap
-              }, radius: 10),
+              // actionButton: 'View Ril'.toText(medium: true).pad(13).onTap(() {
+              //   TODO LATER LIST: Add View Ril Reply OnTap
+              // }, radius: 10),
             )));
   }
 }
@@ -383,14 +384,14 @@ Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionBu
       ),
       4.verticalSpace,
       buildExpandableText(
-              // 'Example : let’s try to think of an topic or fdsk conte tou fc words as possible... I think I’ve already ',
-              post.textContent,
-              maxLines: 4,
-              textAlign: post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
-              textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
-              style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50))
-          .advancedSizedBox(context, maxWidth: true)
-          .pOnly(left: 50, bottom: 5, right: 45)
+        // 'Example : let’s try to think of an topic or fdsk conte tou fc words as possible... I think I’ve already ',
+        post.textContent,
+        maxLines: 4,
+        textAlign: post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
+        textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+        style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50),
+        linkColor: AppColors.greyLight,
+      ).advancedSizedBox(context, maxWidth: true).pOnly(left: 50, bottom: 5, right: 45)
     ],
   );
 }

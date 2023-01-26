@@ -322,9 +322,9 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
             child: buildReplyProfile(
               context,
               message.postReply!,
-              actionButton: 'View Ril'.toText(medium: true).pad(13).onTap(() {
-                // TODO LATER LIST: Add View Ril Reply OnTap
-              }, radius: 10),
+              // actionButton: 'View Ril'.toText(medium: true).pad(13).onTap(() {
+              //   TODO LATER LIST: Add View Ril Reply OnTap
+              // }, radius: 10),
             )));
   }
 

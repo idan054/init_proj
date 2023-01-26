@@ -19,7 +19,7 @@ import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import '../../common/extensions/color_printer.dart';
@@ -120,30 +120,30 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       length: 2,
       initialIndex: 0,
       child: Scaffold(
-          backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.darkOutline,
-          appBar: _buildRiltopiaAppBar(
-            context,
-            bottom: TabBar(
-              indicator: UnderlineTabIndicator(
-                  borderSide: const BorderSide(width: 2.5, color: AppColors.primaryOriginal),
-                  insets: 30.horizontal),
-              labelStyle: AppStyles.text14PxRegular,
-              indicatorColor: AppColors.primaryOriginal,
-              tabs: const [
-                Tab(text: 'Members'),
-                Tab(text: 'Conversions'),
-                // Tab(text: 'Latest'),
-                // Tab(text: 'Questions'),
-              ],
-              onTap: (value) async {
-                if (value == 0) activeFilter = FilterTypes.postWithoutComments;
-                if (value == 1) activeFilter = FilterTypes.postWithComments;
-                context.uniProvider.updateFeedStatus(activeFilter);
-                await _loadMore(refresh: true);
-              },
-            ),
+        backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.darkOutline,
+        appBar: _buildRiltopiaAppBar(
+          context,
+          bottom: TabBar(
+            indicator: UnderlineTabIndicator(
+                borderSide: const BorderSide(width: 2.5, color: AppColors.primaryOriginal),
+                insets: 30.horizontal),
+            labelStyle: AppStyles.text14PxRegular,
+            indicatorColor: AppColors.primaryOriginal,
+            tabs: const [
+              Tab(text: 'Members'),
+              Tab(text: 'Conversions'),
+              // Tab(text: 'Latest'),
+              // Tab(text: 'Questions'),
+            ],
+            onTap: (value) async {
+              if (value == 0) activeFilter = FilterTypes.postWithoutComments;
+              if (value == 1) activeFilter = FilterTypes.postWithComments;
+              context.uniProvider.updateFeedStatus(activeFilter);
+              await _loadMore(refresh: true);
+            },
           ),
-          body:  buildFeed(context),
+        ),
+        body: buildFeed(context),
       ),
     );
   }
@@ -198,36 +198,36 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     );
   }
 
-  Widget getAd(BuildContext context) {
-    BannerAdListener bannerAdListener = BannerAdListener(onAdWillDismissScreen: (ad) {
-      ad.dispose();
-    }, onAdClosed: (ad) {
-      debugPrint("Ad Got Closeed");
-    });
-    BannerAd bannerAd = BannerAd(
-      size: AdSize.banner,
-      adUnitId: Platform.isAndroid
-          ? "ca-app-pub-3940256099942544/6300978111"
-          : "ca-app-pub-3940256099942544/2934735716",
-      listener: bannerAdListener,
-      request: const AdRequest(),
-    );
-
-    bannerAd.load();
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        '${context.uniProvider.serverConfig?.adStatus}'
-            .toText(color: AppColors.grey50, fontSize: 10),
-        SizedBox(
-          width: 320,
-          height: 50,
-          child: AdWidget(ad: bannerAd),
-        ),
-      ],
-    );
-  }
+  // Widget getAd(BuildContext context) {
+  //   BannerAdListener bannerAdListener = BannerAdListener(onAdWillDismissScreen: (ad) {
+  //     ad.dispose();
+  //   }, onAdClosed: (ad) {
+  //     debugPrint("Ad Got Closeed");
+  //   });
+  //   BannerAd bannerAd = BannerAd(
+  //     size: AdSize.banner,
+  //     adUnitId: Platform.isAndroid
+  //         ? "ca-app-pub-3940256099942544/6300978111"
+  //         : "ca-app-pub-3940256099942544/2934735716",
+  //     listener: bannerAdListener,
+  //     request: const AdRequest(),
+  //   );
+  //
+  //   bannerAd.load();
+  //
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       '${context.uniProvider.serverConfig?.adStatus}'
+  //           .toText(color: AppColors.grey50, fontSize: 10),
+  //       SizedBox(
+  //         width: 320,
+  //         height: 50,
+  //         child: AdWidget(ad: bannerAd),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   ListTile buildTagTitle() {
     // bool isQuestionsTag = newTags[tagIndex] == 'New';
@@ -258,6 +258,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     );
   }
 
+
   AppBar _buildRiltopiaAppBar(BuildContext context, {PreferredSizeWidget? bottom}) {
     var currUser = context.uniProvider.currUser;
 
@@ -267,88 +268,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       // backgroundColor: AppColors.darkBg,
       title: riltopiaHorizontalLogo(ratio: 1.15).pOnly(bottom: 5, right: 5, left: 5, top: 5),
       // .onTap(() {}, radius: 8),
-      actions: [
-        CircleAvatar(
-          backgroundColor: AppColors.primaryDark,
-          child: CircleAvatar(
-            radius: 16,
-            backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl!),
-            backgroundColor: AppColors.darkOutline50,
-          ),
-        ).px(10).py(5).onTap(() {
-          showRilDialog(
-            context,
-            title: null,
-            desc: Column(
-              children: [
-                //~ Profile
-                SizedBox(
-                  height: 68,
-                  // height: 72, // 72: original size 60: min size
-                  child: ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    // title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.grey50),
-                    title:
-                        '${currUser.name}'.toText(fontSize: 14, bold: true, color: AppColors.white),
-                    subtitle: 'SEE YOUR PROFILE'
-                        .toText(color: AppColors.grey50, fontSize: 12)
-                        .pOnly(right: 10, top: 4, bottom: 10),
-                    leading: CircleAvatar(
-                      radius: 20,
-                      backgroundImage: NetworkImage('${currUser.photoUrl}'),
-                      backgroundColor: AppColors.darkOutline,
-                    ),
-                    // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
-                  ).pad(0).onTap(() {
-                    print('PROFILE CLICKED');
-                    Navigator.pop(context);
-                    context.router.push(UserRoute(user: currUser));
-                  }, radius: 5),
-                ),
-                // TODO ADD ON POST MVP ONLY: Add Edit Tags https://prnt.sc/6wXKp7BfpcKx
-                const Divider(thickness: 2.5, color: AppColors.darkOutline).py(10),
-
-                //~ Chat with us
-                SizedBox(
-                  height: 50,
-                  // height: 72, // 72: original size 60: min size
-                  child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          horizontalTitleGap: 0,
-                          title: 'Chat with us'
-                              .toText(fontSize: 14, medium: true, color: AppColors.grey50),
-                          leading:
-                              Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.grey50))
-                      .pad(0)
-                      .onTap(() {
-                    Navigator.pop(context);
-                    ChatService.chatWithUs(context);
-                  }, radius: 5),
-                ),
-
-                //~ Log out
-                SizedBox(
-                  height: 50,
-                  // height: 72, // 72: original size 60: min size
-                  child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          horizontalTitleGap: 0,
-                          title:
-                              'Log out'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
-                          leading: Assets.svg.icons.logOut01.svg(color: AppColors.grey50))
-                      .pad(0)
-                      .onTap(() {
-                    context.router.replaceAll([const LoginRoute()]);
-                  }, radius: 5),
-                ),
-              ],
-            ),
-            barrierDismissible: true,
-            showCancelBtn: false,
-          );
-          // context.router.push(UserRoute(user: context.uniProvider.currUser));
-        })
-      ],
+      actions: [appBarProfile(context)],
 
       // TODO ADD ON POST MVP ONLY (Notification page)
       // actions: [Assets.svg.icons.bellUntitledIcon.svg().px(20).onTap(() {})],
@@ -395,6 +315,89 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     );
   }
 }
+
+Widget appBarProfile(BuildContext context) {
+  var currUser = context.uniProvider.currUser;
+
+  return CircleAvatar(
+    backgroundColor: AppColors.primaryDark,
+    child: CircleAvatar(
+      radius: 16,
+      backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl!),
+      backgroundColor: AppColors.darkOutline50,
+    ),
+  ).px(10).py(5).onTap(() {
+    showRilDialog(
+      context,
+      title: null,
+      desc: Column(
+        children: [
+          //~ Profile
+          SizedBox(
+            height: 68,
+            // height: 72, // 72: original size 60: min size
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              // title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.grey50),
+              title: '${currUser.name}'.toText(fontSize: 14, bold: true, color: AppColors.white),
+              subtitle: 'SEE YOUR PROFILE'
+                  .toText(color: AppColors.grey50, fontSize: 12)
+                  .pOnly(right: 10, top: 4, bottom: 10),
+              leading: CircleAvatar(
+                radius: 20,
+                backgroundImage: NetworkImage('${currUser.photoUrl}'),
+                backgroundColor: AppColors.darkOutline,
+              ),
+              // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
+            ).pad(0).onTap(() {
+              print('PROFILE CLICKED');
+              Navigator.pop(context);
+              context.router.push(UserRoute(user: currUser));
+            }, radius: 5),
+          ),
+          // TODO ADD ON POST MVP ONLY: Add Edit Tags https://prnt.sc/6wXKp7BfpcKx
+          const Divider(thickness: 2.5, color: AppColors.darkOutline).py(10),
+
+          //~ Chat with us
+          SizedBox(
+            height: 50,
+            // height: 72, // 72: original size 60: min size
+            child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                horizontalTitleGap: 0,
+                title: 'Chat with us'
+                    .toText(fontSize: 14, medium: true, color: AppColors.grey50),
+                leading: Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.grey50))
+                .pad(0)
+                .onTap(() {
+              Navigator.pop(context);
+              ChatService.chatWithUs(context);
+            }, radius: 5),
+          ),
+
+          //~ Log out
+          SizedBox(
+            height: 50,
+            // height: 72, // 72: original size 60: min size
+            child: ListTile(
+                contentPadding: EdgeInsets.zero,
+                horizontalTitleGap: 0,
+                title: 'Log out'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
+                leading: Assets.svg.icons.logOut01.svg(color: AppColors.grey50))
+                .pad(0)
+                .onTap(() {
+              context.router.replaceAll([const LoginRoute()]);
+            }, radius: 5),
+          ),
+        ],
+      ),
+      barrierDismissible: true,
+      showCancelBtn: false,
+    );
+    // context.router.push(UserRoute(user: context.uniProvider.currUser));
+  });
+}
+
 
 Widget buildChoiceChip(BuildContext context,
     {bool showCloseIcon = false,

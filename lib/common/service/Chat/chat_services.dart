@@ -58,25 +58,21 @@ class ChatService {
     }
     print('chatId $chatId');
 
-
-     return context.router.push(ChatRoute(
-        otherUser: otherUser,
-        postReply: postReply,
-        chatId: chatId,
-        chat: chat,
-      ));
+    return context.router.push(ChatRoute(
+      otherUser: otherUser,
+      postReply: postReply,
+      chatId: chatId,
+      chat: chat,
+    ));
   }
 
-  static void clearUnread(userUnreadCounter, userEmail, ChatModel chat) {
+  static void clearUnread(int userUnreadCounter, userEmail, ChatModel chat) {
     print('START: clearUnread()');
     // var currUser = context.uniProvider.currUser;
     var unread = chat.unreadCounter;
     print('unread ${unread}');
 
-    if (unread != null &&
-        unread != 0 &&
-        // decrease until 0
-        (userUnreadCounter ?? 0 - unread) >= 0) {
+    if (unread != null && unread != 0 && userUnreadCounter > 0) {
       print('START: clearUnread() [if]');
 
       // From chat & user collections.

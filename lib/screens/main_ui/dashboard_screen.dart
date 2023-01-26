@@ -147,7 +147,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       context: context,
                       builder: (context) {
                         var replyStyle = context.uniProvider.feedStatus == FilterTypes.postWithoutComments;
-                        print('replyStyle ${replyStyle}');
+                        // print('replyStyle ${replyStyle}');
                         return CreatePostScreen(replyStyle);
                       });
                 },
@@ -168,7 +168,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // int? counter = context.listenUniProvider.currUser.unreadCounter;
 
     // return StreamProvider<int?>(
-    return StreamBuilder<int?>( //> BETTER Because can handle stream Collection / Doc (!)
+    return StreamBuilder<int>( //> BETTER Because can handle stream Collection / Doc (!)
       stream: Database.streamUnreadCounter(context),
       initialData: 0,
       builder: (context, snapshot) {

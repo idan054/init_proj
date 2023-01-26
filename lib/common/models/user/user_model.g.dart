@@ -15,7 +15,7 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
       age: json['age'] as int?,
       photoUrl: json['photoUrl'] as String?,
       isOnline: json['isOnline'] as bool?,
-      unreadCounter: json['unreadCounter'] as int?,
+      unreadCounter: json['unreadCounter'] as int? ?? 0,
       gender: $enumDecodeNullable(_$GenderTypesEnumMap, json['gender']),
       userType: $enumDecodeNullable(_$UserTypesEnumMap, json['userType']) ??
           UserTypes.normal,

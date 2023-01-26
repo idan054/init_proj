@@ -13,7 +13,7 @@ Widget rilFlushBar(BuildContext context, String text,
     flushbarPosition: FlushbarPosition.TOP,
     margin: const EdgeInsets.only(left: 30, right: 30, top: 40),
     borderRadius: BorderRadius.all(10.circular),
-    isDismissible: false,
+    isDismissible: true,
     duration: (duration ?? 3).seconds,
     // titleText: "Hello Hero".toText(color: AppColors.darkBg, medium: true, fontSize: 16),
     messageText: Shimmer.fromColors(

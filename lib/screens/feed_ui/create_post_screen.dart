@@ -30,7 +30,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     // isTagScreen = context.uniProvider.selectedTag != 'New';
-    isComments = !widget.replyStyle;
+    isComments = widget.replyStyle;
     super.initState();
   }
 
