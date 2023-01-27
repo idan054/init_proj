@@ -66,32 +66,35 @@ class ChatService {
     ));
   }
 
-  static void clearUnread(int userUnreadCounter, userEmail, ChatModel chat) {
-    print('START: clearUnread()');
-    // var currUser = context.uniProvider.currUser;
-    var unread = chat.unreadCounter;
-    print('unread ${unread}');
+  static void resetChatUnread(BuildContext context, String chatId) {
+    print('START: resetChatUnread()');
+    var currUser = context.uniProvider.currUser;
+    // var unread = chat.unreadCounter;
+    // print('unread $unread');
 
-    if (unread != null && unread != 0 && userUnreadCounter > 0) {
-      print('START: clearUnread() [if]');
+    Database.updateFirestore(
+      collection: 'chats',
+      docName: chatId,
+      toJson: {
+        'metadata': {'unreadCounter#${currUser.uid}' : 0}
+      },
+    );
 
-      // From chat & user collections.
-      Database.updateFirestore(
-        collection: 'users',
-        docName: userEmail,
-        toJson: {
-          'unreadCounter': FieldValue.increment(-unread), // Overall to user
-        },
-      );
-
-      Database.updateFirestore(
-        collection: 'chats',
-        docName: chat.id,
-        toJson: {
-          'unreadCounter': FieldValue.increment(-unread), // Overall to user
-        },
-      );
-    }
+    // if (unread != null && unread != 0 && userUnreadCounter > 0) {
+    //   print('START: resetChatUnread() [if]');
+    //
+    //   // From chat & user collections.
+    //   // Database.updateFirestore(
+    //   //   collection: 'users',
+    //   //   docName: userEmail,
+    //   //   toJson: {
+    //   //     'unreadCounter': FieldValue.increment(-unread), // Overall to user
+    //   //   },
+    //   // );
+    //   //
+    //
+    //
+    // }
   }
 
   static void chatWithUs(BuildContext context) {
@@ -135,6 +138,7 @@ class ChatService {
       textContent: content,
       fromId: fromId!,
       toId: toId!,
+      isRead: false,
       createdAt: createdAtStr,
       timestamp: timeStamp,
       postReply: postReply,
@@ -148,7 +152,8 @@ class ChatService {
       usersIds: [context.uniProvider.currUser.uid!, otherUser.uid!],
     );
     var chatJson = chatData.toJson();
-    chatJson['unreadCounter'] = FieldValue.increment(1); // to chat
+    chatJson['metadata'] = {};
+    chatJson['metadata']['unreadCounter#${otherUser.uid}'] = FieldValue.increment(1); // to chat
 
     // Start a Batch requests.
     // var sendMessageBatch = Database.db.batch();
@@ -166,14 +171,14 @@ class ChatService {
         docName: messageId,
         toJson: messageData.toJson());
 
-    Database.updateFirestore(
-      // batch: sendMessageBatch,
-      collection: 'users',
-      docName: otherUser.email,
-      toJson: {
-        'unreadCounter': FieldValue.increment(1), // Overall to user
-      },
-    );
+    // Database.updateFirestore(
+    //   // batch: sendMessageBatch,
+    //   collection: 'users',
+    //   docName: otherUser.email,
+    //   toJson: {
+    //     'unreadCounter': FieldValue.increment(1), // Overall to user
+    //   },
+    // );
 
     // sendMessageBatch.commit();
   }

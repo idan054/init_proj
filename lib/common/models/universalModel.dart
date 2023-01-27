@@ -14,11 +14,11 @@ import 'package:flutter/foundation.dart';
 class UniProvider with ChangeNotifier {
   AppConfigModel localConfig = AppConfigModel(
     //~ ------------------- Edit this:
-    publicVersionAndroid: 1,        //~ |
-    publicVersionIos: 1,            //~ |
-    whatsNew: 'Heres what new!',    //~ |
-    updateType: UpdateTypes.needed, //~ |
+    publicVersionAndroid: 3,        //~ |
+    publicVersionIos: 3,            //~ |
     //~ --------------------------------
+    // whatsNew: 'Heres what new!',
+    // updateType: UpdateTypes.needed,
     // status: 'ok',
     // statusCode: 200,
     osType: Platform.isAndroid ? OsTypes.android : OsTypes.ios,
@@ -31,6 +31,12 @@ class UniProvider with ChangeNotifier {
   AppConfigModel? serverConfig;
   void updateServerConfig(AppConfigModel? data) {
     serverConfig = data;
+    notifyListeners();
+  }
+
+  bool showFab = true;
+  void updateShowFab(bool data) {
+    showFab = data;
     notifyListeners();
   }
 
@@ -83,6 +89,14 @@ class UniProvider with ChangeNotifier {
     notifyListeners();
     // return data;
   }
+
+
+  ChatModel? activeChat;
+  void updateActiveChat(ChatModel? data) {
+    activeChat = data;
+    notifyListeners();
+  }
+
 
   List<ChatModel> chatList = [];
   void updateChatList(List<ChatModel> data) {

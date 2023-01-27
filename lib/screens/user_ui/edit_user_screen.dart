@@ -103,7 +103,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
                   .where('creatorUser.uid', isEqualTo: updatedUser.uid)
                   .get();
 
-              List posts = await FsAdvanced().docsToModelList(snap, ModelTypes.posts);
+              List posts = await FsAdvanced().docsToModelList(currUser.uid!, snap, ModelTypes.posts);
               for (PostModel post in posts) {
                 var updatedPost = post.copyWith(creatorUser: updatedUser);
                 // print('posts.length ${posts.length}');

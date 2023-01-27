@@ -27,6 +27,8 @@ mixin _$MessageModel {
   String? get toId => throw _privateConstructorUsedError;
   String? get createdAt => throw _privateConstructorUsedError;
   PostModel? get postReply => throw _privateConstructorUsedError;
+  bool get isRead => throw _privateConstructorUsedError;
+  Map<String, dynamic> get metadata => throw _privateConstructorUsedError;
   bool? get isPostComment => throw _privateConstructorUsedError;
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
@@ -51,6 +53,8 @@ abstract class $MessageModelCopyWith<$Res> {
       String? toId,
       String? createdAt,
       PostModel? postReply,
+      bool isRead,
+      Map<String, dynamic> metadata,
       bool? isPostComment,
       @DateTimeStampConv() DateTime? timestamp,
       bool? read});
@@ -77,6 +81,8 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
     Object? toId = freezed,
     Object? createdAt = freezed,
     Object? postReply = freezed,
+    Object? isRead = null,
+    Object? metadata = null,
     Object? isPostComment = freezed,
     Object? timestamp = freezed,
     Object? read = freezed,
@@ -106,6 +112,14 @@ class _$MessageModelCopyWithImpl<$Res, $Val extends MessageModel>
           ? _value.postReply
           : postReply // ignore: cast_nullable_to_non_nullable
               as PostModel?,
+      isRead: null == isRead
+          ? _value.isRead
+          : isRead // ignore: cast_nullable_to_non_nullable
+              as bool,
+      metadata: null == metadata
+          ? _value.metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
       isPostComment: freezed == isPostComment
           ? _value.isPostComment
           : isPostComment // ignore: cast_nullable_to_non_nullable
@@ -149,6 +163,8 @@ abstract class _$$_MessageModelCopyWith<$Res>
       String? toId,
       String? createdAt,
       PostModel? postReply,
+      bool isRead,
+      Map<String, dynamic> metadata,
       bool? isPostComment,
       @DateTimeStampConv() DateTime? timestamp,
       bool? read});
@@ -174,6 +190,8 @@ class __$$_MessageModelCopyWithImpl<$Res>
     Object? toId = freezed,
     Object? createdAt = freezed,
     Object? postReply = freezed,
+    Object? isRead = null,
+    Object? metadata = null,
     Object? isPostComment = freezed,
     Object? timestamp = freezed,
     Object? read = freezed,
@@ -203,6 +221,14 @@ class __$$_MessageModelCopyWithImpl<$Res>
           ? _value.postReply
           : postReply // ignore: cast_nullable_to_non_nullable
               as PostModel?,
+      isRead: null == isRead
+          ? _value.isRead
+          : isRead // ignore: cast_nullable_to_non_nullable
+              as bool,
+      metadata: null == metadata
+          ? _value._metadata
+          : metadata // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
       isPostComment: freezed == isPostComment
           ? _value.isPostComment
           : isPostComment // ignore: cast_nullable_to_non_nullable
@@ -230,9 +256,12 @@ class _$_MessageModel implements _MessageModel {
       this.toId,
       this.createdAt,
       this.postReply,
+      this.isRead = false,
+      final Map<String, dynamic> metadata = const {},
       this.isPostComment = false,
       @DateTimeStampConv() this.timestamp,
-      this.read});
+      this.read})
+      : _metadata = metadata;
 
   factory _$_MessageModel.fromJson(Map<String, dynamic> json) =>
       _$$_MessageModelFromJson(json);
@@ -252,6 +281,18 @@ class _$_MessageModel implements _MessageModel {
   final PostModel? postReply;
   @override
   @JsonKey()
+  final bool isRead;
+  final Map<String, dynamic> _metadata;
+  @override
+  @JsonKey()
+  Map<String, dynamic> get metadata {
+    if (_metadata is EqualUnmodifiableMapView) return _metadata;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_metadata);
+  }
+
+  @override
+  @JsonKey()
   final bool? isPostComment;
   @override
   @DateTimeStampConv()
@@ -261,7 +302,7 @@ class _$_MessageModel implements _MessageModel {
 
   @override
   String toString() {
-    return 'MessageModel(id: $id, textContent: $textContent, fromId: $fromId, toId: $toId, createdAt: $createdAt, postReply: $postReply, isPostComment: $isPostComment, timestamp: $timestamp, read: $read)';
+    return 'MessageModel(id: $id, textContent: $textContent, fromId: $fromId, toId: $toId, createdAt: $createdAt, postReply: $postReply, isRead: $isRead, metadata: $metadata, isPostComment: $isPostComment, timestamp: $timestamp, read: $read)';
   }
 
   @override
@@ -278,6 +319,8 @@ class _$_MessageModel implements _MessageModel {
                 other.createdAt == createdAt) &&
             (identical(other.postReply, postReply) ||
                 other.postReply == postReply) &&
+            (identical(other.isRead, isRead) || other.isRead == isRead) &&
+            const DeepCollectionEquality().equals(other._metadata, _metadata) &&
             (identical(other.isPostComment, isPostComment) ||
                 other.isPostComment == isPostComment) &&
             (identical(other.timestamp, timestamp) ||
@@ -287,8 +330,19 @@ class _$_MessageModel implements _MessageModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, textContent, fromId, toId,
-      createdAt, postReply, isPostComment, timestamp, read);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      textContent,
+      fromId,
+      toId,
+      createdAt,
+      postReply,
+      isRead,
+      const DeepCollectionEquality().hash(_metadata),
+      isPostComment,
+      timestamp,
+      read);
 
   @JsonKey(ignore: true)
   @override
@@ -312,6 +366,8 @@ abstract class _MessageModel implements MessageModel {
       final String? toId,
       final String? createdAt,
       final PostModel? postReply,
+      final bool isRead,
+      final Map<String, dynamic> metadata,
       final bool? isPostComment,
       @DateTimeStampConv() final DateTime? timestamp,
       final bool? read}) = _$_MessageModel;
@@ -331,6 +387,10 @@ abstract class _MessageModel implements MessageModel {
   String? get createdAt;
   @override
   PostModel? get postReply;
+  @override
+  bool get isRead;
+  @override
+  Map<String, dynamic> get metadata;
   @override
   bool? get isPostComment;
   @override

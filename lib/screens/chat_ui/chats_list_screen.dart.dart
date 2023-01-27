@@ -77,7 +77,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     if (updatedList.isNotEmpty) chatList = updatedList;
     // initLoader = false;
     splashLoader = false;
-    setState(() {});
+    if(mounted) setState(() {});
   }
 
   @override
@@ -129,20 +129,22 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                 // WidgetsBinding.instance.addPostFrameCallback(
                 //         (_) => context.uniProvider.updateChatList(chatList));
 
-                var chat = chatList[i];
+                ChatModel chat = chatList[i];
                 var otherUser = chat.users!.firstWhere((user) => user.uid != currUser.uid);
 
                 return StatefulBuilder(builder: (_context, stfSetState) {
-                  return ChatBlockSts(chat, otherUser, onTap: () {
+                  return ChatBlockSts(chat, otherUser, onTap: () async {
                     var currUser = context.uniProvider.currUser;
-                    ChatService.clearUnread(currUser.unreadCounter, currUser.email, chat);
-                    chat = chat.copyWith(unreadCounter: 0);
                     chatList[i] = chat;
-                    // stfSetState(() {});
 
                     // var chatId = ChatService.openChat(context, otherUser: otherUser); // no need
-                    context.router
+                    await context.router
                         .push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));
+                    if (_context.uniProvider.activeChat != null) {
+                      print('START: stfSetState()');
+                      chat = _context.uniProvider.activeChat!;
+                      stfSetState(() {});
+                    }
                   });
                 });
               },

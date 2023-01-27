@@ -20,6 +20,8 @@ class MessageModel with _$MessageModel {
     String? toId,
     String? createdAt,
     PostModel? postReply,
+    @Default(false) bool isRead,
+    @Default({}) Map<String, dynamic> metadata,
     @Default(false) bool? isPostComment,
     @DateTimeStampConv() DateTime? timestamp,
     bool? read,

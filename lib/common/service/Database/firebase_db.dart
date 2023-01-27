@@ -17,7 +17,7 @@ import '../timestamp_convert.dart';
 import 'db_advanced.dart';
 import 'package:hive/hive.dart';
 
-enum FilterTypes { postsByUser , postWithoutComments, postWithComments, postConversionsOfUser}
+enum FilterTypes { postsByUser, postWithoutComments, postWithComments, postConversionsOfUser }
 
 //> MUST Be same as collection name!
 enum ModelTypes { posts, chats, messages, users }
@@ -160,8 +160,33 @@ class Database {
   // persistenceEnabled: true,
   // cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   // );
+  static Stream<int> streamChatsUnreadCounter(BuildContext context) {
+    var currUser = context.uniProvider.currUser;
+    print('START: streamChatsUnreadCounter()');
+    var reqBase =
+        db.collection('chats').where('metadata.unreadCounter#${currUser.uid}', isNotEqualTo: 0);
+    // if (timestamp != null) reqBase = reqBase.startAfter([timestamp]);
 
-  static Stream<int> streamUnreadCounter(BuildContext context) {
+    return reqBase.snapshots().map((snap) {
+      // print('USER_DOC_ID: ${snap.size}');
+      // print('USER_DOC_ID: ${snap.docs.first.data()}');
+
+      int chatUnreadCounter = 0;
+      for (var doc in snap.docs) {
+        var data = doc.data();
+        // chatUnreadCounter = data['metadata']['unreadCounter#${currUser.uid}'];
+        chatUnreadCounter = (chatUnreadCounter + doc.get('metadata.unreadCounter#${currUser.uid}')) as int;
+      }
+      // var updatedUser = UserModel.fromJson(snap.data() as Map<String, dynamic>);
+      context.uniProvider.updateUser(currUser.copyWith(unreadCounter: chatUnreadCounter));
+
+      return chatUnreadCounter;
+    }).handleError((dynamic e) {
+      print('ERROR: streamUnreadCounter() E: $e');
+    });
+  }
+
+  static Stream<int> streamUserUnreadCounter(BuildContext context) {
     var currUser = context.uniProvider.currUser;
     print('START: streamUnreadCounter()');
     var reqBase = db.collection('users').doc(currUser.email);
@@ -202,7 +227,6 @@ class Database {
     });
   }
 
-
   static Stream<List<MessageModel>>? streamMessages(String chatId, {required int limit}) {
     print('START: streamMessages()');
     print('chatId ${chatId}');
@@ -218,7 +242,8 @@ class Database {
       print('chats - list ${list.docs.length}');
       return list.docs.map((DocumentSnapshot snap) {
         print('MSG_DOC_ID: ${snap.id}');
-        return MessageModel.fromJson(snap.data() as Map<String, dynamic>);
+        var msgModel = MessageModel.fromJson(snap.data() as Map<String, dynamic>);
+        return msgModel;
       }).toList();
     }).handleError((dynamic e) {
       print('ERROR: streamMessages() E: $e');

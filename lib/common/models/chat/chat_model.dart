@@ -20,7 +20,8 @@ class ChatModel with _$ChatModel {
     List<String>? usersIds,
     List<UserModel>? users,
     List<MessageModel>? messages,
-    @DateTimeStampConv() DateTime? timestamp,
+    // @DateTimeStampConv() DateTime? updatedAt,
+    @DateTimeStampConv() DateTime? timestamp, // AKA updatedAt
   }) = _ChatModel;
 
   factory ChatModel.fromJson(Map<String, dynamic> json) =>

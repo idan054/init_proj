@@ -16,6 +16,8 @@ _$_MessageModel _$$_MessageModelFromJson(Map<String, dynamic> json) =>
       postReply: json['postReply'] == null
           ? null
           : PostModel.fromJson(json['postReply'] as Map<String, dynamic>),
+      isRead: json['isRead'] as bool? ?? false,
+      metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
       isPostComment: json['isPostComment'] as bool? ?? false,
       timestamp:
           const DateTimeStampConv().fromJson(json['timestamp'] as Timestamp?),
@@ -30,6 +32,8 @@ Map<String, dynamic> _$$_MessageModelToJson(_$_MessageModel instance) =>
       'toId': instance.toId,
       'createdAt': instance.createdAt,
       'postReply': instance.postReply?.toJson(),
+      'isRead': instance.isRead,
+      'metadata': instance.metadata,
       'isPostComment': instance.isPostComment,
       'timestamp': const DateTimeStampConv().toJson(instance.timestamp),
       'read': instance.read,

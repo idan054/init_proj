@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
       body: Column(
         children: [
           const Spacer(flex: 25),
-          riltopiaHorizontalLogo(ratio: 2.2, showSubText: true),
+          riltopiaHorizontalLogo(context, ratio: 2.2, showSubText: true),
           30.verticalSpace,
           // const Spacer(flex: 80),
           const Placeholder(fallbackHeight: 450),

@@ -38,6 +38,10 @@ class $AssetsImagesGen {
   AssetGenImage get logoCircularRilTopiaLogo =>
       const AssetGenImage('assets/images/LogoCircularRilTopiaLogo.png');
 
+  /// File path: assets/images/Riltopia-as-icon-PNG.png
+  AssetGenImage get riltopiaAsIconPNG =>
+      const AssetGenImage('assets/images/Riltopia-as-icon-PNG.png');
+
   /// File path: assets/images/app_icon.png
   AssetGenImage get appIcon =>
       const AssetGenImage('assets/images/app_icon.png');
@@ -61,6 +65,7 @@ class $AssetsImagesGen {
   /// List of all assets
   List<AssetGenImage> get values => [
         logoCircularRilTopiaLogo,
+        riltopiaAsIconPNG,
         appIcon,
         chatBubblesSolid,
         checkVerifiedImage,
@@ -298,6 +303,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get iconSendButton =>
       const SvgGenImage('assets/svg/icons/Icon-send-Button.svg');
 
+  /// File path: assets/svg/icons/Riltopia-icon.svg
+  SvgGenImage get riltopiaIcon =>
+      const SvgGenImage('assets/svg/icons/Riltopia-icon.svg');
+
   /// File path: assets/svg/icons/arrow-narrow-left.svg
   SvgGenImage get arrowNarrowLeft =>
       const SvgGenImage('assets/svg/icons/arrow-narrow-left.svg');
@@ -407,6 +416,7 @@ class $AssetsSvgIconsGen {
   List<SvgGenImage> get values => [
         iconClose,
         iconSendButton,
+        riltopiaIcon,
         arrowNarrowLeft,
         arrowBackLeft,
         bellUntitledIcon,

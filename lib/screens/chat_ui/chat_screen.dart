@@ -57,6 +57,11 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   Future _loadOlderMessages() async {
     // splashLoader = true; setState(() {});
     List olderMessages = await Database.advanced.handleGetModel(ModelTypes.messages, messages,
@@ -69,97 +74,110 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     print('chatId ${widget.chatId}');
 
-    return GestureDetector(
-      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: Scaffold(
-        backgroundColor: AppColors.primaryDark,
-        appBar: darkAppBar(context,
-            // title: widget.otherUser.name.toString(),
-            title: null,
-            // centerTitle: true,
-            titleWidget: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Stack(
-                  children: [
-                    CircleAvatar(
-                        radius: 20,
-                        backgroundColor: Colors.grey,
-                        backgroundImage: NetworkImage(
-                            widget.otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
-                    buildOnlineBadge(ratio: 1.0)
-                  ],
-                ),
-                10.horizontalSpace,
-                Text(
-                  widget.otherUser.name ?? '',
-                  overflow: TextOverflow.ellipsis,
-                  style: AppStyles.text18PxSemiBold.white,
-                ),
-              ],
-            ).pOnly(right: 10).onTap(() {
-              context.router.push(UserRoute(user: widget.otherUser));
-            })),
-        body: Column(
-          children: [
-            StreamProvider<List<MessageModel>>.value(
-              value: Database.streamMessages(widget.chatId, limit: isInitMessages ? 25 : 1),
-              initialData: const [],
-              builder: (context, child) {
-                print('START: builder()');
-                var newMsgs = context.listenMessagesModelList;
-                if (newMsgs.isNotEmpty) {
-                  messages.isEmpty ? setInitMessages(newMsgs) : addLatestMessage(context);
-                }
-
-                return LazyLoadScrollView(
-                  scrollOffset: 300,
-                  onEndOfPage: () async {
-                    print('START: onEndOfPage()');
-
-                    if (messages.isNotEmpty) {
-                      timeStamp = Timestamp.fromDate(messages.last.timestamp!);
-                    }
-                    // context.uniProvider.updateIsFeedLoading(true);
-                    await _loadOlderMessages();
-                    // context.uniProvider.updateIsFeedLoading(false);
-                  },
-                  child: ListView.builder(
-                    controller: messagesController,
-                    reverse: true,
-                    // controller: ,
-                    itemCount: messages.length,
-                    itemBuilder: (context, i) =>
-                        buildBubble(context, messages[i], (i + 1) == messages.length),
+    return WillPopScope(
+      onWillPop: () async {
+        print('START: onWillPop()');
+        ChatService.resetChatUnread(context, widget.chatId);
+        context.uniProvider.updateActiveChat(widget.chat?.copyWith(
+          messages: messages,
+          lastMessage: messages.last,
+          unreadCounter: 0,
+        ));
+        Navigator.pop(context);
+        return false;
+      },
+      child: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: Scaffold(
+          backgroundColor: AppColors.primaryDark,
+          appBar: darkAppBar(context,
+              // title: widget.otherUser.name.toString(),
+              title: null,
+              // centerTitle: true,
+              titleWidget: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    children: [
+                      CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey,
+                          backgroundImage: NetworkImage(
+                              widget.otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
+                      buildOnlineBadge(ratio: 1.0)
+                    ],
                   ),
-                );
-              },
-            ).expanded(),
-            4.verticalSpace,
-            StatefulBuilder(builder: (context, stfState) {
-              return buildTextField(context,
-                  stfSetState: stfState,
-                  post: post,
-                  hintText: 'Write your message...',
-                  postOnCloseReply: () {
-                    post = null;
-                    stfState(() {});
-                  },
-                  controller: sendController,
-                  onTap: () {
-                    ChatService().sendMessage(
-                      context,
-                      chatId: widget.chatId,
-                      content: sendController.text,
-                      otherUser: widget.otherUser,
-                      postReply: post,
-                    );
-                    sendController.clear();
-                    post = null;
-                    stfState(() {});
-                  });
-            }),
-          ],
+                  10.horizontalSpace,
+                  Text(
+                    widget.otherUser.name ?? '',
+                    overflow: TextOverflow.ellipsis,
+                    style: AppStyles.text18PxSemiBold.white,
+                  ),
+                ],
+              ).pOnly(right: 10).onTap(() {
+                context.router.push(UserRoute(user: widget.otherUser));
+              })),
+          body: Column(
+            children: [
+              StreamProvider<List<MessageModel>>.value(
+                value: Database.streamMessages(widget.chatId, limit: isInitMessages ? 25 : 1),
+                initialData: const [],
+                builder: (context, child) {
+                  print('START: builder()');
+                  var newMsgs = context.listenMessagesModelList;
+                  if (newMsgs.isNotEmpty) {
+                    messages.isEmpty ? setInitMessages(newMsgs) : addLatestMessage(context);
+                  }
+
+                  return LazyLoadScrollView(
+                    scrollOffset: 300,
+                    onEndOfPage: () async {
+                      print('START: onEndOfPage()');
+
+                      if (messages.isNotEmpty) {
+                        timeStamp = Timestamp.fromDate(messages.last.timestamp!);
+                      }
+                      // context.uniProvider.updateIsFeedLoading(true);
+                      await _loadOlderMessages();
+                      // context.uniProvider.updateIsFeedLoading(false);
+                    },
+                    child: ListView.builder(
+                      controller: messagesController,
+                      reverse: true,
+                      // controller: ,
+                      itemCount: messages.length,
+                      itemBuilder: (context, i) =>
+                          buildBubble(context, messages[i], (i + 1) == messages.length),
+                    ),
+                  );
+                },
+              ).expanded(),
+              4.verticalSpace,
+              StatefulBuilder(builder: (context, stfState) {
+                return buildTextField(context,
+                    stfSetState: stfState,
+                    post: post,
+                    hintText: 'Write your message...',
+                    postOnCloseReply: () {
+                      post = null;
+                      stfState(() {});
+                    },
+                    controller: sendController,
+                    onTap: () {
+                      ChatService().sendMessage(
+                        context,
+                        chatId: widget.chatId,
+                        content: sendController.text,
+                        otherUser: widget.otherUser,
+                        postReply: post,
+                      );
+                      sendController.clear();
+                      post = null;
+                      stfState(() {});
+                    });
+              }),
+            ],
+          ),
         ),
       ),
     );

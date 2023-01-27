@@ -10,8 +10,9 @@ import 'package:url_launcher/url_launcher.dart';
 void chekForUpdate(
   BuildContext context,
   AppConfigModel localConfig,
-  AppConfigModel serverConfig,
-) async {
+  AppConfigModel serverConfig, {
+  bool mustShowPopup = false,
+}) async {
   var serverVer =
       Platform.isAndroid ? serverConfig.publicVersionAndroid : serverConfig.publicVersionIos;
   var localVer =
@@ -26,32 +27,34 @@ void chekForUpdate(
       .updateLocalConfig(localConfig.copyWith(isUpdateAvailable: serverVer != localVer));
 
   print('localVer != serverVer ${localVer != serverVer}');
-  if (localVer != serverVer) {
+  if (localVer != serverVer || mustShowPopup) {
     print('START: localVer != serverVer()');
     showRilDialog(
       context,
-      title: title,
+      title: mustShowPopup ? 'Whats new' : title,
       verticalMargin: 40,
       desc: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           'Please update from V$localVer to V$serverVer'.toText(color: AppColors.grey50),
-          '\nWhats new?'
-                  ' \n${serverConfig.whatsNew}'
+          // '\n${mustShowPopup ? 'Whats new?' : ''}'
+                  (serverConfig.whatsNew ?? '')
               .toTextExpanded(
             maxLines: 5,
             textAlign: TextAlign.left,
           ),
         ],
       ),
-      secondaryBtn: TextButton(
-          child: 'Update now'.toText(color: AppColors.primaryLight),
-          onPressed: () {
-            launchUrl(updateLink, mode: LaunchMode.externalApplication);
-            Navigator.of(context).pop();
-          }),
-      barrierDismissible: serverConfig.updateType == UpdateTypes.recommended,
-      showCancelBtn: serverConfig.updateType == UpdateTypes.recommended,
+      secondaryBtn: mustShowPopup
+          ? const Offstage()
+          : TextButton(
+              child: 'Update now'.toText(color: AppColors.primaryLight),
+              onPressed: () {
+                launchUrl(updateLink, mode: LaunchMode.externalApplication);
+                Navigator.of(context).pop();
+              }),
+      barrierDismissible: mustShowPopup || serverConfig.updateType == UpdateTypes.recommended,
+      showCancelBtn: mustShowPopup || serverConfig.updateType == UpdateTypes.recommended,
     );
   }
 }

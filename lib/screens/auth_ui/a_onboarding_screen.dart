@@ -90,7 +90,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                   }
                 }),
             const Spacer(),
-            riltopiaHorizontalLogo(ratio: 1.2),
+            riltopiaHorizontalLogo(context, ratio: 1.2),
             const Spacer(),
             // PlaceHolder:
             Opacity(

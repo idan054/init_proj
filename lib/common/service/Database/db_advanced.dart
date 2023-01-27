@@ -39,7 +39,7 @@ class FsAdvanced {
 
     // 2/2) .fromJson() To postModel, userModel etc...
     if (snap.docs.isNotEmpty) {
-      var newItems = await docsToModelList(snap, modelType);
+      var newItems = await docsToModelList(uid, snap, modelType);
 
       modelList = [...modelList, ...newItems];
       print('✴️ SUMMARY: ${modelList.length} ${collectionRef.toUpperCase()}');
@@ -69,11 +69,11 @@ class FsAdvanced {
       case ModelTypes.users: // Nothing special
         break;
       case ModelTypes.posts:
-
         //~ Filters (query) REQUIRE an index. Check log to create it.
 
         if (filter == FilterTypes.postsByUser) {
           reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid!);
+          reqBase = reqBase.where('enableComments', isEqualTo: false); // Rils reply tab
         }
         if (filter == FilterTypes.postWithComments) {
           reqBase = reqBase.where('enableComments', isEqualTo: true);
@@ -81,7 +81,8 @@ class FsAdvanced {
         if (filter == FilterTypes.postWithoutComments) {
           reqBase = reqBase.where('enableComments', isEqualTo: false);
         }
-        if (filter == FilterTypes.postConversionsOfUser) { // AKA conversion users
+        if (filter == FilterTypes.postConversionsOfUser) {
+          // AKA conversion users
           reqBase = reqBase.where('commentedUsersIds', arrayContains: uid!);
         }
         break;
@@ -95,7 +96,7 @@ class FsAdvanced {
 
   // 2/2
   Future<List> docsToModelList(
-      QuerySnapshot<Map<String, dynamic>> snap, ModelTypes modelType) async {
+      String? uid, QuerySnapshot<Map<String, dynamic>> snap, ModelTypes modelType) async {
     print('START: docsToModelList() - ${modelType.name}');
 
     List listModel;
@@ -104,7 +105,11 @@ class FsAdvanced {
         listModel = snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
         break;
       case ModelTypes.chats:
-        listModel = snap.docs.map((doc) => ChatModel.fromJson(doc.data())).toList();
+        listModel = snap.docs.map((doc) {
+          var chat = ChatModel.fromJson(doc.data());
+          chat = chat.copyWith(unreadCounter: doc.data()['metadata']?['unreadCounter#$uid']);
+          return chat;
+        }).toList();
         break;
       case ModelTypes.messages:
         listModel = snap.docs.map((doc) => MessageModel.fromJson(doc.data())).toList();

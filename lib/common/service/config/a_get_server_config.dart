@@ -8,7 +8,6 @@ import 'package:example/widgets/my_dialog.dart';
 import '../../models/appConfig/app_config_model.dart';
 import '../Database/firebase_db.dart';
 import 'dart:io' show Platform;
-
 import 'check_app_update.dart';
 
 Future<AppConfigModel> getAppConfig(BuildContext context) async {

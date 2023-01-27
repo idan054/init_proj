@@ -18,7 +18,9 @@ import 'package:example/widgets/my_dialog.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +29,7 @@ import '../../common/models/post/post_model.dart';
 import '../../common/models/universalModel.dart';
 import '../../common/models/user/user_model.dart';
 import '../../common/service/Chat/chat_services.dart';
+import '../../common/service/config/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/components/postBlock_sts.dart';
 import 'comments_chat_screen.dart';
@@ -171,28 +174,40 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               print('START: onRefresh()');
               await _loadMore(refresh: true);
             },
-            child: ListView(
-              children: [
-                buildTagTitle(),
-                1.verticalSpace,
-                //   Expanded(child:
-                ListView.builder(
-                    physics: const ScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: postList.length,
-                    itemBuilder: (BuildContext context, int i) {
-                      bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
-                      // PostView(postList[i])
+            child: NotificationListener<UserScrollNotification>(
+              onNotification: (notification) {
+                final ScrollDirection direction = notification.direction;
+                  if (direction == ScrollDirection.reverse) {
+                    context.uniProvider.updateShowFab(false);
+                  } else if (direction == ScrollDirection.forward) {
+                    context.uniProvider.updateShowFab(true);
+                  }
+                // setState(() {});
+                return true;
+              },
+              child: ListView(
+                children: [
+                  buildTagTitle(),
+                  1.verticalSpace,
+                  //   Expanded(child:
+                  ListView.builder(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: postList.length,
+                      itemBuilder: (BuildContext context, int i) {
+                        bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
+                        // PostView(postList[i])
 
-                      return Column(
-                        children: [
-                          //> if (isShowAd) getAd(context),
-                          PostBlock(postList[i]),
-                        ],
-                      );
-                    }).appearOpacity,
-                //     )
-              ],
+                        return Column(
+                          children: [
+                            //> if (isShowAd) getAd(context),
+                            PostBlock(postList[i]),
+                          ],
+                        );
+                      }).appearOpacity,
+                  //     )
+                ],
+              ),
             ));
       }),
     );
@@ -258,7 +273,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     );
   }
 
-
   AppBar _buildRiltopiaAppBar(BuildContext context, {PreferredSizeWidget? bottom}) {
     var currUser = context.uniProvider.currUser;
 
@@ -266,7 +280,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       elevation: 2,
       backgroundColor: AppColors.primaryDark,
       // backgroundColor: AppColors.darkBg,
-      title: riltopiaHorizontalLogo(ratio: 1.15).pOnly(bottom: 5, right: 5, left: 5, top: 5),
+      title:
+          riltopiaHorizontalLogo(context, ratio: 1.15).pOnly(bottom: 5, right: 5, left: 5, top: 5),
       // .onTap(() {}, radius: 8),
       actions: [appBarProfile(context)],
 
@@ -363,15 +378,35 @@ Widget appBarProfile(BuildContext context) {
             height: 50,
             // height: 72, // 72: original size 60: min size
             child: ListTile(
-                contentPadding: EdgeInsets.zero,
-                horizontalTitleGap: 0,
-                title: 'Chat with us'
-                    .toText(fontSize: 14, medium: true, color: AppColors.grey50),
-                leading: Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.grey50))
+                    contentPadding: EdgeInsets.zero,
+                    horizontalTitleGap: 0,
+                    title:
+                        'Chat with us'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
+                    leading: Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.grey50))
                 .pad(0)
                 .onTap(() {
               Navigator.pop(context);
               ChatService.chatWithUs(context);
+            }, radius: 5),
+          ),
+
+          //~ Whats New?
+          SizedBox(
+            height: 50,
+            // height: 72, // 72: original size 60: min size
+            child: ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    horizontalTitleGap: 0,
+                    title: 'Whats new?'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
+                    leading: Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50))
+                .pad(0)
+                .onTap(() {
+              Navigator.pop(context);
+              var localConfig = context.uniProvider.localConfig;
+              var serverConfig = context.uniProvider.serverConfig;
+
+              WidgetsBinding.instance.addPostFrameCallback(
+                  (_) => chekForUpdate(context, localConfig, serverConfig!, mustShowPopup: true));
             }, radius: 5),
           ),
 
@@ -380,10 +415,10 @@ Widget appBarProfile(BuildContext context) {
             height: 50,
             // height: 72, // 72: original size 60: min size
             child: ListTile(
-                contentPadding: EdgeInsets.zero,
-                horizontalTitleGap: 0,
-                title: 'Log out'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
-                leading: Assets.svg.icons.logOut01.svg(color: AppColors.grey50))
+                    contentPadding: EdgeInsets.zero,
+                    horizontalTitleGap: 0,
+                    title: 'Log out'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
+                    leading: Assets.svg.icons.logOut01.svg(color: AppColors.grey50))
                 .pad(0)
                 .onTap(() {
               context.router.replaceAll([const LoginRoute()]);
@@ -397,7 +432,6 @@ Widget appBarProfile(BuildContext context) {
     // context.router.push(UserRoute(user: context.uniProvider.currUser));
   });
 }
-
 
 Widget buildChoiceChip(BuildContext context,
     {bool showCloseIcon = false,

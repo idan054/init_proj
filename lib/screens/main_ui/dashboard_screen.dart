@@ -6,6 +6,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:badges/badges.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/main.dart';
 import 'package:example/screens/chat_ui/chats_list_screen.dart.dart';
@@ -19,6 +20,7 @@ import 'package:provider/provider.dart';
 import '../../common/config.dart';
 import '../../common/models/appConfig/app_config_model.dart';
 import '../../common/routes/app_router.gr.dart';
+import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/config/a_get_server_config.dart';
 import '../../common/service/config/check_app_update.dart';
@@ -26,7 +28,6 @@ import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/my_dialog.dart';
 import '../feed_ui/create_post_screen.dart';
 import 'dart:io' show Platform;
-
 
 // enum TabItems { home, placeHolder, chat }
 enum TabItems { home, chat }
@@ -51,9 +52,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;
 
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        chekForUpdate(context, localConfig, serverConfig!)
-    );
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => chekForUpdate(context, localConfig, serverConfig!));
 
     _pageController = PageController(initialPage: widget.dashboardPage.index);
     sItem = widget.dashboardPage;
@@ -62,11 +62,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _handleIndexChanged(int i, bool navBar) {
+    if (sItem == TabItems.chat) {
+      context.uniProvider.updateFeedStatus(FilterTypes.postWithoutComments);
+    }
+
     sItem = TabItems.values[i];
     // 0 = home, 2 = chat
     //    _pageController.animateToPage(homePage ? 2 : 0, duration: 200.milliseconds, curve: Curves.easeIn);
     // if (sItem.index == 1) return;
-    setState(() {});
+    if(mounted) setState(() {});
     if (navBar) {
       _pageController.jumpToPage(i);
     }
@@ -78,6 +82,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     print('START: CreatePostScreen()');
     _pageController = PageController(initialPage: widget.dashboardPage.index);
+    var currUser = context.uniProvider.currUser;
+
+    if (currUser.userType == UserTypes.blocked) {
+      return WillPopScope(
+          onWillPop: () async {
+            return false;
+          },
+          child: Scaffold(
+            backgroundColor: AppColors.primaryDark,
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                'Your account has been Blocked'.toText(fontSize: 16),
+                const SizedBox(height: 10),
+                'Please contact us to get details'.toText(color: AppColors.grey50),
+                const SizedBox(height: 10),
+                TextButton(
+                    child: 'Contact support'.toText(color: AppColors.primaryLight),
+                    onPressed: () {
+                      ChatService.chatWithUs(context);
+                    }),
+              ],
+            ).center,
+          ));
+    }
 
     return Scaffold(
       backgroundColor: AppColors.primaryDark,
@@ -89,6 +119,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
             MainFeedScreen(),
             ChatsListScreen(),
           ]),
+      floatingActionButton: sItem != TabItems.home
+          ? null
+          : Builder(builder: (context) {
+              var showFab = context.listenUniProvider.showFab;
+              var replyStyle =
+                  context.listenUniProvider.feedStatus == FilterTypes.postWithoutComments;
+              return AnimatedSlide(
+                duration: 450.milliseconds,
+                offset: showFab ? Offset.zero : const Offset(0, 1.2),
+                child: quickCrossFade(
+                  showFab,
+                  duration: 450.milliseconds,
+                  secondChild: const SizedBox(width: 100, height: 3),
+                  firstChild: FloatingActionButton.extended(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          barrierColor: Colors.black38,
+                          // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
+                          // barrierColor: Colors.black.withOpacity(0.00),
+                          // AKA 2%
+                          isScrollControlled: true,
+                          context: context,
+                          builder: (context) {
+                            // print('replyStyle ${replyStyle}');
+                            return CreatePostScreen(replyStyle);
+                          });
+                    },
+                    shape: 6.roundedShape,
+                    label: (replyStyle ? 'New Ril' : 'Add yours').toText(bold: true, fontSize: 13),
+                    icon: replyStyle
+                        ? Assets.images.riltopiaAsIconPNG.image(height: 20).pad(5)
+                        // ? Assets.svg.icons.groupMultiPeople.svg().pad(5)
+                        : Assets.svg.icons.groupMultiPeople.svg().pad(5),
+                    backgroundColor: AppColors.primaryOriginal,
+                  ),
+                ),
+              );
+            }),
       bottomNavigationBar: SizedBox(
         height: 55 + 3,
         child: Stack(
@@ -111,53 +180,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     },
                     items: [
                       BottomNavigationBarItem(
-                        label: '',
-                        icon: Assets.svg.icons.homeUntitledIcon
-                            .svg(color: AppColors.grey50)
-                            .pOnly(right: 15),
-                        activeIcon: Assets.svg.icons.homeSolidUntitledIcon
-                            .svg(color: AppColors.white)
-                            .pOnly(right: 15),
-                      ),
+                          label: '',
+                          icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.grey50),
+                          // .pOnly(right: 15),
+                          activeIcon:
+                              Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.white)
+                          // .pOnly(right: 15),
+                          ),
                       BottomNavigationBarItem(
                         label: '',
                         icon: notifyBubble(
-                          child: Assets.svg.icons.chatBubblesUntitledIcon
-                              .svg(color: AppColors.grey50)
-                              .pOnly(left: 15),
-                        ),
-                        activeIcon: notifyBubble(
-                            child:
-                            Assets.images.chatBubblesSolid.image(height: 22).pOnly(left: 15)),
+                            child: Assets.svg.icons.chatBubblesUntitledIcon
+                                .svg(color: AppColors.grey50)
+                            // .pOnly(left: 15),
+                            ),
+                        activeIcon:
+                            notifyBubble(child: Assets.images.chatBubblesSolid.image(height: 22)
+                                // .pOnly(left: 15)
+                                ),
                       ),
                     ],
                   ),
                 ),
               ],
             ),
-            TextButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                      backgroundColor: Colors.transparent,
-                      // barrierColor: Colors.black54,
-                      // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
-                      barrierColor: Colors.black.withOpacity(0.00),
-                      // AKA 2%
-                      isScrollControlled: true,
-                      context: context,
-                      builder: (context) {
-                        var replyStyle = context.uniProvider.feedStatus == FilterTypes.postWithoutComments;
-                        // print('replyStyle ${replyStyle}');
-                        return CreatePostScreen(replyStyle);
-                      });
-                },
-                child: Container(
-                    color: AppColors.primaryOriginal,
-                    height: 35,
-                    width: 35,
-                    child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
-                    .rounded(radius: 10))
-                .center,
+            // TextButton(
+            //     onPressed: () {},
+            //     child: Container(
+            //         color: AppColors.primaryOriginal,
+            //         height: 35,
+            //         width: 35,
+            //         child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
+            //         .rounded(radius: 10)).center,
           ],
         ),
       ),
@@ -168,21 +222,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // int? counter = context.listenUniProvider.currUser.unreadCounter;
 
     // return StreamProvider<int?>(
-    return StreamBuilder<int>( //> BETTER Because can handle stream Collection / Doc (!)
-      stream: Database.streamUnreadCounter(context),
+    return StreamBuilder<int>(
+      //> BETTER Because can handle stream Collection / Doc (!)
+      // stream: Database.streamUnreadCounter(context),
+      stream: Database.streamChatsUnreadCounter(context),
       initialData: 0,
       builder: (context, snapshot) {
         var counter = context.listenUniProvider.currUser.unreadCounter;
-        return counter == null || counter == 0
+        return counter == 0
             ? child
             : Badge(
-            badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white70, medium: true),
-            padding: const EdgeInsets.all(5),
-            elevation: 0,
-            badgeColor: AppColors.errRed,
-            // stackFit: StackFit.loose,
-            // shape:
-            child: child);
+                badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white70, medium: true),
+                padding: const EdgeInsets.all(5),
+                elevation: 0,
+                badgeColor: AppColors.errRed,
+                // stackFit: StackFit.loose,
+                // shape:
+                child: child);
       },
     );
   }

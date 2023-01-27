@@ -26,7 +26,8 @@ mixin _$ChatModel {
       throw _privateConstructorUsedError; // eachTime only 1 user have unreadCounter, checked by lastMessage
   List<String>? get usersIds => throw _privateConstructorUsedError;
   List<UserModel>? get users => throw _privateConstructorUsedError;
-  List<MessageModel>? get messages => throw _privateConstructorUsedError;
+  List<MessageModel>? get messages =>
+      throw _privateConstructorUsedError; // @DateTimeStampConv() DateTime? updatedAt,
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
 
@@ -249,6 +250,7 @@ class _$_ChatModel implements _ChatModel {
     return EqualUnmodifiableListView(value);
   }
 
+// @DateTimeStampConv() DateTime? updatedAt,
   @override
   @DateTimeStampConv()
   final DateTime? timestamp;
@@ -326,7 +328,7 @@ abstract class _ChatModel implements ChatModel {
   List<UserModel>? get users;
   @override
   List<MessageModel>? get messages;
-  @override
+  @override // @DateTimeStampConv() DateTime? updatedAt,
   @DateTimeStampConv()
   DateTime? get timestamp;
   @override

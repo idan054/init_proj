@@ -1,9 +1,11 @@
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../common/service/mixins/assets.gen.dart';
+import '../common/service/mixins/fonts.gen.dart';
 import '../common/themes/app_styles.dart';
 
 export 'bottom_sheet.dart';
@@ -87,7 +89,8 @@ Widget wMainButton(BuildContext context,
 }
 
 // New logo
-Row riltopiaHorizontalLogo({double ratio = 1.0, bool showSubText = false}) {
+Row riltopiaHorizontalLogo(BuildContext context, {double ratio = 1.0, bool showSubText = false}) {
+  var isAdmin = context.uniProvider.currUser.userType == UserTypes.admin;
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -96,7 +99,8 @@ Row riltopiaHorizontalLogo({double ratio = 1.0, bool showSubText = false}) {
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          'RilTopia'.toText(fontSize: 15 * ratio),
+          (isAdmin ? 'RilTopia Admin' : 'RilTopia').toText(fontSize: 15 * ratio),
+          // Text(isAdmin ? 'RilTopia Admin' : 'RilTopia', style: TextStyle(fontFamily: FontFamily.rilTopia, fontWeight: FontWeight.w500, fontSize: 18)),
           if (showSubText) ...[
             3.verticalSpace,
             ' A Social Chat App'.toText(fontSize: 6 * ratio),

@@ -30,7 +30,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   @override
   void initState() {
     // isTagScreen = context.uniProvider.selectedTag != 'New';
-    isComments = widget.replyStyle;
+
+    isComments = !(widget.replyStyle);// no comments when reply mode!
     super.initState();
   }
 
@@ -96,11 +97,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                                 .svg(height: 15, color: AppColors.grey50),
                         selectedColor: AppColors.darkOutline50,
                         // label: (isComments ? 'With comments' : 'Reply style') // Reply only
-                        label: (isComments ? 'Conversion style' : 'Reply style') // Reply only
+                        label: (isComments ? 'With comments' : 'Reply style') // Reply only
                             .toText(color: isComments ? AppColors.white : AppColors.grey50),
                         onSelect: (bool newSelection) {
-                  isComments = !isComments;
-                  setState(() {});
+                  //> BUTTON DISABLED!
+                  // isComments = !isComments;
+                  // setState(() {});
                 }, selected: isComments)
                     .centerLeft
                     .pOnly(left: 5),
@@ -129,6 +131,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       creatorUser: currUser,
                       timestamp: DateTime.now(),
                       enableComments: isComments,
+                      commentedUsersIds: isComments ? [currUser.uid.toString()] : [],
                     );
                     context.uniProvider.updatePostUploaded(true);
                     FeedService.uploadPost(context, post);
