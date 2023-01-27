@@ -371,7 +371,13 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                     ],
                   ),
                   5.verticalSpace,
-                  post.textContent.toText(color: AppColors.white, fontSize: 14)
+                  post.textContent.toTextExpanded(
+                    autoExpanded: true,
+                    textAlign: isHebComment ? TextAlign.right : TextAlign.left,
+                      style: AppStyles.text14PxRegular.copyWith(
+                    color: AppColors.white,
+                    fontSize: 14,
+                  ))
                 ],
               ),
             ).rounded(radius: 10).expanded();

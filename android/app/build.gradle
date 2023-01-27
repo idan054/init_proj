@@ -83,8 +83,8 @@ android {
             keyPassword '123456'
         }
         release {
-            storeFile keystoreProperties['storeFile'] ? file('MomsPassKey.jks') : null
-            keyAlias 'upload'
+            storeFile file('mom-release.jks')
+            keyAlias 'mom'
             storePassword keystoreProperties['MomsPass']
             keyPassword keystoreProperties['MomsPass']
         }
@@ -95,7 +95,8 @@ android {
         release {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+//            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }

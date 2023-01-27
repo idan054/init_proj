@@ -82,11 +82,13 @@ extension StringX on String {
     TextDirection? textDirection,
     int? maxLines,
     ValueChanged<bool>? onChanged,
+    bool autoExpanded = false,
   }) =>
       buildExpandableText(
         this,
         style: style,
         textAlign: textAlign,
+        autoExpanded: autoExpanded,
         textDirection: textDirection,
         maxLines: maxLines,
         onChanged: onChanged,

@@ -6,6 +6,7 @@ import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../common/service/Auth/auth_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/mixins/fonts.gen.dart';
@@ -69,7 +70,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
           ).onTap(() {
-            // TODO Add Terms & Conditions Link
+            launchUrl(
+                Uri.parse(
+                    'https://www.privacypolicies.com/live/4ae28974-cd40-4c8e-b265-6d6da2c7690b'),
+                mode: LaunchMode.externalApplication);
           }),
           const Spacer(flex: 15),
         ],
