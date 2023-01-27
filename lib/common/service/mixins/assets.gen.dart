@@ -34,6 +34,12 @@ class $AssetsFontsGen {
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/AdPrt1.png
+  AssetGenImage get adPrt1 => const AssetGenImage('assets/images/AdPrt1.png');
+
+  /// File path: assets/images/AdPrt2.png
+  AssetGenImage get adPrt2 => const AssetGenImage('assets/images/AdPrt2.png');
+
   /// File path: assets/images/LogoCircularRilTopiaLogo.png
   AssetGenImage get logoCircularRilTopiaLogo =>
       const AssetGenImage('assets/images/LogoCircularRilTopiaLogo.png');
@@ -58,18 +64,25 @@ class $AssetsImagesGen {
   AssetGenImage get commentsOffPNG =>
       const AssetGenImage('assets/images/comments-off-PNG.png');
 
+  /// File path: assets/images/elonMuskAd.png
+  AssetGenImage get elonMuskAd =>
+      const AssetGenImage('assets/images/elonMuskAd.png');
+
   /// File path: assets/images/map_placeholder.png
   AssetGenImage get mapPlaceholder =>
       const AssetGenImage('assets/images/map_placeholder.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
+        adPrt1,
+        adPrt2,
         logoCircularRilTopiaLogo,
         riltopiaAsIconPNG,
         appIcon,
         chatBubblesSolid,
         checkVerifiedImage,
         commentsOffPNG,
+        elonMuskAd,
         mapPlaceholder
       ];
 }
