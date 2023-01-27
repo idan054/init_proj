@@ -71,7 +71,9 @@ class PostBlock extends StatelessWidget {
           ).pOnly(left: 55)
         ],
       ).pOnly(left: 15),
-    ).onTap(() {
+    ).onTap(
+        isConversion ?
+            () {
       isUserPage
           ? Navigator.push(
               context,
@@ -95,7 +97,7 @@ class PostBlock extends StatelessWidget {
                 return CommentsChatScreen(post);
                 // return Offstage();
               });
-    }, radius: 10);
+    } : null , radius: 10);
   }
 
   Widget buildProfile(BuildContext context, bool isUserPage) {
