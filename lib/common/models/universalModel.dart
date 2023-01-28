@@ -13,11 +13,9 @@ import 'package:flutter/foundation.dart';
 
 class UniProvider with ChangeNotifier {
   AppConfigModel localConfig = AppConfigModel(
-    //~ ------------------- Edit this:
-    publicVersionAndroid: 304,        //~ |
-    publicVersionIos: 304,            //~ |
-    //~ --------------------------------
-    // whatsNew: 'Heres what new!',
+    publicVersionAndroid: 1,  //> Auto set on getAppConfig()
+    publicVersionIos: 1,      //> Auto set on getAppConfig()
+    // whatsNew: 'Here's what new!',
     // updateType: UpdateTypes.needed,
     // status: 'ok',
     // statusCode: 200,

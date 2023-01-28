@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/widgets/my_dialog.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../../models/appConfig/app_config_model.dart';
 import '../Database/firebase_db.dart';
 import 'dart:io' show Platform;
@@ -13,6 +14,7 @@ void checkForUpdate(
   AppConfigModel serverConfig, {
   bool mustShowPopup = false,
 }) async {
+
   var serverVer =
       Platform.isAndroid ? serverConfig.publicVersionAndroid : serverConfig.publicVersionIos;
   var localVer =
@@ -22,6 +24,7 @@ void checkForUpdate(
   var updateLink = Uri.parse(
     Platform.isAndroid ? serverConfig.updateAndroidLink ?? '' : serverConfig.updateIosLink ?? '',
   );
+
 
   context.uniProvider
       .updateLocalConfig(localConfig.copyWith(isUpdateAvailable: serverVer != localVer));

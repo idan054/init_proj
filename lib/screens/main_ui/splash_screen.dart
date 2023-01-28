@@ -32,6 +32,12 @@ Future splashInit(BuildContext context) async {
   //   context.router.replaceAll([const OnBoardingRoute()]);
   //   return;
   // }
+  
+    var serverConfig = await getAppConfig(context);
+    var localConfig =
+        context.uniProvider.localConfig; // getAppConfig() set localConfig.isUpdateAvailable!
+    if (serverConfig.statusCode != 200) return;
+    if (localConfig.isUpdateAvailable! && serverConfig.updateType == UpdateTypes.needed) return;
 
   //> First time:
   if (FirebaseAuth.instance.currentUser?.uid == null ||
@@ -39,11 +45,6 @@ Future splashInit(BuildContext context) async {
     context.router.replaceAll([const LoginRoute()]);
   } else {
     //> Next time:
-    var serverConfig = await getAppConfig(context);
-    var localConfig =
-        context.uniProvider.localConfig; // getAppConfig() set localConfig.isUpdateAvailable!
-    if (serverConfig.statusCode != 200) return;
-    if (localConfig.isUpdateAvailable! && serverConfig.updateType == UpdateTypes.needed) return;
     await AuthService.signInWith(context, autoSignIn: true);
     // context.router.replaceAll([DashboardRoute()]);
   }
