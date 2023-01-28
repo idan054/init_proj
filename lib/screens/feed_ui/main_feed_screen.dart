@@ -355,7 +355,8 @@ Widget appBarProfile(BuildContext context) {
   var currUser = context.uniProvider.currUser;
 
   return CircleAvatar(
-    backgroundColor: AppColors.primaryDark,
+    backgroundColor: AppColors.darkOutline,
+    radius: 18,
     child: CircleAvatar(
       radius: 16,
       backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl!),

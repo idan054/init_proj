@@ -12,8 +12,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/extensions/color_printer.dart';
 import '../../common/models/chat/chat_model.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/Chat/chat_services.dart';
@@ -48,16 +50,15 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     //> Uncomment this to auto refresh chats when new message coming
     WidgetsBinding.instance.addPostFrameCallback((_) =>
         // context.uniProvider.addListener(() => listenLoadMore)
-        context.uniProvider.addListener(() => _loadMore(refresh: true))
-        );
+        context.uniProvider.addListener(() => _loadMore(refresh: true)));
 
     super.initState();
   }
 
   // @override
   // void dispose() {
-    // context.uniProvider.removeListener(() => listenLoadMore);
-    // super.dispose();
+  // context.uniProvider.removeListener(() => listenLoadMore);
+  // super.dispose();
   // }
 
   Future _loadMore({bool refresh = false}) async {
@@ -78,7 +79,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     if (updatedList.isNotEmpty) chatList = updatedList;
     // initLoader = false;
     splashLoader = false;
-    if(mounted) setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -108,7 +109,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
           // ]
         ),
         body: Builder(builder: (context) {
-          if (splashLoader) {
+          if (splashLoader && chatList.isEmpty) {
             // First time only
             return const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3)
                 .center;
@@ -120,37 +121,46 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
 
           return Container(
             color: AppColors.primaryDark,
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: chatList.length,
-              itemBuilder: (context, i) {
-                if (chatList.isEmpty) {
-                  return 'Your conversations \nwill be show here'.toText().center;
-                }
-
-                // var chatList = context.listenchatListModelList;
-                // WidgetsBinding.instance.addPostFrameCallback(
-                //         (_) => context.uniProvider.updateChatList(chatList));
-
-                ChatModel chat = chatList[i];
-                var otherUser = chat.users!.firstWhere((user) => user.uid != currUser.uid);
-
-                return StatefulBuilder(builder: (_context, stfSetState) {
-                  return ChatBlockSts(chat, otherUser, onTap: () async {
-                    if(!mounted) return;
-                    chatList[i] = chat;
-                    // var chatId = ChatService.openChat(context, otherUser: otherUser); // no need
-                    await context.router
-                        .push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));
-                    if (_context.uniProvider.activeChat != null) {
-                      print('START: stfSetState()');
-                      chat = _context.uniProvider.activeChat!;
-                      stfSetState(() {});
-                    }
-                  });
-                });
+            child: LazyLoadScrollView(
+              scrollOffset: 500,
+              onEndOfPage: () async {
+                printGreen('START: chat_list_screen.dart onEndOfPage()');
+                // context.uniProvider.updateIsLoading(true);
+                await _loadMore();
+                // context.uniProvider.updateIsLoading(false);
               },
-            ).pOnly(top: 10),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: chatList.length,
+                itemBuilder: (context, i) {
+                  if (chatList.isEmpty) {
+                    return 'Your conversations \nwill be show here'.toText().center;
+                  }
+
+                  // var chatList = context.listenchatListModelList;
+                  // WidgetsBinding.instance.addPostFrameCallback(
+                  //         (_) => context.uniProvider.updateChatList(chatList));
+
+                  ChatModel chat = chatList[i];
+                  var otherUser = chat.users!.firstWhere((user) => user.uid != currUser.uid);
+
+                  return StatefulBuilder(builder: (_context, stfSetState) {
+                    return ChatBlockSts(chat, otherUser, onTap: () async {
+                      if (!mounted) return;
+                      chatList[i] = chat;
+                      // var chatId = ChatService.openChat(context, otherUser: otherUser); // no need
+                      await context.router
+                          .push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));
+                      if (_context.uniProvider.activeChat != null) {
+                        print('START: stfSetState()');
+                        chat = _context.uniProvider.activeChat!;
+                        stfSetState(() {});
+                      }
+                    });
+                  });
+                },
+              ).pOnly(top: 10),
+            ),
           );
         }));
   }

@@ -100,23 +100,27 @@ class _ChatScreenState extends State<ChatScreen> {
               // StreamProvider<List<MessageModel>>.value(
               NotificationListener<UserScrollNotification>(
                 onNotification: (notification) {
-                  final ScrollDirection direction = notification.direction;
-                  if (direction == ScrollDirection.reverse) {
-                    isLoadOlderMessages = true;
-                  } else if (direction == ScrollDirection.forward) {
-                    isLoadOlderMessages = false;
-                  }
-                  // setState(() {});
+                  // final ScrollDirection direction = notification.direction;
+                  // if (direction == ScrollDirection.reverse) {
+                  //   isLoadOlderMessages = true;
+                  // } else if (direction == ScrollDirection.forward) {
+                  //   isLoadOlderMessages = false;
+                  // }
+                  // // setState(() {});
                   return true;
                 },
                 child: StreamBuilder<List<MessageModel>>(
                   stream: Database.streamMessages(widget.chatId, limit: 1),
+                  // initialData: [],
                   // limit: isInitMessages ? 25 : 1),
                   builder: (context, snapshot) {
                     print('START: builder()');
                     // var newMsgs = context.listenMessagesModelList;
-                    MessageModel? newMsg = snapshot.data?.first;
-                    _addLatestMessage(newMsg);
+
+                    if (snapshot.data != null && snapshot.data!.isNotEmpty) {
+                      MessageModel? newMsg = snapshot.data?.first;
+                      _addLatestMessage(newMsg);
+                    }
 
                     return LazyLoadScrollView(
                       scrollOffset: 300,
@@ -277,8 +281,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ? message.createdAt!.substring(9, 14)
                                   : message.createdAt!.substring(0, 14);
 
-                              return Text(
-                                  time,
+                              return Text(time,
                                   style: AppStyles.text10PxRegular
                                       .copyWith(color: AppColors.greyLight));
                             })
