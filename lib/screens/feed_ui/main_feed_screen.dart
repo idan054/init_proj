@@ -455,9 +455,11 @@ Widget appBarProfile(BuildContext context) {
                     leading: Assets.svg.icons.logOut01.svg(color: AppColors.grey50))
                 .pad(0)
                 .onTap(() async {
-              var isAppleLogin = context.uniProvider.currUser.email!.contains('apple');
+              // var isAppleLogin = context.uniProvider.currUser.email!.contains('apple');
+
               await AuthService.auth.signOut();
-              if (!isAppleLogin) await GoogleSignIn().signOut();
+              await FirebaseAuth.instance.signOut();
+              await GoogleSignIn().signOut();
               context.router.replaceAll([const LoginRoute()]);
             }, radius: 5),
           ),

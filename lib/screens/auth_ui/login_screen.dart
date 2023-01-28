@@ -13,7 +13,6 @@ import '../../common/service/mixins/fonts.gen.dart';
 import '../../widgets/my_widgets.dart';
 import 'dart:io' show Platform;
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -46,38 +45,47 @@ class _LoginScreenState extends State<LoginScreen> {
           // googleLoginButton(),
           28.verticalSpace,
           wMainButton(context,
-              radius: 10,
-              isWide: true,
-              title: isLoading ? 'Loading...' : 'Join with Google',
-              icon: Assets.svg.gLogoIcon.svg(height: 25),
-              color: isLoading ? AppColors.greyUnavailable : AppColors.white,
-              textColor: AppColors.darkBg, onPressed: () async {
-            isLoading = true;
-            setState(() {});
-            await AuthService.signInWith(context, autoSignIn: false);
-            isLoading = false;
-            setState(() {});
-          }).appearAll,
+                  radius: 10,
+                  isWide: true,
+                  title: isLoading ? 'Loading...' : 'Join with Google',
+                  icon: Assets.svg.gLogoIcon.svg(height: 25),
+                  color: isLoading ? AppColors.greyUnavailable : AppColors.white,
+                  textColor: AppColors.darkBg,
+                  onPressed: isLoading
+                      ? null
+                      : () async {
+                          isLoading = true;
+                          setState(() {});
+                          await AuthService.signInWith(context, autoSignIn: false);
+                          isLoading = false;
+                          setState(() {});
+                        })
+              .appearAll,
 
           15.verticalSpace,
-          if(Platform.isIOS)
-          wMainButton(context,
-              radius: 10,
-              isWide: true,
-              icon: Assets.svg.apple.svg(height: 23).pOnly(right: 6),
-              title: isLoading ? 'Loading...' : 'Join with Apple',
-              color: isLoading ? AppColors.greyUnavailable : AppColors.white,
-              textColor: AppColors.darkBg, onPressed: () async {
-                isLoading = true;
-                setState(() {});
-                try {
-                  await AuthService.signInWith(context, autoSignIn: false, applePopup: true);
-                } catch (e, s) {
-                  // print(s);
-                }
-                isLoading = false;
-                setState(() {});
-              }).appearAll,
+          if (Platform.isIOS)
+            wMainButton(context,
+                    radius: 10,
+                    isWide: true,
+                    icon: Assets.svg.apple.svg(height: 23).pOnly(right: 6),
+                    title: isLoading ? 'Loading...' : 'Join with Apple',
+                    color: isLoading ? AppColors.greyUnavailable : AppColors.white,
+                    textColor: AppColors.darkBg,
+                    onPressed: isLoading
+                        ? null
+                        : () async {
+                            isLoading = true;
+                            setState(() {});
+                            try {
+                              await AuthService.signInWith(context,
+                                  autoSignIn: false, applePopup: true);
+                            } catch (e, s) {
+                              // print(s);
+                            }
+                            isLoading = false;
+                            setState(() {});
+                          })
+                .appearAll,
           const Spacer(flex: 5),
           RichText(
             textAlign: TextAlign.center,

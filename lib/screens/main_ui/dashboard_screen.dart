@@ -171,7 +171,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Builder buildFab() {
     return Builder(builder: (context) {
       var showFab = context.uniProvider.showFab;
-      var replyStyle = context.uniProvider.feedStatus == FilterTypes.postWithoutComments;
+      var replyStyle = context.listenUniProvider.feedStatus == FilterTypes.postWithoutComments;
       return AnimatedSlide(
         duration: 450.milliseconds,
         offset: showFab ? Offset.zero : const Offset(0, 1.2),

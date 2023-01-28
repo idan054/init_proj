@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
@@ -19,72 +21,69 @@ import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 class AuthService {
   /// streamUsers() Available At [click.Database] // <<---
   static var auth = FirebaseAuth.instance;
-  static User? authUser = FirebaseAuth.instance.currentUser;
+  static User? authUser = auth.currentUser;
 
   /// Google LOGIN
   static Future signInWith(BuildContext context,
       {required bool autoSignIn, bool applePopup = false}) async {
     print('START: signInWith()');
-    // User? userProvider;
 
-    // autoLogin for when user casually come back to the app
-    if (!autoSignIn) {
-      await FirebaseAuth.instance.signOut();
-      if (!applePopup) await GoogleSignIn().signOut();
-    }
-
-    // When try to auto signing but got issues
-    if ((authUser?.uid == null || authUser?.email == null) && autoSignIn) {
+    // Go to LoginRoute() When Err in autoSignIn
+    if (autoSignIn && authUser?.email == null) {
       await FirebaseAuth.instance.signOut();
       context.router.replace(const LoginRoute());
       return;
     }
 
+    // On LoginRoute()
     if (!autoSignIn) {
-      // userProvider = await // No need
-      await (applePopup ? _appleAuthPopup() : _googleAuthPopup());
+      authUser = null;
+      await FirebaseAuth.instance.signOut();
+      if (!applePopup) await GoogleSignIn().signOut();
+
+      await (applePopup ? _appleAuthPopup() : _googleAuthPopup()); // set authUser
+      if (authUser?.email == null) return; // When popup canceled
     }
 
-    // While signing from Login page
-    if ((authUser == null || authUser?.uid == null || authUser?.email == null) && !autoSignIn) {
-      return;
-    }
-
-    //~ Check if User exist:
-    var userEmail = authUser!.email;
-    var userData = await Database.docData('users/$userEmail');
-
+    var userData = await Database.docData('users/${authUser!.email}');
     if (userData == null || userData['tags'] == null) {
-      printYellow('START User: New');
-
-      // This fix bug when user out while signup. // BETA COMMENT
-      // if (authUser == null || authUser?.uid == null || authUser?.email == null) {
-      //   authUser = await (applePopup ? _appleAuthPopup() : _googleAuthPopup());
-      // }
-
-      var user = context.uniProvider.currUser.copyWith(
-        uid: authUser!.uid,
-        email: authUser!.email,
-        // name: userProvider.displayName, // DEFAULT
-        // photoUrl: userProvider.photoURL, // DEFAULT
-      );
-      context.uniProvider.updateUser(user);
-      context.router.replace(const OnBoardingRoute());
+      printYellow('START: handleNewUser');
+      _handleNewUser(context);
     } else {
-      printYellow('START User: Exist');
-      var currUser = UserModel.fromJson(userData);
-
-      String? fcm = await FirebaseMessaging.instance.getToken();
-      // print('fcm $fcm');
-      if (userData['fcm'] != fcm) {
-        Database.updateFirestore(
-            collection: 'users', docName: userData['email'], toJson: {'fcm': fcm});
-        currUser = currUser.copyWith(fcm: fcm);
-      }
-
-      context.uniProvider.updateUser(currUser);
-      context.router.replace(DashboardRoute());
+      printYellow('START: handleExistUser()');
+      _handleExistUser(context, userData);
     }
+  }
+
+  static void _handleExistUser(BuildContext context, Map<String, dynamic> userData) async {
+    var currUser = UserModel.fromJson(userData);
+
+    String? fcm = await FirebaseMessaging.instance.getToken();
+    // print('fcm $fcm');
+    if (userData['fcm'] != fcm) {
+      Database.updateFirestore(
+          collection: 'users', docName: userData['email'], toJson: {'fcm': fcm});
+      currUser = currUser.copyWith(fcm: fcm);
+    }
+
+    context.uniProvider.updateUser(currUser);
+    context.router.replace(DashboardRoute());
+  }
+
+  static void _handleNewUser(BuildContext context) async {
+    //- This fix bug when user out while signup. // BETA COMMENT
+    //- if (authUser == null || authUser?.uid == null || authUser?.email == null) {
+    //-   authUser = await (applePopup ? _appleAuthPopup() : _googleAuthPopup());
+    //- }
+
+    String? fcm = await FirebaseMessaging.instance.getToken();
+    var user = context.uniProvider.currUser.copyWith(
+      uid: authUser!.uid,
+      email: authUser!.email,
+      fcm: fcm,
+    );
+    context.uniProvider.updateUser(user);
+    context.router.replace(const OnBoardingRoute());
   }
 
   // static Future<User?> _setFcm() async {
@@ -93,62 +92,39 @@ class AuthService {
 
   static Future<User?> _googleAuthPopup() async {
     print('START: _googleAuthPopup()');
-    final googleUser = await GoogleSignIn(
+    final googleProvider = await GoogleSignIn(
             clientId: Platform.isIOS
                 ? DefaultFirebaseOptions.currentPlatform.iosClientId
                 : DefaultFirebaseOptions.currentPlatform.androidClientId)
         .signIn();
-    if (googleUser == null) return null;
+    if (googleProvider == null) return null;
 
     // Sign in & Create user on firebase console
-    final googleAuth = await googleUser.authentication;
-    await FirebaseAuth.instance.signInWithCredential(GoogleAuthProvider.credential(
+    final googleAuth = await googleProvider.authentication;
+    await auth.signInWithCredential(GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
-    authUser = FirebaseAuth.instance.currentUser;
-    print('authUser $authUser');
+
+    authUser = auth.currentUser;
     return authUser;
   }
-
-  // Future<User?> signInWithApple() async {
-  //   final AuthorizationResult result = await AppleSignIn.performRequests([
-  //     const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-  //   ]);
-  //
-  //       final AppleIdCredential appleIdCredential = result.credential;
-  //
-  //       OAuthProvider oAuthProvider =
-  //       OAuthProvider("apple.com");
-  //       // oAuthProvider.setScopes(scopes)
-  //
-  // }
 
   /// Apple LOGIN
   static Future<User?> _appleAuthPopup() async {
     print('START: _appleAuthPopup()');
-    // 1. perform the sign-in request
-
-    // final apl.AuthorizationResult result = await
-    // apl.AppleSignIn.performRequests([
-    //   const apl.AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
-    // ]);
 
     final appleProvider = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
+        scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName]);
 
-    // 2. check the result
     final credential = OAuthProvider('apple.com').credential(
         idToken: appleProvider.identityToken, accessToken: appleProvider.authorizationCode);
-    final authSign = await auth.signInWithCredential(credential);
-    final firebaseUser = authSign.user;
-    if (firebaseUser != null && firebaseUser.email == null) {
-      var mail = '${firebaseUser.uid.substring(0, 10)}@apple.com';
-      firebaseUser.updateEmail(mail);
+    await auth.signInWithCredential(credential);
+
+    authUser = auth.currentUser;
+    if (authUser != null && authUser!.email == null) {
+      var mail = '${authUser!.uid.substring(0, 10)}@apple.com';
+      authUser!.updateEmail(mail);
     }
-    return firebaseUser;
+    return authUser;
   }
 }
 
