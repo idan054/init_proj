@@ -49,11 +49,13 @@ class _UserScreenState extends State<UserScreen> {
   var activeFilter = FilterTypes.postsByUser;
   var isLoading = true;
   var isBioExpanded = false;
+  bool isBlocked = false;
 
   @override
   void initState() {
     print('START: initState()');
-    _loadMore();
+    isBlocked = context.uniProvider.currUser.blockedUsers.contains(widget.user.uid);
+    _loadMore(refresh: true);
     super.initState();
   }
 
@@ -61,20 +63,24 @@ class _UserScreenState extends State<UserScreen> {
   Future _loadMore({bool refresh = false}) async {
     print('START: USER _loadMore()');
 
-    isLoading = true;
-    setState(() {});
-    if (refresh) postList = [];
+    if (refresh) {
+      postList = [];
+      isLoading = true;
+      setState(() {});
+    }
     List newPosts = await Database.advanced.handleGetModel(
+      context,
       ModelTypes.posts,
       postList,
       filter: activeFilter,
-      uid: widget.user.uid,
     );
 
     if (newPosts.isNotEmpty) postList = [...newPosts];
-    print('postList ${postList.length}');
-    isLoading = false;
-    setState(() {});
+    // print('postList ${postList.length}');
+    if (refresh) {
+      isLoading = false;
+    }
+      setState(() {});
   }
 
   @override
@@ -97,7 +103,7 @@ class _UserScreenState extends State<UserScreen> {
         child: Scaffold(
           backgroundColor: AppColors.darkBg,
           body: LazyLoadScrollView(
-            scrollOffset: 1500,
+            scrollOffset: 500,
             onEndOfPage: () async {
               printGreen('START: user_screen.dart onEndOfPage()');
               await _loadMore();
@@ -123,19 +129,21 @@ class _UserScreenState extends State<UserScreen> {
                               ? "${isCurrUserProfile ? 'Your' : "${user.name}'s"} Rils will appear here"
                               : 'Conversations ${isCurrUserProfile ? 'you' : "${user.name}"} joined will appear here';
 
-                          return postList.isEmpty
-                              ? text.toText(color: AppColors.grey50).pOnly(top: 100)
-                              : Container(
-                                  color: AppColors.darkOutline,
-                                  child: ListView.builder(
-                                      physics: const ScrollPhysics(),
-                                      shrinkWrap: true,
-                                      itemCount: postList.length,
-                                      itemBuilder: (BuildContext context, int i) {
-                                        // PostView(postList[i])
-                                        return PostBlock(postList[i], isUserPage: true);
-                                      }),
-                                );
+                          if (postList.isEmpty || isBlocked) {
+                            return text.toText(color: AppColors.grey50).pOnly(top: 100);
+                          }
+
+                          return Container(
+                            color: AppColors.darkOutline,
+                            child: ListView.builder(
+                                physics: const ScrollPhysics(),
+                                shrinkWrap: true,
+                                itemCount: postList.length,
+                                itemBuilder: (BuildContext context, int i) {
+                                  // PostView(postList[i])
+                                  return PostBlock(postList[i], isUserPage: true);
+                                }),
+                          );
                         })
                       ],
                     ),
@@ -176,7 +184,7 @@ class _UserScreenState extends State<UserScreen> {
             ],
             onTap: (value) async {
               if (value == 0) activeFilter = FilterTypes.postsByUser;
-              if (value == 1) activeFilter = FilterTypes.postConversionsOfUser;
+              if (value == 1) activeFilter = FilterTypes.converstionsPostByUser;
               context.uniProvider.updateCurrFilter(activeFilter);
               await _loadMore(refresh: true);
             },
@@ -188,6 +196,8 @@ class _UserScreenState extends State<UserScreen> {
   }
 
   Container buildTopProfile(double topPadding, BuildContext context, bool isCurrUserProfile) {
+    var currUser = context.uniProvider.currUser;
+
     return Container(
       height: topPadding,
       color: AppColors.darkOutline,
@@ -204,6 +214,10 @@ class _UserScreenState extends State<UserScreen> {
                 ? context.router.replaceAll([DashboardRoute()])
                 : Navigator.pop(context);
           }),
+          // Email also show to admins on 'Admin delete Ril'
+          // if (currUser.userType == UserTypes.admin)
+          //   widget.user.email.toString().toText(color: AppColors.grey50).pOnly(bottom: 20),
+
           CircleAvatar(
             radius: 15,
             backgroundColor: AppColors.darkOutline50,
@@ -225,10 +239,10 @@ class _UserScreenState extends State<UserScreen> {
                         onTap: () => reportUserPopup(context, widget.user),
                         child: 'Report member'.toText(),
                       ),
-                      // PopupMenuItem(
-                      //   // TODO LATER LIST: Add Block user action
-                      //   child: 'Block member'.toText(),
-                      // ),
+                      PopupMenuItem(
+                        onTap: () => blockUserPopup(context, widget.user),
+                        child: (isBlocked ? 'UnBlock member' : 'Block member').toText(),
+                      ),
                     ]
                   ];
                 }),
@@ -284,6 +298,61 @@ class _UserScreenState extends State<UserScreen> {
                 rilFlushBar(context, 'Thanks, We\'ll handle it asap');
               },
               child: 'Report'.toText(color: AppColors.primaryLight)));
+    });
+  }
+
+  void blockUserPopup(BuildContext context, UserModel user) {
+    var currUser = context.uniProvider.currUser;
+
+    Future.delayed(150.milliseconds).then((_) {
+      String userName = '${user.name}';
+      showRilDialog(context,
+          title: isBlocked ? 'Unblock?' : 'Are you sure?',
+          desc: (isBlocked
+                  ? 'You will see content from \n$userName \n'
+                  : 'You will not see content from \n$userName \n')
+              // 'You can\'t Undo it. Are you sure?'
+              .toText(maxLines: 10),
+          barrierDismissible: true,
+          secondaryBtn: TextButton(
+              onPressed: () async {
+                if (isBlocked) {
+                  // UnBlock action:
+                  var blockedUsers = [...currUser.blockedUsers];
+                  blockedUsers.remove(user.uid);
+                  currUser = currUser.copyWith(blockedUsers: blockedUsers);
+                  context.uniProvider.updateUser(currUser);
+
+                  Database.updateFirestore(
+                    collection: 'users',
+                    docName: currUser.email.toString(),
+                    toJson: currUser.toJson(),
+                  );
+
+                  Navigator.of(context).pop();
+                  rilFlushBar(context, '$userName unblocked.');
+                  isBlocked = false;
+                  setState(() {});
+                } else {
+                  // Block action:
+                  var blockedUsers = [...currUser.blockedUsers];
+                  blockedUsers.add(user.uid.toString());
+                  currUser = currUser.copyWith(blockedUsers: blockedUsers);
+                  context.uniProvider.updateUser(currUser);
+
+                  Database.updateFirestore(
+                    collection: 'users',
+                    docName: currUser.email.toString(),
+                    toJson: currUser.toJson(),
+                  );
+
+                  Navigator.of(context).pop();
+                  rilFlushBar(context, '$userName blocked.');
+                  isBlocked = true;
+                  setState(() {});
+                }
+              },
+              child: 'Block'.toText(color: AppColors.primaryLight)));
     });
   }
 
@@ -425,13 +494,17 @@ class _UserScreenState extends State<UserScreen> {
                       side: const BorderSide(width: 2.0, color: AppColors.primaryLight2),
                       shape: 8.roundedShape,
                     ),
-                    icon: Assets.svg.icons.dmPlaneUntitledIcon
-                        .svg(height: 17, color: AppColors.primaryLight2),
-                    label:
-                        'Send DM'.toText(fontSize: 13, color: AppColors.primaryLight2, bold: true),
-                    onPressed: () {
-                      ChatService.openChat(context, otherUser: user);
-                    },
+                    icon: isBlocked
+                        ? const Offstage()
+                        : Assets.svg.icons.dmPlaneUntitledIcon
+                            .svg(height: 17, color: AppColors.primaryLight2),
+                    label: (isBlocked ? 'Blocked' : 'Send DM')
+                        .toText(fontSize: 13, color: AppColors.primaryLight2, bold: true),
+                    onPressed: isBlocked
+                        ? null
+                        : () {
+                            ChatService.openChat(context, otherUser: user);
+                          },
                   ),
                 ),
                 12.verticalSpace,

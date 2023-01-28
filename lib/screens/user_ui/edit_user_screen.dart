@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:badges/badges.dart';
 import 'package:camera/camera.dart';
 import 'package:example/common/extensions/extensions.dart';
@@ -103,7 +105,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
                   .where('creatorUser.uid', isEqualTo: updatedUser.uid)
                   .get();
 
-              List posts = await FsAdvanced().docsToModelList(currUser.uid!, snap, ModelTypes.posts);
+              List posts = await FsAdvanced().docsToModelList(context, snap, ModelTypes.posts);
               for (PostModel post in posts) {
                 var updatedPost = post.copyWith(creatorUser: updatedUser);
                 // print('posts.length ${posts.length}');

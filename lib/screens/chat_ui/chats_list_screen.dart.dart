@@ -69,9 +69,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     if (refresh) chatList = [];
     var updatedList = <ChatModel>[
       ...await Database.advanced.handleGetModel(
+        context,
         ModelTypes.chats,
         chatList,
-        uid: context.uniProvider.currUser.uid,
       )
     ];
     print('updatedList ${updatedList.length}');

@@ -60,7 +60,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
 
   Future _loadOlderMessages() async {
     // splashLoader = true; setState(() {});
-    List olderMessages = await Database.advanced.handleGetModel(ModelTypes.posts, comments,
+    List olderMessages = await Database.advanced.handleGetModel(context, ModelTypes.posts, comments,
         collectionReference: 'posts/${widget.post.id}/comments');
     if (olderMessages.isNotEmpty) comments = [...olderMessages];
     setState(() {});

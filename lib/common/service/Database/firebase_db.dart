@@ -19,7 +19,7 @@ import 'package:hive/hive.dart';
 
 enum FeedTypes { members, conversations}
 
-enum FilterTypes { postsByUser, postWithoutComments, postWithComments, postConversionsOfUser }
+enum FilterTypes { postsByUser, postWithoutComments, postWithComments, converstionsPostByUser }
 
 //> MUST Be same as collection name!
 enum ModelTypes { posts, chats, messages, users }

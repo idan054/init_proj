@@ -1,8 +1,9 @@
-// ignore_for_file: unused_local_variable, no_leading_underscores_for_local_identifiers
+// ignore_for_file: unused_local_variable, no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 
 import 'dart:async';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
@@ -17,11 +18,11 @@ class FsAdvanced {
   static final db = FirebaseFirestore.instance;
 
   Future<List> handleGetModel(
+    BuildContext context,
     ModelTypes modelType,
     List? currList, {
     String? collectionReference,
     FilterTypes? filter,
-    String? uid,
   }) async {
     var collectionRef = collectionReference ?? modelType.name;
     print('START: handleGetModel() [$collectionRef]');
@@ -35,11 +36,12 @@ class FsAdvanced {
 
     // 1/2) Set modelList from Database snap:
     print('Start fetch From: ${timeStamp == null ? 'Most recent' : 'timeStamp'}');
-    var snap = await getDocsBasedModel(uid, timeStamp, modelType, collectionRef, filter: filter);
+    var snap =
+        await getDocsBasedModel(context, timeStamp, modelType, collectionRef, filter: filter);
 
     // 2/2) .fromJson() To postModel, userModel etc...
     if (snap.docs.isNotEmpty) {
-      var newItems = await docsToModelList(uid, snap, modelType);
+      var newItems = await docsToModelList(context, snap, modelType);
 
       modelList = [...modelList, ...newItems];
       print('✴️ SUMMARY: ${modelList.length} ${collectionRef.toUpperCase()}');
@@ -53,9 +55,11 @@ class FsAdvanced {
 
   // 1/2
   Future<QuerySnapshot<Map<String, dynamic>>> getDocsBasedModel(
-      String? uid, Timestamp? timestamp, ModelTypes modelType, String collectionRef,
+      BuildContext context, Timestamp? timestamp, ModelTypes modelType, String collectionRef,
       {FilterTypes? filter}) async {
     print('START: getDocsBasedModel() - ${modelType.name}');
+    var uid = context.uniProvider.currUser.uid;
+
     print(timestamp == null
         ? 'timestamp not found! - Get most recent instead.'
         : 'timestamp: $timestamp');
@@ -72,18 +76,17 @@ class FsAdvanced {
         //~ Filters (query) REQUIRE an index. Check log to create it.
 
         if (filter == FilterTypes.postsByUser) {
-          reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid!);
+          reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid);
           reqBase = reqBase.where('enableComments', isEqualTo: false); // Rils reply tab
+        }
+        if (filter == FilterTypes.converstionsPostByUser) {
+          reqBase = reqBase.where('commentedUsersIds', arrayContains: uid!);
         }
         if (filter == FilterTypes.postWithComments) {
           reqBase = reqBase.where('enableComments', isEqualTo: true);
         }
         if (filter == FilterTypes.postWithoutComments) {
           reqBase = reqBase.where('enableComments', isEqualTo: false);
-        }
-        if (filter == FilterTypes.postConversionsOfUser) {
-          // AKA conversion users
-          reqBase = reqBase.where('commentedUsersIds', arrayContains: uid!);
         }
         break;
       case ModelTypes.chats:
@@ -96,13 +99,23 @@ class FsAdvanced {
 
   // 2/2
   Future<List> docsToModelList(
-      String? uid, QuerySnapshot<Map<String, dynamic>> snap, ModelTypes modelType) async {
+      BuildContext context, QuerySnapshot<Map<String, dynamic>> snap, ModelTypes modelType) async {
     print('START: docsToModelList() - ${modelType.name}');
+    var uid = context.uniProvider.currUser.uid;
 
     List listModel;
     switch (modelType) {
       case ModelTypes.posts:
         listModel = snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+
+        // Remove locally because can't multiple 'isNotEqualTo' on server (Compare 2 lists)
+        var blockedUsers = context.uniProvider.currUser.blockedUsers;
+        for (var post in [...listModel]) {
+          if (blockedUsers.contains(post.creatorUser!.uid)) {
+            printYellow('Post Remove locally from ${post.creatorUser.email}');
+            listModel.remove(post);
+          }
+        }
         break;
       case ModelTypes.chats:
         listModel = snap.docs.map((doc) {

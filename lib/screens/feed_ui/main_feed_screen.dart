@@ -103,7 +103,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     }
 
     List newPosts =
-        await Database.advanced.handleGetModel(ModelTypes.posts, postList, filter: activeFilter);
+        await Database.advanced.handleGetModel(context, ModelTypes.posts, postList, filter: activeFilter);
     if (newPosts.isNotEmpty) postList = [...newPosts];
     splashLoader = false;
 
