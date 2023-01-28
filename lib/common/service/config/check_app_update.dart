@@ -7,7 +7,7 @@ import '../Database/firebase_db.dart';
 import 'dart:io' show Platform;
 import 'package:url_launcher/url_launcher.dart';
 
-void chekForUpdate(
+void checkForUpdate(
   BuildContext context,
   AppConfigModel localConfig,
   AppConfigModel serverConfig, {

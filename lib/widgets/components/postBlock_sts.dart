@@ -349,7 +349,7 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
 
   @override
   void initState() {
-    _animationController = AnimationController(vsync: this, duration: 3.seconds);
+    _animationController = AnimationController(vsync: this, duration: 2.seconds);
     _animationController.repeat(reverse: true);
     super.initState();
   }

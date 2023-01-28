@@ -1,4 +1,3 @@
-// import 'package:apple_sign_in/apple_sign_in.dart' as apl;
 import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
@@ -8,13 +7,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'dart:io' show Platform;
-
 import '../../models/user/user_model.dart';
 import '../../providers/firebase_options.dart';
 import '../Database/firebase_db.dart' as click;
 import '../Database/firebase_db.dart';
+
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+// import 'package:apple_sign_in/apple_sign_in.dart' as apl;
 
 class AuthService {
   /// streamUsers() Available At [click.Database] // <<---
@@ -25,7 +25,7 @@ class AuthService {
   static Future signInWith(BuildContext context,
       {required bool autoSignIn, bool applePopup = false}) async {
     print('START: signInWith()');
-    User? userProvider;
+    // User? userProvider;
 
     // autoLogin for when user casually come back to the app
     if (!autoSignIn) {
@@ -37,35 +37,39 @@ class AuthService {
     if ((authUser?.uid == null || authUser?.email == null) && autoSignIn) {
       await FirebaseAuth.instance.signOut();
       context.router.replace(const LoginRoute());
+      return;
     }
 
     if (!autoSignIn) {
-      userProvider = await (applePopup ? _appleAuthPopup() : _googleAuthPopup());
+      // userProvider = await // No need
+      await (applePopup ? _appleAuthPopup() : _googleAuthPopup());
     }
 
-    print('userProvider ${userProvider}');
-    if (userProvider == null && !autoSignIn) return; // ?
+    // While signing from Login page
+    if ((authUser == null || authUser?.uid == null || authUser?.email == null) && !autoSignIn) {
+      return;
+    }
 
     //~ Check if User exist:
-    var userEmail = authUser?.uid == null ? userProvider?.email : authUser!.email;
+    var userEmail = authUser!.email;
     var userData = await Database.docData('users/$userEmail');
 
     if (userData == null || userData['tags'] == null) {
       printYellow('START User: New');
 
-      // This fix bug when user out while signup.
-      if (userProvider?.uid == null) {
-        userProvider = await (applePopup ? _appleAuthPopup() : _googleAuthPopup());
-      }
+      // This fix bug when user out while signup. // BETA COMMENT
+      // if (authUser == null || authUser?.uid == null || authUser?.email == null) {
+      //   authUser = await (applePopup ? _appleAuthPopup() : _googleAuthPopup());
+      // }
 
       var user = context.uniProvider.currUser.copyWith(
-        uid: userProvider!.uid,
-        email: userProvider.email,
+        uid: authUser!.uid,
+        email: authUser!.email,
         // name: userProvider.displayName, // DEFAULT
         // photoUrl: userProvider.photoURL, // DEFAULT
       );
       context.uniProvider.updateUser(user);
-      context.router.replace(autoSignIn ? const OnBoardingRoute() : const LoginRoute());
+      context.router.replace(const OnBoardingRoute());
     } else {
       printYellow('START User: Exist');
       var currUser = UserModel.fromJson(userData);
@@ -101,25 +105,49 @@ class AuthService {
     await FirebaseAuth.instance.signInWithCredential(GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
     authUser = FirebaseAuth.instance.currentUser;
-    print('authUser ${authUser}');
+    print('authUser $authUser');
     return authUser;
   }
+
+  // Future<User?> signInWithApple() async {
+  //   final AuthorizationResult result = await AppleSignIn.performRequests([
+  //     const AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+  //   ]);
+  //
+  //       final AppleIdCredential appleIdCredential = result.credential;
+  //
+  //       OAuthProvider oAuthProvider =
+  //       OAuthProvider("apple.com");
+  //       // oAuthProvider.setScopes(scopes)
+  //
+  // }
 
   /// Apple LOGIN
   static Future<User?> _appleAuthPopup() async {
     print('START: _appleAuthPopup()');
     // 1. perform the sign-in request
+
+    // final apl.AuthorizationResult result = await
+    // apl.AppleSignIn.performRequests([
+    //   const apl.AppleIdRequest(requestedScopes: [Scope.email, Scope.fullName])
+    // ]);
+
     final appleProvider = await SignInWithApple.getAppleIDCredential(
       scopes: [
         AppleIDAuthorizationScopes.email,
-        // AppleIDAuthorizationScopes.fullName,
+        AppleIDAuthorizationScopes.fullName,
       ],
     );
+
     // 2. check the result
     final credential = OAuthProvider('apple.com').credential(
         idToken: appleProvider.identityToken, accessToken: appleProvider.authorizationCode);
     final authSign = await auth.signInWithCredential(credential);
     final firebaseUser = authSign.user;
+    if (firebaseUser != null && firebaseUser.email == null) {
+      var mail = '${firebaseUser.uid.substring(0, 10)}@apple.com';
+      firebaseUser.updateEmail(mail);
+    }
     return firebaseUser;
   }
 }

@@ -33,17 +33,17 @@ Future splashInit(BuildContext context) async {
   //   return;
   // }
 
-  var serverConfig = await getAppConfig(context);
-  var localConfig =
-      context.uniProvider.localConfig; // getAppConfig() set localConfig.isUpdateAvailable!
-  if (serverConfig.statusCode != 200) return;
-  if (localConfig.isUpdateAvailable! && serverConfig.updateType == UpdateTypes.needed) return;
-
   //> First time:
-  if (FirebaseAuth.instance.currentUser?.uid == null) {
+  if (FirebaseAuth.instance.currentUser?.uid == null ||
+      FirebaseAuth.instance.currentUser?.email == null) {
     context.router.replaceAll([const LoginRoute()]);
   } else {
     //> Next time:
+    var serverConfig = await getAppConfig(context);
+    var localConfig =
+        context.uniProvider.localConfig; // getAppConfig() set localConfig.isUpdateAvailable!
+    if (serverConfig.statusCode != 200) return;
+    if (localConfig.isUpdateAvailable! && serverConfig.updateType == UpdateTypes.needed) return;
     await AuthService.signInWith(context, autoSignIn: true);
     // context.router.replaceAll([DashboardRoute()]);
   }

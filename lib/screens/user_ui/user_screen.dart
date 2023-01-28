@@ -143,7 +143,7 @@ class _UserScreenState extends State<UserScreen> {
         padding: 5.vertical,
         color: AppColors.primaryDark,
         child: Builder(builder: (context) {
-          var title = isCurrUserProfile ? 'Your Rils' : "${user.name}'s Rils";
+          var title = isCurrUserProfile ? 'Your Rils' : "Rils";
           // return title.toText(fontSize: 18, medium: true).centerLeft.py(12).px(25);
           return TabBar(
             indicator: UnderlineTabIndicator(
@@ -152,8 +152,9 @@ class _UserScreenState extends State<UserScreen> {
             labelStyle: AppStyles.text14PxRegular,
             indicatorColor: AppColors.primaryOriginal,
             tabs: [
-              Tab(text: '$title'),
-              Tab(text: 'Conversions'),
+              Tab(text: title),
+              Tab(text: "${user.name}'s Conversions"),
+
               // Tab(text: 'Latest'),
               // Tab(text: 'Questions'),
             ],
@@ -331,7 +332,9 @@ class _UserScreenState extends State<UserScreen> {
                       if (user.userType == UserTypes.admin) ...[
                         12.horizontalSpace,
                         buildRilChip('Admin',
-                            icon: Assets.images.riltopiaAsIconPNG.image(height: 14)),
+                            icon: Opacity(
+                                opacity: 0.8,
+                                child: Assets.images.riltopiaAsIconPNG.image(height: 14))),
                       ]
                     ],
                   ),

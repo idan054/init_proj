@@ -160,7 +160,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                 var title = "You're ${user.age} y.o $gender";
                 showRilDialog(context,
                     title: title,
-                    desc: "You can't change your age & gender later".toText(fontSize: 13),
+                    desc: "For a safe community, You CAN'T change your age & gender later".toText(fontSize: 13),
                     secondaryBtn: TextButton(
                         child: 'Confirm'.toText(color: AppColors.primaryLight),
                         onPressed: () {

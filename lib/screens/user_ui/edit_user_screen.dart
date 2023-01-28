@@ -138,7 +138,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
                       .px(20),
                   30.verticalSpace,
                   rilTextField(
-                    label: 'Nickname',
+                    // label: 'Nickname',
+                    label: 'Name',
                     textAlign: TextAlign.left,
                     controller: nameController,
                     maxLines: 1,

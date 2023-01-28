@@ -82,8 +82,10 @@ class _NameProfileViewState extends State<NameProfileView> {
           'Add a profile picture'.toText(fontSize: 13, medium: true),
           50.verticalSpace,
           rilTextField(
-            label: 'Nickname',
+            // label: 'Nickname',
+            label: 'Name',
             hint: 'What is your name?',
+            maxLines: 1,
             controller: nameController,
             validator: (value) {
               if (nameController.text.replaceAll(' ', '').isEmpty) return '';

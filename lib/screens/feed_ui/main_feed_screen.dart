@@ -11,15 +11,18 @@ import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:example/main.dart';
+import 'dart:io' show Platform;
 
 // import 'package:example/common/service/Auth/firebase_db.dart';
 import 'package:example/common/dump/postViewOld_sts.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:example/widgets/my_widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -28,6 +31,7 @@ import '../../common/extensions/color_printer.dart';
 import '../../common/models/post/post_model.dart';
 import '../../common/models/universalModel.dart';
 import '../../common/models/user/user_model.dart';
+import '../../common/service/Auth/auth_services.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/config/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
@@ -177,11 +181,11 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
             child: NotificationListener<UserScrollNotification>(
               onNotification: (notification) {
                 final ScrollDirection direction = notification.direction;
-                  if (direction == ScrollDirection.reverse) {
-                    context.uniProvider.updateShowFab(false);
-                  } else if (direction == ScrollDirection.forward) {
-                    context.uniProvider.updateShowFab(true);
-                  }
+                if (direction == ScrollDirection.reverse) {
+                  context.uniProvider.updateShowFab(false);
+                } else if (direction == ScrollDirection.forward) {
+                  context.uniProvider.updateShowFab(true);
+                }
                 // setState(() {});
                 return true;
               },
@@ -280,8 +284,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       elevation: 2,
       backgroundColor: AppColors.primaryDark,
       // backgroundColor: AppColors.darkBg,
-      title:
-          riltopiaHorizontalLogo(context, ratio: 1.15).pOnly(bottom: 5, right: 5, left: 5, top: 5).centerLeft,
+      title: riltopiaHorizontalLogo(context, ratio: 1.15)
+          .pOnly(bottom: 5, right: 5, left: 5, top: 5)
+          .centerLeft,
       // .onTap(() {}, radius: 8),
       actions: [
         //~ Report Screen
@@ -290,7 +295,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
         //     radius: 14,
         //     child: Assets.svg.icons.flag03.svg(color: AppColors.white, height: 15)),
 
-            // child: Icons.flag.icon(color: AppColors.white,)),
+        // child: Icons.flag.icon(color: AppColors.white,)),
         appBarProfile(context),
       ],
 
@@ -415,7 +420,7 @@ Widget appBarProfile(BuildContext context) {
               var serverConfig = context.uniProvider.serverConfig;
 
               WidgetsBinding.instance.addPostFrameCallback(
-                  (_) => chekForUpdate(context, localConfig, serverConfig!, mustShowPopup: true));
+                  (_) => checkForUpdate(context, localConfig, serverConfig!, mustShowPopup: true));
             }, radius: 5),
           ),
 
@@ -449,7 +454,10 @@ Widget appBarProfile(BuildContext context) {
                     title: 'Log out'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
                     leading: Assets.svg.icons.logOut01.svg(color: AppColors.grey50))
                 .pad(0)
-                .onTap(() {
+                .onTap(() async {
+              var isAppleLogin = context.uniProvider.currUser.email!.contains('apple');
+              await AuthService.auth.signOut();
+              if (!isAppleLogin) await GoogleSignIn().signOut();
               context.router.replaceAll([const LoginRoute()]);
             }, radius: 5),
           ),

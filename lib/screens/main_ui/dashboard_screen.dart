@@ -54,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     var serverConfig = context.uniProvider.serverConfig;
 
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => chekForUpdate(context, localConfig, serverConfig!));
+        .addPostFrameCallback((_) => checkForUpdate(context, localConfig, serverConfig!));
 
     _pageController = PageController(initialPage: widget.dashboardPage.index);
     sItem = widget.dashboardPage;
@@ -71,11 +71,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // 0 = home, 2 = chat
     //    _pageController.animateToPage(homePage ? 2 : 0, duration: 200.milliseconds, curve: Curves.easeIn);
     // if (sItem.index == 1) return;
+
     if (mounted) setState(() {});
     if (navBar) {
       _pageController.jumpToPage(i);
     }
-
     homePage = sItem == TabItems.home;
   }
 
@@ -170,8 +170,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Builder buildFab() {
     return Builder(builder: (context) {
-      var showFab = context.listenUniProvider.showFab;
-      var replyStyle = context.listenUniProvider.feedStatus == FilterTypes.postWithoutComments;
+      var showFab = context.uniProvider.showFab;
+      var replyStyle = context.uniProvider.feedStatus == FilterTypes.postWithoutComments;
       return AnimatedSlide(
         duration: 450.milliseconds,
         offset: showFab ? Offset.zero : const Offset(0, 1.2),
@@ -218,7 +218,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       stream: Database.streamChatsUnreadCounter(context),
       initialData: 0,
       builder: (context, snapshot) {
-        var counter = context.listenUniProvider.currUser.unreadCounter;
+        var counter = context.uniProvider.currUser.unreadCounter;
         return counter == 0
             ? child
             : Badge(
