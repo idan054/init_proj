@@ -21,6 +21,7 @@ class FsAdvanced {
     BuildContext context,
     ModelTypes modelType,
     List? currList, {
+    String? uid, // Could be different than curr user, like in UserScreen()
     String? collectionReference,
     FilterTypes? filter,
   }) async {
@@ -36,8 +37,8 @@ class FsAdvanced {
 
     // 1/2) Set modelList from Database snap:
     print('Start fetch From: ${timeStamp == null ? 'Most recent' : 'timeStamp'}');
-    var snap =
-        await getDocsBasedModel(context, timeStamp, modelType, collectionRef, filter: filter);
+    var snap = await getDocsBasedModel(context, timeStamp, modelType, collectionRef,
+        filter: filter, uid: uid);
 
     // 2/2) .fromJson() To postModel, userModel etc...
     if (snap.docs.isNotEmpty) {
@@ -56,16 +57,16 @@ class FsAdvanced {
   // 1/2
   Future<QuerySnapshot<Map<String, dynamic>>> getDocsBasedModel(
       BuildContext context, Timestamp? timestamp, ModelTypes modelType, String collectionRef,
-      {FilterTypes? filter}) async {
+      {FilterTypes? filter, String? uid}) async {
     print('START: getDocsBasedModel() - ${modelType.name}');
-    var uid = context.uniProvider.currUser.uid;
 
     print(timestamp == null
         ? 'timestamp not found! - Get most recent instead.'
         : 'timestamp: $timestamp');
 
+    var limit = modelType == ModelTypes.messages ? 25 : 8;
     QuerySnapshot<Map<String, dynamic>>? docs;
-    var reqBase = db.collection(collectionRef).orderBy('timestamp', descending: true).limit(8);
+    var reqBase = db.collection(collectionRef).orderBy('timestamp', descending: true).limit(limit);
     if (timestamp != null) reqBase = reqBase.startAfter([timestamp]);
 
     switch (modelType) {
@@ -76,11 +77,11 @@ class FsAdvanced {
         //~ Filters (query) REQUIRE an index. Check log to create it.
 
         if (filter == FilterTypes.postsByUser) {
-          reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid);
-          reqBase = reqBase.where('enableComments', isEqualTo: false); // Rils reply tab
+          reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid); // curr / other user
+          reqBase = reqBase.where('enableComments', isEqualTo: false);
         }
         if (filter == FilterTypes.converstionsPostByUser) {
-          reqBase = reqBase.where('commentedUsersIds', arrayContains: uid!);
+          reqBase = reqBase.where('commentedUsersIds', arrayContains: uid!); // curr / other user
         }
         if (filter == FilterTypes.postWithComments) {
           reqBase = reqBase.where('enableComments', isEqualTo: true);
@@ -90,7 +91,10 @@ class FsAdvanced {
         }
         break;
       case ModelTypes.chats:
-        reqBase = reqBase.where('usersIds', arrayContains: uid!);
+        reqBase = reqBase.where(
+          'usersIds',
+          arrayContains: context.uniProvider.currUser.uid!,
+        );
         break;
     }
     docs = await reqBase.get();
@@ -101,8 +105,7 @@ class FsAdvanced {
   Future<List> docsToModelList(
       BuildContext context, QuerySnapshot<Map<String, dynamic>> snap, ModelTypes modelType) async {
     print('START: docsToModelList() - ${modelType.name}');
-    var uid = context.uniProvider.currUser.uid;
-
+    var currUid = context.uniProvider.currUser.uid;
     List listModel;
     switch (modelType) {
       case ModelTypes.posts:
@@ -120,7 +123,7 @@ class FsAdvanced {
       case ModelTypes.chats:
         listModel = snap.docs.map((doc) {
           var chat = ChatModel.fromJson(doc.data());
-          chat = chat.copyWith(unreadCounter: doc.data()['metadata']?['unreadCounter#$uid']);
+          chat = chat.copyWith(unreadCounter: doc.data()['metadata']?['unreadCounter#$currUid']);
           return chat;
         }).toList();
         break;

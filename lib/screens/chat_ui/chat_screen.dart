@@ -8,6 +8,7 @@ import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -44,6 +45,7 @@ class _ChatScreenState extends State<ChatScreen> {
   List<MessageModel> messages = [];
   Timestamp? timeStamp;
   bool isInitMessages = true;
+  bool isLoadOlderMessages = false;
   PostModel? post;
 
   // var splashLoader = true;
@@ -53,22 +55,23 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     post = widget.postReply;
-    // _loadOlderMessages().then((_) => messages.remove(messages.first));
+    _loadOlderMessages().then((_) => messages.remove(messages.first));
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   Future _loadOlderMessages() async {
     // splashLoader = true; setState(() {});
-    List olderMessages = await Database.advanced.handleGetModel(
+    List withOlderMessages = await Database.advanced.handleGetModel(
         context, ModelTypes.messages, messages,
         collectionReference: 'chats/${widget.chatId}/messages');
-    if (olderMessages.isNotEmpty) messages = [...olderMessages];
+    if (withOlderMessages.isNotEmpty) messages = [...withOlderMessages];
     setState(() {});
+  }
+
+  void addMessages(List<MessageModel> newMsgs) {
+    print('START: addMessages()');
+    messages = [...newMsgs, ...messages];
+    isInitMessages = false;
   }
 
   @override
@@ -91,77 +94,54 @@ class _ChatScreenState extends State<ChatScreen> {
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
           backgroundColor: AppColors.primaryDark,
-          appBar: darkAppBar(context,
-              // title: widget.otherUser.name.toString(),
-              title: null,
-              // centerTitle: true,
-              titleWidget: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Stack(
-                    children: [
-                      CircleAvatar(
-                          radius: 20,
-                          backgroundColor: Colors.grey,
-                          backgroundImage: NetworkImage(
-                              widget.otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
-                      buildOnlineBadge(ratio: 1.0)
-                    ],
-                  ),
-                  10.horizontalSpace,
-                  Text(
-                    widget.otherUser.name ?? '',
-                    overflow: TextOverflow.ellipsis,
-                    style: AppStyles.text18PxSemiBold.white,
-                  ),
-                ],
-              ).pOnly(right: 10).onTap(() {
-                // Users cant go RilTopia Team Profile because this is hack for when user is blocked
-                // (He can only "Chat with us" & From there go to Conversions & More...
-                if (widget.otherUser.email == 'idanbit80@gmail.com') return;
-
-                context.router.push(UserRoute(user: widget.otherUser));
-              })),
+          appBar: buildDarkAppBar(context),
           body: Column(
             children: [
               // StreamProvider<List<MessageModel>>.value(
-              StreamBuilder<List<MessageModel>>(
-                stream: Database.streamMessages(widget.chatId, limit: isInitMessages ? 25 : 1),
-                initialData: const [],
-                // builder: (context, child) {
-                builder: (context, snapshot) {
-                  print('START: builder()');
-                  // var newMsgs = context.listenMessagesModelList;
-
-                  var newMsgs = snapshot.data;
-                  if (newMsgs != null) {
-                    // messages.isEmpty ? setInitMessages(newMsgs) : addLatestMessage(newMsgs.first);
-                    addMessages(newMsgs);
+              NotificationListener<UserScrollNotification>(
+                onNotification: (notification) {
+                  final ScrollDirection direction = notification.direction;
+                  if (direction == ScrollDirection.reverse) {
+                    isLoadOlderMessages = true;
+                  } else if (direction == ScrollDirection.forward) {
+                    isLoadOlderMessages = false;
                   }
-
-                  return LazyLoadScrollView(
-                    scrollOffset: 300,
-                    onEndOfPage: () async {
-                      print('START: onEndOfPage()');
-
-                      if (messages.isNotEmpty) {
-                        timeStamp = Timestamp.fromDate(messages.last.timestamp!);
-                      }
-                      // context.uniProvider.updateIsFeedLoading(true);
-                      await _loadOlderMessages();
-                      // context.uniProvider.updateIsFeedLoading(false);
-                    },
-                    child: ListView.builder(
-                      controller: messagesController,
-                      reverse: true,
-                      // controller: ,
-                      itemCount: messages.length,
-                      itemBuilder: (context, i) =>
-                          buildBubble(context, messages[i], (i + 1) == messages.length),
-                    ),
-                  );
+                  // setState(() {});
+                  return true;
                 },
-              ).expanded(),
+                child: StreamBuilder<List<MessageModel>>(
+                  stream: Database.streamMessages(widget.chatId, limit: 1),
+                  // limit: isInitMessages ? 25 : 1),
+                  builder: (context, snapshot) {
+                    print('START: builder()');
+                    // var newMsgs = context.listenMessagesModelList;
+                    MessageModel? newMsg = snapshot.data?.first;
+                    _addLatestMessage(newMsg);
+
+                    return LazyLoadScrollView(
+                      scrollOffset: 300,
+                      onEndOfPage: () async {
+                        print('START: onEndOfPage()');
+
+                        if (messages.isNotEmpty) {
+                          timeStamp = Timestamp.fromDate(messages.last.timestamp!);
+                        }
+                        // context.uniProvider.updateIsFeedLoading(true);
+                        await _loadOlderMessages();
+                        // context.uniProvider.updateIsFeedLoading(false);
+                      },
+                      child: ListView.builder(
+                        controller: messagesController,
+                        reverse: true,
+                        // controller: ,
+                        itemCount: messages.length,
+                        itemBuilder: (context, i) =>
+                            buildBubble(context, messages[i], (i + 1) == messages.length),
+                      ),
+                    );
+                  },
+                ).expanded(),
+              ),
               4.verticalSpace,
               StatefulBuilder(builder: (context, stfState) {
                 return buildTextField(context,
@@ -193,27 +173,55 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  void addMessages(List<MessageModel> newMsgs) {
-    print('START: addMessages()');
-    messages = [...newMsgs, ...messages];
-    isInitMessages = false;
+  AppBar buildDarkAppBar(BuildContext context) {
+    return darkAppBar(context,
+        // title: widget.otherUser.name.toString(),
+        title: null,
+        // centerTitle: true,
+        titleWidget: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              children: [
+                CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.grey,
+                    backgroundImage:
+                        NetworkImage(widget.otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
+                buildOnlineBadge(ratio: 1.0)
+              ],
+            ),
+            10.horizontalSpace,
+            Text(
+              widget.otherUser.name ?? '',
+              overflow: TextOverflow.ellipsis,
+              style: AppStyles.text18PxSemiBold.white,
+            ),
+          ],
+        ).pOnly(right: 10).onTap(() {
+          // Users cant go RilTopia Team Profile because this is hack for when user is blocked
+          // (He can only "Chat with us" & From there go to Conversions & More...
+          if (widget.otherUser.email == 'idanbit80@gmail.com') return;
+
+          context.router.push(UserRoute(user: widget.otherUser));
+        }));
   }
 
-  // void _setInitMessages(List<MessageModel> newMsgs) {
+  // Future<List<MessageModel>> _setInitMessages(List<MessageModel> newMsgs) {
   //   print('START: setInitMessages()');
   //   messages = newMsgs;
   //   isInitMessages = false;
   //   // _loadOlderMessages();
   // }
-  //
-  // void _addLatestMessage(MessageModel newMessage) {
-  //   print('START: addLatestMessage()');
-  //   // var newMessage = context.listenMessagesModelList.first;
-  //   if (!(messages.contains(newMessage))) {
-  //     messages.insert(0, newMessage);
-  //     messagesController.jumpTo(0);
-  //   }
-  // }
+
+  void _addLatestMessage(MessageModel? newMessage) {
+    print('START: addLatestMessage()');
+    // var newMessage = context.listenMessagesModelList.first;
+    if (newMessage != null && !(messages.contains(newMessage))) {
+      messages.insert(0, newMessage);
+      messagesController.jumpTo(0);
+    }
+  }
 
   Widget buildBubble(BuildContext context, MessageModel message, bool isLastMessage) {
     // print('START: buildBubble()');
@@ -261,9 +269,19 @@ class _ChatScreenState extends State<ChatScreen> {
                                 textDirection: isHebrew ? TextDirection.rtl : TextDirection.ltr,
                                 style: AppStyles.text16PxRegular.white),
                             5.verticalSpace,
-                            Text(message.createdAt!.substring(9, 14),
-                                style:
-                                    AppStyles.text10PxRegular.copyWith(color: AppColors.greyLight))
+                            Builder(builder: (context) {
+                              // AKA if today, show time only, no date.
+                              var time = (message.timestamp!.day == DateTime.now().day &&
+                                      message.timestamp!.month == DateTime.now().month &&
+                                      message.timestamp!.year == DateTime.now().year)
+                                  ? message.createdAt!.substring(9, 14)
+                                  : message.createdAt!.substring(0, 14);
+
+                              return Text(
+                                  time,
+                                  style: AppStyles.text10PxRegular
+                                      .copyWith(color: AppColors.greyLight));
+                            })
                           ],
                         ))).px(6).pOnly(
                   bottom: 4,

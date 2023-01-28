@@ -137,9 +137,8 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
 
                 return StatefulBuilder(builder: (_context, stfSetState) {
                   return ChatBlockSts(chat, otherUser, onTap: () async {
-                    var currUser = context.uniProvider.currUser;
+                    if(!mounted) return;
                     chatList[i] = chat;
-
                     // var chatId = ChatService.openChat(context, otherUser: otherUser); // no need
                     await context.router
                         .push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));

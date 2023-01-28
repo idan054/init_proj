@@ -73,6 +73,7 @@ class _UserScreenState extends State<UserScreen> {
       ModelTypes.posts,
       postList,
       filter: activeFilter,
+      uid: widget.user.uid,
     );
 
     if (newPosts.isNotEmpty) postList = [...newPosts];
@@ -80,7 +81,7 @@ class _UserScreenState extends State<UserScreen> {
     if (refresh) {
       isLoading = false;
     }
-      setState(() {});
+    setState(() {});
   }
 
   @override
