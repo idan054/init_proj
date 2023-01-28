@@ -15,6 +15,7 @@ import 'main_feed_screen.dart';
 
 class CreatePostScreen extends StatefulWidget {
   final bool replyStyle;
+
   const CreatePostScreen(this.replyStyle, {Key? key}) : super(key: key);
 
   @override
@@ -24,6 +25,7 @@ class CreatePostScreen extends StatefulWidget {
 class _CreatePostScreenState extends State<CreatePostScreen> {
   var postController = TextEditingController();
   bool isComments = false;
+
   // bool isTagScreen = false;
   int? tagIndex;
 
@@ -31,7 +33,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   void initState() {
     // isTagScreen = context.uniProvider.selectedTag != 'New';
 
-    isComments = !(widget.replyStyle);// no comments when reply mode!
+    isComments = !(widget.replyStyle); // no comments when reply mode!
     super.initState();
   }
 
@@ -69,6 +71,13 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             TextField(
               maxLines: 11,
               minLines: 1,
+              maxLength: isComments ? 512 : 256, // X2 for conversion
+              buildCounter: (context, {required currentLength, required isFocused, maxLength}) =>
+              postController.text.length == (isComments ? 512 : 256) ?
+                  'Max length'.toText(
+                fontSize: 12,
+                color: AppColors.errRed,
+              ) : const Offstage(),
               autofocus: true,
               textDirection: textDir,
               controller: postController,
@@ -100,9 +109,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         label: (isComments ? 'With comments' : 'Reply style') // Reply only
                             .toText(color: isComments ? AppColors.white : AppColors.grey50),
                         onSelect: (bool newSelection) {
-                  //> BUTTON DISABLED!
-                  // isComments = !isComments;
-                  // setState(() {});
+                  isComments = !isComments;
+                  setState(() {});
                 }, selected: isComments)
                     .centerLeft
                     .pOnly(left: 5),
@@ -120,24 +128,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 // ),
 
                 const Spacer(),
-                buildSendButton(
-                  onTap: () {
-                    UserModel currUser = context.uniProvider.currUser;
-                    var post = PostModel(
-                      textContent: postController.text,
-                      id: '${currUser.email}${UniqueKey()}',
-                      //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
-                      // details will be update if user edit his info
-                      creatorUser: currUser,
-                      timestamp: DateTime.now(),
-                      enableComments: isComments,
-                      commentedUsersIds: isComments ? [currUser.uid.toString()] : [],
-                    );
-                    context.uniProvider.updatePostUploaded(true);
-                    FeedService.uploadPost(context, post);
-                    context.router.pop();
-                  }
-                )
+                buildSendButton(onTap: () {
+                  UserModel currUser = context.uniProvider.currUser;
+                  var post = PostModel(
+                    textContent: postController.text,
+                    id: '${currUser.email}${UniqueKey()}',
+                    //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
+                    // details will be update if user edit his info
+                    creatorUser: currUser,
+                    timestamp: DateTime.now(),
+                    enableComments: isComments,
+                    commentedUsersIds: isComments ? [currUser.uid.toString()] : [],
+                  );
+                  context.uniProvider.updatePostUploaded(true);
+                  FeedService.uploadPost(context, post);
+                  context.router.pop();
+                })
               ],
             ).pOnly(bottom: 5),
           ],
@@ -180,7 +186,6 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 }
 
 Widget buildSendButton({GestureTapCallback? onTap, bool isActive = true}) {
-
   return Opacity(
     opacity: isActive ? 1.0 : 0.3,
     child: Container(
@@ -189,7 +194,12 @@ Widget buildSendButton({GestureTapCallback? onTap, bool isActive = true}) {
       // color: AppColors.grey50,
       color: AppColors.transparent,
       child: Assets.svg.icons.iconSendButton.svg().pad(7.5),
-    ).rounded(radius: 10).px(10).pOnly(top: 5, bottom: 5).onTap(isActive ? onTap : null, radius: 10).pOnly(right: 5),
+    )
+        .rounded(radius: 10)
+        .px(10)
+        .pOnly(top: 5, bottom: 5)
+        .onTap(isActive ? onTap : null, radius: 10)
+        .pOnly(right: 5),
   );
 }
 

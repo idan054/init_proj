@@ -66,11 +66,8 @@ class _NameProfileViewState extends State<NameProfileView> {
             ),
           ).onTap(() async {
             final ImagePicker picker = ImagePicker();
-            image = await picker.pickImage(
-              source: ImageSource.gallery,
-              maxHeight: 400,
-              maxWidth: 400,
-            );
+            image =
+                await picker.pickImage(source: ImageSource.gallery, maxHeight: 400, maxWidth: 400);
             // context.uniProvider.updateIsLoading(true);
             setState(() {});
             var imageUrl = await uploadProfilePhoto(
@@ -89,6 +86,7 @@ class _NameProfileViewState extends State<NameProfileView> {
             hint: 'What is your name?',
             controller: nameController,
             validator: (value) {
+              if (nameController.text.replaceAll(' ', '').isEmpty) return '';
               if (nameController.text.isEmpty) return '';
               return null;
             },

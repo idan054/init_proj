@@ -1,6 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 
 import 'dart:async';
+import 'dart:io' show Platform;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:badges/badges.dart';
@@ -70,7 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // 0 = home, 2 = chat
     //    _pageController.animateToPage(homePage ? 2 : 0, duration: 200.milliseconds, curve: Curves.easeIn);
     // if (sItem.index == 1) return;
-    if(mounted) setState(() {});
+    if (mounted) setState(() {});
     if (navBar) {
       _pageController.jumpToPage(i);
     }
@@ -119,103 +120,91 @@ class _DashboardScreenState extends State<DashboardScreen> {
             MainFeedScreen(),
             ChatsListScreen(),
           ]),
-      floatingActionButton: sItem != TabItems.home
-          ? null
-          : Builder(builder: (context) {
-              var showFab = context.listenUniProvider.showFab;
-              var replyStyle =
-                  context.listenUniProvider.feedStatus == FilterTypes.postWithoutComments;
-              return AnimatedSlide(
-                duration: 450.milliseconds,
-                offset: showFab ? Offset.zero : const Offset(0, 1.2),
-                child: quickCrossFade(
-                  showFab,
-                  duration: 450.milliseconds,
-                  secondChild: const SizedBox(width: 100, height: 3),
-                  firstChild: FloatingActionButton.extended(
-                    onPressed: () {
-                      showModalBottomSheet(
-                          backgroundColor: Colors.transparent,
-                          barrierColor: Colors.black38,
-                          // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
-                          // barrierColor: Colors.black.withOpacity(0.00),
-                          // AKA 2%
-                          isScrollControlled: true,
-                          context: context,
-                          builder: (context) {
-                            // print('replyStyle ${replyStyle}');
-                            return CreatePostScreen(replyStyle);
-                          });
-                    },
-                    shape: 6.roundedShape,
-                    label: (replyStyle ? 'New Ril' : 'Add yours').toText(bold: true, fontSize: 13),
-                    icon: replyStyle
-                        ? Assets.images.riltopiaAsIconPNG.image(height: 20).pad(5)
-                        // ? Assets.svg.icons.groupMultiPeople.svg().pad(5)
-                        : Assets.svg.icons.groupMultiPeople.svg().pad(5),
-                    backgroundColor: AppColors.primaryOriginal,
-                  ),
-                ),
-              );
-            }),
+      floatingActionButton: sItem != TabItems.home ? null : buildFab(),
       bottomNavigationBar: SizedBox(
-        height: 55 + 3,
-        child: Stack(
+        height: Platform.isAndroid ? 55 + 3 : null,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(color: AppColors.darkOutline, height: 2, width: double.maxFinite),
-                SizedBox(
-                  height: 55,
-                  child: BottomNavigationBar(
-                    selectedFontSize: 0,
-                    unselectedFontSize: 0,
-                    backgroundColor: AppColors.primaryDark,
-                    // backgroundColor: AppColors.darkBg,
-                    currentIndex: sItem.index,
-                    onTap: (i) {
-                      _handleIndexChanged(i, true);
-                      // stfSetState(() {});
-                    },
-                    items: [
-                      BottomNavigationBarItem(
-                          label: '',
-                          icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.grey50),
-                          // .pOnly(right: 15),
-                          activeIcon:
-                              Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.white)
-                          // .pOnly(right: 15),
-                          ),
-                      BottomNavigationBarItem(
-                        label: '',
-                        icon: notifyBubble(
-                            child: Assets.svg.icons.chatBubblesUntitledIcon
-                                .svg(color: AppColors.grey50)
-                            // .pOnly(left: 15),
-                            ),
-                        activeIcon:
-                            notifyBubble(child: Assets.images.chatBubblesSolid.image(height: 22)
-                                // .pOnly(left: 15)
-                                ),
+            Container(color: AppColors.darkOutline, height: 2, width: double.maxFinite),
+            SizedBox(
+              height: Platform.isAndroid ? 55 : null,
+              child: BottomNavigationBar(
+                selectedFontSize: 0,
+                unselectedFontSize: 0,
+                backgroundColor: AppColors.primaryDark,
+                // backgroundColor: AppColors.darkBg,
+                currentIndex: sItem.index,
+                onTap: (i) {
+                  _handleIndexChanged(i, true);
+                  // stfSetState(() {});
+                },
+                items: [
+                  BottomNavigationBarItem(
+                      label: '',
+                      icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.grey50),
+                      // .pOnly(right: 15),
+                      activeIcon: Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.white)
+                      // .pOnly(right: 15),
                       ),
-                    ],
-                  ),
-                ),
-              ],
+                  BottomNavigationBarItem(
+                      label: '',
+                      icon: notifyBubble(
+                          // child: Assets.svg.icons.chatBubblesUntitledIcon.svg(color: AppColors.grey50)
+                          child: Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50)
+                          // .pOnly(left: 15),
+                          ),
+                      activeIcon: notifyBubble(
+                          child: Assets.svg.icons.groupMultiPeopleSolid
+                              .svg(color: AppColors.white, height: 19))
+                      // .pOnly(left: 15)
+                      ),
+                ],
+              ),
             ),
-            // TextButton(
-            //     onPressed: () {},
-            //     child: Container(
-            //         color: AppColors.primaryOriginal,
-            //         height: 35,
-            //         width: 35,
-            //         child: Assets.svg.icons.plusAddUntitledIcon.svg().pad(10))
-            //         .rounded(radius: 10)).center,
           ],
         ),
       ),
     );
+  }
+
+  Builder buildFab() {
+    return Builder(builder: (context) {
+      var showFab = context.listenUniProvider.showFab;
+      var replyStyle = context.listenUniProvider.feedStatus == FilterTypes.postWithoutComments;
+      return AnimatedSlide(
+        duration: 450.milliseconds,
+        offset: showFab ? Offset.zero : const Offset(0, 1.2),
+        child: quickCrossFade(
+          showFab,
+          duration: 450.milliseconds,
+          secondChild: const SizedBox(width: 100, height: 3),
+          firstChild: FloatingActionButton.extended(
+            onPressed: () {
+              showModalBottomSheet(
+                  backgroundColor: Colors.transparent,
+                  barrierColor: Colors.black38,
+                  // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
+                  // barrierColor: Colors.black.withOpacity(0.00),
+                  // AKA 2%
+                  isScrollControlled: true,
+                  context: context,
+                  builder: (context) {
+                    // print('replyStyle ${replyStyle}');
+                    return CreatePostScreen(replyStyle);
+                  });
+            },
+            shape: 6.roundedShape,
+            label: (replyStyle ? 'New Ril' : 'Add yours').toText(bold: true, fontSize: 13),
+            icon: replyStyle
+                ? Assets.images.riltopiaAsIconPNG.image(height: 20).pad(5)
+                // ? Assets.svg.icons.groupMultiPeople.svg().pad(5)
+                : Assets.svg.icons.messageChatCircle.svg(height: 20, color: Colors.white).pad(5),
+            backgroundColor: AppColors.primaryOriginal,
+          ),
+        ),
+      );
+    });
   }
 
   Widget notifyBubble({required Widget child}) {

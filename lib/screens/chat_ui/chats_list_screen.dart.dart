@@ -48,20 +48,21 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     //> Uncomment this to auto refresh chats when new message coming
     WidgetsBinding.instance.addPostFrameCallback((_) =>
         // context.uniProvider.addListener(() => listenLoadMore)
-        context.uniProvider.addListener(() => _loadMore(refresh: true)));
+        context.uniProvider.addListener(() => _loadMore(refresh: true))
+        );
 
     super.initState();
   }
 
   // @override
   // void dispose() {
-  //   // context.uniProvider.removeListener(() => listenLoadMore);
-  //   super.dispose();
+    // context.uniProvider.removeListener(() => listenLoadMore);
+    // super.dispose();
   // }
 
   Future _loadMore({bool refresh = false}) async {
-    print('START: CHAT _loadMore()');
     if (!mounted) return;
+    print('START: CHAT _loadMore()');
     // await Future.delayed(100.milliseconds);
     splashLoader = true;
     setState(() {});
@@ -84,11 +85,13 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
   Widget build(BuildContext context) {
     print('START: ChatsListScreen');
     var currUser = context.uniProvider.currUser;
+    // context.listenUniProvider..currUser.unreadCounter; // Rebuilt when get new message
 
     return Scaffold(
         backgroundColor: AppColors.primaryDark,
         appBar: darkAppBar(
-          context, title: 'Chats',
+          centerTitle: true,
+          context, title: 'Members messages',
           hideBackButton: true,
           //     backAction: () async {
           //   await FirebaseAuth.instance.signOut();

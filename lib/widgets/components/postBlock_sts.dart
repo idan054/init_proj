@@ -39,9 +39,8 @@ import 'package:intl/intl.dart' as intl;
 class PostBlock extends StatelessWidget {
   final PostModel post;
   final bool isUserPage;
-  final bool isConversion;
 
-  const PostBlock(this.post, {this.isUserPage = false, this.isConversion = false, Key? key})
+  const PostBlock(this.post, {this.isUserPage = false, Key? key})
       : super(key: key);
 
   @override
@@ -72,7 +71,7 @@ class PostBlock extends StatelessWidget {
         ],
       ).pOnly(left: 15),
     ).onTap(
-        isConversion ?
+        post.enableComments ?
             () {
       isUserPage
           ? Navigator.push(
@@ -97,7 +96,9 @@ class PostBlock extends StatelessWidget {
                 return CommentsChatScreen(post);
                 // return Offstage();
               });
-    } : null , radius: 10);
+    }
+    : null
+        , radius: 10);
   }
 
   Widget buildProfile(BuildContext context, bool isUserPage) {
@@ -124,7 +125,8 @@ class PostBlock extends StatelessWidget {
                 .pOnly(right: 10, top: 4, bottom: 10)
             // .onTap(() {}, radius: 10), // TODO Add move to Tag
           ],
-        ),
+        )
+        ,
         leading: Stack(
           children: [
             CircleAvatar(
@@ -134,7 +136,14 @@ class PostBlock extends StatelessWidget {
             ),
             buildOnlineBadge(),
           ],
-        ),
+        ).pad(0).onTap(
+            isUserPage
+                ? null
+                : () {
+              print('PROFILE CLICKED');
+              context.router.push(UserRoute(user: post.creatorUser!));
+            },
+            radius: 5),
         // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
         trailing: PopupMenuButton(
             icon: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50),
@@ -163,14 +172,7 @@ class PostBlock extends StatelessWidget {
                 ),
               ];
             }),
-      ).pad(0).onTap(
-          isUserPage
-              ? null
-              : () {
-                  print('PROFILE CLICKED');
-                  context.router.push(UserRoute(user: post.creatorUser!));
-                },
-          radius: 5),
+      )
     );
   }
 
@@ -206,16 +208,19 @@ class PostBlock extends StatelessWidget {
   }
 
   void deleteRilPopup(BuildContext context) {
+    var myPost = post.creatorUser?.uid == context.uniProvider.currUser.uid;
+
     Future.delayed(150.milliseconds).then((_) {
       showRilDialog(context,
-          title: 'Delete your Ril?',
+          // title: 'Delete your Ril?',
+          title: 'Delete ${myPost ? 'Your' : post.creatorUser?.email} Ril?',
           desc: '"${post.textContent}"'.toText(fontSize: 13),
           barrierDismissible: true,
           secondaryBtn: TextButton(
               onPressed: () {
                 Database().deleteDoc(collection: 'posts', docName: post.id);
                 Navigator.of(context).pop();
-                rilFlushBar(context, 'Your Ril has been deleted forever');
+                rilFlushBar(context, 'Your Ril has been deleted');
               },
               child: 'Delete'.toText(color: AppColors.primaryLight)));
     });

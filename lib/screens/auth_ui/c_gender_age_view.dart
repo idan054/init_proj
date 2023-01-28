@@ -140,6 +140,11 @@ class _GenderAgeViewState extends State<GenderAgeView> {
                   if (yearController.text.isEmpty || yearController.text.length != 4) {
                     return 'YYYY Format';
                   }
+
+                  var age = context.uniProvider.currUser.age ?? -404;
+                  var validAge = age > 10 && age < 100;
+                  if(!validAge) return "Age can't be $age";
+
                   return null;
                 },
                 // errorText:? '': null,

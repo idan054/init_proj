@@ -143,6 +143,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
                     controller: nameController,
                     maxLines: 1,
                     validator: (value) {
+                      if (value(' ', '').isEmpty) return '';
                       if (nameController.text.isEmpty) return '';
                       return null;
                     },

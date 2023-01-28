@@ -320,6 +320,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get riltopiaIcon =>
       const SvgGenImage('assets/svg/icons/Riltopia-icon.svg');
 
+  /// File path: assets/svg/icons/apple-logo-svgrepo-com.svg
+  SvgGenImage get appleLogoSvgrepoCom =>
+      const SvgGenImage('assets/svg/icons/apple-logo-svgrepo-com.svg');
+
   /// File path: assets/svg/icons/arrow-narrow-left.svg
   SvgGenImage get arrowNarrowLeft =>
       const SvgGenImage('assets/svg/icons/arrow-narrow-left.svg');
@@ -374,6 +378,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get groupMultiPeople =>
       const SvgGenImage('assets/svg/icons/group_multi_people.svg');
 
+  /// File path: assets/svg/icons/group_multi_people_solid.svg
+  SvgGenImage get groupMultiPeopleSolid =>
+      const SvgGenImage('assets/svg/icons/group_multi_people_solid.svg');
+
   /// File path: assets/svg/icons/heart-untitled-icon.svg
   SvgGenImage get heartUntitledIcon =>
       const SvgGenImage('assets/svg/icons/heart-untitled-icon.svg');
@@ -397,6 +405,10 @@ class $AssetsSvgIconsGen {
   /// File path: assets/svg/icons/man_profile_outline.svg
   SvgGenImage get manProfileOutline =>
       const SvgGenImage('assets/svg/icons/man_profile_outline.svg');
+
+  /// File path: assets/svg/icons/message-chat-circle.svg
+  SvgGenImage get messageChatCircle =>
+      const SvgGenImage('assets/svg/icons/message-chat-circle.svg');
 
   /// File path: assets/svg/icons/message-comments-Lines.svg
   SvgGenImage get messageCommentsLines =>
@@ -430,6 +442,7 @@ class $AssetsSvgIconsGen {
         iconClose,
         iconSendButton,
         riltopiaIcon,
+        appleLogoSvgrepoCom,
         arrowNarrowLeft,
         arrowBackLeft,
         bellUntitledIcon,
@@ -444,12 +457,14 @@ class $AssetsSvgIconsGen {
         dmPlaneUntitledIcon,
         flag03,
         groupMultiPeople,
+        groupMultiPeopleSolid,
         heartUntitledIcon,
         homeUntitledIcon,
         homeSolidUntitledIcon,
         logOut01,
         manProfile,
         manProfileOutline,
+        messageChatCircle,
         messageCommentsLines,
         plusAddUntitledIcon,
         settings01,

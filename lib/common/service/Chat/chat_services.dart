@@ -133,6 +133,8 @@ class ChatService {
         '${content.length < 15 ? content : content.substring(0, 15)}'
         ' ${UniqueKey()}';
 
+    // For some reason '/' Make issues!
+
     var messageData = MessageModel(
       id: messageId,
       textContent: content,

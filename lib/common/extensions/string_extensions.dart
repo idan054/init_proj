@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../screens/user_ui/user_screen.dart';
 
+
 extension StringNullX on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
 
@@ -74,9 +75,8 @@ extension StringX on String {
                       // height: 1
                     )); // line spacing
 
-  ExpandableText toTextExpanded(
-    // String text,
-      {
+  ExpandableText toTextExpanded( // String text,
+          {
     TextStyle? style,
     TextAlign? textAlign,
     TextDirection? textDirection,
@@ -125,12 +125,22 @@ extension StringX on String {
       'ת',
       'ם',
       'ך',
-      'ץ',
+      'ץ'
     ];
-    // actually needs to be map.
-    for (var l in heb) {
-      if (contains(l)) return true;
+    if (heb.any((item) => contains(item))) {
+      // Lists have at least one common element
+      return true;
+    } else {
+      // Lists DON'T have any common element
+      return false;
     }
-    return false;
+
+    // OLD VERSION
+    // ----------
+    // actually needs to be map.
+    // for (var l in heb) {
+    //   if (contains(l)) return true;
+    // }
+    // return false;
   }
 }

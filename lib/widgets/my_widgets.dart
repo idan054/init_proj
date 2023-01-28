@@ -103,7 +103,7 @@ Row riltopiaHorizontalLogo(BuildContext context, {double ratio = 1.0, bool showS
           // Text(isAdmin ? 'RilTopia Admin' : 'RilTopia', style: TextStyle(fontFamily: FontFamily.rilTopia, fontWeight: FontWeight.w500, fontSize: 18)),
           if (showSubText) ...[
             3.verticalSpace,
-            ' A Social Chat App'.toText(fontSize: 6 * ratio),
+            ' A Social Chat App'.toText(fontSize: 7 * ratio),
           ]
         ],
       )

@@ -115,18 +115,27 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                 ],
               ).pOnly(right: 10).onTap(() {
+                // Users cant go RilTopia Team Profile because this is hack for when user is blocked
+                // (He can only "Chat with us" & From there go to Conversions & More...
+                if(widget.otherUser.email == 'idanbit80@gmail.com') return;
+
                 context.router.push(UserRoute(user: widget.otherUser));
               })),
           body: Column(
             children: [
-              StreamProvider<List<MessageModel>>.value(
-                value: Database.streamMessages(widget.chatId, limit: isInitMessages ? 25 : 1),
+              // StreamProvider<List<MessageModel>>.value(
+              StreamBuilder<List<MessageModel>>(
+                stream: Database.streamMessages(widget.chatId, limit: isInitMessages ? 25 : 1),
                 initialData: const [],
-                builder: (context, child) {
+                // builder: (context, child) {
+                builder: (context, snapshot) {
                   print('START: builder()');
-                  var newMsgs = context.listenMessagesModelList;
-                  if (newMsgs.isNotEmpty) {
-                    messages.isEmpty ? setInitMessages(newMsgs) : addLatestMessage(context);
+                  // var newMsgs = context.listenMessagesModelList;
+
+                  var newMsgs = snapshot.data;
+                  if (newMsgs != null) {
+                    // messages.isEmpty ? setInitMessages(newMsgs) : addLatestMessage(newMsgs.first);
+                    addMessages(newMsgs);
                   }
 
                   return LazyLoadScrollView(
@@ -183,21 +192,27 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  void setInitMessages(List<MessageModel> newMsgs) {
-    print('START: setInitMessages()');
-    messages = newMsgs;
+  void addMessages(List<MessageModel> newMsgs) {
+    print('START: addMessages()');
+    messages = [...newMsgs, ...messages];
     isInitMessages = false;
-    // _loadOlderMessages();
   }
 
-  void addLatestMessage(BuildContext context) {
-    print('START: addLatestMessage()');
-    var newMessage = context.listenMessagesModelList.first;
-    if (!(messages.contains(newMessage))) {
-      messages.insert(0, newMessage);
-      messagesController.jumpTo(0);
-    }
-  }
+  // void _setInitMessages(List<MessageModel> newMsgs) {
+  //   print('START: setInitMessages()');
+  //   messages = newMsgs;
+  //   isInitMessages = false;
+  //   // _loadOlderMessages();
+  // }
+  //
+  // void _addLatestMessage(MessageModel newMessage) {
+  //   print('START: addLatestMessage()');
+  //   // var newMessage = context.listenMessagesModelList.first;
+  //   if (!(messages.contains(newMessage))) {
+  //     messages.insert(0, newMessage);
+  //     messagesController.jumpTo(0);
+  //   }
+  // }
 
   Widget buildBubble(BuildContext context, MessageModel message, bool isLastMessage) {
     // print('START: buildBubble()');

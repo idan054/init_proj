@@ -13,7 +13,7 @@ import 'package:example/common/themes/app_styles.dart';
 import 'package:example/main.dart';
 
 // import 'package:example/common/service/Auth/firebase_db.dart';
-import 'package:example/widgets/components/postViewOld_sts.dart';
+import 'package:example/common/dump/postViewOld_sts.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/gestures.dart';
@@ -256,7 +256,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       title: Row(
         children: [
           isQuestionsTag
-              ? Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50, height: 14)
+              ? Assets.svg.icons.messageChatCircle.svg(color: AppColors.grey50, height: 20)
               : Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50, height: 20),
           // : Assets.svg.icons.shieldTickUntitledIcon.svg(color: Colors.white70),
           const SizedBox(width: 7),
@@ -281,9 +281,18 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       backgroundColor: AppColors.primaryDark,
       // backgroundColor: AppColors.darkBg,
       title:
-          riltopiaHorizontalLogo(context, ratio: 1.15).pOnly(bottom: 5, right: 5, left: 5, top: 5),
+          riltopiaHorizontalLogo(context, ratio: 1.15).pOnly(bottom: 5, right: 5, left: 5, top: 5).centerLeft,
       // .onTap(() {}, radius: 8),
-      actions: [appBarProfile(context)],
+      actions: [
+        //~ Report Screen
+        // CircleAvatar(
+        //   backgroundColor: AppColors.darkOutline50,
+        //     radius: 14,
+        //     child: Assets.svg.icons.flag03.svg(color: AppColors.white, height: 15)),
+
+            // child: Icons.flag.icon(color: AppColors.white,)),
+        appBarProfile(context),
+      ],
 
       // TODO ADD ON POST MVP ONLY (Notification page)
       // actions: [Assets.svg.icons.bellUntitledIcon.svg().px(20).onTap(() {})],
@@ -409,6 +418,26 @@ Widget appBarProfile(BuildContext context) {
                   (_) => chekForUpdate(context, localConfig, serverConfig!, mustShowPopup: true));
             }, radius: 5),
           ),
+
+          //~ Rules
+          // SizedBox(
+          //   height: 50,
+          //   // height: 72, // 72: original size 60: min size
+          //   child: ListTile(
+          //       contentPadding: EdgeInsets.zero,
+          //       horizontalTitleGap: 0,
+          //       title: 'Rules'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
+          //       leading: Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50))
+          //       .pad(0)
+          //       .onTap(() {
+          //     Navigator.pop(context);
+          //     var localConfig = context.uniProvider.localConfig;
+          //     var serverConfig = context.uniProvider.serverConfig;
+          //
+          //     WidgetsBinding.instance.addPostFrameCallback(
+          //             (_) => chekForUpdate(context, localConfig, serverConfig!, mustShowPopup: true));
+          //   }, radius: 5),
+          // ),
 
           //~ Log out
           SizedBox(

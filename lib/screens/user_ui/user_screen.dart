@@ -19,7 +19,7 @@ import 'package:example/common/themes/app_styles.dart';
 import 'package:example/main.dart';
 import 'package:collection/collection.dart'; // You have to add this manually,
 // import 'package:example/common/service/Auth/firebase_db.dart';
-import 'package:example/widgets/components/postViewOld_sts.dart';
+import 'package:example/common/dump/postViewOld_sts.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -236,6 +236,7 @@ class _UserScreenState extends State<UserScreen> {
               label: 'Reason why',
               controller: reasonController,
               validator: (value) {
+                if (value(' ', '').isEmpty) return '';
                 return '$value'.isEmpty ? '' : null;
               },
             ),
@@ -299,32 +300,41 @@ class _UserScreenState extends State<UserScreen> {
                   showTagsRow = !showTagsRow;
                   stfSetState(() {});
                 })
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    user.tags.isEmpty
-                        ? const Offstage()
-                        : user.tags.length == 1
-                            ? buildRilChip(user.tags.first)
-                            : Badge(
-                                    badgeContent: '+${user.tags.length - 1}'
-                                        .toText(fontSize: 10, color: Colors.white70, medium: true),
-                                    padding: const EdgeInsets.all(5),
-                                    elevation: 0,
-                                    badgeColor: AppColors.darkOutline50,
-                                    // stackFit: StackFit.loose,
-                                    // shape:
-                                    child: buildRilChip(user.tags.first))
-                                .pad(7)
-                                .onTap(() {
-                                showTagsRow = !showTagsRow;
-                                stfSetState(() {});
-                              }, radius: 12),
-                    12.horizontalSpace,
-                    buildRilChip('${user.gender?.name}', icon: Assets.svg.icons.manProfile.svg()),
-                    12.horizontalSpace,
-                    buildRilChip('${user.age} y.o', icon: Assets.svg.icons.dateTimeCalender.svg()),
-                  ],
+              : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      user.tags.isEmpty
+                          ? const Offstage()
+                          : user.tags.length == 1
+                              ? buildRilChip(user.tags.first)
+                              : Badge(
+                                      badgeContent: '+${user.tags.length - 1}'.toText(
+                                          fontSize: 10, color: Colors.white70, medium: true),
+                                      padding: const EdgeInsets.all(5),
+                                      elevation: 0,
+                                      badgeColor: AppColors.darkOutline50,
+                                      // stackFit: StackFit.loose,
+                                      // shape:
+                                      child: buildRilChip(user.tags.first))
+                                  .pad(7)
+                                  .onTap(() {
+                                  showTagsRow = !showTagsRow;
+                                  stfSetState(() {});
+                                }, radius: 12),
+                      12.horizontalSpace,
+                      buildRilChip('${user.gender?.name}', icon: Assets.svg.icons.manProfile.svg()),
+                      12.horizontalSpace,
+                      buildRilChip('${user.age} y.o',
+                          icon: Assets.svg.icons.dateTimeCalender.svg()),
+                      if (user.userType == UserTypes.admin) ...[
+                        12.horizontalSpace,
+                        buildRilChip('Admin',
+                            icon: Assets.images.riltopiaAsIconPNG.image(height: 14)),
+                      ]
+                    ],
+                  ),
                 );
         }),
         8.verticalSpace,
@@ -333,27 +343,28 @@ class _UserScreenState extends State<UserScreen> {
 
           return Column(
             children: [
-              !haveBio && !isCurrUser ? const Offstage() :
-              buildExpandableText(haveBio ? '${user.bio}' : 'Edit your bio',
-                      // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                      // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                      // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                      // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
-                      onChanged: (val) {
-                isBioExpanded = !isBioExpanded;
-                stfSetState(() {});
-              },
-                      style: AppStyles.text14PxRegular.copyWith(
-                          color: AppColors.grey50,
-                          decoration: haveBio ? null : TextDecoration.underline))
-                  .px(12)
-                  .py(6)
-                  .onTap(
-                      haveBio
-                          ? null
-                          : () => context.router
-                              .push(EditUserRoute(user: context.uniProvider.currUser)),
-                      radius: 6),
+              !haveBio && !isCurrUser
+                  ? const Offstage()
+                  : buildExpandableText(haveBio ? '${user.bio}' : 'Edit your bio',
+                          // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                          // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                          // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
+                          // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
+                          onChanged: (val) {
+                      isBioExpanded = !isBioExpanded;
+                      stfSetState(() {});
+                    },
+                          style: AppStyles.text14PxRegular.copyWith(
+                              color: AppColors.grey50,
+                              decoration: haveBio ? null : TextDecoration.underline))
+                      .px(12)
+                      .py(6)
+                      .onTap(
+                          haveBio
+                              ? null
+                              : () => context.router
+                                  .push(EditUserRoute(user: context.uniProvider.currUser)),
+                          radius: 6),
               12.verticalSpace,
               if (!isCurrUser && isBioExpanded) ...[
                 SizedBox(
@@ -372,13 +383,12 @@ class _UserScreenState extends State<UserScreen> {
                     onPressed: () {
                       // TODO LATER LIST: Add Reply bio action
                       var replyBio = PostModel(
-                        creatorUser: user,
-                        timestamp: DateTime.now(),
-                        id: 'bio-${user.email}-${UniqueKey()}',
-                        enableComments: false,
-                        likeByIds: [],
-                        textContent: '${user.bio}'
-                      );
+                          creatorUser: user,
+                          timestamp: DateTime.now(),
+                          id: 'bio-${user.email}-${UniqueKey()}',
+                          enableComments: false,
+                          likeByIds: [],
+                          textContent: '${user.bio}');
                       ChatService.openChat(context, otherUser: user, postReply: replyBio);
                     },
                   ),
@@ -411,13 +421,14 @@ class _UserScreenState extends State<UserScreen> {
                   return commonTag == null
                       ? const Offstage()
                       : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Assets.svg.icons.groupMultiPeople
-                                .svg(width: 17, color: Colors.white70)
+                                .svg(width: 17, color: AppColors.grey50)
                                 .pOnly(right: 10),
                             "You both interesting in $commonTag... that's cool!"
                                 .toText(color: AppColors.grey50, fontSize: 12)
-                                .expanded(),
+                                // .expanded(),
                           ],
                         );
                 }),
@@ -438,26 +449,24 @@ Widget buildTagsRow(UserModel user,
     children: [
       // Text('${user.name}\'s interests', style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50))
       //     .pOnly(left: 12),
-      SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (onAddonTap != null)
-              buildRilChip('$addonName',
-                      bgColor: chipColor,
-                      icon: addonName != 'Edit'
-                          ? null
-                          : Icons.edit_rounded.icon(color: Colors.white70))
-                  .pad(7)
-                  .onTap(onAddonTap, radius: 12),
-            4.horizontalSpace,
-            for (var tag in user.tags) ...[
-              buildRilChip(tag, bgColor: chipColor),
-              12.horizontalSpace,
-            ],
+      Wrap(
+        // mainAxisAlignment: MainAxisAlignment.center,
+        spacing: 10,
+        runSpacing: 10,
+        children: [
+          if (onAddonTap != null)
+            buildRilChip('$addonName',
+                    bgColor: chipColor,
+                    icon:
+                        addonName != 'Edit' ? null : Icons.edit_rounded.icon(color: Colors.white70))
+                // .pad(7)
+                .onTap(onAddonTap, radius: 12),
+          // 4.horizontalSpace,
+          for (var tag in user.tags) ...[
+            buildRilChip(tag, bgColor: chipColor),
+            // 12.horizontalSpace,
           ],
-        ),
+        ],
       ),
     ],
   );
@@ -480,15 +489,16 @@ Widget buildRilChip(String label, {Widget? icon, Color? bgColor}) {
   );
 }
 
-ExpandableText buildExpandableText(String text,
-    {TextStyle? style,
-    TextAlign? textAlign,
-    TextDirection? textDirection,
-    int? maxLines,
-    ValueChanged<bool>? onChanged,
-    Color? linkColor,
-    bool autoExpanded = false,
-    }) {
+ExpandableText buildExpandableText(
+  String text, {
+  TextStyle? style,
+  TextAlign? textAlign,
+  TextDirection? textDirection,
+  int? maxLines,
+  ValueChanged<bool>? onChanged,
+  Color? linkColor,
+  bool autoExpanded = false,
+}) {
   return ExpandableText(text,
       maxLines: maxLines ?? 5,
       textAlign: textAlign ?? TextAlign.center,

@@ -12,6 +12,7 @@ import 'package:example/common/themes/app_colors.dart';
 import 'package:example/screens/main_ui/widgets/riv_splash_screen.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../common/config.dart';
@@ -26,8 +27,15 @@ Future splashInit(BuildContext context) async {
   // await HiveServices.openBoxes();
   // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
 
+  // DEBUG ONLY
+  if (kDebugMode) {
+    context.router.replaceAll([const OnBoardingRoute()]);
+    return;
+  }
+
   var serverConfig = await getAppConfig(context);
-  var localConfig = context.uniProvider.localConfig; // getAppConfig() set localConfig.isUpdateAvailable!
+  var localConfig =
+      context.uniProvider.localConfig; // getAppConfig() set localConfig.isUpdateAvailable!
   if (serverConfig.statusCode != 200) return;
   if (localConfig.isUpdateAvailable! && serverConfig.updateType == UpdateTypes.needed) return;
 
@@ -36,7 +44,7 @@ Future splashInit(BuildContext context) async {
     context.router.replaceAll([const LoginRoute()]);
   } else {
     //> Next time:
-    await AuthService.signInWithGoogle(context);
+    await AuthService.signInWith(context, autoSignIn: true);
     // context.router.replaceAll([DashboardRoute()]);
   }
 }
