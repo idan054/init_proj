@@ -199,7 +199,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: replyStyle
                 ? Assets.images.riltopiaAsIconPNG.image(height: 20).pad(5)
                 // ? Assets.svg.icons.groupMultiPeople.svg().pad(5)
-                : Assets.svg.icons.messageChatCircle.svg(height: 20, color: Colors.white).pad(5),
+                // : Assets.svg.icons.messageChatCircle.svg(height: 20, color: Colors.white).pad(5),
+                : Assets.svg.icons.messageChatCircleAdd.svg(height: 20, color: Colors.white).pad(5),
             backgroundColor: AppColors.primaryOriginal,
           ),
         ),

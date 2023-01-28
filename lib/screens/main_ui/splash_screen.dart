@@ -28,10 +28,10 @@ Future splashInit(BuildContext context) async {
   // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
 
   // DEBUG ONLY
-  if (kDebugMode) {
-    context.router.replaceAll([const OnBoardingRoute()]);
-    return;
-  }
+  // if (kDebugMode) {
+  //   context.router.replaceAll([const OnBoardingRoute()]);
+  //   return;
+  // }
 
   var serverConfig = await getAppConfig(context);
   var localConfig =

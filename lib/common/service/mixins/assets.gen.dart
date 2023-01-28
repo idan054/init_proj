@@ -406,6 +406,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get manProfileOutline =>
       const SvgGenImage('assets/svg/icons/man_profile_outline.svg');
 
+  /// File path: assets/svg/icons/message-chat-circle-add.svg
+  SvgGenImage get messageChatCircleAdd =>
+      const SvgGenImage('assets/svg/icons/message-chat-circle-add.svg');
+
   /// File path: assets/svg/icons/message-chat-circle.svg
   SvgGenImage get messageChatCircle =>
       const SvgGenImage('assets/svg/icons/message-chat-circle.svg');
@@ -464,6 +468,7 @@ class $AssetsSvgIconsGen {
         logOut01,
         manProfile,
         manProfileOutline,
+        messageChatCircleAdd,
         messageChatCircle,
         messageCommentsLines,
         plusAddUntitledIcon,

@@ -71,13 +71,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             TextField(
               maxLines: 11,
               minLines: 1,
-              maxLength: isComments ? 512 : 256, // X2 for conversion
+              maxLength: isComments ? 512 : 256,
+              // X2 for conversion
               buildCounter: (context, {required currentLength, required isFocused, maxLength}) =>
-              postController.text.length == (isComments ? 512 : 256) ?
-                  'Max length'.toText(
-                fontSize: 12,
-                color: AppColors.errRed,
-              ) : const Offstage(),
+                  postController.text.length == (isComments ? 512 : 256)
+                      ? 'Max length'.toText(
+                          fontSize: 12,
+                          color: AppColors.errRed,
+                        )
+                      : const Offstage(),
               autofocus: true,
               textDirection: textDir,
               controller: postController,
@@ -128,22 +130,24 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                 // ),
 
                 const Spacer(),
-                buildSendButton(onTap: () {
-                  UserModel currUser = context.uniProvider.currUser;
-                  var post = PostModel(
-                    textContent: postController.text,
-                    id: '${currUser.email}${UniqueKey()}',
-                    //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
-                    // details will be update if user edit his info
-                    creatorUser: currUser,
-                    timestamp: DateTime.now(),
-                    enableComments: isComments,
-                    commentedUsersIds: isComments ? [currUser.uid.toString()] : [],
-                  );
-                  context.uniProvider.updatePostUploaded(true);
-                  FeedService.uploadPost(context, post);
-                  context.router.pop();
-                })
+                buildSendButton(
+                    onTap: () {
+                      UserModel currUser = context.uniProvider.currUser;
+                      var post = PostModel(
+                        textContent: postController.text,
+                        id: '${currUser.email}${UniqueKey()}',
+                        //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
+                        // details will be update if user edit his info
+                        creatorUser: currUser,
+                        timestamp: DateTime.now(),
+                        enableComments: isComments,
+                        commentedUsersIds: isComments ? [currUser.uid.toString()] : [],
+                      );
+                      context.uniProvider.updatePostUploaded(true);
+                      FeedService.uploadPost(context, post);
+                      context.router.pop();
+                    },
+                    isConversationSend: isComments)
               ],
             ).pOnly(bottom: 5),
           ],
@@ -185,17 +189,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 // }
 }
 
-Widget buildSendButton({GestureTapCallback? onTap, bool isActive = true}) {
+Widget buildSendButton(
+    {GestureTapCallback? onTap, bool isActive = true, bool isConversationSend = false}) {
   return Opacity(
     opacity: isActive ? 1.0 : 0.3,
     child: Container(
       height: 35,
       width: 35,
-      // color: AppColors.grey50,
-      color: AppColors.transparent,
-      child: Assets.svg.icons.iconSendButton.svg().pad(7.5),
+      color: isConversationSend ? AppColors.darkOutline50 : AppColors.transparent,
+      // color: ,
+      child: (isConversationSend
+              ? Assets.svg.icons.messageChatCircleAdd.svg(color: Colors.white)
+              : Assets.svg.icons.iconSendButton.svg())
+          .pad(7.5),
     )
-        .rounded(radius: 10)
+        .rounded(radius: 8)
         .px(10)
         .pOnly(top: 5, bottom: 5)
         .onTap(isActive ? onTap : null, radius: 10)
