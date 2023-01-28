@@ -67,6 +67,9 @@ List<String> tags = [
 ];
 // endregion tags
 
+Widget basicLoader() =>
+    const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3).center;
+
 class MainFeedScreen extends StatefulWidget {
   const MainFeedScreen({Key? key}) : super(key: key);
 
@@ -110,9 +113,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     Future.delayed(350.milliseconds).then((_) => setState(() {}));
   }
 
-  Widget loader() =>
-      const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3).center;
-
   @override
   Widget build(BuildContext context) {
     print('START: MainFeedScreen() ${context.routeData.path}');
@@ -143,9 +143,15 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               // Tab(text: 'Questions'),
             ],
             onTap: (value) async {
-              if (value == 0) activeFilter = FilterTypes.postWithoutComments;
-              if (value == 1) activeFilter = FilterTypes.postWithComments;
-              context.uniProvider.updateFeedStatus(activeFilter);
+              if (value == 0) {
+                activeFilter = FilterTypes.postWithoutComments;
+              context.uniProvider.updateFeedType(FeedTypes.members);
+              }
+              if (value == 1) {
+                activeFilter = FilterTypes.postWithComments;
+              context.uniProvider.updateFeedType(FeedTypes.conversations);
+              }
+              context.uniProvider.updateCurrFilter(activeFilter);
               await _loadMore(refresh: true);
             },
           ),
@@ -169,7 +175,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       child: Builder(builder: (context) {
         // return 'Sorry, no post found... \nTry again later!'.toText().center;
 
-        if (splashLoader || postList.isEmpty) return loader();
+        if (splashLoader || postList.isEmpty) return basicLoader();
 
         return RefreshIndicator(
             backgroundColor: AppColors.darkBg,

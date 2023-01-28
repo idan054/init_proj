@@ -40,15 +40,15 @@ class UniProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  FilterTypes feedStatus = FilterTypes.postWithoutComments;
-  void updateFeedStatus(FilterTypes data) {
-    feedStatus = data;
+  FilterTypes currFilter = FilterTypes.postWithoutComments;
+  void updateCurrFilter(FilterTypes data) {
+    currFilter = data;
     notifyListeners();
   }
 
-  String? status;
-  void updateStatus(String? data) {
-    status = data;
+  FeedTypes feedType = FeedTypes.members;
+  void updateFeedType(FeedTypes data) {
+    feedType = data;
     notifyListeners();
   }
 

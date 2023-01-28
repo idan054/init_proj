@@ -32,6 +32,7 @@ import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/clean_snackbar.dart';
 import '../../widgets/components/postBlock_sts.dart';
 import '../../widgets/my_dialog.dart';
+import '../feed_ui/main_feed_screen.dart';
 
 class UserScreen extends StatefulWidget {
   final bool fromEditScreen;
@@ -46,6 +47,7 @@ class UserScreen extends StatefulWidget {
 class _UserScreenState extends State<UserScreen> {
   List<PostModel> postList = [];
   var activeFilter = FilterTypes.postsByUser;
+  var isLoading = true;
   var isBioExpanded = false;
 
   @override
@@ -59,7 +61,8 @@ class _UserScreenState extends State<UserScreen> {
   Future _loadMore({bool refresh = false}) async {
     print('START: USER _loadMore()');
 
-    // splashLoader = true; setState(() {});
+    isLoading = true;
+    setState(() {});
     if (refresh) postList = [];
     List newPosts = await Database.advanced.handleGetModel(
       ModelTypes.posts,
@@ -70,7 +73,7 @@ class _UserScreenState extends State<UserScreen> {
 
     if (newPosts.isNotEmpty) postList = [...newPosts];
     print('postList ${postList.length}');
-    // splashLoader = false;
+    isLoading = false;
     setState(() {});
   }
 
@@ -113,17 +116,27 @@ class _UserScreenState extends State<UserScreen> {
                         // const Divider(thickness: 2, color: AppColors.darkOutline),
                         5.verticalSpace,
                         buildPostsDivider(isCurrUserProfile, user),
-                        Container(
-                          color: AppColors.darkOutline,
-                          child: ListView.builder(
-                              physics: const ScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: postList.length,
-                              itemBuilder: (BuildContext context, int i) {
-                                // PostView(postList[i])
-                                return PostBlock(postList[i], isUserPage: true);
-                              }),
-                        ),
+                        Builder(builder: (context) {
+                          if (isLoading) return basicLoader().pOnly(top: 100);
+
+                          var text = activeFilter == FilterTypes.postsByUser
+                              ? "${isCurrUserProfile ? 'Your' : "${user.name}'s"} Rils will appear here"
+                              : 'Conversations ${isCurrUserProfile ? 'you' : "${user.name}"} joined will appear here';
+
+                          return postList.isEmpty
+                              ? text.toText(color: AppColors.grey50).pOnly(top: 100)
+                              : Container(
+                                  color: AppColors.darkOutline,
+                                  child: ListView.builder(
+                                      physics: const ScrollPhysics(),
+                                      shrinkWrap: true,
+                                      itemCount: postList.length,
+                                      itemBuilder: (BuildContext context, int i) {
+                                        // PostView(postList[i])
+                                        return PostBlock(postList[i], isUserPage: true);
+                                      }),
+                                );
+                        })
                       ],
                     ),
                   )
@@ -143,7 +156,10 @@ class _UserScreenState extends State<UserScreen> {
         padding: 5.vertical,
         color: AppColors.primaryDark,
         child: Builder(builder: (context) {
-          var title = isCurrUserProfile ? 'Your Rils' : "Rils";
+          // var rilTitle = isCurrUserProfile ? 'Your Rils' : "Rils";
+          var rilTitle = "Rils";
+          var convTitle = isCurrUserProfile ? 'Your Conversions' : "${user.name}'s Conversions";
+
           // return title.toText(fontSize: 18, medium: true).centerLeft.py(12).px(25);
           return TabBar(
             indicator: UnderlineTabIndicator(
@@ -152,8 +168,8 @@ class _UserScreenState extends State<UserScreen> {
             labelStyle: AppStyles.text14PxRegular,
             indicatorColor: AppColors.primaryOriginal,
             tabs: [
-              Tab(text: title),
-              Tab(text: "${user.name}'s Conversions"),
+              Tab(text: rilTitle),
+              Tab(text: convTitle),
 
               // Tab(text: 'Latest'),
               // Tab(text: 'Questions'),
@@ -161,7 +177,7 @@ class _UserScreenState extends State<UserScreen> {
             onTap: (value) async {
               if (value == 0) activeFilter = FilterTypes.postsByUser;
               if (value == 1) activeFilter = FilterTypes.postConversionsOfUser;
-              context.uniProvider.updateFeedStatus(activeFilter);
+              context.uniProvider.updateCurrFilter(activeFilter);
               await _loadMore(refresh: true);
             },
           );
@@ -431,7 +447,7 @@ class _UserScreenState extends State<UserScreen> {
                                 .pOnly(right: 10),
                             "You both interesting in $commonTag... that's cool!"
                                 .toText(color: AppColors.grey50, fontSize: 12)
-                                // .expanded(),
+                            // .expanded(),
                           ],
                         );
                 }),

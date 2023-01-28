@@ -64,7 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _handleIndexChanged(int i, bool navBar) {
     if (sItem == TabItems.chat) {
-      context.uniProvider.updateFeedStatus(FilterTypes.postWithoutComments);
+      context.uniProvider.updateCurrFilter(FilterTypes.postWithoutComments);
     }
 
     sItem = TabItems.values[i];
@@ -171,7 +171,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Builder buildFab() {
     return Builder(builder: (context) {
       var showFab = context.uniProvider.showFab;
-      var replyStyle = context.listenUniProvider.feedStatus == FilterTypes.postWithoutComments;
+      var replyStyle = context.listenUniProvider.feedType == FeedTypes.members;
+
       return AnimatedSlide(
         duration: 450.milliseconds,
         offset: showFab ? Offset.zero : const Offset(0, 1.2),

@@ -17,6 +17,8 @@ import '../timestamp_convert.dart';
 import 'db_advanced.dart';
 import 'package:hive/hive.dart';
 
+enum FeedTypes { members, conversations}
+
 enum FilterTypes { postsByUser, postWithoutComments, postWithComments, postConversionsOfUser }
 
 //> MUST Be same as collection name!
