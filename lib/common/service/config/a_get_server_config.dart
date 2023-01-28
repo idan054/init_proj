@@ -22,6 +22,7 @@ Future<AppConfigModel> getAppConfig(BuildContext context) async {
   var localConfig = context.uniProvider.localConfig;
   var packageInfo = await PackageInfo.fromPlatform();
   int buildNumber = int.parse(packageInfo.buildNumber);
+  print('buildNumber ${buildNumber}');
 
   context.uniProvider.updateLocalConfig(localConfig
       .copyWith(publicVersionAndroid: buildNumber, publicVersionIos: buildNumber));

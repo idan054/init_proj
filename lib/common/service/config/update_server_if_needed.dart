@@ -1,3 +1,4 @@
+import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/service/config/check_app_status.dart';
 import 'package:flutter/material.dart';
 import 'package:example/common/extensions/extensions.dart';
@@ -34,13 +35,14 @@ Future updateServerVersionIfNeeded(
 
   if (Platform.isAndroid) {
     if (localConfig.publicVersionAndroid! > serverConfig.publicVersionAndroid!) {
-      print('Android local version higher than server /: Update server!');
+      printYellow('Android local version higher than server \\(*o*)/ Update server!');
       updateServerConfig();
     }
   }
+
   if (Platform.isIOS) {
     if (localConfig.publicVersionIos! > serverConfig.publicVersionIos!) {
-      print('IOS local version higher than server /: Update server!');
+      printYellow('IOS local version higher than server \\(*o*)/ Update server!');
       updateServerConfig();
     }
   }
