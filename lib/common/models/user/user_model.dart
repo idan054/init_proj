@@ -28,6 +28,7 @@ class UserModel with _$UserModel {
     GenderTypes? gender,
     @Default(UserTypes.normal) UserTypes? userType,
     @Default([]) List<String> tags,
+    @Default([]) List<String> blockedUsers, // Hide content from (server based)
     @DateTimeStampConv() DateTime? birthday,
   }) = _UserModel;
 
