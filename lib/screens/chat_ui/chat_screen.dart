@@ -117,7 +117,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ).pOnly(right: 10).onTap(() {
                 // Users cant go RilTopia Team Profile because this is hack for when user is blocked
                 // (He can only "Chat with us" & From there go to Conversions & More...
-                if(widget.otherUser.email == 'idanbit80@gmail.com') return;
+                if (widget.otherUser.email == 'idanbit80@gmail.com') return;
 
                 context.router.push(UserRoute(user: widget.otherUser));
               })),
@@ -363,7 +363,11 @@ Widget buildTextField(
             hintStyle: AppStyles.text14PxRegular.greyLight,
             focusedBorder: InputBorder.none,
             hintText: hintText,
-            suffixIcon: buildSendButton(isActive: controller.text.isNotEmpty, onTap: onTap)),
+            suffixIcon: buildSendButton(
+              isActive:
+                  controller.text.isNotEmpty && (controller.text.replaceAll(' ', '').isNotEmpty),
+              onTap: onTap,
+            )),
       )
           .roundedOnly(
             bottomLeft: 10,

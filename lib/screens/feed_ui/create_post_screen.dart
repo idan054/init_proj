@@ -131,6 +131,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
                 const Spacer(),
                 buildSendButton(
+                    isActive: postController.text.isNotEmpty &&
+                        (postController.text.replaceAll(' ', '').isNotEmpty),
                     onTap: () {
                       UserModel currUser = context.uniProvider.currUser;
                       var post = PostModel(

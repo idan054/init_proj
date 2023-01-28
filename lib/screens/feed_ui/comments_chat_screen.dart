@@ -372,12 +372,12 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                   ),
                   5.verticalSpace,
                   post.textContent.toTextExpanded(
-                    autoExpanded: true,
-                    textAlign: isHebComment ? TextAlign.right : TextAlign.left,
+                      autoExpanded: true,
+                      textAlign: isHebComment ? TextAlign.right : TextAlign.left,
                       style: AppStyles.text14PxRegular.copyWith(
-                    color: AppColors.white,
-                    fontSize: 14,
-                  ))
+                        color: AppColors.white,
+                        fontSize: 14,
+                      ))
                 ],
               ),
             ).rounded(radius: 10).expanded();
@@ -447,7 +447,11 @@ Widget buildTextField(
             hintStyle: AppStyles.text14PxRegular.greyLight,
             focusedBorder: InputBorder.none,
             hintText: hintText,
-            suffixIcon: buildSendButton(isActive: controller.text.isNotEmpty, onTap: onTap)),
+            suffixIcon: buildSendButton(
+              isActive:
+                  controller.text.isNotEmpty && (controller.text.replaceAll(' ', '').isNotEmpty),
+              onTap: onTap,
+            )),
       )
           .roundedOnly(
             bottomLeft: 10,
