@@ -92,7 +92,9 @@ class _LoginScreenState extends State<LoginScreen> {
             text: TextSpan(
               children: <TextSpan>[
                 TextSpan(
-                    text: "By Join with Google, you agree to our ",
+                    text: Platform.isAndroid
+                        ? "By Join with Google, you agree to our "
+                        : "By 'Join with Google' or 'Join with Apple', you agree to our ",
                     style: AppStyles.text14PxRegular),
                 TextSpan(text: '\nTerms & Conditions', style: AppStyles.text14PxBold
                     // .copyWith(decoration: TextDecoration.underline)
@@ -104,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Uri.parse(
                     'https://www.privacypolicies.com/live/4ae28974-cd40-4c8e-b265-6d6da2c7690b'),
                 mode: LaunchMode.externalApplication);
-          }),
+          }, radius: 10),
           const Spacer(flex: 15),
         ],
       ).center,

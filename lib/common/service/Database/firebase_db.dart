@@ -17,7 +17,7 @@ import '../timestamp_convert.dart';
 import 'db_advanced.dart';
 import 'package:hive/hive.dart';
 
-enum FeedTypes { members, conversations}
+enum FeedTypes { members, conversations }
 
 enum FilterTypes { postsByUser, postWithoutComments, postWithComments, converstionsPostByUser }
 
@@ -40,19 +40,23 @@ class Database {
 
   static final advanced = FsAdvanced();
 
-  void deleteDoc({required String collection, String? docName}) {
+  static void deleteDoc({required String collection, String? docName}) {
     db.collection(collection).doc(docName).delete();
   }
 
   static Future<Map<String, dynamic>?> docData(String documentPath) =>
       db.doc(documentPath).get().then((doc) => doc.data());
 
-  static Future updateFirestore(
-      {required String collection, String? docName, required Map<String, dynamic> toJson}) async {
+  static Future updateFirestore({
+    required String collection,
+    String? docName,
+    required Map<String, dynamic> toJson,
+    bool merge = true,
+  }) async {
     db
         .collection(collection)
         .doc(docName)
-        .set(toJson, SetOptions(merge: true))
+        .set(toJson, SetOptions(merge: merge)) // Almost always true
         .onError((error, stackTrace) => print('updateFirestore ERR - $error'));
   }
 
@@ -177,7 +181,8 @@ class Database {
       for (var doc in snap.docs) {
         var data = doc.data();
         // chatUnreadCounter = data['metadata']['unreadCounter#${currUser.uid}'];
-        chatUnreadCounter = (chatUnreadCounter + doc.get('metadata.unreadCounter#${currUser.uid}')) as int;
+        chatUnreadCounter =
+            (chatUnreadCounter + doc.get('metadata.unreadCounter#${currUser.uid}')) as int;
       }
       // var updatedUser = UserModel.fromJson(snap.data() as Map<String, dynamic>);
       context.uniProvider.updateUser(currUser.copyWith(unreadCounter: chatUnreadCounter));

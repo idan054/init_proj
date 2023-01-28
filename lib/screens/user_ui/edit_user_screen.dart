@@ -32,6 +32,7 @@ import '../feed_ui/main_feed_screen.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/themes/app_colors.dart';
 import '../../widgets/app_bar.dart';
+import 'dart:io' show Platform;
 
 class EditUserScreen extends StatefulWidget {
   final UserModel user;
@@ -177,11 +178,40 @@ class _EditUserScreenState extends State<EditUserScreen> {
                   30.verticalSpace,
                 ],
               ),
-            )
+            ),
+            if (Platform.isIOS)
+              wMainButton(context,
+                  radius: 10,
+                  isWide: true,
+                  title: 'Delete my account',
+                  color: AppColors.errRed,
+                  textColor: AppColors.greyLight, onPressed: () async {
+                _deleteUserPopup(context);
+              }).scale(scale: 0.7).bottom.pOnly(bottom: 25)
           ],
         ),
       ),
     );
+  }
+
+  void _deleteUserPopup(BuildContext context) {
+    var currUser = context.uniProvider.currUser;
+    // print('currUser.email ${currUser.email}');
+
+    Future.delayed(150.milliseconds).then((_) {
+      showRilDialog(context,
+          title: 'Are you sure want to DELETE this account?',
+          desc: 'Any of your content will be lost & you will lose access to this user'
+              // 'You can\'t Undo it. Are you sure?'
+              .toText(maxLines: 10),
+          barrierDismissible: true,
+          secondaryBtn: TextButton(
+              onPressed: () async {
+                Database.deleteDoc(collection: 'users', docName: currUser.email.toString());
+                context.router.replaceAll([const LoginRoute()]);
+              },
+              child: 'Delete account'.toText(color: AppColors.primaryLight)));
+    });
   }
 
   void _discardPopup(UserModel user) {

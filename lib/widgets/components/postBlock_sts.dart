@@ -218,7 +218,7 @@ class PostBlock extends StatelessWidget {
           barrierDismissible: true,
           secondaryBtn: TextButton(
               onPressed: () {
-                Database().deleteDoc(collection: 'posts', docName: post.id);
+                Database.deleteDoc(collection: 'posts', docName: post.id);
                 Navigator.of(context).pop();
                 rilFlushBar(context, 'Your Ril has been deleted');
               },
