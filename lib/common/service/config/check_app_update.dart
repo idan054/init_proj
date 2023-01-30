@@ -42,7 +42,8 @@ void checkForUpdate(
           'Please update from V$localVer to V$serverVer'.toText(color: AppColors.grey50),
           // '\n${mustShowPopup ? 'Whats new?' : ''}'
                   (serverConfig.whatsNew ?? '')
-              .toTextExpanded(
+              // .toTextExpanded(
+              .toText(
             maxLines: 5,
             textAlign: TextAlign.left,
           ),

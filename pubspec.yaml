@@ -4,7 +4,10 @@ description: A new Flutter project.
 
 # check for update based + build version
 # This also update the server if needed!
-version: 3.0.6+306
+
+# LASTED ANDROID: 305
+# LASTED IOS: 307
+version: 3.0.7+307
 environment:
   sdk: ">=2.17.6 <3.0.0"
 

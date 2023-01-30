@@ -76,25 +76,21 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
             backgroundColor: AppColors.darkOutline,
             body: buildScreenBody(post).pOnly(top: 40),
           )
-        : BackdropFilter(
-            // filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-            filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.darkOutline,
-                borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.99),
-                    offset: const Offset(0.0, 1.5), //(x,y)
-                    blurRadius: 4.0,
-                  ),
-                ],
+        : Container(
+          decoration: BoxDecoration(
+            color: AppColors.darkOutline,
+            borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.99),
+                offset: const Offset(0.0, 1.5), //(x,y)
+                blurRadius: 4.0,
               ),
-              margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, top: 150),
-              child: buildScreenBody(post),
-            ),
-          );
+            ],
+          ),
+          margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, top: 150),
+          child: buildScreenBody(post),
+        );
   }
 
   Widget buildScreenBody(PostModel post) {

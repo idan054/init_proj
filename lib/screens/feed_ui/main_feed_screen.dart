@@ -512,8 +512,7 @@ Widget appBarProfile(BuildContext context) {
               var localConfig = context.uniProvider.localConfig;
               var serverConfig = context.uniProvider.serverConfig;
 
-              WidgetsBinding.instance.addPostFrameCallback(
-                  (_) => checkForUpdate(context, localConfig, serverConfig!, mustShowPopup: true));
+              checkForUpdate(context, localConfig, serverConfig!, mustShowPopup: true);
             }, radius: 5),
           ),
 

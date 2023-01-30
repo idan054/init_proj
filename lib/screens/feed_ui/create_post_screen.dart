@@ -44,116 +44,112 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     var textDir = postController.text.isHebrew ? TextDirection.rtl : TextDirection.ltr;
     var selectedTag = context.uniProvider.selectedTag;
 
-    return BackdropFilter(
-      // filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-      filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: AppColors.darkOutline,
-          borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.99),
-              offset: const Offset(0.0, 1.5), //(x,y)
-              blurRadius: 4.0,
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.darkOutline,
+        borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.99),
+            offset: const Offset(0.0, 1.5), //(x,y)
+            blurRadius: 4.0,
+          ),
+        ],
+      ),
+      margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // if (isTagScreen)
+          //   '#$selectedTag'
+          //       .toText(color: AppColors.darkOutline50)
+          //       .pOnly(left: 10, top: 10)
+          //       .centerLeft,
+          TextField(
+            maxLines: 11,
+            minLines: 1,
+            maxLength: isComments ? 512 : 256,
+            // X2 for conversion
+            buildCounter: (context, {required currentLength, required isFocused, maxLength}) =>
+                postController.text.length == (isComments ? 512 : 256)
+                    ? 'Max length'.toText(
+                        fontSize: 12,
+                        color: AppColors.errRed,
+                      )
+                    : const Offstage(),
+            autofocus: true,
+            textDirection: textDir,
+            controller: postController,
+            keyboardAppearance: Brightness.dark,
+            keyboardType: TextInputType.multiline,
+            style: AppStyles.text16PxRegular.copyWith(color: AppColors.white),
+            onChanged: (val) => setState(() {}),
+            // inputFormatters: [LengthLimitingTextInputFormatter(350)],
+            cursorColor: Colors.white,
+            decoration: InputDecoration(
+              filled: true,
+              hintText: isComments ? 'Start a conversion about...' : 'Share your Ril thoughts...',
+              hintStyle: AppStyles.text16PxRegular.copyWith(color: AppColors.grey50),
+              fillColor: Colors.transparent,
+              border: InputBorder.none,
             ),
-          ],
-        ),
-        margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // if (isTagScreen)
-            //   '#$selectedTag'
-            //       .toText(color: AppColors.darkOutline50)
-            //       .pOnly(left: 10, top: 10)
-            //       .centerLeft,
-            TextField(
-              maxLines: 11,
-              minLines: 1,
-              maxLength: isComments ? 512 : 256,
-              // X2 for conversion
-              buildCounter: (context, {required currentLength, required isFocused, maxLength}) =>
-                  postController.text.length == (isComments ? 512 : 256)
-                      ? 'Max length'.toText(
-                          fontSize: 12,
-                          color: AppColors.errRed,
-                        )
-                      : const Offstage(),
-              autofocus: true,
-              textDirection: textDir,
-              controller: postController,
-              keyboardAppearance: Brightness.dark,
-              keyboardType: TextInputType.multiline,
-              style: AppStyles.text16PxRegular.copyWith(color: AppColors.white),
-              onChanged: (val) => setState(() {}),
-              // inputFormatters: [LengthLimitingTextInputFormatter(350)],
-              cursorColor: Colors.white,
-              decoration: InputDecoration(
-                filled: true,
-                hintText: isComments ? 'Start a conversion about...' : 'Share your Ril thoughts...',
-                hintStyle: AppStyles.text16PxRegular.copyWith(color: AppColors.grey50),
-                fillColor: Colors.transparent,
-                border: InputBorder.none,
-              ),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                buildChoiceChip(context,
-                        customIcon: isComments
-                            ? Assets.svg.icons.messageCommentsLines
-                                .svg(height: 15, color: AppColors.white)
-                            : Assets.svg.icons.dmPlaneUntitledIcon
-                                .svg(height: 15, color: AppColors.grey50),
-                        selectedColor: AppColors.darkOutline50,
-                        // label: (isComments ? 'With comments' : 'Reply style') // Reply only
-                        label: (isComments ? 'With comments' : 'Reply style') // Reply only
-                            .toText(color: isComments ? AppColors.white : AppColors.grey50),
-                        onSelect: (bool newSelection) {
-                  isComments = !isComments;
-                  setState(() {});
-                }, selected: isComments)
-                    .centerLeft
-                    .pOnly(left: 5),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              buildChoiceChip(context,
+                      customIcon: isComments
+                          ? Assets.svg.icons.messageCommentsLines
+                              .svg(height: 15, color: AppColors.white)
+                          : Assets.svg.icons.dmPlaneUntitledIcon
+                              .svg(height: 15, color: AppColors.grey50),
+                      selectedColor: AppColors.darkOutline50,
+                      // label: (isComments ? 'With comments' : 'Reply style') // Reply only
+                      label: (isComments ? 'With comments' : 'Reply style') // Reply only
+                          .toText(color: isComments ? AppColors.white : AppColors.grey50),
+                      onSelect: (bool newSelection) {
+                isComments = !isComments;
+                setState(() {});
+              }, selected: isComments)
+                  .centerLeft
+                  .pOnly(left: 5),
 
-                // Expanded(
-                //   child: isTagAdded
-                //       ? _tagsChoiceList(context)
-                //       : buildChoiceChip(context, label: const Text('Add tag'),
-                //               onSelect: (bool newSelection) {
-                //           isTagAdded = !isTagAdded;
-                //           setState(() {});
-                //         }, selected: isTagAdded)
-                //           .centerLeft
-                //           .pOnly(left: 5),
-                // ),
+              // Expanded(
+              //   child: isTagAdded
+              //       ? _tagsChoiceList(context)
+              //       : buildChoiceChip(context, label: const Text('Add tag'),
+              //               onSelect: (bool newSelection) {
+              //           isTagAdded = !isTagAdded;
+              //           setState(() {});
+              //         }, selected: isTagAdded)
+              //           .centerLeft
+              //           .pOnly(left: 5),
+              // ),
 
-                const Spacer(),
-                buildSendButton(
-                    isActive: postController.text.isNotEmpty &&
-                        (postController.text.replaceAll(' ', '').isNotEmpty),
-                    onTap: () {
-                      UserModel currUser = context.uniProvider.currUser;
-                      var post = PostModel(
-                        textContent: postController.text,
-                        id: '${currUser.email}${UniqueKey()}',
-                        //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
-                        // details will be update if user edit his info
-                        creatorUser: currUser,
-                        timestamp: DateTime.now(),
-                        enableComments: isComments,
-                        commentedUsersIds: isComments ? [currUser.uid.toString()] : [],
-                      );
-                      context.uniProvider.updatePostUploaded(true);
-                      FeedService.uploadPost(context, post);
-                      context.router.pop();
-                    },
-                    isConversationSend: isComments)
-              ],
-            ).pOnly(bottom: 5),
-          ],
-        ),
+              const Spacer(),
+              buildSendButton(
+                  isActive: postController.text.isNotEmpty &&
+                      (postController.text.replaceAll(' ', '').isNotEmpty),
+                  onTap: () {
+                    UserModel currUser = context.uniProvider.currUser;
+                    var post = PostModel(
+                      textContent: postController.text,
+                      id: '${currUser.email}${UniqueKey()}',
+                      //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
+                      // details will be update if user edit his info
+                      creatorUser: currUser,
+                      timestamp: DateTime.now(),
+                      enableComments: isComments,
+                      commentedUsersIds: isComments ? [currUser.uid.toString()] : [],
+                    );
+                    context.uniProvider.updatePostUploaded(true);
+                    FeedService.uploadPost(context, post);
+                    context.router.pop();
+                  },
+                  isConversationSend: isComments)
+            ],
+          ).pOnly(bottom: 5),
+        ],
       ),
     );
   }
