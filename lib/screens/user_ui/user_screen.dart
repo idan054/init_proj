@@ -27,6 +27,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 import '../../common/models/post/post_model.dart';
+import '../../common/models/report/report_model.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/clean_snackbar.dart';
@@ -185,7 +186,7 @@ class _UserScreenState extends State<UserScreen> {
             ],
             onTap: (value) async {
               if (value == 0) activeFilter = FilterTypes.postsByUser;
-              if (value == 1) activeFilter = FilterTypes.converstionsPostByUser;
+              if (value == 1) activeFilter = FilterTypes.conversationsPostByUser;
               context.uniProvider.updateCurrFilter(activeFilter);
               await _loadMore(refresh: true);
             },
@@ -268,7 +269,7 @@ class _UserScreenState extends State<UserScreen> {
               label: 'Reason why',
               controller: reasonController,
               validator: (value) {
-                if (value(' ', '').isEmpty) return '';
+                if (value.toString().replaceAll(' ', '').isEmpty) return '';
                 return '$value'.isEmpty ? '' : null;
               },
             ),
@@ -280,20 +281,23 @@ class _UserScreenState extends State<UserScreen> {
                 if (!validState) return;
 
                 var nameEndAt = userName.length < 20 ? userName.length : 20;
-                var docName = userName.substring(0, nameEndAt).toString() + UniqueKey().toString();
+                var docName = 'REPORT: ${userName.substring(0, nameEndAt).toString() + UniqueKey().toString()}';
+
+                var postReport = ReportModel(
+                  timestamp: DateTime.now(),
+                  reportedBy: context.uniProvider.currUser.email!,
+                  // reportedPost: ,
+                  reportedUser: user,
+                  reasonWhy: reasonController.text,
+                  reportStatus: ReportStatus.newReport,
+                  reportType: ReportType.user,
+                  userName: userName,
+                );
 
                 Database.updateFirestore(
                   collection: 'reports/Reported users/users',
                   docName: docName,
-                  toJson: {
-                    'reportAt': Timestamp.fromDate(DateTime.now()),
-                    'reportedBy': context.uniProvider.currUser.uid,
-                    'reasonWhy': reasonController.text,
-                    'userName': userName,
-                    'status': 'New',
-                    'type': 'User',
-                    'user': user.toJson()
-                  },
+                  toJson: postReport.toJson()
                 );
                 Navigator.of(context).pop();
                 rilFlushBar(context, 'Thanks, We\'ll handle it asap');

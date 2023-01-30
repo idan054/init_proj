@@ -11,12 +11,12 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i14;
-import 'package:example/common/models/chat/chat_model.dart' as _i18;
-import 'package:example/common/models/post/post_model.dart' as _i17;
-import 'package:example/common/models/user/user_model.dart' as _i16;
+import 'package:auto_route/auto_route.dart' as _i15;
+import 'package:example/common/models/chat/chat_model.dart' as _i19;
+import 'package:example/common/models/post/post_model.dart' as _i18;
+import 'package:example/common/models/user/user_model.dart' as _i17;
 import 'package:example/screens/auth_ui/a_onboarding_screen.dart' as _i2;
-import 'package:example/screens/auth_ui/e_tags_view_screen.dart' as _i13;
+import 'package:example/screens/auth_ui/e_tags_view_screen.dart' as _i14;
 import 'package:example/screens/auth_ui/login_screen.dart' as _i1;
 import 'package:example/screens/chat_ui/chat_screen.dart' as _i3;
 import 'package:example/screens/chat_ui/chats_list_screen.dart.dart' as _i4;
@@ -24,20 +24,21 @@ import 'package:example/screens/chat_ui/members_screen.dart' as _i5;
 import 'package:example/screens/feed_ui/comments_chat_screen.dart' as _i8;
 import 'package:example/screens/feed_ui/create_post_screen.dart' as _i7;
 import 'package:example/screens/feed_ui/main_feed_screen.dart' as _i6;
+import 'package:example/screens/main_ui/admin_screen.dart' as _i11;
 import 'package:example/screens/main_ui/dashboard_screen.dart' as _i10;
 import 'package:example/screens/main_ui/splash_screen.dart' as _i9;
-import 'package:example/screens/user_ui/edit_user_screen.dart' as _i12;
-import 'package:example/screens/user_ui/user_screen.dart' as _i11;
-import 'package:flutter/material.dart' as _i15;
+import 'package:example/screens/user_ui/edit_user_screen.dart' as _i13;
+import 'package:example/screens/user_ui/user_screen.dart' as _i12;
+import 'package:flutter/material.dart' as _i16;
 
-class AppRouter extends _i14.RootStackRouter {
-  AppRouter([_i15.GlobalKey<_i15.NavigatorState>? navigatorKey])
+class AppRouter extends _i15.RootStackRouter {
+  AppRouter([_i16.GlobalKey<_i16.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i14.PageFactory> pagesMap = {
+  final Map<String, _i15.PageFactory> pagesMap = {
     LoginRoute.name: (routeData) {
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i1.LoginScreen(),
         opaque: true,
@@ -45,7 +46,7 @@ class AppRouter extends _i14.RootStackRouter {
       );
     },
     OnBoardingRoute.name: (routeData) {
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i2.OnBoardingScreen(),
         opaque: true,
@@ -54,7 +55,7 @@ class AppRouter extends _i14.RootStackRouter {
     },
     ChatRoute.name: (routeData) {
       final args = routeData.argsAs<ChatRouteArgs>();
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
         child: _i3.ChatScreen(
           otherUser: args.otherUser,
@@ -68,7 +69,7 @@ class AppRouter extends _i14.RootStackRouter {
       );
     },
     ChatsListRoute.name: (routeData) {
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i4.ChatsListScreen(),
         opaque: true,
@@ -76,7 +77,7 @@ class AppRouter extends _i14.RootStackRouter {
       );
     },
     MembersRoute.name: (routeData) {
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i5.MembersScreen(),
         opaque: true,
@@ -84,7 +85,7 @@ class AppRouter extends _i14.RootStackRouter {
       );
     },
     MainFeedRoute.name: (routeData) {
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i6.MainFeedScreen(),
         opaque: true,
@@ -93,7 +94,7 @@ class AppRouter extends _i14.RootStackRouter {
     },
     CreatePostRoute.name: (routeData) {
       final args = routeData.argsAs<CreatePostRouteArgs>();
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
         child: _i7.CreatePostScreen(
           args.replyStyle,
@@ -105,7 +106,7 @@ class AppRouter extends _i14.RootStackRouter {
     },
     CommentsChatRoute.name: (routeData) {
       final args = routeData.argsAs<CommentsChatRouteArgs>();
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
         child: _i8.CommentsChatScreen(
           args.post,
@@ -117,7 +118,7 @@ class AppRouter extends _i14.RootStackRouter {
       );
     },
     SplashRoute.name: (routeData) {
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
         child: const _i9.SplashScreen(),
         opaque: true,
@@ -127,7 +128,7 @@ class AppRouter extends _i14.RootStackRouter {
     DashboardRoute.name: (routeData) {
       final args = routeData.argsAs<DashboardRouteArgs>(
           orElse: () => const DashboardRouteArgs());
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
         child: _i10.DashboardScreen(
           key: args.key,
@@ -137,11 +138,19 @@ class AppRouter extends _i14.RootStackRouter {
         barrierDismissible: false,
       );
     },
+    AdminRoute.name: (routeData) {
+      return _i15.CustomPage<dynamic>(
+        routeData: routeData,
+        child: const _i11.AdminScreen(),
+        opaque: true,
+        barrierDismissible: false,
+      );
+    },
     UserRoute.name: (routeData) {
       final args = routeData.argsAs<UserRouteArgs>();
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
-        child: _i11.UserScreen(
+        child: _i12.UserScreen(
           args.user,
           fromEditScreen: args.fromEditScreen,
           key: args.key,
@@ -152,9 +161,9 @@ class AppRouter extends _i14.RootStackRouter {
     },
     EditUserRoute.name: (routeData) {
       final args = routeData.argsAs<EditUserRouteArgs>();
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
-        child: _i12.EditUserScreen(
+        child: _i13.EditUserScreen(
           args.user,
           key: args.key,
         ),
@@ -165,9 +174,9 @@ class AppRouter extends _i14.RootStackRouter {
     TagsViewRoute.name: (routeData) {
       final args = routeData.argsAs<TagsViewRouteArgs>(
           orElse: () => const TagsViewRouteArgs());
-      return _i14.CustomPage<dynamic>(
+      return _i15.CustomPage<dynamic>(
         routeData: routeData,
-        child: _i13.TagsViewScreen(
+        child: _i14.TagsViewScreen(
           user: args.user,
           key: args.key,
         ),
@@ -178,56 +187,60 @@ class AppRouter extends _i14.RootStackRouter {
   };
 
   @override
-  List<_i14.RouteConfig> get routes => [
-        _i14.RouteConfig(
+  List<_i15.RouteConfig> get routes => [
+        _i15.RouteConfig(
           LoginRoute.name,
           path: '/login-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           OnBoardingRoute.name,
           path: '/on-boarding-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           ChatRoute.name,
           path: '/chat-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           ChatsListRoute.name,
           path: '/chats-list-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           MembersRoute.name,
           path: '/members-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           MainFeedRoute.name,
           path: '/main-feed-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           CreatePostRoute.name,
           path: '/create-post-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           CommentsChatRoute.name,
           path: '/comments-chat-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           SplashRoute.name,
           path: '/',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           DashboardRoute.name,
           path: '/dashboard-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
+          AdminRoute.name,
+          path: '/admin-screen',
+        ),
+        _i15.RouteConfig(
           UserRoute.name,
           path: '/user-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           EditUserRoute.name,
           path: '/edit-user-screen',
         ),
-        _i14.RouteConfig(
+        _i15.RouteConfig(
           TagsViewRoute.name,
           path: '/tags-view-screen',
         ),
@@ -236,7 +249,7 @@ class AppRouter extends _i14.RootStackRouter {
 
 /// generated route for
 /// [_i1.LoginScreen]
-class LoginRoute extends _i14.PageRouteInfo<void> {
+class LoginRoute extends _i15.PageRouteInfo<void> {
   const LoginRoute()
       : super(
           LoginRoute.name,
@@ -248,7 +261,7 @@ class LoginRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.OnBoardingScreen]
-class OnBoardingRoute extends _i14.PageRouteInfo<void> {
+class OnBoardingRoute extends _i15.PageRouteInfo<void> {
   const OnBoardingRoute()
       : super(
           OnBoardingRoute.name,
@@ -260,13 +273,13 @@ class OnBoardingRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.ChatScreen]
-class ChatRoute extends _i14.PageRouteInfo<ChatRouteArgs> {
+class ChatRoute extends _i15.PageRouteInfo<ChatRouteArgs> {
   ChatRoute({
-    required _i16.UserModel otherUser,
+    required _i17.UserModel otherUser,
     required String chatId,
-    _i17.PostModel? postReply,
-    _i18.ChatModel? chat,
-    _i15.Key? key,
+    _i18.PostModel? postReply,
+    _i19.ChatModel? chat,
+    _i16.Key? key,
   }) : super(
           ChatRoute.name,
           path: '/chat-screen',
@@ -291,15 +304,15 @@ class ChatRouteArgs {
     this.key,
   });
 
-  final _i16.UserModel otherUser;
+  final _i17.UserModel otherUser;
 
   final String chatId;
 
-  final _i17.PostModel? postReply;
+  final _i18.PostModel? postReply;
 
-  final _i18.ChatModel? chat;
+  final _i19.ChatModel? chat;
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   @override
   String toString() {
@@ -309,7 +322,7 @@ class ChatRouteArgs {
 
 /// generated route for
 /// [_i4.ChatsListScreen]
-class ChatsListRoute extends _i14.PageRouteInfo<void> {
+class ChatsListRoute extends _i15.PageRouteInfo<void> {
   const ChatsListRoute()
       : super(
           ChatsListRoute.name,
@@ -321,7 +334,7 @@ class ChatsListRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.MembersScreen]
-class MembersRoute extends _i14.PageRouteInfo<void> {
+class MembersRoute extends _i15.PageRouteInfo<void> {
   const MembersRoute()
       : super(
           MembersRoute.name,
@@ -333,7 +346,7 @@ class MembersRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i6.MainFeedScreen]
-class MainFeedRoute extends _i14.PageRouteInfo<void> {
+class MainFeedRoute extends _i15.PageRouteInfo<void> {
   const MainFeedRoute()
       : super(
           MainFeedRoute.name,
@@ -345,10 +358,10 @@ class MainFeedRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i7.CreatePostScreen]
-class CreatePostRoute extends _i14.PageRouteInfo<CreatePostRouteArgs> {
+class CreatePostRoute extends _i15.PageRouteInfo<CreatePostRouteArgs> {
   CreatePostRoute({
     required bool replyStyle,
-    _i15.Key? key,
+    _i16.Key? key,
   }) : super(
           CreatePostRoute.name,
           path: '/create-post-screen',
@@ -369,7 +382,7 @@ class CreatePostRouteArgs {
 
   final bool replyStyle;
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   @override
   String toString() {
@@ -379,11 +392,11 @@ class CreatePostRouteArgs {
 
 /// generated route for
 /// [_i8.CommentsChatScreen]
-class CommentsChatRoute extends _i14.PageRouteInfo<CommentsChatRouteArgs> {
+class CommentsChatRoute extends _i15.PageRouteInfo<CommentsChatRouteArgs> {
   CommentsChatRoute({
-    required _i17.PostModel post,
+    required _i18.PostModel post,
     bool isFullScreen = false,
-    _i15.Key? key,
+    _i16.Key? key,
   }) : super(
           CommentsChatRoute.name,
           path: '/comments-chat-screen',
@@ -404,11 +417,11 @@ class CommentsChatRouteArgs {
     this.key,
   });
 
-  final _i17.PostModel post;
+  final _i18.PostModel post;
 
   final bool isFullScreen;
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   @override
   String toString() {
@@ -418,7 +431,7 @@ class CommentsChatRouteArgs {
 
 /// generated route for
 /// [_i9.SplashScreen]
-class SplashRoute extends _i14.PageRouteInfo<void> {
+class SplashRoute extends _i15.PageRouteInfo<void> {
   const SplashRoute()
       : super(
           SplashRoute.name,
@@ -430,9 +443,9 @@ class SplashRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i10.DashboardScreen]
-class DashboardRoute extends _i14.PageRouteInfo<DashboardRouteArgs> {
+class DashboardRoute extends _i15.PageRouteInfo<DashboardRouteArgs> {
   DashboardRoute({
-    _i15.Key? key,
+    _i16.Key? key,
     _i10.TabItems dashboardPage = _i10.TabItems.home,
   }) : super(
           DashboardRoute.name,
@@ -452,7 +465,7 @@ class DashboardRouteArgs {
     this.dashboardPage = _i10.TabItems.home,
   });
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   final _i10.TabItems dashboardPage;
 
@@ -463,12 +476,24 @@ class DashboardRouteArgs {
 }
 
 /// generated route for
-/// [_i11.UserScreen]
-class UserRoute extends _i14.PageRouteInfo<UserRouteArgs> {
+/// [_i11.AdminScreen]
+class AdminRoute extends _i15.PageRouteInfo<void> {
+  const AdminRoute()
+      : super(
+          AdminRoute.name,
+          path: '/admin-screen',
+        );
+
+  static const String name = 'AdminRoute';
+}
+
+/// generated route for
+/// [_i12.UserScreen]
+class UserRoute extends _i15.PageRouteInfo<UserRouteArgs> {
   UserRoute({
-    required _i16.UserModel user,
+    required _i17.UserModel user,
     bool fromEditScreen = false,
-    _i15.Key? key,
+    _i16.Key? key,
   }) : super(
           UserRoute.name,
           path: '/user-screen',
@@ -489,11 +514,11 @@ class UserRouteArgs {
     this.key,
   });
 
-  final _i16.UserModel user;
+  final _i17.UserModel user;
 
   final bool fromEditScreen;
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   @override
   String toString() {
@@ -502,11 +527,11 @@ class UserRouteArgs {
 }
 
 /// generated route for
-/// [_i12.EditUserScreen]
-class EditUserRoute extends _i14.PageRouteInfo<EditUserRouteArgs> {
+/// [_i13.EditUserScreen]
+class EditUserRoute extends _i15.PageRouteInfo<EditUserRouteArgs> {
   EditUserRoute({
-    required _i16.UserModel user,
-    _i15.Key? key,
+    required _i17.UserModel user,
+    _i16.Key? key,
   }) : super(
           EditUserRoute.name,
           path: '/edit-user-screen',
@@ -525,9 +550,9 @@ class EditUserRouteArgs {
     this.key,
   });
 
-  final _i16.UserModel user;
+  final _i17.UserModel user;
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   @override
   String toString() {
@@ -536,11 +561,11 @@ class EditUserRouteArgs {
 }
 
 /// generated route for
-/// [_i13.TagsViewScreen]
-class TagsViewRoute extends _i14.PageRouteInfo<TagsViewRouteArgs> {
+/// [_i14.TagsViewScreen]
+class TagsViewRoute extends _i15.PageRouteInfo<TagsViewRouteArgs> {
   TagsViewRoute({
-    _i16.UserModel? user,
-    _i15.Key? key,
+    _i17.UserModel? user,
+    _i16.Key? key,
   }) : super(
           TagsViewRoute.name,
           path: '/tags-view-screen',
@@ -559,9 +584,9 @@ class TagsViewRouteArgs {
     this.key,
   });
 
-  final _i16.UserModel? user;
+  final _i17.UserModel? user;
 
-  final _i15.Key? key;
+  final _i16.Key? key;
 
   @override
   String toString() {

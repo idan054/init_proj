@@ -8,6 +8,7 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
+import 'package:example/common/models/report/report_model.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/service/hive_services.dart';
 import 'package:flutter/cupertino.dart';
@@ -37,8 +38,7 @@ class FsAdvanced {
 
     // 1/2) Set modelList from Database snap:
     print('Start fetch From: ${timeStamp == null ? 'Most recent' : 'timeStamp'}');
-    var snap = await getDocsBasedModel(context, timeStamp, modelType, collectionRef,
-        filter: filter, uid: uid);
+    var snap = await getDocsBasedModel(context, timeStamp, modelType, collectionRef, filter, uid);
 
     // 2/2) .fromJson() To postModel, userModel etc...
     if (snap.docs.isNotEmpty) {
@@ -56,8 +56,13 @@ class FsAdvanced {
 
   // 1/2
   Future<QuerySnapshot<Map<String, dynamic>>> getDocsBasedModel(
-      BuildContext context, Timestamp? timestamp, ModelTypes modelType, String collectionRef,
-      {FilterTypes? filter, String? uid}) async {
+    BuildContext context,
+    Timestamp? timestamp,
+    ModelTypes modelType,
+    String collectionRef,
+    FilterTypes? filter,
+    String? uid,
+  ) async {
     print('START: getDocsBasedModel() - ${modelType.name}');
 
     print(timestamp == null
@@ -80,7 +85,7 @@ class FsAdvanced {
           reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid); // curr / other user
           reqBase = reqBase.where('enableComments', isEqualTo: false);
         }
-        if (filter == FilterTypes.converstionsPostByUser) {
+        if (filter == FilterTypes.conversationsPostByUser) {
           reqBase = reqBase.where('commentedUsersIds', arrayContains: uid!); // curr / other user
         }
         if (filter == FilterTypes.postWithComments) {
@@ -98,6 +103,7 @@ class FsAdvanced {
         break;
     }
     docs = await reqBase.get();
+    print('DONE: getDocsBasedModel() - ${modelType.name} [${docs.size} docs]');
     return docs;
   }
 
@@ -132,6 +138,10 @@ class FsAdvanced {
         break;
       case ModelTypes.users:
         listModel = snap.docs.map((doc) => UserModel.fromJson(doc.data())).toList();
+        break;
+
+      case ModelTypes.reports:
+        listModel = snap.docs.map((doc) => ReportModel.fromJson(doc.data())).toList();
         break;
     }
 

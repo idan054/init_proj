@@ -10,19 +10,21 @@ import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../Auth/auth_services.dart' as auth;
-import '../Chat/chat_services.dart' as chat;
-import '../timestamp_convert.dart';
 import 'db_advanced.dart';
-import 'package:hive/hive.dart';
 
 enum FeedTypes { members, conversations }
 
-enum FilterTypes { postsByUser, postWithoutComments, postWithComments, converstionsPostByUser }
+enum FilterTypes {
+  postsByUser,             // User Screen
+  conversationsPostByUser, // User Screen
+  postWithoutComments, // Home Screen
+  postWithComments,    // Home Screen
+  reportedUsers, // Admin Screen
+  reportedRils,  // Admin Screen
+}
 
 //> MUST Be same as collection name!
-enum ModelTypes { posts, chats, messages, users }
+enum ModelTypes { posts, chats, messages, users, reports}
 
 // .get() = READ.
 // .set() / .update() = WRITE.

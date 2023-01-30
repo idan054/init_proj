@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/appConfig/app_config_model.dart';
+import 'package:example/common/models/report/report_model.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
@@ -36,6 +37,7 @@ import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/config/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/components/postBlock_sts.dart';
+import '../../widgets/components/reported_user_block.dart';
 import 'comments_chat_screen.dart';
 
 // region tags
@@ -77,11 +79,13 @@ class MainFeedScreen extends StatefulWidget {
   State<MainFeedScreen> createState() => _MainFeedScreenState();
 }
 
-class _MainFeedScreenState extends State<MainFeedScreen> {
+class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProviderStateMixin {
   int tagIndex = 0;
   var splashLoader = true;
   List<PostModel> postList = [];
   var activeFilter = FilterTypes.postWithoutComments;
+  TabController? _tabController;
+  final _pageController = PageController(initialPage: 0);
 
   // var feedController = PageController();
   // var chipsController = ScrollController();
@@ -89,8 +93,37 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
   @override
   void initState() {
     print('START: initState()');
+    _tabController = TabController(vsync: this, length: 2);
     _loadMore();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    super.dispose();
+  }
+
+  void _handleIndexChanged(int i, {required bool fromTabBar}) async {
+    print('START: _handleIndexChanged()');
+    if (fromTabBar) {
+      _pageController.animateToPage(i, duration: 250.milliseconds, curve: Curves.easeIn);
+    } else {
+      _tabController?.animateTo(i);
+    }
+    // _pageController.jumpToPage(i);
+    // if (mounted) setState(() {});
+
+    if (i == 0) {
+      activeFilter = FilterTypes.postWithoutComments;
+      context.uniProvider.updateFeedType(FeedTypes.members);
+    }
+    if (i == 1) {
+      activeFilter = FilterTypes.postWithComments;
+      context.uniProvider.updateFeedType(FeedTypes.conversations);
+    }
+    context.uniProvider.updateCurrFilter(activeFilter);
+    await _loadMore(refresh: true);
   }
 
   Future _loadMore({bool refresh = false}) async {
@@ -102,8 +135,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       setState(() {});
     }
 
-    List newPosts =
-        await Database.advanced.handleGetModel(context, ModelTypes.posts, postList, filter: activeFilter);
+    List newPosts = await Database.advanced
+        .handleGetModel(context, ModelTypes.posts, postList, filter: activeFilter);
     if (newPosts.isNotEmpty) postList = [...newPosts];
     splashLoader = false;
 
@@ -119,7 +152,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
     var postUploaded = context.listenUniProvider.postUploaded;
     if (postUploaded) {
       _loadMore(refresh: true);
-      context.uniProvider.postUploaded = false;
+      context.uniProvider.postUploaded = false; // Will NOT rebuild
+      // context.uniProvider.updatePostUploaded(false, notify: false); // Will NOT rebuild
       // context.uniProvider.updatePostUploaded(false); // Will rebuild
     }
 
@@ -128,9 +162,10 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       initialIndex: 0,
       child: Scaffold(
         backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.darkOutline,
-        appBar: _buildRiltopiaAppBar(
+        appBar: buildRiltopiaAppBar(
           context,
           bottom: TabBar(
+            controller: _tabController,
             indicator: UnderlineTabIndicator(
                 borderSide: const BorderSide(width: 2.5, color: AppColors.primaryOriginal),
                 insets: 30.horizontal),
@@ -142,84 +177,52 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
               // Tab(text: 'Latest'),
               // Tab(text: 'Questions'),
             ],
-            onTap: (value) async {
-              if (value == 0) {
-                activeFilter = FilterTypes.postWithoutComments;
-              context.uniProvider.updateFeedType(FeedTypes.members);
-              }
-              if (value == 1) {
-                activeFilter = FilterTypes.postWithComments;
-              context.uniProvider.updateFeedType(FeedTypes.conversations);
-              }
-              context.uniProvider.updateCurrFilter(activeFilter);
-              await _loadMore(refresh: true);
+            onTap: (i) async {
+              _handleIndexChanged(i, fromTabBar: true);
             },
           ),
         ),
-        body: buildFeed(context),
-      ),
-    );
-  }
-
-  Widget buildFeed(BuildContext context) {
-    print('START: buildFeed()');
-
-    return LazyLoadScrollView(
-      scrollOffset: 1500,
-      onEndOfPage: () async {
-        printGreen('START: main_feed_screen.dart onEndOfPage()');
-        // context.uniProvider.updateIsLoading(true);
-        await _loadMore();
-        // context.uniProvider.updateIsLoading(false);
-      },
-      child: Builder(builder: (context) {
-        // return 'Sorry, no post found... \nTry again later!'.toText().center;
-
-        if (splashLoader || postList.isEmpty) return basicLoader();
-
-        return RefreshIndicator(
-            backgroundColor: AppColors.darkBg,
-            color: AppColors.primaryOriginal,
-            onRefresh: () async {
-              print('START: onRefresh()');
-              await _loadMore(refresh: true);
-            },
-            child: NotificationListener<UserScrollNotification>(
-              onNotification: (notification) {
-                final ScrollDirection direction = notification.direction;
-                if (direction == ScrollDirection.reverse) {
-                  context.uniProvider.updateShowFab(false);
-                } else if (direction == ScrollDirection.forward) {
-                  context.uniProvider.updateShowFab(true);
-                }
-                // setState(() {});
-                return true;
+        body: PageView(
+          controller: _pageController,
+          physics: const ScrollPhysics(),
+          // physics: const NeverScrollableScrollPhysics(), // disable swipe
+          onPageChanged: (i) {
+            _handleIndexChanged(i, fromTabBar: false);
+          },
+          children: [
+            buildFeed(
+              customTitle: 'EXPLORE MEMBERS',
+              context,
+              postList,
+              splashLoader,
+              activeFilter,
+              onRefreshIndicator: () async {
+                printGreen('START: onRefresh()');
+                await _loadMore(refresh: true);
               },
-              child: ListView(
-                children: [
-                  buildTagTitle(),
-                  1.verticalSpace,
-                  //   Expanded(child:
-                  ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: postList.length,
-                      itemBuilder: (BuildContext context, int i) {
-                        bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
-                        // PostView(postList[i])
-
-                        return Column(
-                          children: [
-                            //> if (isShowAd) getAd(context),
-                            PostBlock(postList[i]),
-                          ],
-                        );
-                      }).appearOpacity,
-                  //     )
-                ],
-              ),
-            ));
-      }),
+              onEndOfPage: () async {
+                printGreen('START: onEndOfPage()');
+                await _loadMore();
+              },
+            ),
+            buildFeed(
+              customTitle: 'JOIN PUBLIC CONVERSATION',
+              context,
+              postList,
+              splashLoader,
+              activeFilter,
+              onRefreshIndicator: () async {
+                printGreen('START: onRefresh()');
+                await _loadMore(refresh: true);
+              },
+              onEndOfPage: () async {
+                printGreen('START: onEndOfPage()');
+                await _loadMore();
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 
@@ -254,73 +257,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
   //   );
   // }
 
-  ListTile buildTagTitle() {
-    // bool isQuestionsTag = newTags[tagIndex] == 'New';
-    bool isQuestionsTag = activeFilter == FilterTypes.postWithComments;
-
-    return ListTile(
-      minVerticalPadding: 25,
-      tileColor: AppColors.primaryDark,
-      // horizontalTitleGap: 0,
-      // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
-      title: Row(
-        children: [
-          isQuestionsTag
-              ? Assets.svg.icons.messageChatCircle.svg(color: AppColors.grey50, height: 20)
-              : Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50, height: 20),
-          // : Assets.svg.icons.shieldTickUntitledIcon.svg(color: Colors.white70),
-          const SizedBox(width: 7),
-          // (isNewTag ? 'EXPLORE 14-17 Y.O MEMBERS' : 'MEMBERS WHO INTERESTED IN')
-          // (isQuestionsTag ? 'HELP & SHARE YOUR WISDOM' : 'EXPLORE MEMBERS')
-          (isQuestionsTag ? 'JOIN PUBLIC CONVERSATION' : 'EXPLORE MEMBERS')
-              .toText(fontSize: 13, color: AppColors.grey50)
-              .pOnly(top: 3)
-        ],
-      ).pOnly(bottom: isQuestionsTag ? 0 : 15),
-      // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
-      subtitle:
-          isQuestionsTag ? null : 'NEW'.toUpperCase().toText(fontSize: 18, medium: true).appearAll,
-    );
-  }
-
-  AppBar _buildRiltopiaAppBar(BuildContext context, {PreferredSizeWidget? bottom}) {
-    var currUser = context.uniProvider.currUser;
-
-    return AppBar(
-      elevation: 2,
-      backgroundColor: AppColors.primaryDark,
-      // backgroundColor: AppColors.darkBg,
-      title: riltopiaHorizontalLogo(context, ratio: 1.15)
-          .pOnly(bottom: 5, right: 5, left: 5, top: 5)
-          .centerLeft,
-      // .onTap(() {}, radius: 8),
-      actions: [
-        //~ Report Screen
-        // CircleAvatar(
-        //   backgroundColor: AppColors.darkOutline50,
-        //     radius: 14,
-        //     child: Assets.svg.icons.flag03.svg(color: AppColors.white, height: 15)),
-
-        // child: Icons.flag.icon(color: AppColors.white,)),
-        appBarProfile(context),
-      ],
-
-      // TODO ADD ON POST MVP ONLY (Notification page)
-      // actions: [Assets.svg.icons.bellUntitledIcon.svg().px(20).onTap(() {})],
-
-      bottom: bottom,
-      // TODO ADD ON POST MVP ONLY (Tags Row at Main Page)
-      // bottom: PreferredSize(
-      //   preferredSize: const Size(00.0, 50.0),
-      //   child: Card(
-      //     elevation: 0,
-      //     color: AppColors.primaryDark,
-      //     child: _feedChoiceList(context),
-      //   ),
-      // ),
-    );
-  }
-
   SizedBox _feedChoiceList(BuildContext context) {
     return SizedBox(
       height: 50.0,
@@ -349,6 +285,156 @@ class _MainFeedScreenState extends State<MainFeedScreen> {
       ),
     );
   }
+}
+
+ListTile buildTagTitle(FilterTypes activeFilter, String? customTitle) {
+  // bool isQuestionsTag = newTags[tagIndex] == 'New';
+  bool isQuestionsTag = activeFilter == FilterTypes.postWithComments;
+
+  return ListTile(
+    minVerticalPadding: 25,
+    tileColor: AppColors.primaryDark,
+    // horizontalTitleGap: 0,
+    // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
+    title: Row(
+      children: [
+        isQuestionsTag
+            ? Assets.svg.icons.messageChatCircle.svg(color: AppColors.grey50, height: 20)
+            : Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50, height: 20),
+        // : Assets.svg.icons.shieldTickUntitledIcon.svg(color: Colors.white70),
+        const SizedBox(width: 7),
+        // (isNewTag ? 'EXPLORE 14-17 Y.O MEMBERS' : 'MEMBERS WHO INTERESTED IN')
+        // (isQuestionsTag ? 'HELP & SHARE YOUR WISDOM' : 'EXPLORE MEMBERS')
+
+        // (customTitle ?? (isQuestionsTag ? 'JOIN PUBLIC CONVERSATION' : 'EXPLORE MEMBERS'))
+
+        if (customTitle != null)
+          customTitle.toText(fontSize: 13, color: AppColors.grey50).pOnly(top: 3)
+      ],
+    ).pOnly(bottom: isQuestionsTag ? 0 : 15),
+    // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
+    subtitle:
+        isQuestionsTag ? null : 'NEW'.toUpperCase().toText(fontSize: 18, medium: true).appearAll,
+  );
+}
+
+Widget buildFeed(
+  BuildContext context,
+  List<PostModel> postList,
+  bool splashLoader,
+  FilterTypes activeFilter, {
+  List<ReportModel>? reportList,
+  String? customTitle,
+  RefreshCallback? onRefreshIndicator,
+  EndOfPageListenerCallback? onEndOfPage,
+}) {
+  print('START: buildFeed()');
+
+  if (splashLoader || postList.isEmpty) return basicLoader();
+
+  return LazyLoadScrollView(
+      scrollOffset: 1500,
+      onEndOfPage: onEndOfPage ?? () async {},
+      child: RefreshIndicator(
+          backgroundColor: AppColors.darkBg,
+          color: AppColors.primaryOriginal,
+          onRefresh: onRefreshIndicator ?? () async {},
+          child: NotificationListener<UserScrollNotification>(
+            onNotification: (notification) {
+              final ScrollDirection direction = notification.direction;
+              if (direction == ScrollDirection.reverse) {
+                context.uniProvider.updateShowFab(false);
+              } else if (direction == ScrollDirection.forward) {
+                context.uniProvider.updateShowFab(true);
+              }
+              // setState(() {});
+              return true;
+            },
+            child: ListView(
+              children: [
+                buildTagTitle(activeFilter, customTitle),
+                1.verticalSpace,
+                //   Expanded(child:
+                ListView.builder(
+                    physics: const ScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: postList.length,
+                    itemBuilder: (BuildContext context, int i) {
+                      bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
+                      // PostView(postList[i])
+
+                      return Column(
+                        children: [
+                          //> if (isShowAd) getAd(context),
+
+                          // Shows on AdminScreen() only
+                          if (reportList != null)
+                            'By ${reportList[i].reportedBy} :'
+                                .toText(color: Colors.white30, fontSize: 12)
+                                .centerLeft
+                                .pOnly(top: 5, left: 15)
+                                .pad(3)
+                                .onTap(() {}, radius: 5),
+
+                          if (reportList != null && reportList[i].reportedUser != null) ...[
+                            ReportedUserBlock(reportList[i]),
+                          ] else
+                            PostBlock(postList[i]),
+                        ],
+                      );
+                    }).appearOpacity,
+                //     )
+              ],
+            ),
+          )));
+}
+
+AppBar buildRiltopiaAppBar(
+  BuildContext context, {
+  PreferredSizeWidget? bottom,
+  bool isHomePage = true,
+}) {
+  var currUser = context.uniProvider.currUser;
+
+  return AppBar(
+    elevation: 2,
+    backgroundColor: AppColors.primaryDark,
+    // backgroundColor: AppColors.darkBg,
+    title: riltopiaHorizontalLogo(context, ratio: 1.15, isHomePage: isHomePage)
+        .pOnly(bottom: 5, right: 5, left: 5, top: 5)
+        .centerLeft,
+    // .onTap(() {}, radius: 8),
+    actions: [
+      //~ Report Screen
+      if (currUser.userType == UserTypes.admin && isHomePage)
+        CircleAvatar(
+            backgroundColor: AppColors.darkOutline50,
+            radius: 14,
+            child: Assets.svg.icons.flag03.svg(
+              color: AppColors.white,
+              height: 15,
+            )).pad(3).onTap(() {
+          context.router.push(const AdminRoute());
+        }),
+
+      // child: Icons.flag.icon(color: AppColors.white,)),
+      if (isHomePage) appBarProfile(context),
+    ],
+
+    // TODO ADD ON POST MVP ONLY (Notification page)
+    // actions: [Assets.svg.icons.bellUntitledIcon.svg().px(20).onTap(() {})],
+
+    bottom: bottom,
+    // TODO ADD ON POST MVP ONLY (Tags Row at Main Page)
+    // bottom: PreferredSize(
+    //   preferredSize: const Size(00.0, 50.0),
+    //   child: Card(
+    //     elevation: 0,
+    //     color: AppColors.primaryDark,
+    //     child: _feedChoiceList(context),
+    //   ),
+    // ),
+  );
 }
 
 Widget appBarProfile(BuildContext context) {

@@ -16,6 +16,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 import '../../common/models/post/post_model.dart';
+import '../../common/models/report/report_model.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/mixins/fonts.gen.dart';
@@ -185,20 +186,22 @@ class PostBlock extends StatelessWidget {
           secondaryBtn: TextButton(
               onPressed: () {
                 var nameEndAt = post.textContent.length < 20 ? post.textContent.length : 20;
-                var docName =
-                    post.textContent.substring(0, nameEndAt).toString() + UniqueKey().toString();
+                var docName = 'REPORT:' '${post.textContent.substring(0, nameEndAt).toString() + UniqueKey().toString()}';
+
+                var postReport = ReportModel(
+                  timestamp: DateTime.now(),
+                  reportedBy: context.uniProvider.currUser.email!,
+                  reportedPost: post,
+                  // reportedUser: user,
+                  // reasonWhy: reasonController.text,
+                  reportStatus: ReportStatus.newReport,
+                  reportType: post.enableComments ? ReportType.conversation : ReportType.ril,
+                );
 
                 Database.updateFirestore(
                   collection: 'reports/Reported rils/rils',
                   docName: docName,
-                  toJson: {
-                    'reportAt': Timestamp.fromDate(DateTime.now()),
-                    'reportedBy': context.uniProvider.currUser.uid,
-                    'textContent': post.textContent,
-                    'status': 'New',
-                    'type': 'Ril',
-                    'post': post.toJson()
-                  },
+                  toJson: postReport.toJson()
                 );
                 Navigator.of(context).pop();
                 rilFlushBar(context, 'Thanks, We\'ll handle it asap');
