@@ -4,7 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:example/delete_me.dart';
 import 'package:example/screens/auth_ui/widgets/camera_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
@@ -205,10 +205,10 @@ class _VerifyViewState extends State<VerifyView> {
     );
   }
 
-  Badge _buildVerifyBadge({required Widget child}) {
-    return Badge(
+  badge.Badge _buildVerifyBadge({required Widget child}) {
+    return badge.Badge(
         badgeContent: Assets.images.checkVerifiedImage.image(height: 16),
-        position: BadgePosition.topEnd(end: -10, top: -10),
+        position: badge.BadgePosition.topEnd(end: -10, top: -10),
         // badgeColor: AppColors.darkOutline50,
         badgeColor: AppColors.transparent,
         elevation: 0,
