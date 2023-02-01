@@ -25,9 +25,8 @@ void checkForUpdate(
     Platform.isAndroid ? serverConfig.updateAndroidLink ?? '' : serverConfig.updateIosLink ?? '',
   );
 
-
   context.uniProvider
-      .updateLocalConfig(localConfig.copyWith(isUpdateAvailable: serverVer != localVer));
+      .updateLocalVersion(localConfig.copyWith(isUpdateAvailable: serverVer != localVer));
 
   print('localVer != serverVer ${localVer != serverVer}');
   if (localVer != serverVer || mustShowPopup) {

@@ -12,26 +12,33 @@ import '../Database/firebase_db.dart';
 import 'dart:io' show Platform;
 import 'check_app_update.dart';
 
-Future<AppConfigModel> updateAppConfigModel(BuildContext context) async {
+Future<bool> updateAppConfigModel(BuildContext context) async {
   print('START: getAppConfig()');
   var jsonData = await Database.docData('config/appConfigDoc');
   var serverConfig = AppConfigModel.fromJson(jsonData ?? {});
   context.uniProvider.updateServerConfig(serverConfig);
 
   // Get & Update local version
-  var localConfig = context.uniProvider.localConfig;
   var packageInfo = await PackageInfo.fromPlatform();
   int buildNumber = int.parse(packageInfo.buildNumber);
   print('buildNumber $buildNumber');
 
-  context.uniProvider.updateLocalConfig(localConfig
-      .copyWith(publicVersionAndroid: buildNumber, publicVersionIos: buildNumber));
-  localConfig = context.uniProvider.localConfig;
+  var localConfig = context.uniProvider.localConfig;
+  localConfig = context.uniProvider.updateLocalVersion(localConfig.copyWith(
+    publicVersionAndroid: buildNumber,
+    publicVersionIos: buildNumber,
+  ));
 
   // Make sure server ver > local ver.
-  await updateServerVersionIfNeeded(context, localConfig, serverConfig);
-  serverConfig = context.uniProvider.serverConfig!;
+  // await updateServerVersionIfNeeded(context, localConfig, serverConfig);
+  // serverConfig = context.uniProvider.serverConfig!;
+
   checkForUpdate(context, localConfig, serverConfig);
   chekAppStatus(context, serverConfig);
-  return serverConfig;
+
+  // false: stop the app.
+  if (serverConfig.statusCode != 200) return false;
+  if (context.uniProvider.localConfig.isUpdateAvailable! &&
+      serverConfig.updateType == UpdateTypes.needed) return false;
+  return true;
 }

@@ -13,6 +13,7 @@ import 'package:example/main.dart';
 import 'package:example/screens/chat_ui/chats_list_screen.dart.dart';
 import 'package:example/screens/feed_ui/main_feed_screen.dart';
 import 'package:example/screens/main_ui/splash_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,6 +27,7 @@ import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/config/a_get_server_config.dart';
 import '../../common/service/config/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
+import '../../common/service/notifications_services.dart';
 import '../../widgets/my_dialog.dart';
 import '../feed_ui/create_post_screen.dart';
 import 'dart:io' show Platform;
@@ -50,11 +52,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
+    NotificationService.instance.requestPermission();
+
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;
-
     WidgetsBinding.instance
         .addPostFrameCallback((_) => checkForUpdate(context, localConfig, serverConfig!));
+
+    NotificationService.sendPushMessage();
 
     _pageController = PageController(initialPage: widget.dashboardPage.index);
     sItem = widget.dashboardPage;

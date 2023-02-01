@@ -16,6 +16,7 @@ import 'common/models/universalModel.dart';
 import 'common/service/Database/firebase_db.dart';
 import 'common/service/Database/firebase_options.dart';
 import 'common/service/life_cycle.dart';
+import 'common/service/notifications_services.dart';
 import 'common/themes/app_colors.dart';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -35,11 +36,20 @@ import 'delete_me.dart';
 //   runApp(const MaterialApp(home: CameraExampleHome()));
 // }
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.toMap()}");
+}
+
+
 /// Add More Pre-Actions At [click.SplashScreen]
 void main() async {
   printWhite('START main()!');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  NotificationService.setupNotifications(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+
   final dbDir = await getApplicationDocumentsDirectory();
   Hive.init(dbDir.path);
 

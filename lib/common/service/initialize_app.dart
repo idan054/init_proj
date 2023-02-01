@@ -12,6 +12,7 @@ import 'package:example/common/themes/app_colors.dart';
 import 'package:example/screens/main_ui/widgets/riv_splash_screen.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,30 +30,16 @@ Future initializeApp(BuildContext context) async {
   // await HiveServices.openBoxes();
   // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
 
-  var serverConfig = await updateAppConfigModel(context);
-  var localConfig = context.uniProvider.localConfig; // getAppConfig() set localConfig.isUpdateAvailable!
-  if (serverConfig.statusCode != 200) return;
-  if (localConfig.isUpdateAvailable! && serverConfig.updateType == UpdateTypes.needed) return;
+  var succeed = await updateAppConfigModel(context);
+  if (!succeed) return;
 
   //> First time:
   if (FirebaseAuth.instance.currentUser?.uid == null ||
       FirebaseAuth.instance.currentUser?.email == null) {
     context.router.replaceAll([const LoginRoute()]);
-  } else {
-    //> Next time:
-    await AuthService.signInWith(context, autoSignIn: true);
-    // context.router.replaceAll([DashboardRoute()]);
+    return;
   }
-}
 
-//MARK: - Push notifications
-void _setupNotifications() async {
-  print('START: _setupNotifications()');
-  await NotificationService.instance.requestPermission();
-
-  NotificationService.instance.onNotificationReceived(
-    onReceived: (RemoteMessage message) {
-
-    },
-  );
+  //> Next time:
+  await AuthService.signInWith(context, autoSignIn: true);
 }

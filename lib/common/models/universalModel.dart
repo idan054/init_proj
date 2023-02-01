@@ -21,9 +21,10 @@ class UniProvider with ChangeNotifier {
     // statusCode: 200,
     osType: Platform.isAndroid ? OsTypes.android : OsTypes.ios,
   );
-  void updateLocalConfig(AppConfigModel data) {
+  AppConfigModel updateLocalVersion(AppConfigModel data) {
     localConfig = data;
     notifyListeners();
+    return data;
   }
 
   AppConfigModel? serverConfig;
