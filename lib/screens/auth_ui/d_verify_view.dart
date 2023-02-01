@@ -115,7 +115,8 @@ class _VerifyViewState extends State<VerifyView> {
             return ListTile(
               horizontalTitleGap: 0,
               contentPadding: EdgeInsets.zero,
-              leading: Assets.svg.icons.checkVerifiedOutline.svg(height: 25, color: AppColors.grey50),
+              leading:
+                  Assets.svg.icons.checkVerifiedOutline.svg(height: 25, color: AppColors.grey50),
               // visualDensity: VisualDensity.compact,
               title: 'Show verified members only'.toText(fontSize: 13),
 
@@ -196,10 +197,8 @@ class _VerifyViewState extends State<VerifyView> {
         const Spacer(),
         Text(
           '< Go back',
-          style: AppStyles.text12PxRegular.copyWith(
-            color: AppColors.grey50,
-            decoration: TextDecoration.underline,
-          ),
+          style: AppStyles.text12PxRegular
+              .copyWith(color: AppColors.grey50, decoration: TextDecoration.underline),
         ).pad(5).onTap(() => widget.tabController.animateTo(widget.tabController.previousIndex))
       ],
     );

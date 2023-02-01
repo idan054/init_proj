@@ -37,26 +37,9 @@ import 'delete_me.dart';
 
 /// Add More Pre-Actions At [click.SplashScreen]
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   printWhite('START main()!');
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // FirebaseMessaging.instance.setAutoInitEnabled(true);
-
-
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-  // NotificationSettings settings = await messaging.requestPermission(
-  //   alert: true,
-  //   announcement: false,
-  //   badge: true,
-  //   carPlay: false,
-  //   criticalAlert: false,
-  //   provisional: false,
-  //   sound: true,
-  // );
-
-
-
   final dbDir = await getApplicationDocumentsDirectory();
   Hive.init(dbDir.path);
 
@@ -82,19 +65,12 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   final _router = AppRouter(); // Add screens AT app_router.dart
 
   @override
   Widget build(BuildContext context) {
     print('BUILD: App.dart');
-
-    // void onAppResumed
-    // void onAppPaused
 
     try {
       return LifeCycleManager(
@@ -112,7 +88,7 @@ class _AppState extends State<App> {
             builder: (_, __) => MaterialApp.router(
               routerDelegate: _router.delegate(),
               routeInformationParser: _router.defaultRouteParser(),
-              title: 'Example',
+              title: 'RilTopia',
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
                 colorSchemeSeed: AppColors.darkOutline,

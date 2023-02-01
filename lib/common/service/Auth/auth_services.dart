@@ -16,6 +16,8 @@ import '../Database/firebase_db.dart' as click;
 import '../Database/firebase_db.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+import '../notifications_services.dart';
 // import 'package:apple_sign_in/apple_sign_in.dart' as apl;
 
 class AuthService {
@@ -57,25 +59,17 @@ class AuthService {
 
   static void _handleExistUser(BuildContext context, Map<String, dynamic> userData) async {
     var currUser = UserModel.fromJson(userData);
+    context.uniProvider.updateUser(currUser);
 
     String? fcm = await FirebaseMessaging.instance.getToken();
-    // print('fcm $fcm');
     if (userData['fcm'] != fcm) {
-      Database.updateFirestore(
-          collection: 'users', docName: userData['email'], toJson: {'fcm': fcm});
-      currUser = currUser.copyWith(fcm: fcm);
+      NotificationService.updateFcmToken(context, fcm);
     }
 
-    context.uniProvider.updateUser(currUser);
     context.router.replace(DashboardRoute());
   }
 
   static void _handleNewUser(BuildContext context) async {
-    //- This fix bug when user out while signup. // BETA COMMENT
-    //- if (authUser == null || authUser?.uid == null || authUser?.email == null) {
-    //-   authUser = await (applePopup ? _appleAuthPopup() : _googleAuthPopup());
-    //- }
-
     String? fcm = await FirebaseMessaging.instance.getToken();
     var user = context.uniProvider.currUser.copyWith(
       uid: authUser!.uid,
@@ -84,11 +78,8 @@ class AuthService {
     );
     context.uniProvider.updateUser(user);
     context.router.replace(const OnBoardingRoute());
+    // Data will upload to server when sign up Done,
   }
-
-  // static Future<User?> _setFcm() async {
-  //
-  // }
 
   static Future<User?> _googleAuthPopup() async {
     print('START: _googleAuthPopup()');

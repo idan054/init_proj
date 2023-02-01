@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:convert';
 import 'dart:io' show Platform;
 import 'package:auto_route/auto_route.dart';
@@ -20,35 +19,8 @@ import '../../common/models/appConfig/app_config_model.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/config/a_get_server_config.dart';
 import '../../common/service/hive_services.dart';
+import '../../common/service/initialize_app.dart';
 import '../../widgets/my_widgets.dart';
-
-Future splashInit(BuildContext context) async {
-  // await Future.delayed(3.seconds);
-  // await HiveServices.openBoxes();
-  // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
-
-  // DEBUG ONLY
-  // if (kDebugMode) {
-  //   context.router.replaceAll([const OnBoardingRoute()]);
-  //   return;
-  // }
-  
-    var serverConfig = await getAppConfig(context);
-    var localConfig =
-        context.uniProvider.localConfig; // getAppConfig() set localConfig.isUpdateAvailable!
-    if (serverConfig.statusCode != 200) return;
-    if (localConfig.isUpdateAvailable! && serverConfig.updateType == UpdateTypes.needed) return;
-
-  //> First time:
-  if (FirebaseAuth.instance.currentUser?.uid == null ||
-      FirebaseAuth.instance.currentUser?.email == null) {
-    context.router.replaceAll([const LoginRoute()]);
-  } else {
-    //> Next time:
-    await AuthService.signInWith(context, autoSignIn: true);
-    // context.router.replaceAll([DashboardRoute()]);
-  }
-}
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -63,36 +35,16 @@ class _SplashScreenState extends State<SplashScreen>
   bool userLogged = false;
 
   @override
+  void initState() {
+    super.initState();
+    initializeApp(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryDark,
-      // body: riltopiaLogo(fontSize: 32).center,
       body: buildAnimation().center,
     ); // Splash here
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        splashInit(context);
-        // .then((_) => userLogged
-        // ? context.router.replaceAll([DashboardRoute()])
-        // : context.router.replaceAll([const LoginRoute()]));
-      }
-    });
-  }
-
-  // @override
-  // void afterFirstLayout(BuildContext context) {
-  //
-  // }
-
-  @override
-  void didChangeDependencies() {
-    // Navigator.of(context);
-    super.didChangeDependencies();
   }
 }

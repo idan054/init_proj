@@ -12,7 +12,7 @@ import '../Database/firebase_db.dart';
 import 'dart:io' show Platform;
 import 'check_app_update.dart';
 
-Future<AppConfigModel> getAppConfig(BuildContext context) async {
+Future<AppConfigModel> updateAppConfigModel(BuildContext context) async {
   print('START: getAppConfig()');
   var jsonData = await Database.docData('config/appConfigDoc');
   var serverConfig = AppConfigModel.fromJson(jsonData ?? {});
