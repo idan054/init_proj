@@ -60,6 +60,7 @@ class NotificationService {
 
     //Handle notifications when the app is opened
     FirebaseMessaging.onMessage.listen((RemoteMessage message) => onReceived(message));
+
   }
 
   static void updateFcmToken(BuildContext context, String? fcm) async {

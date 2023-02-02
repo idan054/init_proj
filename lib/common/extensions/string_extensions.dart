@@ -81,12 +81,14 @@ extension StringX on String {
     TextAlign? textAlign,
     TextDirection? textDirection,
     int? maxLines,
+        Color? linkColor,
     ValueChanged<bool>? onChanged,
     bool autoExpanded = false,
   }) =>
       buildExpandableText(
         this,
         style: style,
+        linkColor: linkColor ?? AppColors.greyLight,
         textAlign: textAlign,
         autoExpanded: autoExpanded,
         textDirection: textDirection,

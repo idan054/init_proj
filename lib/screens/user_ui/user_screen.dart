@@ -25,6 +25,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 import '../../common/models/post/post_model.dart';
 import '../../common/models/report/report_model.dart';
@@ -202,55 +203,67 @@ class _UserScreenState extends State<UserScreen> {
 
     return Container(
       height: topPadding,
-      color: AppColors.darkOutline,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // color: AppColors.darkOutline,
+      color: AppColors.primaryShiny,
+      child: Stack(
         children: [
-          CircleAvatar(
-            radius: 15,
-            backgroundColor: AppColors.darkOutline50,
-            // child: Icons.arrow_back_rounded.icon(size: 18, color: AppColors.white),
-            child: Assets.svg.icons.arrowBackLeft.svg(height: 14, color: AppColors.white),
-          ).onTap(() {
-            widget.fromEditScreen
-                ? context.router.replaceAll([DashboardRoute()])
-                : Navigator.pop(context);
-          }),
-          // Email also show to admins on 'Admin delete Ril'
-          // if (currUser.userType == UserTypes.admin)
-          //   widget.user.email.toString().toText(color: AppColors.grey50).pOnly(bottom: 20),
-
-          CircleAvatar(
-            radius: 15,
-            backgroundColor: AppColors.darkOutline50,
-            child: PopupMenuButton(
-                icon: Assets.svg.moreVert.svg(height: 18, color: AppColors.white),
-                shape: 10.roundedShape,
-                color: AppColors.darkOutline50,
-                itemBuilder: (context) {
-                  return [
-                    if (isCurrUserProfile) ...[
-                      PopupMenuItem(
-                        onTap: () {
-                          context.router.push(EditUserRoute(user: context.uniProvider.currUser));
-                        },
-                        child: 'Edit profile'.toText(),
-                      ),
-                    ] else ...[
-                      PopupMenuItem(
-                        onTap: () => reportUserPopup(context, widget.user),
-                        child: 'Report member'.toText(),
-                      ),
-                      PopupMenuItem(
-                        onTap: () => blockUserPopup(context, widget.user),
-                        child: (isBlocked ? 'UnBlock member' : 'Block member').toText(),
-                      ),
-                    ]
-                  ];
-                }),
+          SizedBox(
+            width: context.width,
+            height: topPadding,
+            child: Assets.images.squresBg.image(fit: BoxFit.cover),
           ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CircleAvatar(
+                radius: 15,
+                backgroundColor: Colors.black45,
+                // backgroundColor: AppColors.darkOutline50,
+                // child: Icons.arrow_back_rounded.icon(size: 18, color: AppColors.white),
+                child: Assets.svg.icons.arrowBackLeft.svg(height: 14, color: AppColors.white),
+              ).onTap(() {
+                widget.fromEditScreen
+                    ? context.router.replaceAll([DashboardRoute()])
+                    : Navigator.pop(context);
+              }),
+              // Email also show to admins on 'Admin delete Ril'
+              // if (currUser.userType == UserTypes.admin)
+              //   widget.user.email.toString().toText(color: AppColors.grey50).pOnly(bottom: 20),
+
+              CircleAvatar(
+                radius: 15,
+                backgroundColor: Colors.black45,
+                // backgroundColor: AppColors.darkOutline50,
+                child: PopupMenuButton(
+                    icon: Assets.svg.moreVert.svg(height: 18, color: AppColors.white),
+                    shape: 10.roundedShape,
+                    color: AppColors.darkOutline50,
+                    itemBuilder: (context) {
+                      return [
+                        if (isCurrUserProfile) ...[
+                          PopupMenuItem(
+                            onTap: () {
+                              context.router.push(EditUserRoute(user: context.uniProvider.currUser));
+                            },
+                            child: 'Edit profile'.toText(),
+                          ),
+                        ] else ...[
+                          PopupMenuItem(
+                            onTap: () => reportUserPopup(context, widget.user),
+                            child: 'Report member'.toText(),
+                          ),
+                          PopupMenuItem(
+                            onTap: () => blockUserPopup(context, widget.user),
+                            child: (isBlocked ? 'UnBlock member' : 'Block member').toText(),
+                          ),
+                        ]
+                      ];
+                    }),
+              ),
+            ],
+          ).px(20).pOnly(top: 15),
         ],
-      ).px(20),
+      ),
     );
   }
 
@@ -371,8 +384,8 @@ class _UserScreenState extends State<UserScreen> {
         Stack(
           children: [
             CircleAvatar(
-              radius: 46,
-              backgroundColor: AppColors.darkOutline,
+              radius: 40,
+              backgroundColor: AppColors.darkBg,
               child: CircleAvatar(
                 radius: 40,
                 backgroundImage: NetworkImage(user.photoUrl!),
@@ -384,7 +397,7 @@ class _UserScreenState extends State<UserScreen> {
         ),
         16.verticalSpace,
         '${user.name}'.toText(fontSize: 18, medium: true),
-        8.verticalSpace,
+        16.verticalSpace,
         StatefulBuilder(builder: (context, stfSetState) {
           return showTagsRow
               ? buildTagsRow(user, addonName: '<', onAddonTap: () {
@@ -402,10 +415,10 @@ class _UserScreenState extends State<UserScreen> {
                               ? buildRilChip(user.tags.first)
                               : Badge(
                                       badgeContent: '+${user.tags.length - 1}'.toText(
-                                          fontSize: 10, color: Colors.white70, medium: true),
+                                          fontSize: 10, color: Colors.white, medium: true),
                                       padding: const EdgeInsets.all(5),
                                       elevation: 0,
-                                      badgeColor: AppColors.darkOutline50,
+                                      badgeColor: AppColors.primaryOriginal,
                                       // stackFit: StackFit.loose,
                                       // shape:
                                       child: buildRilChip(user.tags.first))
@@ -449,7 +462,8 @@ class _UserScreenState extends State<UserScreen> {
                     },
                           style: AppStyles.text14PxRegular.copyWith(
                               color: AppColors.grey50,
-                              decoration: haveBio ? null : TextDecoration.underline))
+                              decoration: haveBio ? null : TextDecoration.underline),
+              )
                       .px(12)
                       .py(6)
                       .onTap(
@@ -465,14 +479,14 @@ class _UserScreenState extends State<UserScreen> {
                   height: 42,
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
-                      backgroundColor: AppColors.primaryLight2,
-                      // side: const BorderSide(width: 2.0, color: AppColors.primaryLight2),
-                      // foregroundColor: AppColors.darkOutline,
-                      shape: 8.roundedShape,
+                      // backgroundColor: AppColors.white,
+                      side: const BorderSide(width: 2.0, color: AppColors.white),
+                      foregroundColor: AppColors.darkOutline,
+                      shape: 99.roundedShape,
                     ),
                     icon: Assets.svg.icons.dmPlaneUntitledIcon
-                        .svg(height: 17, color: AppColors.darkBg),
-                    label: 'Reply bio'.toText(fontSize: 13, color: AppColors.darkBg, bold: true),
+                        .svg(height: 17, color: AppColors.white),
+                    label: 'Reply bio'.toText(fontSize: 13, color: AppColors.white, bold: true),
                     onPressed: () {
                       // TODO LATER LIST: Add Reply bio action
                       var replyBio = PostModel(
@@ -489,28 +503,34 @@ class _UserScreenState extends State<UserScreen> {
                 12.verticalSpace,
               ],
               if (!isCurrUser && !isBioExpanded) ...[
-                SizedBox(
-                  width: context.width * 0.5,
-                  height: 40,
-                  child: OutlinedButton.icon(
-                    style: OutlinedButton.styleFrom(
-                      // backgroundColor: AppColors.primaryLight2,
-                      backgroundColor: AppColors.transparent,
-                      side: const BorderSide(width: 2.0, color: AppColors.primaryLight2),
-                      shape: 8.roundedShape,
-                    ),
-                    icon: isBlocked
-                        ? const Offstage()
-                        : Assets.svg.icons.dmPlaneUntitledIcon
-                            .svg(height: 17, color: AppColors.primaryLight2),
-                    label: (isBlocked ? 'Blocked' : 'Send DM')
-                        .toText(fontSize: 13, color: AppColors.primaryLight2, bold: true),
-                    onPressed: isBlocked
-                        ? null
-                        : () {
-                            ChatService.openChat(context, otherUser: user);
-                          },
-                  ),
+                Builder(
+                  builder: (context) {
+                    var color = AppColors.white;
+                    var bgColor = AppColors.darkBg;
+                    return SizedBox(
+                      width: context.width * 0.5,
+                      height: 40,
+                      child: OutlinedButton.icon(
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: color,
+                          // backgroundColor: AppColors.transparent,
+                          side: BorderSide(width: 2.0, color: color),
+                          shape: 99.roundedShape,
+                        ),
+                        icon: isBlocked
+                            ? const Offstage()
+                            : Assets.svg.icons.dmPlaneUntitledIcon
+                                .svg(height: 17, color: bgColor),
+                        label: (isBlocked ? 'Blocked' : 'Send DM')
+                            .toText(fontSize: 13, color: bgColor, bold: true),
+                        onPressed: isBlocked
+                            ? null
+                            : () {
+                                ChatService.openChat(context, otherUser: user);
+                              },
+                      ),
+                    );
+                  }
                 ),
                 12.verticalSpace,
                 Builder(builder: (context) {
@@ -523,11 +543,11 @@ class _UserScreenState extends State<UserScreen> {
                             Assets.svg.icons.groupMultiPeople
                                 .svg(width: 17, color: AppColors.grey50)
                                 .pOnly(right: 10),
-                            "You both interesting in $commonTag... that's cool!"
+                            "You both interested in $commonTag... that's cool!"
                                 .toText(color: AppColors.grey50, fontSize: 12)
                             // .expanded(),
                           ],
-                        );
+                        ).py(3);
                 }),
                 if (!isCurrUser) 12.verticalSpace,
               ],
@@ -578,7 +598,8 @@ Widget buildRilChip(String label, {Widget? icon, Color? bgColor}) {
       shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       // side: BorderSide(width: 2.0, color: AppColors.transparent),
-      label: label.toText(fontSize: 13, color: Colors.white70),
+      // label: label.toText(fontSize: 13, color: Colors.white70),
+      label: label.toText(fontSize: 13, color: AppColors.greyLight),
       avatar: icon,
       shape: 8.roundedShape,
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -601,7 +622,7 @@ ExpandableText buildExpandableText(
       textAlign: textAlign ?? TextAlign.center,
       onExpandedChanged: onChanged,
       expandText: 'Expand',
-      collapseText: 'Collape',
+      collapseText: 'Collapse',
       expanded: autoExpanded,
       linkColor: linkColor ?? AppColors.primaryLight2,
       animation: true,

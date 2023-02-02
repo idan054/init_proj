@@ -99,14 +99,14 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             children: [
               buildChoiceChip(context,
                       customIcon: isComments
-                          ? Assets.svg.icons.messageCommentsLines
+                          ? Assets.svg.icons.messageTextCircle02
                               .svg(height: 15, color: AppColors.white)
                           : Assets.svg.icons.dmPlaneUntitledIcon
-                              .svg(height: 15, color: AppColors.grey50),
-                      selectedColor: AppColors.darkOutline50,
+                              .svg(height: 15, color: AppColors.primaryLight2),
+                      selectedColor: AppColors.primaryLight2,
                       // label: (isComments ? 'With comments' : 'Reply style') // Reply only
                       label: (isComments ? 'With comments' : 'Reply style') // Reply only
-                          .toText(color: isComments ? AppColors.white : AppColors.grey50),
+                          .toText(color: isComments ? AppColors.white : AppColors.primaryLight2),
                       onSelect: (bool newSelection) {
                 isComments = !isComments;
                 setState(() {});

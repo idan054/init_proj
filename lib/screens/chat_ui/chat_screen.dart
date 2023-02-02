@@ -48,6 +48,10 @@ class _ChatScreenState extends State<ChatScreen> {
   bool isLoadOlderMessages = false;
   PostModel? post;
 
+  Color otherUserBubble = AppColors.chatBubble;
+  Color currUserBubble = AppColors.primaryOriginal;
+  Color textFieldBg = AppColors.chatBubble;
+
   // var splashLoader = true;
   // List<MessageModel> chatList = [];
   //
@@ -148,7 +152,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
               4.verticalSpace,
               StatefulBuilder(builder: (context, stfState) {
-                return buildTextField(context,
+                return buildTextField(context, textFieldBg,
                     stfSetState: stfState,
                     post: post,
                     hintText: 'Write your message...',
@@ -248,16 +252,16 @@ class _ChatScreenState extends State<ChatScreen> {
                         padding: const EdgeInsets.only(top: 8, right: 12, left: 12, bottom: 6),
                         margin: 5.horizontal,
                         decoration: BoxDecoration(
-                            color: currUser ? AppColors.primaryLight : AppColors.darkOutline50,
+                            color: currUser ? currUserBubble : otherUserBubble,
                             borderRadius: BorderRadius.only(
-                              bottomRight: 10.circular,
+                              bottomRight: 15.circular,
                               topRight: message.postReply != null
                                   ? 3.circular
-                                  : (currUser ? 3 : 10).circular,
+                                  : (currUser ? 3 : 15).circular,
                               topLeft: message.postReply != null
                                   ? 3.circular
-                                  : (currUser ? 10 : 3).circular,
-                              bottomLeft: 10.circular,
+                                  : (currUser ? 15 : 3).circular,
+                              bottomLeft: 15.circular,
                             )),
                         // padding: const BubbleEdges.all(8.0),
                         // nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,
@@ -305,7 +309,7 @@ class _ChatScreenState extends State<ChatScreen> {
             padding: const EdgeInsets.only(top: 8, right: 12, left: 12, bottom: 6),
             margin: 5.horizontal,
             decoration: BoxDecoration(
-                color: currUser ? AppColors.primaryLight : AppColors.darkOutline50,
+                color: currUser ? currUserBubble : otherUserBubble,
                 borderRadius: BorderRadius.only(
                   bottomRight: 3.circular,
                   topRight: (currUser ? 3 : 10).circular,
@@ -326,10 +330,10 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-Widget buildReplyField(PostModel post, {GestureTapCallback? onTap}) {
+Widget buildReplyField(PostModel post, Color textFieldBg, {GestureTapCallback? onTap}) {
   return Builder(builder: (context) {
     return Container(
-            color: AppColors.darkOutline50,
+            color: textFieldBg,
             // color: AppColors.primaryLight,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: buildReplyProfile(context, post,
@@ -348,7 +352,8 @@ Widget buildReplyField(PostModel post, {GestureTapCallback? onTap}) {
 }
 
 Widget buildTextField(
-  BuildContext context, {
+  BuildContext context,
+  Color textFieldBg, {
   required TextEditingController controller,
   required StateSetter stfSetState,
   GestureTapCallback? onTap,
@@ -361,7 +366,7 @@ Widget buildTextField(
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
-      if (post != null) buildReplyField(post, onTap: postOnCloseReply),
+      if (post != null) buildReplyField(post, textFieldBg, onTap: postOnCloseReply),
       3.verticalSpace,
       TextField(
         // onTapOutside: (event) => setState(() => sendNode.unfocus()),
@@ -381,7 +386,8 @@ Widget buildTextField(
         decoration: InputDecoration(
             filled: true,
             // fillColor: AppColors.primaryLight,
-            fillColor: AppColors.darkOutline50,
+            // fillColor: AppColors.darkOutline50,
+            fillColor: textFieldBg,
             hintStyle: AppStyles.text14PxRegular.greyLight,
             focusedBorder: InputBorder.none,
             hintText: hintText,
@@ -392,10 +398,10 @@ Widget buildTextField(
             )),
       )
           .roundedOnly(
-            bottomLeft: 10,
-            topLeft: post != null ? 3 : 10,
-            topRight: post != null ? 3 : 10,
-            bottomRight: 10,
+            bottomLeft: 12,
+            topLeft: post != null ? 3 : 12,
+            topRight: post != null ? 3 : 12,
+            bottomRight: 12,
           )
           .pOnly(bottom: 6),
     ],
@@ -429,7 +435,7 @@ Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionBu
             children: [
               shortName.toText(fontSize: 14, bold: true, color: AppColors.white, softWrap: false),
               postAgo
-                  .toText(color: AppColors.grey50, fontSize: 11)
+                  .toText(color: AppColors.greyLight, fontSize: 11)
                   .pOnly(right: 10, top: 0, bottom: 0),
             ],
           ),
@@ -448,8 +454,8 @@ Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionBu
         maxLines: 4,
         textAlign: post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
         textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
-        style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50),
-        linkColor: AppColors.greyLight,
+        style: AppStyles.text14PxRegular.copyWith(color: AppColors.greyLight),
+        linkColor: AppColors.white,
       ).advancedSizedBox(context, maxWidth: true).pOnly(left: 50, bottom: 5, right: 45)
     ],
   );

@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 import '../../common/models/post/post_model.dart';
 import '../../common/models/report/report_model.dart';
@@ -41,8 +42,7 @@ class PostBlock extends StatelessWidget {
   final PostModel post;
   final bool isUserPage;
 
-  const PostBlock(this.post, {this.isUserPage = false, Key? key})
-      : super(key: key);
+  const PostBlock(this.post, {this.isUserPage = false, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,34 +72,34 @@ class PostBlock extends StatelessWidget {
         ],
       ).pOnly(left: 15),
     ).onTap(
-        post.enableComments ?
-            () {
-      isUserPage
-          ? Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Scaffold(
-                          body: CommentsChatScreen(
-                        post,
-                        isFullScreen: isUserPage,
-                      ))),
-            )
-          : showModalBottomSheet(
-              backgroundColor: Colors.transparent,
-              barrierColor: Colors.black38,
-              // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
-              // barrierColor: Colors.black.withOpacity(0.00),
-              // AKA 2%
-              isScrollControlled: true,
-              enableDrag: false,
-              context: context,
-              builder: (context) {
-                return CommentsChatScreen(post);
-                // return Offstage();
-              });
-    }
-    : null
-        , radius: 10);
+        post.enableComments
+            ? () {
+                isUserPage
+                    ? Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Scaffold(
+                                    body: CommentsChatScreen(
+                                  post,
+                                  isFullScreen: isUserPage,
+                                ))),
+                      )
+                    : showModalBottomSheet(
+                        backgroundColor: Colors.transparent,
+                        barrierColor: Colors.black38,
+                        // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
+                        // barrierColor: Colors.black.withOpacity(0.00),
+                        // AKA 2%
+                        isScrollControlled: true,
+                        enableDrag: true,
+                        context: context,
+                        builder: (context) {
+                          return CommentsChatScreen(post);
+                          // return Offstage();
+                        });
+              }
+            : null,
+        radius: 10);
   }
 
   Widget buildProfile(BuildContext context, bool isUserPage) {
@@ -110,71 +110,74 @@ class PostBlock extends StatelessWidget {
     var postAgo = postTime(post.timestamp!);
 
     return SizedBox(
-      height: 68,
-      // height: 72, // 72: original size 60: min size
-      child: ListTile(
-        contentPadding: EdgeInsets.zero,
-        // title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.grey50),
-        title: '${post.creatorUser?.name}'
-            .toText(fontSize: 14, bold: true, color: AppColors.white, textAlign: TextAlign.left),
-        subtitle: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
-            postAgo
-                .toText(color: AppColors.grey50, fontSize: 12)
-                .pOnly(right: 10, top: 4, bottom: 10)
-            // .onTap(() {}, radius: 10), // TODO Add move to Tag
-          ],
-        )
-        ,
-        leading: Stack(
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
-              backgroundColor: AppColors.darkOutline,
-            ),
-            buildOnlineBadge(),
-          ],
-        ).pad(0).onTap(
-            isUserPage
-                ? null
-                : () {
-              print('PROFILE CLICKED');
-              context.router.push(UserRoute(user: post.creatorUser!));
-            },
-            radius: 5),
-        // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
-        trailing: PopupMenuButton(
-            icon: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50),
-            shape: 10.roundedShape,
-            color: AppColors.darkOutline50,
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem(
-                  child: (isAdmin && !isCurrUser
-                          ? 'Admin Delete Ril'
-                          : isCurrUser
-                              ? 'Delete Ril'
-                              : 'Report Ril')
-                      .toText(),
-                  onTap: (isCurrUser || isAdmin)
-                      //> Open DELETE POPUP
-                      ? () {
-                          print('SETTINGS DELETE CLICKED');
-                          deleteRilPopup(context);
-                        }
-                      //> Open Report POPUP
-                      : () async {
-                          print('SETTINGS REPORT CLICKED');
-                          reportRilPopup(context);
-                        },
-                ),
-              ];
-            }),
-      )
-    );
+        height: 68,
+        // height: 72, // 72: original size 60: min size
+        child: ListTile(
+          contentPadding: EdgeInsets.zero,
+          // title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.grey50),
+          title: '${post.creatorUser?.name}'
+              .toText(fontSize: 14, bold: true, color: AppColors.white, textAlign: TextAlign.left),
+          subtitle: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
+              postAgo
+                  .toText(color: AppColors.grey50, fontSize: 12)
+                  .pOnly(right: 10, top: 4, bottom: 10)
+              // .onTap(() {}, radius: 10), // TODO Add move to Tag
+            ],
+          ),
+          leading: Stack(
+            children: [
+              Container(
+                  // radius: 20,
+                  height: 40,
+                  width: 40,
+                  color: AppColors.darkBg,
+                  child: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: '${post.creatorUser!.photoUrl}',
+                    fit: BoxFit.cover,
+                  )).roundedFull,
+              buildOnlineBadge(),
+            ],
+          ).pad(0).onTap(
+              isUserPage
+                  ? null
+                  : () {
+                      print('PROFILE CLICKED');
+                      context.router.push(UserRoute(user: post.creatorUser!));
+                    },
+              radius: 5),
+          // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
+          trailing: PopupMenuButton(
+              icon: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50),
+              shape: 10.roundedShape,
+              color: AppColors.darkOutline50,
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    child: (isAdmin && !isCurrUser
+                            ? 'Admin Delete Ril'
+                            : isCurrUser
+                                ? 'Delete Ril'
+                                : 'Report Ril')
+                        .toText(),
+                    onTap: (isCurrUser || isAdmin)
+                        //> Open DELETE POPUP
+                        ? () {
+                            print('SETTINGS DELETE CLICKED');
+                            deleteRilPopup(context);
+                          }
+                        //> Open Report POPUP
+                        : () async {
+                            print('SETTINGS REPORT CLICKED');
+                            reportRilPopup(context);
+                          },
+                  ),
+                ];
+              }),
+        ));
   }
 
   void reportRilPopup(BuildContext context) {
@@ -186,7 +189,8 @@ class PostBlock extends StatelessWidget {
           secondaryBtn: TextButton(
               onPressed: () {
                 var nameEndAt = post.textContent.length < 20 ? post.textContent.length : 20;
-                var docName = 'REPORT:' '${post.textContent.substring(0, nameEndAt).toString() + UniqueKey().toString()}';
+                var docName = 'REPORT:'
+                    '${post.textContent.substring(0, nameEndAt).toString() + UniqueKey().toString()}';
 
                 var postReport = ReportModel(
                   timestamp: DateTime.now(),
@@ -199,10 +203,9 @@ class PostBlock extends StatelessWidget {
                 );
 
                 Database.updateFirestore(
-                  collection: 'reports/Reported rils/rils',
-                  docName: docName,
-                  toJson: postReport.toJson()
-                );
+                    collection: 'reports/Reported rils/rils',
+                    docName: docName,
+                    toJson: postReport.toJson());
                 Navigator.of(context).pop();
                 rilFlushBar(context, 'Thanks, We\'ll handle it asap');
               },
@@ -240,20 +243,22 @@ class PostBlock extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         post.enableComments
-            ? Row(
-                children: [
-                  (commentEmpty
-                          ? Assets.svg.icons.wisdomLightStar
-                          : Assets.svg.icons.commentUntitledIcon)
-                      .svg(height: 13, color: AppColors.grey50),
-                  const SizedBox(width: 7),
-                  // 'available soon'
-                  title
-                      .toText(color: AppColors.grey50, fontSize: 12)
-                      .pOnly(right: 12, bottom: 5)
-                      .customRowPadding,
-                ],
-              )
+            ? Container(
+          color: commentEmpty ? AppColors.primaryOriginal : AppColors.transparent,
+              child: Row(
+                  children: [
+                    // if(!commentEmpty)
+                    (commentEmpty
+                            ? Assets.svg.icons.wisdomLightStar
+                            : Assets.svg.icons.messageCircle02)
+                        .svg(height: 13, color: AppColors.grey50),
+                    // if(!commentEmpty)
+                    SizedBox(width: commentEmpty ? 4 : 7),
+                    // 'available soon'
+                    title.toText(color: AppColors.grey50, fontSize: 12)
+                  ],
+                ).px(7).py(4),
+            ).roundedFull
             // .onTap(() {}, radius: 10)
             : const SizedBox(height: 20),
         const Spacer(),
@@ -295,7 +300,7 @@ class PostBlock extends StatelessWidget {
                 }, radius: 10)
         ]
       ],
-    );
+    ).customRowPadding;
   }
 
   StatefulBuilder buildHeartIcon(bool isLiked) {

@@ -132,7 +132,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     if (refresh) {
       splashLoader = true;
       postList = [];
-      setState(() {});
+      if (mounted) setState(() {});
     }
 
     List newPosts = await Database.advanced
@@ -141,9 +141,11 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     splashLoader = false;
 
     // Temp fix
-    setState(() {});
-    Future.delayed(350.milliseconds).then((_) => setState(() {}));
-    Future.delayed(350.milliseconds).then((_) => setState(() {}));
+    if (mounted) {
+      setState(() {});
+      Future.delayed(350.milliseconds).then((_) => setState(() {}));
+      Future.delayed(350.milliseconds).then((_) => setState(() {}));
+    }
   }
 
   @override
@@ -336,8 +338,9 @@ Widget buildFeed(
       scrollOffset: 1500,
       onEndOfPage: onEndOfPage ?? () async {},
       child: RefreshIndicator(
-          backgroundColor: AppColors.darkBg,
-          color: AppColors.primaryOriginal,
+          backgroundColor: AppColors.primaryOriginal,
+          color: AppColors.white,
+          strokeWidth: 2,
           onRefresh: onRefreshIndicator ?? () async {},
           child: NotificationListener<UserScrollNotification>(
             onNotification: (notification) {
@@ -580,7 +583,7 @@ Widget buildChoiceChip(BuildContext context,
       child: ChoiceChip(
           elevation: 0,
           shadowColor: Colors.transparent,
-          shape: 7.roundedShape,
+          shape: 11.roundedShape,
           selected: selected,
           materialTapTargetSize: (padding != null) ? MaterialTapTargetSize.shrinkWrap : null,
           padding: (padding != null) ? 0.all : null,
@@ -591,6 +594,7 @@ Widget buildChoiceChip(BuildContext context,
               : BorderSide(
                   width: 1.5,
                   color: selectedColor ?? (selected ? AppColors.white : AppColors.grey50)),
+                  // color: !selected ? AppColors.grey50 : selectedColor ?? AppColors.white),
           // side: BorderSide.none,
           labelStyle: AppStyles.text14PxRegular.copyWith(
               color: selected ? AppColors.primaryDark : AppColors.white,

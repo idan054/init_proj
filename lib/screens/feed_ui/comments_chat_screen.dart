@@ -73,12 +73,12 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
 
     return widget.isFullScreen
         ? Scaffold(
-            backgroundColor: AppColors.darkOutline,
+            backgroundColor: AppColors.primaryDark,
             body: buildScreenBody(post).pOnly(top: 40),
           )
         : Container(
           decoration: BoxDecoration(
-            color: AppColors.darkOutline,
+            color: AppColors.primaryDark,
             borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
             boxShadow: [
               BoxShadow(
@@ -123,7 +123,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                   controller: viewController,
                   children: [
                     buildComment(post),
-                    const Divider(thickness: 2, color: AppColors.darkOutline50).px(10),
+                    const Divider(thickness: 2.5, color: AppColors.chatBubble).px(10),
                     ListView.builder(
                         // controller: viewController,
                         reverse: true,
@@ -189,7 +189,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
             return buildTextField(context,
                 controller: sendController,
                 stfSetState: stfState,
-                hintText: 'Answer to join the conversion',
+                hintText: 'Join ${post.creatorUser?.name}\'s conversion',
                 // post: post,
                 onTap: () {
               UserModel currUser = context.uniProvider.currUser;
@@ -232,69 +232,6 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
     }
   }
 
-  Widget buildBubble(BuildContext context, PostModel comment, bool isLastMessage) {
-    // print('START: buildBubble()');
-
-    bool currUser = comment.creatorUser?.uid == context.uniProvider.currUser.uid;
-    bool isHebrew = comment.textContent.isHebrew;
-    var commentAgo = postTime(comment.timestamp!);
-
-    return Row(
-      mainAxisAlignment: currUser ? MainAxisAlignment.end : MainAxisAlignment.start,
-      children: <Widget>[
-        Column(
-          children: [
-            // if (comment.postReply != null)buildReplyBubble(context, currUser, comment).px(6).pOnly(top: 4),
-            ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: context.width * 0.8),
-                    // child: Bubble(
-                    child: Container(
-                        // elevation: 0,
-                        padding: const EdgeInsets.only(top: 8, right: 12, left: 12, bottom: 6),
-                        margin: 5.horizontal,
-                        decoration: BoxDecoration(
-                            color: currUser ? AppColors.primaryLight : AppColors.darkOutline50,
-                            borderRadius: BorderRadius.only(
-                              bottomRight: 10.circular,
-                              topRight:
-                                  // comment.postReply != null ? 3.circular :
-                                  (currUser ? 3 : 10).circular,
-                              topLeft:
-                                  // comment.postReply != null ? 3.circular :
-                                  (currUser ? 3 : 10).circular,
-                              bottomLeft: 10.circular,
-                            )),
-                        // padding: const BubbleEdges.all(8.0),
-                        // nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,
-                        // nipRadius: 0,
-                        // showNip: false,
-
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // if (comment.postReply != null) Row(), // AKA Expanded
-                            Text(comment.textContent,
-                                textAlign: isHebrew ? TextAlign.end : TextAlign.start,
-                                textDirection: isHebrew ? TextDirection.rtl : TextDirection.ltr,
-                                style: AppStyles.text16PxRegular.white),
-                            5.verticalSpace,
-                            Text(commentAgo,
-                                // .substring(9, 14),
-                                style:
-                                    AppStyles.text10PxRegular.copyWith(color: AppColors.greyLight))
-                          ],
-                        ))).px(6).pOnly(
-                  bottom: 4,
-                  top:
-                      // comment.postReply != null ? 2.5 :
-                      4,
-                ),
-          ],
-        )
-      ],
-    );
-  }
-
   ConstrainedBox buildReplyBubble(BuildContext context, bool currUser, MessageModel message) {
     return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: context.width * 0.8),
@@ -324,29 +261,31 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
             )));
   }
 
-  Builder buildComment(PostModel post) {
+  Builder buildComment(PostModel comment) {
     return Builder(builder: (context) {
-      var postAgo = postTime(post.timestamp!);
+      var postAgo = postTime(comment.timestamp!);
+      var isCreatorComment = comment.creatorUser?.uid == widget.post.creatorUser?.uid;
+
       return Row(
         children: [
           Stack(
             children: [
               CircleAvatar(
                 radius: 24,
-                backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
-                backgroundColor: AppColors.darkOutline,
+                backgroundImage: NetworkImage('${comment.creatorUser!.photoUrl}'),
+                backgroundColor:  AppColors.darkOutline,
               ),
               buildOnlineBadge(),
             ],
           ).pad(4).onTap(() {
             print('PROFILE CLICKED');
-            context.router.push(UserRoute(user: post.creatorUser!));
+            context.router.push(UserRoute(user: comment.creatorUser!));
           }),
           6.horizontalSpace,
           Builder(builder: (context) {
-            var isHebComment = post.textContent.isHebrew;
+            var isHebComment = comment.textContent.isHebrew;
             return Container(
-              color: AppColors.darkOutline50,
+              color: isCreatorComment ? AppColors.primaryOriginal : AppColors.chatBubble,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 crossAxisAlignment:
@@ -357,17 +296,17 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                     children: [
                       isHebComment
                           ? postAgo.toText(color: AppColors.grey50, fontSize: 12)
-                          : '${post.creatorUser?.name}'
+                          : '${comment.creatorUser?.name}'
                               .toText(fontSize: 14, bold: true, color: AppColors.white),
                       10.horizontalSpace,
                       isHebComment
-                          ? '${post.creatorUser?.name}'
+                          ? '${comment.creatorUser?.name}'
                               .toText(fontSize: 14, bold: true, color: AppColors.white)
                           : postAgo.toText(color: AppColors.grey50, fontSize: 12)
                     ],
                   ),
                   5.verticalSpace,
-                  post.textContent.toTextExpanded(
+                  comment.textContent.toTextExpanded(
                       autoExpanded: true,
                       textAlign: isHebComment ? TextAlign.right : TextAlign.left,
                       style: AppStyles.text14PxRegular.copyWith(
@@ -382,27 +321,6 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
       ).px(15).py(10);
     });
   }
-}
-
-Widget buildReplyField(PostModel post, {GestureTapCallback? onTap}) {
-  return Builder(builder: (context) {
-    return Container(
-            color: AppColors.darkOutline50,
-            // color: AppColors.primaryLight,
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: buildReplyProfile(context, post,
-                actionButton: Icons.close_rounded
-                    .icon(size: 22, color: AppColors.grey50)
-                    // Assets.svg.close.svg(height: 17, color: AppColors.grey50)
-                    .pad(13)
-                    .onTap(onTap, radius: 10)))
-        .roundedOnly(
-      bottomLeft: 3,
-      topLeft: 10,
-      topRight: 10,
-      bottomRight: 3,
-    );
-  });
 }
 
 Widget buildTextField(
@@ -439,7 +357,9 @@ Widget buildTextField(
         decoration: InputDecoration(
             filled: true,
             // fillColor: AppColors.primaryLight,
-            fillColor: AppColors.darkOutline50,
+            // fillColor: AppColors.darkOutline50,
+            // fillColor: AppColors.primaryLight2,
+            fillColor: AppColors.chatBubble,
             hintStyle: AppStyles.text14PxRegular.greyLight,
             focusedBorder: InputBorder.none,
             hintText: hintText,
@@ -504,6 +424,7 @@ Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionBu
               // 'Example : let’s try to think of an topic or fdsk conte tou fc words as possible... I think I’ve already ',
               post.textContent,
               maxLines: 4,
+              linkColor: AppColors.greyLight,
               textAlign: post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
               textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
               style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50))

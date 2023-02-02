@@ -74,7 +74,7 @@ mixin SplashScreenStateMixin<T extends StatefulWidget> on State<T> implements Ti
                       width: 170,
                       height: 170,
                       // color: colorAnimation.value,
-                      color: AppColors.primaryDarkOriginal,
+                      color: AppColors.primaryOriginal,
                       // child: const RiveAnimation.asset('assets/riv/rilManBlackWhite.riv')
                       child: const RiveAnimation.asset('assets/riv/rilmanblackwhitefaster.riv')
                           .sizedBox(null, 150).bottom

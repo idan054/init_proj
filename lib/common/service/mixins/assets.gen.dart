@@ -72,6 +72,10 @@ class $AssetsImagesGen {
   AssetGenImage get mapPlaceholder =>
       const AssetGenImage('assets/images/map_placeholder.png');
 
+  /// File path: assets/images/squresBg.png
+  AssetGenImage get squresBg =>
+      const AssetGenImage('assets/images/squresBg.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         adPrt1,
@@ -83,7 +87,8 @@ class $AssetsImagesGen {
         checkVerifiedImage,
         commentsOffPNG,
         elonMuskAd,
-        mapPlaceholder
+        mapPlaceholder,
+        squresBg
       ];
 }
 
@@ -414,9 +419,17 @@ class $AssetsSvgIconsGen {
   SvgGenImage get messageChatCircle =>
       const SvgGenImage('assets/svg/icons/message-chat-circle.svg');
 
+  /// File path: assets/svg/icons/message-circle-02.svg
+  SvgGenImage get messageCircle02 =>
+      const SvgGenImage('assets/svg/icons/message-circle-02.svg');
+
   /// File path: assets/svg/icons/message-comments-Lines.svg
   SvgGenImage get messageCommentsLines =>
       const SvgGenImage('assets/svg/icons/message-comments-Lines.svg');
+
+  /// File path: assets/svg/icons/message-text-circle-02.svg
+  SvgGenImage get messageTextCircle02 =>
+      const SvgGenImage('assets/svg/icons/message-text-circle-02.svg');
 
   /// File path: assets/svg/icons/plusAdd-untitled-icon.svg
   SvgGenImage get plusAddUntitledIcon =>
@@ -436,6 +449,10 @@ class $AssetsSvgIconsGen {
 
   /// File path: assets/svg/icons/trash-03.svg
   SvgGenImage get trash03 => const SvgGenImage('assets/svg/icons/trash-03.svg');
+
+  /// File path: assets/svg/icons/wisdom__multi_light_star.svg
+  SvgGenImage get wisdomMultiLightStar =>
+      const SvgGenImage('assets/svg/icons/wisdom__multi_light_star.svg');
 
   /// File path: assets/svg/icons/wisdom_light_star.svg
   SvgGenImage get wisdomLightStar =>
@@ -470,12 +487,15 @@ class $AssetsSvgIconsGen {
         manProfileOutline,
         messageChatCircleAdd,
         messageChatCircle,
+        messageCircle02,
         messageCommentsLines,
+        messageTextCircle02,
         plusAddUntitledIcon,
         settings01,
         shareClassicUntitledIcon,
         shieldTickUntitledIcon,
         trash03,
+        wisdomMultiLightStar,
         wisdomLightStar
       ];
 }

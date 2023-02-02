@@ -44,8 +44,8 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       print('START: onAppResumed()');
       Database.updateFirestore(
         collection: 'config',
-        docName: 'mainConfig',
-        toJson: {'onlineUsers': FieldValue.arrayUnion(['X'])},
+        docName: 'usersStatus',
+        toJson: {'onlineUsers': FieldValue.arrayUnion(['${currUser.email}'])},
       );
     }
 
@@ -56,8 +56,8 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
       print('START: onAppPaused()');
       Database.updateFirestore(
         collection: 'config',
-        docName: 'mainConfig',
-        toJson: {'onlineUsers': FieldValue.arrayRemove(['X'])},
+        docName: 'usersStatus',
+        toJson: {'onlineUsers': FieldValue.arrayRemove(['${currUser.email}'])},
       );
     }
   }

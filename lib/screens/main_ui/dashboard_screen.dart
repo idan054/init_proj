@@ -68,11 +68,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _handleIndexChanged(int i, bool navBar) {
-    if (sItem == TabItems.chat) {
+    sItem = TabItems.values[i];
+    if (sItem == TabItems.home) {
+      context.uniProvider.updateFeedType(FeedTypes.members);
       context.uniProvider.updateCurrFilter(FilterTypes.postWithoutComments);
     }
 
-    sItem = TabItems.values[i];
     // 0 = home, 2 = chat
     //    _pageController.animateToPage(homePage ? 2 : 0, duration: 200.milliseconds, curve: Curves.easeIn);
     // if (sItem.index == 1) return;

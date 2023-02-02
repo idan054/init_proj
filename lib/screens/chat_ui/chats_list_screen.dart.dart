@@ -9,12 +9,15 @@ import 'package:example/common/themes/app_strings.dart';
 import 'package:example/common/themes/themes.dart';
 import 'package:example/widgets/components/postBlock_sts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
-
+import 'package:transparent_image/transparent_image.dart';
 import '../../common/extensions/color_printer.dart';
 import '../../common/models/chat/chat_model.dart';
 import '../../common/service/Database/firebase_db.dart';
@@ -49,8 +52,8 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     // listenLoadMore = _loadMore(refresh: true);
     //> Uncomment this to auto refresh chats when new message coming
     WidgetsBinding.instance.addPostFrameCallback((_) =>
-        // context.uniProvider.addListener(() => listenLoadMore)
-        context.uniProvider.addListener(() => _loadMore(refresh: true)));
+    // context.uniProvider.addListener(() => listenLoadMore)
+    context.uniProvider.addListener(() => _loadMore(refresh: true)));
 
     super.initState();
   }
@@ -79,7 +82,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     if (updatedList.isNotEmpty) chatList = updatedList;
     // initLoader = false;
     splashLoader = false;
-    if (mounted) setState(() {});
+    setState(() {});
   }
 
   @override
@@ -116,7 +119,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
           }
 
           if (chatList.isEmpty) {
-            return 'Reply Ril to start new chat!'.toText(color: AppColors.grey50).center;
+            return 'Reply Ril to start new chat!'
+                .toText(color: AppColors.grey50)
+                .center;
           }
 
           return Container(
@@ -134,7 +139,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                 itemCount: chatList.length,
                 itemBuilder: (context, i) {
                   if (chatList.isEmpty) {
-                    return 'Your conversations \nwill be show here'.toText().center;
+                    return 'Your conversations \nwill be show here'
+                        .toText()
+                        .center;
                   }
 
                   // var chatList = context.listenchatListModelList;
@@ -206,11 +213,19 @@ class ChatBlockSts extends StatelessWidget {
           ),
           leading: Stack(
             children: [
-              CircleAvatar(
-                  radius: 28,
-                  backgroundColor: Colors.grey,
-                  backgroundImage:
-                      NetworkImage(otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
+              // CircleAvatar(
+              Container(
+                  // radius: 28,
+                height: 56,
+                width: 56,
+                  color: AppColors.darkBg,
+                  child:
+                  FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder,
+                    fit: BoxFit.cover,
+                  )
+              ).roundedFull,
               buildOnlineBadge(ratio: 1.0)
             ],
           ),

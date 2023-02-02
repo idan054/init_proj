@@ -62,6 +62,7 @@ class AuthService {
     context.uniProvider.updateUser(currUser);
 
     String? fcm = await FirebaseMessaging.instance.getToken();
+    print('fcm $fcm');
     if (userData['fcm'] != fcm) {
       NotificationService.updateFcmToken(context, fcm);
     }
