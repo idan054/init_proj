@@ -28,6 +28,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../common/extensions/color_printer.dart';
 import '../../common/models/post/post_model.dart';
 import '../../common/models/universalModel.dart';
@@ -330,8 +331,7 @@ ListTile buildTagTitle(FilterTypes activeFilter, String? customTitle) {
       ],
     ).pOnly(bottom: isQuestionsTag ? 0 : 15),
     // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
-    subtitle:
-        isQuestionsTag ? null : 'NEW'.toUpperCase().toText(fontSize: 18, medium: true).appearAll,
+    subtitle: isQuestionsTag ? null : 'NEW'.toUpperCase().toText(fontSize: 18, medium: true),
   );
 }
 
@@ -348,6 +348,13 @@ Widget buildFeed(
   print('START: buildFeed()');
 
   if (splashLoader || postList.isEmpty) return basicLoader();
+  // if (splashLoader || postList.isEmpty) {
+  //   return Shimmer.fromColors(
+  //       baseColor: AppColors.white,
+  //       highlightColor: AppColors.greyLight,
+  //       child: buildTagTitle(activeFilter, customTitle),
+  //       );
+  // }
 
   return LazyLoadScrollView(
       scrollOffset: 1500,
@@ -368,7 +375,8 @@ Widget buildFeed(
               // setState(() {});
               return true;
             },
-            child: ListView(
+            child:
+            ListView(
               children: [
                 buildTagTitle(activeFilter, customTitle),
                 1.verticalSpace,

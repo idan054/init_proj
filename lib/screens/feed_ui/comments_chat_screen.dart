@@ -123,7 +123,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
             // }
 
             return LazyLoadScrollView(
-                scrollOffset: 300,
+                scrollOffset: 1000,
                 onEndOfPage: () async {
                   print('START: COMMENTS onEndOfPage()');
                   // context.uniProvider.updateIsFeedLoading(true);

@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../themes/app_colors.dart';
 
-var appearDuration = kDebugMode ? 750 : 250;
+var appearDuration = 650;
 
 extension IconDataX on IconData {
   Icon icon({Color color = AppColors.white, double size = 20}) => Icon(
