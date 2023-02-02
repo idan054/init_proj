@@ -45,7 +45,6 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
   var viewController = ScrollController();
   var sendController = TextEditingController();
   List<PostModel> comments = [];
-  Timestamp? timeStamp;
   bool isInitMessages = true;
 
   // var splashLoader = true;
@@ -54,15 +53,18 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
 
   @override
   void initState() {
-    // _loadOlderMessages().then((_) => messages.remove(messages.first));
+    _loadOlderMessages();
+    // .then((_) => comments.remove(comments.first)
     super.initState();
   }
 
   Future _loadOlderMessages() async {
     // splashLoader = true; setState(() {});
-    List olderMessages = await Database.advanced.handleGetModel(context, ModelTypes.posts, comments,
+    List withOlderComments = await Database.advanced.handleGetModel(
+        context, ModelTypes.posts, comments,
+        filter: FilterTypes.sortByOldestComments,
         collectionReference: 'posts/${widget.post.id}/comments');
-    if (olderMessages.isNotEmpty) comments = [...olderMessages];
+    if (withOlderComments.isNotEmpty) comments = [...withOlderComments];
     setState(() {});
   }
 
@@ -77,44 +79,53 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
             body: buildScreenBody(post).pOnly(top: 40),
           )
         : Container(
-          decoration: BoxDecoration(
-            color: AppColors.primaryDark,
-            borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.99),
-                offset: const Offset(0.0, 1.5), //(x,y)
-                blurRadius: 4.0,
-              ),
-            ],
-          ),
-          margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, top: 150),
-          child: buildScreenBody(post),
-        );
+            decoration: BoxDecoration(
+              color: AppColors.primaryDark,
+              borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.99),
+                  offset: const Offset(0.0, 1.5), //(x,y)
+                  blurRadius: 4.0,
+                ),
+              ],
+            ),
+            margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, top: 150),
+            child: buildScreenBody(post),
+          );
   }
 
   Widget buildScreenBody(PostModel post) {
     return Stack(
       // alignment: Alignment.bottomCenter,
       children: [
-        StreamProvider<List<PostModel>>.value(
-          value: Database.streamComments(widget.post.id, limit: isInitMessages ? 8 : 1),
+        StreamBuilder<List<PostModel>>(
+          //~ Comments works great but currently streamComments NOT connected!
+          // Because comments load from the begging (1,2,3)
+          // while chat need the end (10, 9, 8) theres no match to mix those
+          // U can mix them by replace the comments to load from the end.
+          // Use sample Ril conversion to handle it!
+          stream: Database.streamComments(widget.post.id, limit: 1),
           initialData: const [],
-          builder: (context, child) {
+          // builder: (context, child) {
+          builder: (context, snapshot) {
             print('START: builder()');
-            var newMsgs = context.listenCommentPostModelList;
-            if (newMsgs.isNotEmpty) {
-              comments.isEmpty ? setInitMessages(newMsgs) : addLatestMessage(context);
-            }
+
+            // if(snapshot.hasData && comments.isEmpty){
+            //   comments = snapshot.data ?? [];
+            // }
+
+            // var newMsgs = context.listenCommentPostModelList;
+
+            // if (snapshot.data != null && snapshot.data!.isNotEmpty) {
+            //   PostModel? newComment = snapshot.data?.first;
+            //   _addLatestComment(newComment);
+            // }
 
             return LazyLoadScrollView(
-                scrollOffset: 1000,
+                scrollOffset: 300,
                 onEndOfPage: () async {
-                  print('START: onEndOfPage()');
-
-                  if (comments.isNotEmpty) {
-                    timeStamp = Timestamp.fromDate(comments.last.timestamp!);
-                  }
+                  print('START: COMMENTS onEndOfPage()');
                   // context.uniProvider.updateIsFeedLoading(true);
                   await _loadOlderMessages();
                   // context.uniProvider.updateIsFeedLoading(false);
@@ -126,7 +137,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                     const Divider(thickness: 2.5, color: AppColors.chatBubble).px(10),
                     ListView.builder(
                         // controller: viewController,
-                        reverse: true,
+                        // reverse: true,
                         shrinkWrap: true,
                         physics: const ScrollPhysics(),
                         // controller: ,
@@ -191,7 +202,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                 stfSetState: stfState,
                 hintText: 'Join ${post.creatorUser?.name}\'s conversion',
                 // post: post,
-                onTap: () {
+                onTap: () async {
               UserModel currUser = context.uniProvider.currUser;
               var comment = PostModel(
                 textContent: sendController.text,
@@ -205,9 +216,13 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
               );
               // context.uniProvider.updatePostUploaded(true);
               FeedService.addComment(context, comment, post);
+              // viewController.jumpTo(0); // TOP
+              comments.add(comment);
+              setState(() {});
+              // stfState(() {});
+              viewController.jumpTo(viewController.position.maxScrollExtent + 150); // BOTTOM
               sendController.clear();
               // post = null;
-              // stfState(() {});
             });
           }),
         ).bottom
@@ -215,19 +230,21 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
     );
   }
 
-  void setInitMessages(List<PostModel> newMsgs) {
-    print('START: setInitMessages()');
-    comments = newMsgs;
-    isInitMessages = false;
-    // viewController.jumpTo(0);
-    // _loadOlderMessages();
-  }
+  // void setInitMessages(List<PostModel> newMsgs) {
+  //   print('START: setInitMessages()');
+  //   comments = newMsgs;
+  //   isInitMessages = false;
+  //   // viewController.jumpTo(0);
+  //   // _loadOlderMessages();
+  // }
 
-  void addLatestMessage(BuildContext context) {
-    print('START: addLatestMessage()');
-    var newMessage = context.listenCommentPostModelList.first;
-    if (!(comments.contains(newMessage))) {
-      comments.insert(0, newMessage);
+  void _addLatestComment(PostModel? newComment) {
+    print('START: _addLatestComment()');
+    isInitMessages = false;
+    if (newComment != null && !(comments.contains(newComment))) {
+      comments.insert(0, newComment);
+      // comments.add(newComment);
+      viewController.jumpTo(0);
       // viewController.jumpTo(viewController.position.maxScrollExtent + 150);
     }
   }
@@ -273,7 +290,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
               CircleAvatar(
                 radius: 24,
                 backgroundImage: NetworkImage('${comment.creatorUser!.photoUrl}'),
-                backgroundColor:  AppColors.darkOutline,
+                backgroundColor: AppColors.darkOutline,
               ),
               buildOnlineBadge(),
             ],

@@ -72,12 +72,6 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {});
   }
 
-  void addMessages(List<MessageModel> newMsgs) {
-    print('START: addMessages()');
-    messages = [...newMsgs, ...messages];
-    isInitMessages = false;
-  }
-
   @override
   Widget build(BuildContext context) {
     print('chatId ${widget.chatId}');
@@ -129,7 +123,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     return LazyLoadScrollView(
                       scrollOffset: 300,
                       onEndOfPage: () async {
-                        print('START: onEndOfPage()');
+                        print('START: CHAT onEndOfPage()');
 
                         if (messages.isNotEmpty) {
                           timeStamp = Timestamp.fromDate(messages.last.timestamp!);
@@ -215,6 +209,12 @@ class _ChatScreenState extends State<ChatScreen> {
         }));
   }
 
+  // void addMessages(List<MessageModel> newMsgs) {
+  //   print('START: addMessages()');
+  //   messages = [...newMsgs, ...messages];
+  //   isInitMessages = false;
+  // }
+
   // Future<List<MessageModel>> _setInitMessages(List<MessageModel> newMsgs) {
   //   print('START: setInitMessages()');
   //   messages = newMsgs;
@@ -223,7 +223,7 @@ class _ChatScreenState extends State<ChatScreen> {
   // }
 
   void _addLatestMessage(MessageModel? newMessage) {
-    print('START: addLatestMessage()');
+    print('START: _addLatestMessage()');
     // var newMessage = context.listenMessagesModelList.first;
     if (newMessage != null && !(messages.contains(newMessage))) {
       messages.insert(0, newMessage);

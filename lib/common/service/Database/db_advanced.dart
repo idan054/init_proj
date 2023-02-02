@@ -71,12 +71,20 @@ class FsAdvanced {
 
     var limit = modelType == ModelTypes.messages ? 25 : 8;
     QuerySnapshot<Map<String, dynamic>>? docs;
-    var reqBase = db.collection(collectionRef).orderBy('timestamp', descending: true).limit(limit);
+    var reqBase = db.collection(collectionRef).limit(limit);
+    if (filter == FilterTypes.sortByOldestComments) {
+      // Start from OLDEST Begging 1st (Comments)
+      reqBase = reqBase.orderBy('timestamp', descending: false);
+    } else {
+      // Start from NEWEST LASTED (POSTS / MSGS..)
+      reqBase = reqBase.orderBy('timestamp', descending: true);
+    }
     if (timestamp != null) reqBase = reqBase.startAfter([timestamp]);
 
     switch (modelType) {
       case ModelTypes.messages: // Nothing special
       case ModelTypes.users: // Nothing special
+      case ModelTypes.reports:
         break;
       case ModelTypes.posts:
         //~ Filters (query) REQUIRE an index. Check log to create it.

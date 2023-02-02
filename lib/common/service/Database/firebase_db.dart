@@ -21,6 +21,7 @@ enum FilterTypes {
   postWithComments,    // Home Screen
   reportedUsers, // Admin Screen
   reportedRils,  // Admin Screen
+  sortByOldestComments,  // Comments Screen
 }
 
 //> MUST Be same as collection name!
@@ -221,7 +222,7 @@ class Database {
         .collection('posts')
         .doc(postId)
         .collection('comments')
-        .orderBy('timestamp', descending: true)
+        .orderBy('timestamp', descending: false)
         .limit(limit);
     // if (timestamp != null) reqBase = reqBase.startAfter([timestamp]);
 
