@@ -60,7 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     WidgetsBinding.instance
         .addPostFrameCallback((_) => checkForUpdate(context, localConfig, serverConfig!));
 
-    NotificationService.sendPushMessage();
+    // NotificationService.sendPushMessage();
 
     _pageController = PageController(initialPage: widget.dashboardPage.index);
     sItem = widget.dashboardPage;
