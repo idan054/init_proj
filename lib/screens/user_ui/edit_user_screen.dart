@@ -163,6 +163,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
                       hint: 'Tell everyone about yourself...',
                       minLines: 3,
                       maxLines: 15,
+                      maxLength: 1250,
                       controller: bioController,
                       validator: (value) {
                         // if (bioController.text.isEmpty) return '';

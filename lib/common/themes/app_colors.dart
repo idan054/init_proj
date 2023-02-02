@@ -10,7 +10,6 @@ class AppColors {
   // static const Color grey50 = Color(0xff8D8C92); // OLD
   static const Color grey50 = Color(0xffCACACA); // AKA greyLight
 
-  static const Color darkOutline50 = Color(0xff4D4956);
 
   // static const Color darkOutline = Color(0xff292533); // OLD
   static const Color darkOutline = Color(0xff211c2d); // OLD - NEW
@@ -32,6 +31,8 @@ class AppColors {
   static const Color primaryOriginal = Color(0xff6133E4);
 
   static const Color primaryLight = Color(0xff624b99);
+
+  static const Color darkOutline50 = Color(0xff4D4956); // OLD
   static const Color primaryLight2 = Color(0xff655A72);
 
   static const Color primaryShiny = Color(0xff6133E4);

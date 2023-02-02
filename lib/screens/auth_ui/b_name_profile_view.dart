@@ -50,10 +50,10 @@ class _NameProfileViewState extends State<NameProfileView> {
           50.verticalSpace,
           Badge(
             position: BadgePosition.bottomEnd(bottom: 0, end: 0),
-            badgeColor: isImageErr ? AppColors.errRed : AppColors.grey50,
+            badgeColor: isImageErr ? AppColors.errRed : AppColors.primaryOriginal,
             padding: 10.all,
             badgeContent:
-                Assets.svg.icons.plusAddUntitledIcon.svg(height: 20, color: AppColors.darkBg),
+                Assets.svg.icons.plusAddUntitledIcon.svg(height: 20, color: AppColors.white),
             child: CircleAvatar(
               radius: 60,
               backgroundColor: isImageErr ? AppColors.errRed : AppColors.darkOutline50,
@@ -86,6 +86,7 @@ class _NameProfileViewState extends State<NameProfileView> {
             label: 'Name',
             hint: 'What is your name?',
             maxLines: 1,
+            maxLength: 25,
             controller: nameController,
             validator: (value) {
               if (nameController.text.replaceAll(' ', '').isEmpty) return '';
