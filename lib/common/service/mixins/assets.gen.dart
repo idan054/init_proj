@@ -40,6 +40,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/AdPrt2.png
   AssetGenImage get adPrt2 => const AssetGenImage('assets/images/AdPrt2.png');
 
+  /// File path: assets/images/CircleCover.png
+  AssetGenImage get circleCover =>
+      const AssetGenImage('assets/images/CircleCover.png');
+
   /// File path: assets/images/LogoCircularRilTopiaLogo.png
   AssetGenImage get logoCircularRilTopiaLogo =>
       const AssetGenImage('assets/images/LogoCircularRilTopiaLogo.png');
@@ -80,6 +84,7 @@ class $AssetsImagesGen {
   List<AssetGenImage> get values => [
         adPrt1,
         adPrt2,
+        circleCover,
         logoCircularRilTopiaLogo,
         riltopiaAsIconPNG,
         appIcon,
