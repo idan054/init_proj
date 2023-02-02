@@ -98,6 +98,7 @@ class AppRouter extends _i15.RootStackRouter {
         routeData: routeData,
         child: _i7.CreatePostScreen(
           args.replyStyle,
+          onChange: args.onChange,
           key: args.key,
         ),
         opaque: true,
@@ -361,12 +362,14 @@ class MainFeedRoute extends _i15.PageRouteInfo<void> {
 class CreatePostRoute extends _i15.PageRouteInfo<CreatePostRouteArgs> {
   CreatePostRoute({
     required bool replyStyle,
+    required Function onChange,
     _i16.Key? key,
   }) : super(
           CreatePostRoute.name,
           path: '/create-post-screen',
           args: CreatePostRouteArgs(
             replyStyle: replyStyle,
+            onChange: onChange,
             key: key,
           ),
         );
@@ -377,16 +380,19 @@ class CreatePostRoute extends _i15.PageRouteInfo<CreatePostRouteArgs> {
 class CreatePostRouteArgs {
   const CreatePostRouteArgs({
     required this.replyStyle,
+    required this.onChange,
     this.key,
   });
 
   final bool replyStyle;
 
+  final Function onChange;
+
   final _i16.Key? key;
 
   @override
   String toString() {
-    return 'CreatePostRouteArgs{replyStyle: $replyStyle, key: $key}';
+    return 'CreatePostRouteArgs{replyStyle: $replyStyle, onChange: $onChange, key: $key}';
   }
 }
 

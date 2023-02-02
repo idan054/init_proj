@@ -15,8 +15,9 @@ import 'main_feed_screen.dart';
 
 class CreatePostScreen extends StatefulWidget {
   final bool replyStyle;
+  final Function onChange;
 
-  const CreatePostScreen(this.replyStyle, {Key? key}) : super(key: key);
+  const CreatePostScreen(this.replyStyle, {required this.onChange, Key? key}) : super(key: key);
 
   @override
   State<CreatePostScreen> createState() => _CreatePostScreenState();
@@ -109,6 +110,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           .toText(color: isComments ? AppColors.white : AppColors.primaryLight2),
                       onSelect: (bool newSelection) {
                 isComments = !isComments;
+                widget.onChange(isComments);
                 setState(() {});
               }, selected: isComments)
                   .centerLeft

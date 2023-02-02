@@ -219,7 +219,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
     print('START: setInitMessages()');
     comments = newMsgs;
     isInitMessages = false;
-    viewController.jumpTo(0);
+    // viewController.jumpTo(0);
     // _loadOlderMessages();
   }
 
@@ -228,7 +228,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
     var newMessage = context.listenCommentPostModelList.first;
     if (!(comments.contains(newMessage))) {
       comments.insert(0, newMessage);
-      viewController.jumpTo(viewController.position.maxScrollExtent + 150);
+      // viewController.jumpTo(viewController.position.maxScrollExtent + 150);
     }
   }
 

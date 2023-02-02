@@ -80,7 +80,7 @@ class MainFeedScreen extends StatefulWidget {
 }
 
 class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProviderStateMixin {
-  int tagIndex = 0;
+  // int tagIndex = 0;
   var splashLoader = true;
   List<PostModel> postList = [];
   var activeFilter = FilterTypes.postWithoutComments;
@@ -94,6 +94,14 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
   void initState() {
     print('START: initState()');
     _tabController = TabController(vsync: this, length: 2);
+
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => context.uniProvider.addListener(() => _handleIndexChanged(
+              context.uniProvider.feedType.index,
+              fromTabBar: false,
+              fromListener: true,
+            )));
+
     _loadMore();
     super.initState();
   }
@@ -104,26 +112,33 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     super.dispose();
   }
 
-  void _handleIndexChanged(int i, {required bool fromTabBar}) async {
+  void _handleIndexChanged(int i, {required bool fromTabBar, bool fromListener = false}) async {
     print('START: _handleIndexChanged()');
-    if (fromTabBar) {
-      _pageController.animateToPage(i, duration: 250.milliseconds, curve: Curves.easeIn);
-    } else {
-      _tabController?.animateTo(i);
-    }
-    // _pageController.jumpToPage(i);
-    // if (mounted) setState(() {});
 
-    if (i == 0) {
-      activeFilter = FilterTypes.postWithoutComments;
-      context.uniProvider.updateFeedType(FeedTypes.members);
+    if (fromListener) {
+      _pageController.animateToPage(i, duration: 250.milliseconds, curve: Curves.easeIn);
+      _tabController?.animateTo(i);
+      // Not need to update uniProvider > Will make loop because its update listener
+    } else {
+      if (fromTabBar) {
+        _pageController.animateToPage(i, duration: 250.milliseconds, curve: Curves.easeIn);
+      } else {
+        _tabController?.animateTo(i);
+      }
+      // _pageController.jumpToPage(i);
+      // if (mounted) setState(() {});
+
+      if (i == 0) {
+        activeFilter = FilterTypes.postWithoutComments;
+        context.uniProvider.updateFeedType(FeedTypes.members);
+      }
+      if (i == 1) {
+        activeFilter = FilterTypes.postWithComments;
+        context.uniProvider.updateFeedType(FeedTypes.conversations);
+      }
+      context.uniProvider.updateCurrFilter(activeFilter);
+      await _loadMore(refresh: true);
     }
-    if (i == 1) {
-      activeFilter = FilterTypes.postWithComments;
-      context.uniProvider.updateFeedType(FeedTypes.conversations);
-    }
-    context.uniProvider.updateCurrFilter(activeFilter);
-    await _loadMore(refresh: true);
   }
 
   Future _loadMore({bool refresh = false}) async {
@@ -228,65 +243,65 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     );
   }
 
-  // Widget getAd(BuildContext context) {
-  //   BannerAdListener bannerAdListener = BannerAdListener(onAdWillDismissScreen: (ad) {
-  //     ad.dispose();
-  //   }, onAdClosed: (ad) {
-  //     debugPrint("Ad Got Closeed");
-  //   });
-  //   BannerAd bannerAd = BannerAd(
-  //     size: AdSize.banner,
-  //     adUnitId: Platform.isAndroid
-  //         ? "ca-app-pub-3940256099942544/6300978111"
-  //         : "ca-app-pub-3940256099942544/2934735716",
-  //     listener: bannerAdListener,
-  //     request: const AdRequest(),
-  //   );
-  //
-  //   bannerAd.load();
-  //
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       '${context.uniProvider.serverConfig?.adStatus}'
-  //           .toText(color: AppColors.grey50, fontSize: 10),
-  //       SizedBox(
-  //         width: 320,
-  //         height: 50,
-  //         child: AdWidget(ad: bannerAd),
-  //       ),
-  //     ],
-  //   );
-  // }
+// Widget getAd(BuildContext context) {
+//   BannerAdListener bannerAdListener = BannerAdListener(onAdWillDismissScreen: (ad) {
+//     ad.dispose();
+//   }, onAdClosed: (ad) {
+//     debugPrint("Ad Got Closeed");
+//   });
+//   BannerAd bannerAd = BannerAd(
+//     size: AdSize.banner,
+//     adUnitId: Platform.isAndroid
+//         ? "ca-app-pub-3940256099942544/6300978111"
+//         : "ca-app-pub-3940256099942544/2934735716",
+//     listener: bannerAdListener,
+//     request: const AdRequest(),
+//   );
+//
+//   bannerAd.load();
+//
+//   return Column(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       '${context.uniProvider.serverConfig?.adStatus}'
+//           .toText(color: AppColors.grey50, fontSize: 10),
+//       SizedBox(
+//         width: 320,
+//         height: 50,
+//         child: AdWidget(ad: bannerAd),
+//       ),
+//     ],
+//   );
+// }
 
-  SizedBox _feedChoiceList(BuildContext context) {
-    return SizedBox(
-      height: 50.0,
-      child: ListView(
-        // controller: chipsController,
-        scrollDirection: Axis.horizontal,
-        children: List<Widget>.generate(
-          tags.length,
-          (int i) {
-            var isChipSelected = tagIndex == i;
-
-            return buildChoiceChip(
-              context,
-              label: Text(tags[i]),
-              selected: isChipSelected,
-              onSelect: (bool newSelection) {
-                if (newSelection) tagIndex = i;
-                context.uniProvider.updateSelectedTag(tags[i]);
-                // feedController.jumpToPage(tagIndex);
-                // feedController.animateToPage(selectedTag!, duration: 250.milliseconds, curve: Curves.easeIn);
-                setState(() {});
-              },
-            );
-          },
-        ).toList(),
-      ),
-    );
-  }
+// SizedBox _feedChoiceList(BuildContext context) {
+//   return SizedBox(
+//     height: 50.0,
+//     child: ListView(
+//       // controller: chipsController,
+//       scrollDirection: Axis.horizontal,
+//       children: List<Widget>.generate(
+//         tags.length,
+//         (int i) {
+//           var isChipSelected = tagIndex == i;
+//
+//           return buildChoiceChip(
+//             context,
+//             label: Text(tags[i]),
+//             selected: isChipSelected,
+//             onSelect: (bool newSelection) {
+//               if (newSelection) tagIndex = i;
+//               context.uniProvider.updateSelectedTag(tags[i]);
+//               // feedController.jumpToPage(tagIndex);
+//               // feedController.animateToPage(selectedTag!, duration: 250.milliseconds, curve: Curves.easeIn);
+//               setState(() {});
+//             },
+//           );
+//         },
+//       ).toList(),
+//     ),
+//   );
+// }
 }
 
 ListTile buildTagTitle(FilterTypes activeFilter, String? customTitle) {
@@ -594,7 +609,7 @@ Widget buildChoiceChip(BuildContext context,
               : BorderSide(
                   width: 1.5,
                   color: selectedColor ?? (selected ? AppColors.white : AppColors.grey50)),
-                  // color: !selected ? AppColors.grey50 : selectedColor ?? AppColors.white),
+          // color: !selected ? AppColors.grey50 : selectedColor ?? AppColors.white),
           // side: BorderSide.none,
           labelStyle: AppStyles.text14PxRegular.copyWith(
               color: selected ? AppColors.primaryDark : AppColors.white,

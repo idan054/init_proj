@@ -40,9 +40,9 @@ class UniProvider with ChangeNotifier {
   }
 
   FilterTypes currFilter = FilterTypes.postWithoutComments;
-  void updateCurrFilter(FilterTypes data) {
+  void updateCurrFilter(FilterTypes data, {bool notify = true}) {
     currFilter = data;
-    notifyListeners();
+    if(notify) notifyListeners();
   }
 
   FeedTypes feedType = FeedTypes.members;

@@ -88,33 +88,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('START: CreatePostScreen()');
+    print('START: DashboardScreen()');
     _pageController = PageController(initialPage: widget.dashboardPage.index);
     var currUser = context.uniProvider.currUser;
 
     if (currUser.userType == UserTypes.blocked) {
-      return WillPopScope(
-          onWillPop: () async {
-            return false;
-          },
-          child: Scaffold(
-            backgroundColor: AppColors.primaryDark,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                'Your account has been Blocked'.toText(fontSize: 16),
-                const SizedBox(height: 10),
-                'Please contact us to get details'.toText(color: AppColors.grey50),
-                const SizedBox(height: 10),
-                TextButton(
-                    child: 'Contact support'.toText(color: AppColors.primaryLight),
-                    onPressed: () {
-                      ChatService.chatWithUs(context);
-                    }),
-              ],
-            ).center,
-          ));
+      return buildUserBlockedScaffold(context);
     }
 
     return Scaffold(
@@ -176,22 +155,47 @@ class _DashboardScreenState extends State<DashboardScreen> {
         floatingActionButton: sItem != TabItems.home ? null : buildFab());
   }
 
+  WillPopScope buildUserBlockedScaffold(BuildContext context) {
+    return WillPopScope(
+        onWillPop: () async {
+          return false;
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.primaryDark,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              'Your account has been Blocked'.toText(fontSize: 16),
+              const SizedBox(height: 10),
+              'Please contact us to get details'.toText(color: AppColors.grey50),
+              const SizedBox(height: 10),
+              TextButton(
+                  child: 'Contact support'.toText(color: AppColors.primaryLight),
+                  onPressed: () {
+                    ChatService.chatWithUs(context);
+                  }),
+            ],
+          ).center,
+        ));
+  }
+
   Builder buildFab() {
     return Builder(builder: (context) {
       var showFab = context.uniProvider.showFab;
       var replyStyle = context.listenUniProvider.feedType == FeedTypes.members;
 
-      SpeedDialChild fabChild(String title, Widget icon, {required bool replyStyle}) {
-        return SpeedDialChild(
-          child: icon,
-          labelWidget: title.toText().px(10),
-          labelShadow: [],
-          labelBackgroundColor: AppColors.transparent,
-          elevation: 5,
-          backgroundColor: AppColors.white,
-          onTap: () {},
-        );
-      }
+      // SpeedDialChild fabChild(String title, Widget icon, {required bool replyStyle}) {
+      //   return SpeedDialChild(
+      //     child: icon,
+      //     labelWidget: title.toText().px(10),
+      //     labelShadow: [],
+      //     labelBackgroundColor: AppColors.transparent,
+      //     elevation: 5,
+      //     backgroundColor: AppColors.white,
+      //     onTap: () {},
+      //   );
+      // }
 
       return AnimatedSlide(
         duration: 350.milliseconds,
@@ -233,7 +237,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         context: context,
                         builder: (context) {
                           // print('replyStyle ${replyStyle}');
-                          return CreatePostScreen(replyStyle);
+                          return CreatePostScreen(
+                            replyStyle,
+                            onChange: (bool isComments) {
+                              print('isComments $isComments');
+                              var feedType =
+                                  isComments ? FeedTypes.conversations : FeedTypes.members;
+                              var activeFilter = isComments
+                                  ? FilterTypes.postWithComments
+                                  : FilterTypes.postWithoutComments;
+
+                              context.uniProvider.updateCurrFilter(activeFilter, notify: false);
+                              context.uniProvider.updateFeedType(feedType); // rebuilt listeners
+                            },
+                          );
                         });
                   },
                   //> TO USE MENU MODE:
