@@ -1,28 +1,20 @@
-import 'package:camera/camera.dart';
 import 'package:example/common/extensions/color_printer.dart';
-import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/common/service/Auth/notification_service.dart';
 import 'package:example/screens/main_ui/splash_screen.dart' as click;
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'common/models/universalModel.dart';
-import 'common/service/Database/firebase_db.dart';
 import 'common/service/Database/firebase_options.dart';
 import 'common/service/life_cycle.dart';
-import 'common/service/notifications_services.dart';
 import 'common/themes/app_colors.dart';
-import 'dart:typed_data';
-import 'package:flutter/material.dart';
-import 'package:widgets_to_image/widgets_to_image.dart';
-
-import 'delete_me.dart';
 
 // List<CameraDescription> cameras = <CameraDescription>[];
 // Future<void> mainT() async {
@@ -36,19 +28,17 @@ import 'delete_me.dart';
 //   runApp(const MaterialApp(home: CameraExampleHome()));
 // }
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.toMap()}");
-}
-
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
 /// Add More Pre-Actions At [click.SplashScreen]
 void main() async {
   printWhite('START main()!');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  NotificationService.setupNotifications(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
+  // NotificationService.setupNotifications(_firebaseMessagingBackgroundHandler);
+  await NotificationHelper.initialize(flutterLocalNotificationsPlugin);
+  FirebaseMessaging.onBackgroundMessage(myBackgroundMessageHandler);
 
   final dbDir = await getApplicationDocumentsDirectory();
   Hive.init(dbDir.path);
@@ -75,7 +65,6 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-
   final _router = AppRouter(); // Add screens AT app_router.dart
 
   @override
