@@ -83,7 +83,6 @@ dependencies:
 #  notification_permissions: ^0.6.1
   app_settings: ^4.2.0
   http: ^0.13.5
-  awesome_notifications: ^0.7.4+1
   transparent_image: ^2.0.0
   flutter_speed_dial: ^6.2.0
   auto_direction: ^0.0.6

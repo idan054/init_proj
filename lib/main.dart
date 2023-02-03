@@ -18,25 +18,8 @@ import 'common/service/Database/firebase_options.dart';
 import 'common/service/life_cycle.dart';
 import 'common/service/notifications_services.dart';
 import 'common/themes/app_colors.dart';
-import 'dart:typed_data';
-import 'package:flutter/material.dart';
-import 'package:widgets_to_image/widgets_to_image.dart';
 
-import 'delete_me.dart';
-
-// List<CameraDescription> cameras = <CameraDescription>[];
-// Future<void> mainT() async {
-//   // Fetch the available cameras before initializing the app.
-//   try {
-//     WidgetsFlutterBinding.ensureInitialized();
-//     cameras = await availableCameras();
-//   } on CameraException catch (e) {
-//     // _logError(e.code, e.description);
-//   }
-//   runApp(const MaterialApp(home: CameraExampleHome()));
-// }
-
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+Future<void> _handleNotificationReceived(RemoteMessage message) async {
   print("Handling a background message: ${message.toMap()}");
 }
 
@@ -46,8 +29,7 @@ void main() async {
   printWhite('START main()!');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  NotificationService.setupNotifications(_firebaseMessagingBackgroundHandler);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  NotificationService.setupNotifications(_handleNotificationReceived);
 
 
   final dbDir = await getApplicationDocumentsDirectory();
