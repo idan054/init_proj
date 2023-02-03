@@ -19,6 +19,7 @@ import 'package:example/common/dump/postViewOld_sts.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -96,12 +97,15 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     print('START: initState()');
     _tabController = TabController(vsync: this, length: 2);
 
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => context.uniProvider.addListener(() => _handleIndexChanged(
+    WidgetsBinding.instance.addPostFrameCallback((_) => context.uniProvider.addListener(() {
+          if (mounted) {
+            _handleIndexChanged(
               context.uniProvider.feedType.index,
               fromTabBar: false,
               fromListener: true,
-            )));
+            );
+          }
+        }));
 
     _loadMore();
     super.initState();
@@ -331,7 +335,7 @@ ListTile buildTagTitle(FilterTypes activeFilter, String? customTitle) {
       ],
     ).pOnly(bottom: isQuestionsTag ? 0 : 15),
     // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
-    subtitle: isQuestionsTag ? null : 'NEW'.toUpperCase().toText(fontSize: 18, medium: true),
+    subtitle: isQuestionsTag ? null : 'NEW RILS'.toUpperCase().toText(fontSize: 18, medium: true),
   );
 }
 
@@ -375,8 +379,7 @@ Widget buildFeed(
               // setState(() {});
               return true;
             },
-            child:
-            ListView(
+            child: ListView(
               children: [
                 buildTagTitle(activeFilter, customTitle),
                 1.verticalSpace,
@@ -388,24 +391,45 @@ Widget buildFeed(
                     itemBuilder: (BuildContext context, int i) {
                       bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
                       // PostView(postList[i])
+                      String reportByTitle = '';
+                      bool isComment = postList[i].originalPostId != null;
+                      if (reportList != null) {
+                        reportByTitle += '(${reportList[i].reportStatus?.name}) ';
+                        reportByTitle += reportList[i].reportedUser != null
+                            ? 'User '
+                            : (isComment ? 'Comment ' : 'Ril ');
+                        reportByTitle += 'Reported by ${reportList[i].reportedBy} :';
+                      }
 
                       return Column(
                         children: [
                           //> if (isShowAd) getAd(context),
 
                           // Shows on AdminScreen() only
-                          if (reportList != null)
-                            'By ${reportList[i].reportedBy} :'
+                          if (reportList != null) ...[
+                            const Divider(thickness: 2, color: AppColors.darkOutline),
+                            reportByTitle
                                 .toText(color: Colors.white30, fontSize: 12)
                                 .centerLeft
                                 .pOnly(top: 5, left: 15)
                                 .pad(3)
                                 .onTap(() {}, radius: 5),
 
+                            if(isComment)
+                            'Go to original Ril (unavailable)'
+                                .toText(color: Colors.white30, fontSize: 12)
+                                .centerLeft
+                                .pOnly(left: 15)
+                                .pad(3)
+                                .onTap(() {
+
+                            }, radius: 5),
+                          ],
+
                           if (reportList != null && reportList[i].reportedUser != null) ...[
                             ReportedUserBlock(reportList[i]),
                           ] else
-                            PostBlock(postList[i]),
+                            PostBlock(postList[i], isReported: reportList != null),
                         ],
                       );
                     }).appearOpacity,
@@ -432,7 +456,7 @@ AppBar buildRiltopiaAppBar(
     // .onTap(() {}, radius: 8),
     actions: [
       //~ Report Screen
-      if (currUser.userType == UserTypes.admin && isHomePage)
+      if ((currUser.userType == UserTypes.admin) && isHomePage)
         CircleAvatar(
             backgroundColor: AppColors.darkOutline50,
             radius: 14,

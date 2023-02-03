@@ -100,6 +100,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
           context,
           isHomePage: false,
           bottom: TabBar(
+            isScrollable: true,
             controller: _tabController,
             indicator: UnderlineTabIndicator(
                 borderSide: const BorderSide(width: 2.5, color: AppColors.errRed),
@@ -107,7 +108,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
             labelStyle: AppStyles.text14PxRegular,
             indicatorColor: AppColors.primaryOriginal,
             tabs: const [
-              Tab(text: 'Reported Rils'),
+              Tab(text: 'Reported Rils & Comments'),
               Tab(text: 'Reported Users'),
             ],
             onTap: (i) async => _handleIndexChanged(i, fromTabBar: true),
@@ -120,32 +121,32 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
             onPageChanged: (i) => _handleIndexChanged(i, fromTabBar: false),
             children: <Widget>[
               Builder(
-                builder: (context) {
-                  var postList = <PostModel>[];
-                  for(var rep in reportList){
-                    if(rep.reportedPost != null) postList.add(rep.reportedPost!);
+                  builder: (context) {
+                    var postList = <PostModel>[];
+                    for(var rep in reportList){
+                      if(rep.reportedPost != null) postList.add(rep.reportedPost!);
+                    }
+
+                    printWhite('postList.length: ${postList.length}');
+                    printWhite('reportList.length: ${reportList.length}');
+
+                    return buildFeed(
+                      customTitle: 'NEW REPORTED RILS & COMMENTS',
+                      context,
+                      postList,
+                      splashLoader,
+                      activeFilter,
+                      reportList: reportList,
+                      onRefreshIndicator: () async {
+                        printGreen('START: onRefresh()');
+                        await _loadMore(refresh: true);
+                      },
+                      onEndOfPage: () async {
+                        printGreen('START: onEndOfPage()');
+                        await _loadMore();
+                      },
+                    );
                   }
-
-                  printWhite('postList.length: ${postList.length}');
-                  printWhite('reportList.length: ${reportList.length}');
-
-                  return buildFeed(
-                    customTitle: 'SHOW LASTED REPORTS ONLY',
-                    context,
-                    postList,
-                    splashLoader,
-                    activeFilter,
-                    reportList: reportList,
-                    onRefreshIndicator: () async {
-                      printGreen('START: onRefresh()');
-                      await _loadMore(refresh: true);
-                    },
-                    onEndOfPage: () async {
-                      printGreen('START: onEndOfPage()');
-                      await _loadMore();
-                    },
-                  );
-                }
               ),
               Builder(
                   builder: (context) {

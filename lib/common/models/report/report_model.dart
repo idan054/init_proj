@@ -8,7 +8,7 @@ part 'report_model.freezed.dart';
 part 'report_model.g.dart';
 
 enum ReportStatus {newReport, completedReport}
-enum ReportType {ril, conversation, user}
+enum ReportType {ril, conversation, comment, user}
 
 @freezed
 //~ Don't forget to manually add in HIVE Model!
