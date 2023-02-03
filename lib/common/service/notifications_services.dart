@@ -69,7 +69,7 @@ class NotificationService {
     String? desc,
     Map<String, String>? payload,
   }) async {
-    print('START: sendAwesomePushMessage()');
+    print('START: sendPushMessage()');
 
     var url = Uri.parse('https://fcm.googleapis.com/fcm/send');
     var headers = {
@@ -81,11 +81,11 @@ class NotificationService {
 
     var body = json.encode({
       "to": "$token",
-      "notification": {"title": "$title", "body": "$desc"},
-      // "data": {
-      //   "Nick": "Mario",
-      //   "Room": "PortugalVSDenmark",
-      // },
+      "notification": {
+        "title": "$title",
+        "body": "$desc",
+      },
+      "data": payload,
     });
 
     var resp = await http.post(url, headers: headers, body: body);
