@@ -32,7 +32,7 @@ class NotificationService {
     return settings.authorizationStatus == AuthorizationStatus.authorized;
   }
 
-  static void setupNotifications(Function(RemoteMessage) onReceived) {
+  static void setupNotifications(Function(RemoteMessage) onReceived) async {
     print('START: onNotificationReceived()');
 
     // No Need
@@ -44,8 +44,9 @@ class NotificationService {
     });
      */
 
+
     //Handle background notifications
-    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) => onReceived(message));
+    // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) => onReceived(message));
 
     //Handle foreground notifications
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) => onReceived(message));
@@ -64,9 +65,9 @@ class NotificationService {
 
   //> Actually should be on SERVER!
   static void sendPushMessage({
-    String? token,
-    String? title,
-    String? desc,
+    required String token,
+    required String title,
+    required String desc,
     Map<String, String>? payload,
   }) async {
     print('START: sendPushMessage()');
@@ -80,10 +81,10 @@ class NotificationService {
     };
 
     var body = json.encode({
-      "to": "$token",
+      "to": token,
       "notification": {
-        "title": "$title",
-        "body": "$desc",
+        "title": title,
+        "body": desc,
       },
       "data": payload,
     });

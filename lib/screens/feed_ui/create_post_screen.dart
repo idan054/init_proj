@@ -43,7 +43,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     print('START: CreatePostScreen()');
     print('isTagAdded $isComments');
     var textDir = postController.text.isHebrew ? TextDirection.rtl : TextDirection.ltr;
-    var selectedTag = context.uniProvider.selectedTag;
+    // var selectedTag = context.uniProvider.selectedTag; // When filters in use
 
     return Container(
       decoration: BoxDecoration(

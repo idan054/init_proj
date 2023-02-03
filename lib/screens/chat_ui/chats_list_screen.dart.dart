@@ -53,11 +53,11 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    context.uniProvider.removeListener(listenLoadMore);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   context.uniProvider.removeListener(listenLoadMore);
+  //   super.dispose();
+  // }
 
   Future _loadMore({bool refresh = false}) async {
     if (!mounted) return;

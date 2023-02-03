@@ -127,22 +127,18 @@ class FsAdvanced {
     switch (modelType) {
       case ModelTypes.posts:
         listModel = snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
-
-        // Remove locally because can't multiple 'isNotEqualTo' on server (Compare 2 lists)
-        var blockedUsers = context.uniProvider.currUser.blockedUsers;
-        for (var post in [...listModel]) {
-          if (blockedUsers.contains(post.creatorUser!.uid)) {
-            printYellow('Post Remove locally from ${post.creatorUser.email}');
-            listModel.remove(post);
-          }
-        }
+        listModel = _removeBlockedUsers(context, listModel);
+        // _fetchUsersIfNeeded(context, listModel);
         break;
+
       case ModelTypes.chats:
+        // Add unreadCounter to listModel
         listModel = snap.docs.map((doc) {
           var chat = ChatModel.fromJson(doc.data());
           chat = chat.copyWith(unreadCounter: doc.data()['metadata']?['unreadCounter#$currUid']);
           return chat;
         }).toList();
+
         break;
       case ModelTypes.messages:
         listModel = snap.docs.map((doc) => MessageModel.fromJson(doc.data())).toList();
@@ -158,4 +154,52 @@ class FsAdvanced {
 
     return listModel;
   }
+
+  List _removeBlockedUsers(BuildContext context, List listModel) {
+    printYellow('START: _removeBlockedUsers()');
+    var blockedUsers = context.uniProvider.currUser.blockedUsers;
+    for (var post in [...listModel]) {
+      if (blockedUsers.contains(post.creatorUser!.uid)) {
+        print('POST Remove locally from ${post.creatorUser?.email}');
+        listModel.remove(post);
+      }
+    }
+    return listModel;
+  }
+
+  // // void _fetchUsersIfNeeded(BuildContext context, List<PostModel> list) async {
+  // void _fetchUsersIfNeeded(BuildContext context, List<MessageModel> list) async {
+  //   // void _fetchUsersIfNeeded(BuildContext context, List<UserModel> list) async {
+  //   // void _fetchUsersIfNeeded(BuildContext context, List<ReportModel> list) async {
+  //   printYellow('START: _fetchUsersIfNeeded()');
+  //
+  //   print('alreadyFetchedUsers ${alreadyFetchedUsers.length}');
+  //
+  //   var newUsers = <UserModel>[];
+  //   for (var item in list) {
+  //     var user = item.
+  //     fetchUserIfNeeded(context);
+  //   }
+  //   context.uniProvider.updateFetchedUsers([...alreadyFetchedUsers, ...newUsers]);
+  //   var fetchedUsers = context.uniProvider.fetchedUsers;
+  //   print('DONE: _fetchUsersIfNeeded() - fetchedUsers ${fetchedUsers.length}');
+  // }
+  //
+  // Future<UserModel> fetchUserIfNeeded(BuildContext context, String uid) async {
+  //   var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
+  //
+  //   var isAlreadyFetched = // already exist in uniProvider or already in newUsers []
+  //       alreadyFetchedUsers.any((user) => user.uid == uid);
+  //
+  //   if (!isAlreadyFetched) {
+  //     var userData = await Database.docData('users/${userToCheck.email}');
+  //     if (userData == null) {
+  //       printRed('Couldn\'t fetch User ${userToCheck.email}');
+  //     } else {
+  //       var user = UserModel.fromJson(userData);
+  //       return user;
+  //     }
+  //   }
+  //   return userToCheck;
+  // }
 }

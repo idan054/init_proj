@@ -81,7 +81,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
 
   @override
   Widget build(BuildContext context) {
-    var isErr = context.listenUniProvider.errFound; // This will auto rebuild if err found.
+    var isErr = context.listenUniProvider.signupErrFound; // This will auto rebuild if err found.
     var currUser = context.listenUniProvider.currUser; // This will auto rebuild if err found.
 
     // bool genderErr = false;

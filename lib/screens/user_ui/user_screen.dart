@@ -254,7 +254,7 @@ class _UserScreenState extends State<UserScreen> {
                           ),
                           PopupMenuItem(
                             onTap: () => blockUserPopup(context, widget.user),
-                            child: (isBlocked ? 'UnBlock member' : 'Block member').toText(),
+                            child: (isBlocked ? 'Unblock member' : 'Block member').toText(),
                           ),
                         ]
                       ];
@@ -370,7 +370,7 @@ class _UserScreenState extends State<UserScreen> {
                   setState(() {});
                 }
               },
-              child: 'Block'.toText(color: AppColors.primaryLight)));
+              child: (isBlocked ? 'Unblock' :  'Block').toText(color: AppColors.primaryLight)));
     });
   }
 

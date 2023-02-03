@@ -12,6 +12,7 @@ import '../../models/post/post_model.dart';
 import '../../models/user/user_model.dart';
 import '../Database/firebase_db.dart';
 import '../Database/firebase_db.dart' as click;
+import '../notifications_services.dart';
 
 // ChatService Usage At [screen.ChatScreen] // <<---
 // streamMessages() Available At [click.Database] // <<---
@@ -76,7 +77,7 @@ class ChatService {
       collection: 'chats',
       docName: chatId,
       toJson: {
-        'metadata': {'unreadCounter#${currUser.uid}' : 0}
+        'metadata': {'unreadCounter#${currUser.uid}': 0}
       },
     );
 
@@ -172,6 +173,19 @@ class ChatService {
         collection: 'chats/$chatId/messages',
         docName: messageId,
         toJson: messageData.toJson());
+
+    var counter = otherUser.unreadCounter;
+    //~ TODO other user fetch needed to get FCM!
+    // Change to 'You received $counter new messages!'
+
+    // NotificationService.sendPushMessage(
+    //   token: otherUser.fcm!,
+    //   title: 'You received new message',
+    //   // title: '$name Start a new chat with you',
+    //   // title: '$name replied your Ril',
+    //   // title: '$name joined your conversation',
+    //   desc: '',
+    // );
 
     // Database.updateFirestore(
     //   // batch: sendMessageBatch,

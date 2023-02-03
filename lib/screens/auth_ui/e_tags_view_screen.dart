@@ -86,7 +86,7 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
           190.verticalSpace,
           Builder(builder: (context) {
             var isTagsErr =
-                context.listenUniProvider.errFound; // This will auto rebuild if err found.
+                context.listenUniProvider.signupErrFound; // This will auto rebuild if err found.
             return (isTagsErr
                     ? 'Choose at least one interest'
                     : 'Choose interests, so\nothers will know you better')

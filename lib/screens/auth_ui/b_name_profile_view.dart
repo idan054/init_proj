@@ -31,7 +31,7 @@ class _NameProfileViewState extends State<NameProfileView> {
 
   @override
   Widget build(BuildContext context) {
-    var isImageErr = context.listenUniProvider.errFound; // This will auto rebuild if err found.
+    var isImageErr = context.listenUniProvider.signupErrFound; // This will auto rebuild if err found.
     var currUser = context.uniProvider.currUser;
 
     // bool nameErr = false;

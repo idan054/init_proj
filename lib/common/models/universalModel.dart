@@ -21,68 +21,72 @@ class UniProvider with ChangeNotifier {
     // statusCode: 200,
     osType: Platform.isAndroid ? OsTypes.android : OsTypes.ios,
   );
+
+  AppConfigModel? serverConfig;
+  UserModel currUser = const UserModel();
+  bool showFab = true;
+  FilterTypes currFilter = FilterTypes.postWithoutComments;
+  FeedTypes feedType = FeedTypes.members;
+  bool isLoading = false;
+  bool signupErrFound = false;
+  bool postUploaded = false; // To auto refresh when user post.
+  String? selectedTag = 'New'; // When filters will be in use
+  ChatModel? activeChat; // Might be unnecessary
+  List<ChatModel> chatList = [];
+  List<UserModel> fetchedUsers = [];
+
+  void updateFetchedUsers(List<UserModel> data, {bool notify = true}) {
+    fetchedUsers = data;
+    if(notify) notifyListeners();
+  }
+
   AppConfigModel updateLocalVersion(AppConfigModel data) {
     localConfig = data;
     notifyListeners();
     return data;
   }
 
-  AppConfigModel? serverConfig;
   void updateServerConfig(AppConfigModel? data) {
     serverConfig = data;
     notifyListeners();
   }
 
-  bool showFab = true;
   void updateShowFab(bool data) {
     showFab = data;
     notifyListeners();
   }
 
-  FilterTypes currFilter = FilterTypes.postWithoutComments;
   void updateCurrFilter(FilterTypes data, {bool notify = true}) {
     currFilter = data;
     if(notify) notifyListeners();
   }
 
-  FeedTypes feedType = FeedTypes.members;
   void updateFeedType(FeedTypes data) {
     feedType = data;
     notifyListeners();
   }
 
-  bool isLoading = false;
   void updateIsLoading(bool data) {
     isLoading = data;
     notifyListeners();
   }
 
-  bool errFound = false;
   void updateErrFound(bool data, {bool notify = true}) {
-    errFound = data;
+    signupErrFound = data;
     if(notify) notifyListeners();
   }
 
-  bool postUploaded = false;
   void updatePostUploaded(bool data, {bool notify = true}) {
     postUploaded = data;
     if(notify) notifyListeners();
   }
 
-  String? selectedTag = 'New';
   void updateSelectedTag(String data) {
     selectedTag = data;
     notifyListeners();
   }
 
 
-  String? startAtDocId;
-  void updateStartAtDocId(String data) {
-    startAtDocId = data;
-    notifyListeners();
-  }
-
-  UserModel currUser = const UserModel();
   void updateUser(UserModel data) {
     currUser = data;
     notifyListeners();
@@ -90,36 +94,14 @@ class UniProvider with ChangeNotifier {
   }
 
 
-  ChatModel? activeChat;
   void updateActiveChat(ChatModel? data) {
     activeChat = data;
     notifyListeners();
   }
 
-
-  List<ChatModel> chatList = [];
-  void updateChatList(List<ChatModel> data) {
+  void updateChatList(List<ChatModel> data, {bool notify = true}) {
     chatList = data;
-    notifyListeners();
+    if(notify) notifyListeners();
   }
-
-  List<MessageModel> messages = [];
-  void updateMessages(List<MessageModel> data) {
-    messages = data;
-    notifyListeners();
-  }
-
-
-  // List<PostModel>? postsList;
-  // void updatePostsList(List<PostModel> data) {
-  //   postsList = data;
-  //   notifyListeners();
-  // }
-
-// PostModel? lastedUploadedPost;
-// void updatePostUploaded(PostModel data) {
-//   lastedUploadedPost = data;
-//   notifyListeners();
-// }
 }
 
