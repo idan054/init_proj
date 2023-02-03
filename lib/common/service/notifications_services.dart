@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:app_settings/app_settings.dart';
 import 'package:example/common/extensions/context_extensions.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -55,20 +56,17 @@ class NotificationService {
     // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) =>  onReceived(message));
 
     //Handle foreground notifications
-    FirebaseMessaging.onMessageOpenedApp
-        .listen((RemoteMessage message) => onReceived(message));
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) => onReceived(message));
 
     //Handle notifications when the app is opened
-    FirebaseMessaging.onMessage
-        .listen((RemoteMessage message) => onReceived(message));
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) => onReceived(message));
+
   }
 
   static void updateFcmToken(BuildContext context, String? fcm) async {
     var currUser = context.uniProvider.currUser;
     await Database.updateFirestore(
-        collection: 'users',
-        docName: currUser.email.toString(),
-        toJson: {'fcm': fcm});
+        collection: 'users', docName: currUser.email.toString(), toJson: {'fcm': fcm});
     currUser = currUser.copyWith(fcm: fcm);
     context.uniProvider.updateUser(currUser);
   }
@@ -147,5 +145,6 @@ class NotificationService {
     var resp = await http.post(url, headers: headers, body: body);
     print('resp: ${resp.statusCode}');
     print('resp: ${resp.body}');
+
   }
 }

@@ -298,7 +298,7 @@ class _UserScreenState extends State<UserScreen> {
 
                 var postReport = ReportModel(
                   timestamp: DateTime.now(),
-                  reportedBy: context.uniProvider.currUser.email!,
+                  reportedBy: context.uniProvider.currUser.name,
                   // reportedPost: ,
                   reportedUser: user,
                   reasonWhy: reasonController.text,

@@ -98,7 +98,7 @@ class ReportedUserBlock extends StatelessWidget {
               itemBuilder: (context) {
                 return [
                   PopupMenuItem(
-                    child: 'XX'
+                    child: 'Temp'
                         .toText(),
                     onTap: () {}
                   ),

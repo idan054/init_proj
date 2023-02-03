@@ -24,18 +24,19 @@ extension IconDataX on IconData {
 
 extension WidgetX on Widget {
   // My extension:
-  Widget onTap(GestureTapCallback? onTap, {double radius = 99}) => Theme(
+  Widget onTap(GestureTapCallback? onTap, {double radius = 99, bool onLongPress = false, Color? tapColor}) => Theme(
         data: ThemeData(canvasColor: Colors.transparent),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-              // overlayColor: MaterialStateProperty.all(Colors.white12),
+              overlayColor: tapColor != null ? MaterialStateProperty.all(tapColor) : null,
               //   splashColor: Colors.yellow,
               //   focusColor: Colors.yellow,
               //   highlightColor: Colors.yellow,
               //   hoverColor: Colors.yellow,
               borderRadius: BorderRadius.circular(radius),
-              onTap: onTap,
+              onTap: onLongPress ? null : onTap,
+              onLongPress: onLongPress ? onTap : null,
               child: this),
         ),
       );
