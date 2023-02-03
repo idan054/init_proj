@@ -85,9 +85,6 @@ class FsAdvanced {
       case ModelTypes.messages: // Nothing special
       case ModelTypes.users: // Nothing special
       case ModelTypes.reports:
-        if (filter == FilterTypes.reportedRils) {
-          reqBase = reqBase.where('reportStatus', isEqualTo: 'newReport');
-        }
         break;
       case ModelTypes.posts:
         //~ Filters (query) REQUIRE an index. Check log to create it.

@@ -64,13 +64,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.9.0"
-  auto_direction:
-    dependency: "direct main"
-    description:
-      name: auto_direction
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.6"
   auto_route:
     dependency: "direct main"
     description:

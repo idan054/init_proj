@@ -10,9 +10,7 @@ import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -28,7 +26,6 @@ import '../../widgets/app_bar.dart';
 import '../../widgets/components/postBlock_sts.dart';
 import 'create_post_screen.dart';
 import '../user_ui/user_screen.dart';
-import 'dart:io' show Platform;
 
 class CommentsChatScreen extends StatefulWidget {
   // final UserModel otherUser;
@@ -99,155 +96,138 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
   }
 
   Widget buildScreenBody(PostModel post) {
-    return StatefulBuilder(builder: (context, bodyStfState) {
-      var lines = sendController.text.split('\n');
+    return Stack(
+      // alignment: Alignment.bottomCenter,
+      children: [
+        StreamBuilder<List<PostModel>>(
+          //~ Comments works great but currently streamComments NOT connected!
+          // Because comments load from the begging (1,2,3)
+          // while chat need the end (10, 9, 8) theres no match to mix those
+          // U can mix them by replace the comments to load from the end.
+          // Use sample Ril conversion to handle it!
+          stream: Database.streamComments(widget.post.id, limit: 1),
+          initialData: const [],
+          // builder: (context, child) {
+          builder: (context, snapshot) {
+            print('START: builder()');
 
-      return Stack(
-        // alignment: Alignment.bottomCenter,
-        children: [
-          StreamBuilder<List<PostModel>>(
-            //~ Comments works great but currently streamComments NOT connected!
-            // Because comments load from the begging (1,2,3)
-            // while chat need the end (10, 9, 8) theres no match to mix those
-            // U can mix them by replace the comments to load from the end.
-            // Use sample Ril conversion to handle it!
-            stream: Database.streamComments(widget.post.id, limit: 1),
-            initialData: const [],
-            // builder: (context, child) {
-            builder: (context, snapshot) {
-              print('START: builder()');
+            // if(snapshot.hasData && comments.isEmpty){
+            //   comments = snapshot.data ?? [];
+            // }
 
-              // if(snapshot.hasData && comments.isEmpty){
-              //   comments = snapshot.data ?? [];
-              // }
+            // var newMsgs = context.listenCommentPostModelList;
 
-              // var newMsgs = context.listenCommentPostModelList;
+            // if (snapshot.data != null && snapshot.data!.isNotEmpty) {
+            //   PostModel? newComment = snapshot.data?.first;
+            //   _addLatestComment(newComment);
+            // }
 
-              // if (snapshot.data != null && snapshot.data!.isNotEmpty) {
-              //   PostModel? newComment = snapshot.data?.first;
-              //   _addLatestComment(newComment);
-              // }
+            return LazyLoadScrollView(
+                scrollOffset: 1000,
+                onEndOfPage: () async {
+                  print('START: COMMENTS onEndOfPage()');
+                  // context.uniProvider.updateIsFeedLoading(true);
+                  await _loadOlderMessages();
+                  // context.uniProvider.updateIsFeedLoading(false);
+                },
+                child: ListView(
+                  controller: viewController,
+                  children: [
+                    buildComment(post),
+                    const Divider(thickness: 2.5, color: AppColors.chatBubble).px(10),
+                    ListView.builder(
+                        // controller: viewController,
+                        // reverse: true,
+                        shrinkWrap: true,
+                        physics: const ScrollPhysics(),
+                        // controller: ,
+                        itemCount: comments.length,
+                        itemBuilder: (context, i) {
+                          // I use manually reverse because reverse + LazyLoadScrollView()
+                          // make issues while scrolling
+                          // var revI = (comments.length - 1) - i;
 
-              return LazyLoadScrollView(
-                  scrollOffset: 1000,
-                  onEndOfPage: () async {
-                    print('START: COMMENTS onEndOfPage()');
-                    // context.uniProvider.updateIsFeedLoading(true);
-                    await _loadOlderMessages();
-                    // context.uniProvider.updateIsFeedLoading(false);
-                  },
-                  child: NotificationListener<UserScrollNotification>(
-                    onNotification: (notification) {
-                      final ScrollDirection direction = notification.direction;
-                      if (direction == ScrollDirection.forward) {
-                        // Close keyboard if scroll up.
-                        FocusScope.of(context).unfocus();
-                      }
-                      return true;
-                    },
-                    child: ListView(
-                      controller: viewController,
-                      children: [
-                        buildComment(post),
-                        const Divider(thickness: 2.5, color: AppColors.chatBubble).px(10),
-                        ListView.builder(
-                            // controller: viewController,
-                            // reverse: true,
-                            shrinkWrap: true,
-                            physics: const ScrollPhysics(),
-                            // controller: ,
-                            itemCount: comments.length,
-                            itemBuilder: (context, i) {
-                              // I use manually reverse because reverse + LazyLoadScrollView()
-                              // make issues while scrolling
-                              // var revI = (comments.length - 1) - i;
+                          // return FlutterLogo();
+                          // return buildBubble(context, comments[i], (i + 1) == comments.length);
+                          return buildComment(comments[i]);
+                        }),
+                  ],
+                ).pOnly(bottom: 70, top: 50));
+          },
+        ),
+        4.verticalSpace,
 
-                              // return FlutterLogo();
-                              // return buildBubble(context, comments[i], (i + 1) == comments.length);
-                              return buildComment(comments[i]);
-                            }),
-                        Builder(builder: (context) {
-                          // 5 is maxLines in the TextField() this SizedBox increase the padding.
-                          var size = lines.length < 5 ? lines.length * 15.0 : 15.0 * 5;
-                          return SizedBox(height: size);
-                        })
-                      ],
-                    ).pOnly(bottom: 60, top: 50),
-                  ));
-            },
-          ),
-          4.verticalSpace,
+        //~ Title
+        Container(
+          color: AppColors.darkOutline,
+          padding: const EdgeInsets.only(top: 5, bottom: 5),
+          child: Builder(builder: (context) {
+            var commentsCount =
+                '${comments.length}/${(post.commentsLength > comments.length ? post.commentsLength : comments.length)}';
+            if (post.commentsLength == 0 && comments.isEmpty) commentsCount = 'New';
+            var memberCount =
+                post.commentedUsersIds.isEmpty ? 1 : post.commentedUsersIds.length + 1;
+            return Row(
+              children: [
+                15.horizontalSpace,
+                (commentsCount == 'New'
+                        ? Assets.svg.icons.wisdomLightStar
+                        : Assets.svg.icons.messageCommentsLines)
+                    .svg(color: AppColors.grey50, height: 18),
+                5.horizontalSpace,
+                // '${(post.comments?.isEmpty ?? true) ? '' : post.comments?.length} members'
+                commentsCount.toText(color: AppColors.grey50),
+                20.horizontalSpace,
+                Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50, height: 14),
+                ' $memberCount members'.toText(color: AppColors.grey50),
+                // if (isTagScreen)
+                //   '#$selectedTag'.toText(color: AppColors.darkOutline50).pOnly(left: 10, top: 10).centerLeft,
+                const Spacer(),
+                'Back'.toText(bold: true).pad(10).onTap(() {
+                  Navigator.pop(context);
+                }, radius: 5),
+                20.horizontalSpace,
+              ],
+            );
+          }),
+        ).rounded(radius: 15),
 
-          //~ Bottom sheet Title
-          Container(
-            color: AppColors.darkOutline,
-            padding: const EdgeInsets.only(top: 5, bottom: 5),
-            child: Builder(builder: (context) {
-              var commentsCount =
-                  '${comments.length}/${(post.commentsLength > comments.length ? post.commentsLength : comments.length)}';
-              if (post.commentsLength == 0 && comments.isEmpty) commentsCount = 'New';
-              var memberCount =
-                  post.commentedUsersIds.isEmpty ? 1 : post.commentedUsersIds.length + 1;
-              return Row(
-                children: [
-                  15.horizontalSpace,
-                  (commentsCount == 'New'
-                          ? Assets.svg.icons.wisdomLightStar
-                          : Assets.svg.icons.messageCommentsLines)
-                      .svg(color: AppColors.grey50, height: 18),
-                  5.horizontalSpace,
-                  // '${(post.comments?.isEmpty ?? true) ? '' : post.comments?.length} members'
-                  commentsCount.toText(color: AppColors.grey50),
-                  20.horizontalSpace,
-                  Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50, height: 14),
-                  ' $memberCount members'.toText(color: AppColors.grey50),
-                  // if (isTagScreen)
-                  //   '#$selectedTag'.toText(color: AppColors.darkOutline50).pOnly(left: 10, top: 10).centerLeft,
-                  const Spacer(),
-                  'Back'.toText(bold: true).pad(10).onTap(() {
-                    Navigator.pop(context);
-                  }, radius: 5),
-                  20.horizontalSpace,
-                ],
+        //~ TextField
+        Container(
+          color: AppColors.primaryDark,
+          padding: const EdgeInsets.only(top: 5),
+          child: StatefulBuilder(builder: (context, stfState) {
+            return buildTextField(context,
+                controller: sendController,
+                stfSetState: stfState,
+                hintText: 'Join ${post.creatorUser?.name}\'s conversion',
+                // post: post,
+                onTap: () async {
+              UserModel currUser = context.uniProvider.currUser;
+              var comment = PostModel(
+                textContent: sendController.text,
+                id: '${currUser.email}${UniqueKey()}',
+                //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
+                // details will be update if user edit his info
+                creatorUser: currUser,
+                timestamp: DateTime.now(),
+                originalPostId: post.id,
+                enableComments: true,
               );
-            }),
-          ).rounded(radius: 15),
-
-          //~ TextField
-          Container(
-              color: AppColors.primaryDark,
-              padding: EdgeInsets.only(top: 5, bottom: Platform.isIOS ? 15 : 5),
-              child: buildTextField(context,
-                  controller: sendController,
-                  hintText: 'Join ${post.creatorUser?.name}\'s conversion',
-                  // post: post,
-                  onChanged: (value) {
-                bodyStfState(() {});
-              }, onTap: () async {
-                UserModel currUser = context.uniProvider.currUser;
-                var comment = PostModel(
-                  textContent: sendController.text,
-                  id: '${currUser.email}${UniqueKey()}',
-                  //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
-                  // details will be update if user edit his info
-                  creatorUser: currUser,
-                  timestamp: DateTime.now(),
-                  originalPostId: post.id,
-                  enableComments: true,
-                );
-                // context.uniProvider.updatePostUploaded(true);
-                FeedService.addComment(context, comment, post);
-                // viewController.jumpTo(0); // TOP
-                comments.add(comment);
-                setState(() {});
-                // stfState(() {});
-                viewController.jumpTo(viewController.position.maxScrollExtent + 150); // BOTTOM
-                sendController.clear();
-                // post = null;
-              })).bottom
-        ],
-      );
-    });
+              // context.uniProvider.updatePostUploaded(true);
+              FeedService.addComment(context, comment, post);
+              // viewController.jumpTo(0); // TOP
+              comments.add(comment);
+              setState(() {});
+              // stfState(() {});
+              viewController.jumpTo(viewController.position.maxScrollExtent + 150); // BOTTOM
+              sendController.clear();
+              // post = null;
+            });
+          }),
+        ).bottom
+      ],
+    );
   }
 
   // void setInitMessages(List<PostModel> newMsgs) {
@@ -269,12 +249,39 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
     }
   }
 
+  ConstrainedBox buildReplyBubble(BuildContext context, bool currUser, MessageModel message) {
+    return ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: context.width * 0.8),
+        // child: Bubble(
+        child: Container(
+            // elevation: 0,
+            padding: const EdgeInsets.only(top: 8, right: 12, left: 12, bottom: 6),
+            margin: 5.horizontal,
+            decoration: BoxDecoration(
+                color: currUser ? AppColors.primaryLight : AppColors.darkOutline50,
+                borderRadius: BorderRadius.only(
+                  bottomRight: 3.circular,
+                  topRight: (currUser ? 3 : 10).circular,
+                  topLeft: (currUser ? 10 : 3).circular,
+                  bottomLeft: 3.circular,
+                )),
+            // padding: const BubbleEdges.all(8.0),
+            // nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,
+            // nipRadius: 0,
+            // showNip: false,
+            child: buildReplyProfile(
+              context,
+              message.postReply!,
+              // actionButton: 'View Ril'.toText(medium: true).pad(13).onTap(() {
+              //   TODO LATER LIST: Add View Ril Reply OnTap
+              // }, radius: 10),
+            )));
+  }
+
   Builder buildComment(PostModel comment) {
     return Builder(builder: (context) {
       var postAgo = postTime(comment.timestamp!);
       var isCreatorComment = comment.creatorUser?.uid == widget.post.creatorUser?.uid;
-      var isCurrUserComment = comment.creatorUser?.uid == context.uniProvider.currUser.uid;
-      var isCurrUserAdmin = context.uniProvider.currUser.userType == UserTypes.admin;
 
       return Row(
         children: [
@@ -292,7 +299,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
             context.router.push(UserRoute(user: comment.creatorUser!));
           }),
           6.horizontalSpace,
-          Builder(builder: (dialogContext) {
+          Builder(builder: (context) {
             var isHebComment = comment.textContent.isHebrew;
             return Container(
               color: isCreatorComment ? AppColors.primaryOriginal : AppColors.chatBubble,
@@ -310,11 +317,8 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                               .toText(fontSize: 14, bold: true, color: AppColors.white),
                       10.horizontalSpace,
                       isHebComment
-                          ? '${comment.creatorUser?.name}'.toText(
-                              fontSize: 14,
-                              bold: true,
-                              color: AppColors.white,
-                            )
+                          ? '${comment.creatorUser?.name}'
+                              .toText(fontSize: 14, bold: true, color: AppColors.white)
                           : postAgo.toText(color: AppColors.grey50, fontSize: 12)
                     ],
                   ),
@@ -328,20 +332,10 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                       ))
                 ],
               ),
-            ).rounded(radius: 12).expanded();
+            ).rounded(radius: 10).expanded();
           }),
         ],
-      ).px(15).py(10).onTap(() async {
-        if (isCurrUserComment || isCurrUserAdmin) {
-          print('COMMENT DELETE LONG CLICKED');
-          deleteRilOrCommentPopup(context, comment, onDelete: () {
-            comments.remove(comment);
-            setState(() {});
-          });
-        } else {
-          reportRilOrCommentPopup(context, comment, );
-        }
-      }, onLongPress: true, radius: 10);
+      ).px(15).py(10);
     });
   }
 }
@@ -349,7 +343,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
 Widget buildTextField(
   BuildContext context, {
   required TextEditingController controller,
-  ValueChanged<String>? onChanged,
+  required StateSetter stfSetState,
   GestureTapCallback? onTap,
   PostModel? post,
   GestureTapCallback? postOnCloseReply,
@@ -376,7 +370,7 @@ Widget buildTextField(
                 ? TextAlign.end
                 : TextAlign.start,
         cursorColor: AppColors.white,
-        onChanged: onChanged,
+        onChanged: (val) => stfSetState(() {}),
         decoration: InputDecoration(
             filled: true,
             // fillColor: AppColors.primaryLight,
@@ -393,13 +387,12 @@ Widget buildTextField(
             )),
       )
           .roundedOnly(
-            bottomLeft: 12,
-            topLeft: post != null ? 3 : 12,
-            topRight: post != null ? 3 : 12,
-            bottomRight: 12,
-          ),
-      (Platform.isIOS ? 5 : 3).verticalSpace,
-
+            bottomLeft: 10,
+            topLeft: post != null ? 3 : 10,
+            topRight: post != null ? 3 : 10,
+            bottomRight: 10,
+          )
+          .pOnly(bottom: 6),
     ],
   ).px(8);
 }

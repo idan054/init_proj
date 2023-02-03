@@ -44,6 +44,5 @@ const _$ReportStatusEnumMap = {
 const _$ReportTypeEnumMap = {
   ReportType.ril: 'ril',
   ReportType.conversation: 'conversation',
-  ReportType.comment: 'comment',
   ReportType.user: 'user',
 };

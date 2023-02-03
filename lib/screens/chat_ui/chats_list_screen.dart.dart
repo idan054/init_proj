@@ -35,29 +35,34 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
   var splashLoader = true;
   bool initLoader = true;
   List<ChatModel> chatList = [];
+  Future? listenLoadMore;
 
   // todo POST call creatorUser doc on initState
   // to make sure data is updated (not old after user edit)
   // also use users cubit so it will GET every user once each session
-
-  void listenLoadMore() => _loadMore(refresh: true);
 
   @override
   void initState() {
     // TODO: ADD ON POST MVP ONLY: Get 1 doc instead all users chat.
     // this listener is based Database.streamUnreadCounter(context),
     // add a 'lastMessageFromId' field in UserModel to get only the need to update doc!
+
+    // _loadMore();
+
+    // listenLoadMore = _loadMore(refresh: true);
     //> Uncomment this to auto refresh chats when new message coming
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => context.uniProvider.addListener(listenLoadMore));
+    WidgetsBinding.instance.addPostFrameCallback((_) =>
+    // context.uniProvider.addListener(() => listenLoadMore)
+    context.uniProvider.addListener(() => _loadMore(refresh: true)));
+
     super.initState();
   }
 
-  @override
-  void dispose() {
-    context.uniProvider.removeListener(listenLoadMore);
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  // context.uniProvider.removeListener(() => listenLoadMore);
+  // super.dispose();
+  // }
 
   Future _loadMore({bool refresh = false}) async {
     if (!mounted) return;
@@ -114,7 +119,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
           }
 
           if (chatList.isEmpty) {
-            return 'Reply Ril to start new chat!'.toText(color: AppColors.grey50).center;
+            return 'Reply Ril to start new chat!'
+                .toText(color: AppColors.grey50)
+                .center;
           }
 
           return Container(
@@ -132,7 +139,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                 itemCount: chatList.length,
                 itemBuilder: (context, i) {
                   if (chatList.isEmpty) {
-                    return 'Your conversations \nwill be show here'.toText().center;
+                    return 'Your conversations \nwill be show here'
+                        .toText()
+                        .center;
                   }
 
                   // var chatList = context.listenchatListModelList;
@@ -207,14 +216,16 @@ class ChatBlockSts extends StatelessWidget {
               // CircleAvatar(
               Container(
                   // radius: 28,
-                  height: 56,
-                  width: 56,
+                height: 56,
+                width: 56,
                   color: AppColors.darkBg,
-                  child: FadeInImage.memoryNetwork(
+                  child:
+                  FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
                     image: otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder,
                     fit: BoxFit.cover,
-                  )).roundedFull,
+                  )
+              ).roundedFull,
               buildOnlineBadge(ratio: 1.0)
             ],
           ),

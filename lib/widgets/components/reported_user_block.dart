@@ -1,14 +1,24 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, sort_child_properties_last
 
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/widgets/components/postBlock_sts.dart';
+import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
+import '../../common/models/post/post_model.dart';
 import '../../common/models/report/report_model.dart';
+import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/mixins/assets.gen.dart';
+import '../../common/service/mixins/fonts.gen.dart';
 import '../../common/themes/app_colors.dart';
 import '../../common/themes/app_styles.dart';
+import '../../screens/feed_ui/comments_chat_screen.dart';
 import '../../screens/user_ui/user_screen.dart';
+import '../clean_snackbar.dart';
+import '../my_dialog.dart';
+import 'package:intl/intl.dart' as intl;
 
 class ReportedUserBlock extends StatelessWidget {
   final ReportModel report;
@@ -30,13 +40,9 @@ class ReportedUserBlock extends StatelessWidget {
             children: [
               buildExpandableText(reasonWhy,
                       maxLines: 4,
-                      textAlign:
-                          reasonWhy.isHebrew ? TextAlign.right : TextAlign.left,
-                      textDirection: reasonWhy.isHebrew
-                          ? TextDirection.rtl
-                          : TextDirection.ltr,
-                      style: AppStyles.text16PxRegular
-                          .copyWith(color: AppColors.white))
+                      textAlign: reasonWhy.isHebrew ? TextAlign.right : TextAlign.left,
+                      textDirection: reasonWhy.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+                      style: AppStyles.text16PxRegular.copyWith(color: AppColors.white))
                   .pOnly(right: 20, bottom: 10)
                   .advancedSizedBox(context, maxWidth: true),
             ],
@@ -58,11 +64,8 @@ class ReportedUserBlock extends StatelessWidget {
         child: ListTile(
           contentPadding: EdgeInsets.zero,
           // title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.grey50),
-          title: '${reportedUser.name}'.toText(
-              fontSize: 14,
-              bold: true,
-              color: AppColors.white,
-              textAlign: TextAlign.left),
+          title: '${reportedUser.name}'
+              .toText(fontSize: 14, bold: true, color: AppColors.white, textAlign: TextAlign.left),
           subtitle: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -77,23 +80,28 @@ class ReportedUserBlock extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundImage: NetworkImage('${reportedUser.photoUrl}'),
+                backgroundImage: NetworkImage('${reportedUser!.photoUrl}'),
                 backgroundColor: AppColors.darkOutline,
               ),
             ],
-          ).pad(0).onTap(() {
-            print('PROFILE CLICKED');
-            context.router.push(UserRoute(user: reportedUser));
-          }, radius: 5),
+          ).pad(0).onTap(
+             () {
+                      print('PROFILE CLICKED');
+                      context.router.push(UserRoute(user: reportedUser));
+                    },
+              radius: 5),
           // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
           trailing: PopupMenuButton(
-              icon:
-                  Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50),
+              icon: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50),
               shape: 10.roundedShape,
               color: AppColors.darkOutline50,
               itemBuilder: (context) {
                 return [
-                  PopupMenuItem(child: 'Temp'.toText(), onTap: () {}),
+                  PopupMenuItem(
+                    child: 'XX'
+                        .toText(),
+                    onTap: () {}
+                  ),
                 ];
               }),
         ));

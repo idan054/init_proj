@@ -15,6 +15,7 @@ Widget rilFlushBar(BuildContext context, String text,
     borderRadius: BorderRadius.all(10.circular),
     isDismissible: true,
     duration: (duration ?? 3).seconds,
+    // titleText: "Hello Hero".toText(color: AppColors.darkBg, medium: true, fontSize: 16),
     messageText: Shimmer.fromColors(
         baseColor: textColor,
         highlightColor: isShimmer ? AppColors.darkOutline50 : textColor,

@@ -41,10 +41,8 @@ import 'package:intl/intl.dart' as intl;
 class PostBlock extends StatelessWidget {
   final PostModel post;
   final bool isUserPage;
-  final bool isReported;
 
-  const PostBlock(this.post, {this.isUserPage = false, this.isReported = false, Key? key})
-      : super(key: key);
+  const PostBlock(this.post, {this.isUserPage = false, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -158,13 +156,6 @@ class PostBlock extends StatelessWidget {
               color: AppColors.darkOutline50,
               itemBuilder: (context) {
                 return [
-                  if (isReported)
-                    PopupMenuItem(
-                      child: 'Cancel Report'.toText(),
-                      onTap: () async {
-                        reportRilOrCommentPopup(context, post, isReported: true);
-                      },
-                    ),
                   PopupMenuItem(
                     child: (isAdmin && !isCurrUser
                             ? 'Admin Delete Ril'
@@ -176,17 +167,69 @@ class PostBlock extends StatelessWidget {
                         //> Open DELETE POPUP
                         ? () {
                             print('SETTINGS DELETE CLICKED');
-                            deleteRilOrCommentPopup(context, post);
+                            deleteRilPopup(context);
                           }
                         //> Open Report POPUP
                         : () async {
                             print('SETTINGS REPORT CLICKED');
-                            reportRilOrCommentPopup(context, post);
+                            reportRilPopup(context);
                           },
                   ),
                 ];
               }),
         ));
+  }
+
+  void reportRilPopup(BuildContext context) {
+    Future.delayed(150.milliseconds).then((_) {
+      showRilDialog(context,
+          title: 'Report this Ril?',
+          desc: '"${post.textContent}"'.toText(fontSize: 13),
+          barrierDismissible: true,
+          secondaryBtn: TextButton(
+              onPressed: () {
+                var nameEndAt = post.textContent.length < 20 ? post.textContent.length : 20;
+                var docName = 'REPORT:'
+                    '${post.textContent.substring(0, nameEndAt).toString() + UniqueKey().toString()}';
+
+                var postReport = ReportModel(
+                  timestamp: DateTime.now(),
+                  reportedBy: context.uniProvider.currUser.email!,
+                  reportedPost: post,
+                  // reportedUser: user,
+                  // reasonWhy: reasonController.text,
+                  reportStatus: ReportStatus.newReport,
+                  reportType: post.enableComments ? ReportType.conversation : ReportType.ril,
+                );
+
+                Database.updateFirestore(
+                    collection: 'reports/Reported rils/rils',
+                    docName: docName,
+                    toJson: postReport.toJson());
+                Navigator.of(context).pop();
+                rilFlushBar(context, 'Thanks, We\'ll handle it asap');
+              },
+              child: 'Report'.toText(color: AppColors.primaryLight)));
+    });
+  }
+
+  void deleteRilPopup(BuildContext context) {
+    var myPost = post.creatorUser?.uid == context.uniProvider.currUser.uid;
+
+    Future.delayed(150.milliseconds).then((_) {
+      showRilDialog(context,
+          // title: 'Delete your Ril?',
+          title: 'Delete ${myPost ? 'Your' : post.creatorUser?.email} Ril?',
+          desc: '"${post.textContent}"'.toText(fontSize: 13),
+          barrierDismissible: true,
+          secondaryBtn: TextButton(
+              onPressed: () {
+                Database.deleteDoc(collection: 'posts', docName: post.id);
+                Navigator.of(context).pop();
+                rilFlushBar(context, 'Your Ril has been deleted');
+              },
+              child: 'Delete'.toText(color: AppColors.primaryLight)));
+    });
   }
 
   Widget buildActionRow(BuildContext context) {
@@ -199,10 +242,10 @@ class PostBlock extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        post.enableComments && post.originalPostId == null // AKA its not comment
+        post.enableComments
             ? Container(
-                color: commentEmpty ? AppColors.primaryOriginal : AppColors.transparent,
-                child: Row(
+          color: commentEmpty ? AppColors.primaryOriginal : AppColors.transparent,
+              child: Row(
                   children: [
                     // if(!commentEmpty)
                     (commentEmpty
@@ -215,7 +258,7 @@ class PostBlock extends StatelessWidget {
                     title.toText(color: AppColors.grey50, fontSize: 12)
                   ],
                 ).px(7).py(4),
-              ).roundedFull
+            ).roundedFull
             // .onTap(() {}, radius: 10)
             : const SizedBox(height: 20),
         const Spacer(),
@@ -277,82 +320,6 @@ class PostBlock extends StatelessWidget {
       );
     });
   }
-}
-
-void reportRilOrCommentPopup(BuildContext context, PostModel post, {bool isReported = false}) {
-  var isCommentPost = post.originalPostId != null;
-  var type = isCommentPost ? 'Comment' : 'Ril';
-
-  Future.delayed(150.milliseconds).then((_) {
-    showRilDialog(context,
-        title: isReported ? 'Cancel this $type Report?' : 'Report this $type?',
-        desc: '"${post.textContent}"'.toText(fontSize: 13),
-        barrierDismissible: true,
-        // showCancelBtn: !isReported,
-        secondaryBtn: TextButton(
-            onPressed: () {
-              var nameEndAt = post.textContent.length < 20 ? post.textContent.length : 20;
-              var docName = 'REPORT:'
-                  '${post.textContent.substring(0, nameEndAt).toString() + UniqueKey().toString()}';
-
-              var postReport = ReportModel(
-                timestamp: DateTime.now(),
-                reportedBy: context.uniProvider.currUser.name,
-                reportedPost: post,
-                // reportedUser: user,
-                // reasonWhy: reasonController.text,
-                reportStatus: isReported ? ReportStatus.completedReport : ReportStatus.newReport,
-                reportType: isCommentPost
-                    ? ReportType.comment
-                    : (post.enableComments ? ReportType.conversation : ReportType.ril),
-              );
-
-              Database.updateFirestore(
-                  collection: 'reports/Reported rils/rils',
-                  docName: docName,
-                  toJson: postReport.toJson());
-              Navigator.of(context).pop();
-              if (isReported) {
-                rilFlushBar(context, 'Thanks, $type handled successfully');
-              } else {
-                rilFlushBar(context, 'Thanks, We\'ll handle it asap');
-              }
-            },
-            child:
-                (isReported ? 'Cancel Report' : 'Report').toText(color: AppColors.primaryLight)));
-  });
-}
-
-void deleteRilOrCommentPopup(BuildContext context, PostModel post, {Function? onDelete}) {
-  var myPost = post.creatorUser?.uid == context.uniProvider.currUser.uid;
-  var isCommentPost = post.originalPostId != null;
-  var type = isCommentPost ? 'Comment' : 'Ril';
-
-  Future.delayed(150.milliseconds).then((_) {
-    showRilDialog(context,
-        // title: 'Delete your Ril?',
-        title: 'Delete ${myPost ? 'Your' : post.creatorUser?.email} $type?',
-        desc: '"${post.textContent}"'.toText(fontSize: 13),
-        barrierDismissible: true,
-        secondaryBtn: TextButton(
-            onPressed: () {
-              if (isCommentPost) {
-                Database.deleteDoc(
-                    collection: 'posts', docName: '${post.originalPostId}/comments/${post.id}');
-              } else {
-                Database.deleteDoc(collection: 'posts', docName: post.id);
-              }
-
-              if (onDelete == null) {
-                Navigator.of(context).pop();
-                rilFlushBar(context, '$type has been successfully deleted');
-              } else {
-                onDelete();
-                Navigator.of(context).pop();
-              }
-            },
-            child: 'Delete'.toText(color: AppColors.primaryLight)));
-  });
 }
 
 Positioned buildOnlineBadge({double ratio = 1.0}) {
