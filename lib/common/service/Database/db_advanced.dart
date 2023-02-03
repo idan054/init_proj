@@ -122,22 +122,37 @@ class FsAdvanced {
   Future<List> docsToModelList(
       BuildContext context, QuerySnapshot<Map<String, dynamic>> snap, ModelTypes modelType) async {
     print('START: docsToModelList() - ${modelType.name}');
-    var currUid = context.uniProvider.currUser.uid;
+    var currUser = context.uniProvider.currUser;
     List listModel;
     switch (modelType) {
       case ModelTypes.posts:
         listModel = snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
         listModel = _removeBlockedUsers(context, listModel);
-        // _fetchUsersIfNeeded(context, listModel);
+
+        for (var post in [...listModel]) {
+          listModel.remove(post);
+          var user = await getUserByEmailIfNeeded(context, post.creatorUser?.email);
+          post = post.copyWith(creatorUser: user);
+          listModel.add(post);
+        }
         break;
 
       case ModelTypes.chats:
         // Add unreadCounter to listModel
         listModel = snap.docs.map((doc) {
           var chat = ChatModel.fromJson(doc.data());
-          chat = chat.copyWith(unreadCounter: doc.data()['metadata']?['unreadCounter#$currUid']);
+          chat = chat.copyWith(
+              unreadCounter: doc.data()['metadata']?['unreadCounter#${currUser.uid}']);
           return chat;
         }).toList();
+
+        // for (var chat in [...listModel]) {
+        //   var otherUser = chat.users?.firstWhere((user) => user.email != currUser.email);
+        //   listModel.remove(chat);
+        //   var user = await getUserByEmailIfNeeded(context, otherUser?.email);
+        //   chat = chat.copyWith(users: [user, currUser]);
+        //   listModel.add(chat);
+        // }
 
         break;
       case ModelTypes.messages:
@@ -167,39 +182,28 @@ class FsAdvanced {
     return listModel;
   }
 
-  // // void _fetchUsersIfNeeded(BuildContext context, List<PostModel> list) async {
-  // void _fetchUsersIfNeeded(BuildContext context, List<MessageModel> list) async {
-  //   // void _fetchUsersIfNeeded(BuildContext context, List<UserModel> list) async {
-  //   // void _fetchUsersIfNeeded(BuildContext context, List<ReportModel> list) async {
-  //   printYellow('START: _fetchUsersIfNeeded()');
-  //
-  //   print('alreadyFetchedUsers ${alreadyFetchedUsers.length}');
-  //
-  //   var newUsers = <UserModel>[];
-  //   for (var item in list) {
-  //     var user = item.
-  //     fetchUserIfNeeded(context);
-  //   }
-  //   context.uniProvider.updateFetchedUsers([...alreadyFetchedUsers, ...newUsers]);
-  //   var fetchedUsers = context.uniProvider.fetchedUsers;
-  //   print('DONE: _fetchUsersIfNeeded() - fetchedUsers ${fetchedUsers.length}');
-  // }
-  //
-  // Future<UserModel> fetchUserIfNeeded(BuildContext context, String uid) async {
-  //   var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
-  //
-  //   var isAlreadyFetched = // already exist in uniProvider or already in newUsers []
-  //       alreadyFetchedUsers.any((user) => user.uid == uid);
-  //
-  //   if (!isAlreadyFetched) {
-  //     var userData = await Database.docData('users/${userToCheck.email}');
-  //     if (userData == null) {
-  //       printRed('Couldn\'t fetch User ${userToCheck.email}');
-  //     } else {
-  //       var user = UserModel.fromJson(userData);
-  //       return user;
-  //     }
-  //   }
-  //   return userToCheck;
-  // }
+  // Also update uniProvider
+  // This actually called on openChat(), PostModel & ChatModel
+  static Future<UserModel> getUserByEmailIfNeeded(BuildContext context, String? userEmail) async {
+    print('START: getUserByEmailIfNeeded()');
+    var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
+    var isAlreadyFetched = alreadyFetchedUsers.any((user) => user.email == userEmail);
+
+    UserModel? existUser;
+    if (isAlreadyFetched) {
+      printGreen('USER STATUS: $userEmail ALREADY FETCHED (:');
+      existUser = alreadyFetchedUsers.firstWhere((user) => user.email == userEmail);
+    } else {
+      var userData = await Database.docData('users/$userEmail');
+      if (userData == null) {
+        printRed('Couldn\'t fetch User $userEmail');
+      } else {
+        printOrange('USER STATUS: $userEmail FETCHED SUCCESSFULLY!');
+        var newUser = UserModel.fromJson(userData);
+        context.uniProvider.updateFetchedUsers([newUser, ...alreadyFetchedUsers]);
+        return newUser;
+      }
+    }
+    return existUser!;
+  }
 }

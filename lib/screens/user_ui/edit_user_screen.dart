@@ -89,32 +89,31 @@ class _EditUserScreenState extends State<EditUserScreen> {
                   currUser.copyWith(name: nameController.text, bio: bioController.text);
               context.uniProvider.updateUser(updatedUser);
 
-              // TODO Update all chats 'creatorUser' Map
-
-              //! TODO TODO ADD ON POST MVP ONLY: Edit user doc update
-              // instead hundred of requests in every bio update (Update every made user comment, Ril...)
-              // just get doc by id reference + client cache isExist()
-
               Database.updateFirestore(
                   collection: 'users',
                   docName: '${updatedUser.email}',
                   toJson: updatedUser.toJson());
 
-              var snap = await FsAdvanced.db
-                  .collection('posts')
-                  .orderBy('timestamp', descending: true)
-                  .where('creatorUser.uid', isEqualTo: updatedUser.uid)
-                  .get();
+              //~ The NEW method
+              var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
+              context.uniProvider.updateFetchedUsers([updatedUser, ...alreadyFetchedUsers]);
 
-              List posts = await FsAdvanced().docsToModelList(context, snap, ModelTypes.posts);
-              for (PostModel post in posts) {
-                var updatedPost = post.copyWith(creatorUser: updatedUser);
-                // print('posts.length ${posts.length}');
-                // print('updatedPost.toJson() ${updatedPost.toJson()}');
-                Database.updateFirestore(
-                    collection: 'posts', docName: updatedPost.id, toJson: updatedPost.toJson());
-                // return;
-              }
+              //! Expensive Way! REPLACED by getUserByEmailIfNeeded() method
+              // var snap = await FsAdvanced.db
+              //     .collection('posts')
+              //     .orderBy('timestamp', descending: true)
+              //     .where('creatorUser.uid', isEqualTo: updatedUser.uid)
+              //     .get();
+              //
+              // List posts = await FsAdvanced().docsToModelList(context, snap, ModelTypes.posts);
+              // for (PostModel post in posts) {
+              //   var updatedPost = post.copyWith(creatorUser: updatedUser);
+              //   // print('posts.length ${posts.length}');
+              //   // print('updatedPost.toJson() ${updatedPost.toJson()}');
+              //   Database.updateFirestore(
+              //       collection: 'posts', docName: updatedPost.id, toJson: updatedPost.toJson());
+              //   // return;
+              // }
 
               context.router.replace(UserRoute(user: updatedUser, fromEditScreen: true));
             }, radius: 10).pOnly(right: 5)

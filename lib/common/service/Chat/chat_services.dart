@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
@@ -10,6 +11,7 @@ import 'package:intl/intl.dart';
 import '../../../screens/chat_ui/chat_screen.dart' as screen;
 import '../../models/post/post_model.dart';
 import '../../models/user/user_model.dart';
+import '../Database/db_advanced.dart';
 import '../Database/firebase_db.dart';
 import '../Database/firebase_db.dart' as click;
 import '../notifications_services.dart';
@@ -25,27 +27,17 @@ class ChatService {
     ChatModel? existChat,
   }) async {
     print('START: openChat()');
-
-    //! todo existChat UnChecked Yet!
-    // if(existChat != null) {
-    //   context.router.push(ChatRoute(
-    //     otherUser: existChat.users,
-    //     postReply: postReply,
-    //     chatId: existChat.id.toString(),
-    //     chat: existChat,
-    //   ));
-    // }
-
     var currUser = context.uniProvider.currUser;
-
     String? chatId;
     ChatModel? chat;
+    otherUser = await FsAdvanced.getUserByEmailIfNeeded(context, otherUser.email);
+
     var userIds = [currUser.uid, otherUser.uid];
     var reqBase = Database.db.collection('chats').limit(1);
 
     var snap = await reqBase.where('usersIds', isEqualTo: userIds).get();
     if (snap.docs.isEmpty) {
-      // Check the reversed option.
+      // Check also the reversed option...
       snap = await reqBase.where('usersIds', isEqualTo: userIds.reversed.toList()).get();
     }
 
@@ -122,7 +114,7 @@ class ChatService {
     required UserModel otherUser,
     PostModel? postReply,
   }) {
-    print('START: sendMessage()');
+    printWhite('START: sendMessage()');
 
     var fromId = context.uniProvider.currUser.uid;
     var toId = otherUser.uid;
@@ -132,9 +124,8 @@ class ChatService {
     // docName result example: [idanb] מה קורה [#b4918]
     String messageId = '[${fromId?.substring(0, 5)}] '
         '${content.length < 15 ? content : content.substring(0, 15)}'
-        ' ${UniqueKey()}';
+        ' ${UniqueKey()}'.replaceAll('/', '\\');
 
-    // For some reason '/' Make issues!
 
     var messageData = MessageModel(
       id: messageId,
