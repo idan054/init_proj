@@ -23,7 +23,6 @@ Future<void> _handleNotificationReceived(RemoteMessage message) async {
   print("Handling a background message: ${message.toMap()}");
 }
 
-
 /// Add More Pre-Actions At [click.SplashScreen]
 void main() async {
   printWhite('START main()!');

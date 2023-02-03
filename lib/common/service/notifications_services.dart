@@ -65,8 +65,8 @@ class NotificationService {
   //> Actually should be on SERVER!
   static void sendPushMessage({
     String? token,
-    String? notifyBody,
-    String? notifyTitle,
+    String? title,
+    String? desc,
     Map<String, String>? payload,
   }) async {
     print('START: sendAwesomePushMessage()');
@@ -80,18 +80,12 @@ class NotificationService {
     };
 
     var body = json.encode({
-      "to":
-          "cRd4mWnARyeBfVlaXmuBxt:APA91bHPlPdm06awpkzavO7Q5hLtUb-Kdqgz2RJH_kkfoqX5lxv2GG_4OVCskvGBDDijl9LwuChm6jClhh-Qd5wELKwYb7fcp9-rB4KeLXqP8h1EQNOgaVCoazvhoqXFtxxN69Xrh1Ld",
-      "title": "Portugal vs. Denmark",
-      "body": "great match!",
-      "data": {
-        "Nick": "Mario",
-        "Room": "PortugalVSDenmark",
-      },
-      "notification": {
-        "title": "Portugal vs. Denmark",
-        "body": "great match!",
-      },
+      "to": "$token",
+      "notification": {"title": "$title", "body": "$desc"},
+      // "data": {
+      //   "Nick": "Mario",
+      //   "Room": "PortugalVSDenmark",
+      // },
     });
 
     var resp = await http.post(url, headers: headers, body: body);
