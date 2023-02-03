@@ -106,18 +106,21 @@ dev_dependencies:
   auto_route_generator: ^5.0.3
   flutter_gen_runner: ^5.1.0+1
   freezed: ^2.1.0+1
+  flutter_launcher_icons: 0.11.0
 
 
-  #  flutter_launcher_name: ^0.0.1
+#    flutter_launcher_name: ^0.0.1
 #  flutter_launcher_name: # flutter pub get
 
 # flutter pub run flutter_launcher_icons:main
 # "WARNING: Icons with alpha channel are not allowed in the Apple App Store.
 # Set "remove_alpha_ios: true" to remove it."
 flutter_icons:
-  android: true
   ios: true
+  android: "ic_launcher"
   image_path: "assets/images/app_icon.png"
+#  android: "notification_icon"
+#  image_path: "assets/images/LogoCircularRilTopiaLogo.png"
 
 
 flutter_gen:

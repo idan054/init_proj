@@ -30,7 +30,7 @@ class ChatService {
     var currUser = context.uniProvider.currUser;
     String? chatId;
     ChatModel? chat;
-    otherUser = await FsAdvanced.getUserByEmailIfNeeded(context, otherUser.email);
+    otherUser = await FsAdvanced.getUserByEmailIfNeeded(context, otherUser);
 
     var userIds = [currUser.uid, otherUser.uid];
     var reqBase = Database.db.collection('chats').limit(1);
@@ -113,10 +113,11 @@ class ChatService {
     required String content,
     required UserModel otherUser,
     PostModel? postReply,
-  }) {
+  }) async {
     printWhite('START: sendMessage()');
 
-    var fromId = context.uniProvider.currUser.uid;
+    var currUser = context.uniProvider.currUser;
+    var fromId = currUser.uid;
     var toId = otherUser.uid;
     var timeStamp = DateTime.now();
     String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);
@@ -165,18 +166,18 @@ class ChatService {
         docName: messageId,
         toJson: messageData.toJson());
 
-    var counter = otherUser.unreadCounter;
-    //~ TODO other user fetch needed to get FCM!
-    // Change to 'You received $counter new messages!'
 
-    // NotificationService.sendPushMessage(
-    //   token: otherUser.fcm!,
-    //   title: 'You received new message',
-    //   // title: '$name Start a new chat with you',
-    //   // title: '$name replied your Ril',
-    //   // title: '$name joined your conversation',
-    //   desc: '',
-    // );
+
+    var title = postReply != null ? '${currUser.name} replied your Ril' : '${currUser.name} Sent you a message';
+    print(' otherUser.fcm ${ otherUser.fcm}');
+    NotificationService.sendPushMessage(
+      token: otherUser.fcm!,
+      title: title,
+      // title: 'You received new message!',
+      // title: '$name Start a new chat with you',
+      // title: '$name joined your conversation',
+      desc: '',
+    );
 
     // Database.updateFirestore(
     //   // batch: sendMessageBatch,

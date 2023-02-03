@@ -56,6 +56,7 @@ class NotificationService {
   }
 
   static void updateFcmToken(BuildContext context, String? fcm) async {
+    print('START: updateFcmToken()');
     var currUser = context.uniProvider.currUser;
     await Database.updateFirestore(
         collection: 'users', docName: currUser.email.toString(), toJson: {'fcm': fcm});
@@ -86,11 +87,12 @@ class NotificationService {
         "title": title,
         "body": desc,
       },
+      "sound": "alert.wav", // NOT WORKING RN
       "data": payload,
     });
 
     var resp = await http.post(url, headers: headers, body: body);
-    print('resp: ${resp.statusCode}');
-    print('resp: ${resp.body}');
+    print('sendPushMessage() resp: ${resp.statusCode}');
+    print('sendPushMessage() resp: ${resp.body}');
   }
 }

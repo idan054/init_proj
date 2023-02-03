@@ -271,6 +271,8 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
 
   Builder buildComment(PostModel comment) {
     return Builder(builder: (context) {
+      var userName = comment.creatorUser?.name ?? '';
+      var shortName = userName.length > 23 ? userName.substring(0, 23) + '...'.toString() : userName;
       var postAgo = postTime(comment.timestamp!);
       var isCreatorComment = comment.creatorUser?.uid == widget.post.creatorUser?.uid;
       var isCurrUserComment = comment.creatorUser?.uid == context.uniProvider.currUser.uid;
@@ -306,15 +308,10 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                     children: [
                       isHebComment
                           ? postAgo.toText(color: AppColors.grey50, fontSize: 12)
-                          : '${comment.creatorUser?.name}'
-                              .toText(fontSize: 14, bold: true, color: AppColors.white),
+                          : shortName.toText(fontSize: 14, bold: true, color: AppColors.white),
                       10.horizontalSpace,
                       isHebComment
-                          ? '${comment.creatorUser?.name}'.toText(
-                              fontSize: 14,
-                              bold: true,
-                              color: AppColors.white,
-                            )
+                          ? shortName.toText(fontSize: 14, bold: true, color: AppColors.white)
                           : postAgo.toText(color: AppColors.grey50, fontSize: 12)
                     ],
                   ),
@@ -339,7 +336,10 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
             setState(() {});
           });
         } else {
-          reportRilOrCommentPopup(context, comment, );
+          reportRilOrCommentPopup(
+            context,
+            comment,
+          );
         }
       }, onLongPress: true, radius: 10);
     });
@@ -370,11 +370,8 @@ Widget buildTextField(
         keyboardType: TextInputType.multiline,
         minLines: 1,
         maxLines: 5,
-        textAlign: controller.text.isEmpty
-            ? TextAlign.start
-            : includeHeb
-                ? TextAlign.end
-                : TextAlign.start,
+        textDirection: includeHeb ? TextDirection.rtl : TextDirection.ltr,
+        textAlign: includeHeb ? TextAlign.right : TextAlign.left,
         cursorColor: AppColors.white,
         onChanged: onChanged,
         decoration: InputDecoration(
@@ -391,69 +388,13 @@ Widget buildTextField(
                   controller.text.isNotEmpty && (controller.text.replaceAll(' ', '').isNotEmpty),
               onTap: onTap,
             )),
-      )
-          .roundedOnly(
-            bottomLeft: 12,
-            topLeft: post != null ? 3 : 12,
-            topRight: post != null ? 3 : 12,
-            bottomRight: 12,
-          ),
+      ).roundedOnly(
+        bottomLeft: 12,
+        topLeft: post != null ? 3 : 12,
+        topRight: post != null ? 3 : 12,
+        bottomRight: 12,
+      ),
       (Platform.isIOS ? 5 : 3).verticalSpace,
-
     ],
   ).px(8);
-}
-
-Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionButton}) {
-  var name = '${post.creatorUser?.name}';
-  var shortName = name.length > 13 ? name.substring(0, 13) + '...'.toString() : name;
-  var postAgo = postTime(post.timestamp!);
-  return Column(
-    children: [
-      5.verticalSpace,
-      Row(
-        // mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
-                backgroundColor: AppColors.darkOutline,
-              ),
-              // buildOnlineBadge(),
-            ],
-          ),
-          10.horizontalSpace,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              shortName.toText(fontSize: 14, bold: true, color: AppColors.white, softWrap: false),
-              postAgo
-                  .toText(color: AppColors.grey50, fontSize: 11)
-                  .pOnly(right: 10, top: 0, bottom: 0),
-            ],
-          ),
-          // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
-          const Spacer(),
-          // .onTap(() {}, radius: 10), // TODO Add move to Tag
-          // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
-          actionButton ?? const Offstage()
-          // 10.horizontalSpace,
-        ],
-      ),
-      4.verticalSpace,
-      buildExpandableText(
-              // 'Example : let’s try to think of an topic or fdsk conte tou fc words as possible... I think I’ve already ',
-              post.textContent,
-              maxLines: 4,
-              linkColor: AppColors.greyLight,
-              textAlign: post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
-              textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
-              style: AppStyles.text14PxRegular.copyWith(color: AppColors.grey50))
-          .advancedSizedBox(context, maxWidth: true)
-          .pOnly(left: 50, bottom: 5, right: 45)
-    ],
-  );
 }

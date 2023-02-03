@@ -273,7 +273,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           children: [
                             if (message.postReply != null) Row(), // AKA Expanded
                             Text(message.textContent!,
-                                textAlign: isHebrew ? TextAlign.end : TextAlign.start,
+                                textAlign: isHebrew ? TextAlign.right : TextAlign.left,
                                 textDirection: isHebrew ? TextDirection.rtl : TextDirection.ltr,
                                 style: AppStyles.text16PxRegular.white),
                             5.verticalSpace,
@@ -376,11 +376,8 @@ Widget buildTextField(
         keyboardType: TextInputType.multiline,
         minLines: 1,
         maxLines: 5,
-        textAlign: controller.text.isEmpty
-            ? TextAlign.start
-            : includeHeb
-                ? TextAlign.end
-                : TextAlign.start,
+        textDirection: includeHeb ? TextDirection.rtl : TextDirection.ltr,
+        textAlign: includeHeb ? TextAlign.right : TextAlign.left,
         cursorColor: AppColors.white,
         onChanged: (val) => stfSetState(() {}),
         decoration: InputDecoration(

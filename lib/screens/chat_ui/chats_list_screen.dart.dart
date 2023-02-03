@@ -73,7 +73,6 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
         chatList,
       )
     ];
-    print('updatedList ${updatedList.length}');
     if (updatedList.isNotEmpty) chatList = updatedList;
     // initLoader = false;
     splashLoader = false;
@@ -146,9 +145,8 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                     return ChatBlockSts(chat, otherUser, onTap: () async {
                       if (!mounted) return;
                       chatList[i] = chat;
-                      // var chatId = ChatService.openChat(context, otherUser: otherUser); // no need
-                      await context.router
-                          .push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));
+                      // var chatId = ChatService.openChat(context, otherUser: otherUser);
+                      await context.router.push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));
                       if (_context.uniProvider.activeChat != null) {
                         print('START: stfSetState()');
                         chat = _context.uniProvider.activeChat!;

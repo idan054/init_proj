@@ -131,7 +131,7 @@ class FsAdvanced {
 
         for (var post in [...listModel]) {
           listModel.remove(post);
-          var user = await getUserByEmailIfNeeded(context, post.creatorUser?.email);
+          var user = await getUserByEmailIfNeeded(context, post.creatorUser);
           post = post.copyWith(creatorUser: user);
           listModel.add(post);
         }
@@ -146,13 +146,13 @@ class FsAdvanced {
           return chat;
         }).toList();
 
-        // for (var chat in [...listModel]) {
-        //   var otherUser = chat.users?.firstWhere((user) => user.email != currUser.email);
-        //   listModel.remove(chat);
-        //   var user = await getUserByEmailIfNeeded(context, otherUser?.email);
-        //   chat = chat.copyWith(users: [user, currUser]);
-        //   listModel.add(chat);
-        // }
+        for (var chat in [...listModel]) {
+          var otherUser = chat.users?.firstWhere((user) => user.email != currUser.email);
+          listModel.remove(chat);
+          var user = await getUserByEmailIfNeeded(context, otherUser);
+          chat = chat.copyWith(users: [user, currUser]);
+          listModel.add(chat);
+        }
 
         break;
       case ModelTypes.messages:
@@ -184,8 +184,9 @@ class FsAdvanced {
 
   // Also update uniProvider
   // This actually called on openChat(), PostModel & ChatModel
-  static Future<UserModel> getUserByEmailIfNeeded(BuildContext context, String? userEmail) async {
+  static Future<UserModel> getUserByEmailIfNeeded(BuildContext context, UserModel userSource) async {
     print('START: getUserByEmailIfNeeded()');
+    String? userEmail = userSource.email;
     var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
     var isAlreadyFetched = alreadyFetchedUsers.any((user) => user.email == userEmail);
 
@@ -197,6 +198,7 @@ class FsAdvanced {
       var userData = await Database.docData('users/$userEmail');
       if (userData == null) {
         printRed('Couldn\'t fetch User $userEmail');
+        return userSource;
       } else {
         printOrange('USER STATUS: $userEmail FETCHED SUCCESSFULLY!');
         var newUser = UserModel.fromJson(userData);
@@ -204,6 +206,6 @@ class FsAdvanced {
         return newUser;
       }
     }
-    return existUser!;
+    return existUser;
   }
 }

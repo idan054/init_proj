@@ -7,6 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../screens/user_ui/user_screen.dart';
 
 
+
+
 extension StringNullX on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
 
@@ -129,20 +131,28 @@ extension StringX on String {
       'ך',
       'ץ'
     ];
-    if (heb.any((item) => contains(item))) {
-      // Lists have at least one common element
-      return true;
-    } else {
-      // Lists DON'T have any common element
-      return false;
-    }
+
+
+
+
+    // if (heb.any((item) => contains(item))) {
+    //   // Lists have at least one common element
+    //   return true;
+    // } else {
+    //   // Lists DON'T have any common element
+    //   return false;
+    // }
 
     // OLD VERSION
     // ----------
     // actually needs to be map.
-    // for (var l in heb) {
-    //   if (contains(l)) return true;
-    // }
-    // return false;
+    for (var l in heb) {
+      if (contains(l)){
+        print('START: return true;()');
+        return true;
+      }
+    }
+    // print('START:  return false;()');
+    return false;
   }
 }
