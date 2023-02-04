@@ -330,7 +330,11 @@ Widget buildFeed(
 }) {
   print('START: buildFeed()');
 
-  if (splashLoader || postList.isEmpty) return basicLoader();
+  if (splashLoader) return basicLoader();
+  if (postList.isEmpty) {
+    return 'New notifications will appear here'.toText(color: AppColors.grey50).center;
+  }
+
   // if (splashLoader || postList.isEmpty) {
   //   return Shimmer.fromColors(
   //       baseColor: AppColors.white,

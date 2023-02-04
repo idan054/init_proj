@@ -108,53 +108,60 @@ class _DashboardScreenState extends State<DashboardScreen> {
               NotificationScreen(),
               ChatsListScreen(),
             ]),
-        bottomNavigationBar: SizedBox(
-          height: Platform.isAndroid ? 55 + 3 : null,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(color: AppColors.darkOutline, height: 2, width: double.maxFinite),
-              SizedBox(
-                height: Platform.isAndroid ? 55 : null,
-                child: BottomNavigationBar(
-                  selectedFontSize: 0,
-                  unselectedFontSize: 0,
-                  backgroundColor: AppColors.primaryDark,
-                  // backgroundColor: AppColors.darkBg,
-                  currentIndex: sItem.index,
-                  onTap: (i) {
-                    _handleIndexChanged(i, true);
-                    // stfSetState(() {});
-                  },
-                  items: [
-                    // HOME
-                    BottomNavigationBarItem(
-                        label: '',
-                        icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.grey50),
-                        activeIcon:
-                            Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.white)),
+        bottomNavigationBar: Builder(
+          builder: (context) {
+            print('START: BUILDER DashboardScreen()');
+            // context.listenUniProvider.currUser; // rebuilt when update.
 
-                    // NOTIFICATIONS SCREEN
-                    BottomNavigationBarItem(
-                        label: '',
-                        icon: notificationBadge(
-                            child: Assets.svg.icons.bell.svg(color: AppColors.grey50)),
-                        activeIcon:
-                            notificationBadge(child: Assets.svg.icons.bellSolid.svg(height: 23))),
+            return SizedBox(
+              height: Platform.isAndroid ? 55 + 3 : null,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(color: AppColors.darkOutline, height: 2, width: double.maxFinite),
+                  SizedBox(
+                    height: Platform.isAndroid ? 55 : null,
+                    child: BottomNavigationBar(
+                      selectedFontSize: 0,
+                      unselectedFontSize: 0,
+                      backgroundColor: AppColors.primaryDark,
+                      // backgroundColor: AppColors.darkBg,
+                      currentIndex: sItem.index,
+                      onTap: (i) {
+                        _handleIndexChanged(i, true);
+                        // stfSetState(() {});
+                      },
+                      items: [
+                        // HOME
+                        BottomNavigationBarItem(
+                            label: '',
+                            icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.grey50),
+                            activeIcon:
+                                Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.white)),
 
-                    // DM SCREEN
-                    BottomNavigationBarItem(
-                        label: '',
-                        icon: unreadChatBadge(
-                            child: Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50)),
-                        activeIcon: unreadChatBadge(
-                            child: Assets.svg.icons.groupMultiPeopleSolid
-                                .svg(color: AppColors.white, height: 19))),
-                  ],
-                ),
+                        // NOTIFICATIONS SCREEN
+                        BottomNavigationBarItem(
+                            label: '',
+                            icon: notificationBadge(
+                                child: Assets.svg.icons.bell.svg(color: AppColors.grey50)),
+                            activeIcon:
+                                notificationBadge(child: Assets.svg.icons.bellSolid.svg(height: 23))),
+
+                        // DM SCREEN
+                        BottomNavigationBarItem(
+                            label: '',
+                            icon: unreadChatBadge(
+                                child: Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50)),
+                            activeIcon: unreadChatBadge(
+                                child: Assets.svg.icons.groupMultiPeopleSolid
+                                    .svg(color: AppColors.white, height: 19))),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          }
         ),
         // floatingActionButton: sItem != TabItems.home ? null : buildFab(),
         floatingActionButton: sItem != TabItems.home ? null : buildFab());
@@ -290,7 +297,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       stream: Database.streamNotificationCounter(context),
       initialData: 0,
       builder: (context, snapshot) {
-        var counter = context.uniProvider.currUser.unreadNotificationCounter;
+        // var counter = context.uniProvider.currUser.unreadNotificationCounter;
+        var counter = snapshot.data ?? 0;
         return counter == 0
             ? child
             : Badge(
@@ -315,7 +323,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       stream: Database.streamChatsUnreadCounter(context),
       initialData: 0,
       builder: (context, snapshot) {
-        var counter = context.uniProvider.currUser.unreadCounter;
+        // var counter = context.uniProvider.currUser.unreadCounter;
+        var counter = snapshot.data ?? 0;
         return counter == 0
             ? child
             : Badge(
