@@ -99,15 +99,15 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               buildChoiceChip(context,
+                      selectedColor: AppColors.primaryLight2,
                       customIcon: isComments
                           ? Assets.svg.icons.messageTextCircle02
-                              .svg(height: 15, color: AppColors.white)
+                              .svg(height: 15, color: AppColors.primaryLight2)
                           : Assets.svg.icons.dmPlaneUntitledIcon
                               .svg(height: 15, color: AppColors.primaryLight2),
-                      selectedColor: AppColors.primaryLight2,
                       // label: (isComments ? 'With comments' : 'Reply style') // Reply only
                       label: (isComments ? 'With comments' : 'Reply style') // Reply only
-                          .toText(color: isComments ? AppColors.white : AppColors.primaryLight2),
+                          .toText(color: isComments ? AppColors.primaryLight2 : AppColors.primaryLight2),
                       onSelect: (bool newSelection) {
                 isComments = !isComments;
                 widget.onChange(isComments);
@@ -132,6 +132,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
               buildSendButton(
                   isActive: postController.text.isNotEmpty &&
                       (postController.text.replaceAll(' ', '').isNotEmpty),
+                  withBg: true,
                   onTap: () {
                     UserModel currUser = context.uniProvider.currUser;
                     var post = PostModel(
@@ -142,7 +143,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       creatorUser: currUser,
                       timestamp: DateTime.now(),
                       enableComments: isComments,
-                      commentedUsersIds: isComments ? [currUser.uid.toString()] : [],
+                      commentedUsersEmails: isComments ? [currUser.email.toString()] : [],
                     );
                     context.uniProvider.updatePostUploaded(true);
                     FeedService.uploadPost(context, post);
@@ -190,20 +191,21 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 }
 
 Widget buildSendButton(
-    {GestureTapCallback? onTap, bool isActive = true, bool isConversationSend = false}) {
+    {GestureTapCallback? onTap, bool isActive = true, bool isConversationSend = false, bool withBg = false}) {
   return Opacity(
     opacity: isActive ? 1.0 : 0.3,
     child: Container(
-      height: 35,
-      width: 35,
-      color: isConversationSend ? AppColors.darkOutline50 : AppColors.transparent,
+      height: 37,
+      width: 37,
+      color: withBg ? AppColors.primaryOriginal : AppColors.transparent,
+      // color: AppColors.primaryOriginal,
       // color: ,
       child: (isConversationSend
               ? Assets.svg.icons.messageChatCircleAdd.svg(color: Colors.white)
               : Assets.svg.icons.iconSendButton.svg())
-          .pad(7.5),
+          .pad(isConversationSend ? 8 : 9),
     )
-        .rounded(radius: 8)
+        .roundedFull
         .px(10)
         .pOnly(top: 5, bottom: 5)
         .onTap(isActive ? onTap : null, radius: 10)

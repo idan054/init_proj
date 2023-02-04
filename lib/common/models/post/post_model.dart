@@ -26,7 +26,7 @@ class PostModel with _$PostModel {
     //~ Also use as comment, Comment variables:
     String? originalPostId,
     @Default(0) int commentsLength,
-    @Default([]) List<String> commentedUsersIds, // AKA conversion users
+    @Default([]) List<String> commentedUsersEmails, // AKA conversion users
     @Default([]) List<PostModel>? comments,
   }) = _PostModel;
 

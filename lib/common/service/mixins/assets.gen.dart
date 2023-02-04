@@ -76,6 +76,10 @@ class $AssetsImagesGen {
   AssetGenImage get mapPlaceholder =>
       const AssetGenImage('assets/images/map_placeholder.png');
 
+  /// File path: assets/images/ril-clean-icon.png
+  AssetGenImage get rilCleanIcon =>
+      const AssetGenImage('assets/images/ril-clean-icon.png');
+
   /// File path: assets/images/squresBg.png
   AssetGenImage get squresBg =>
       const AssetGenImage('assets/images/squresBg.png');
@@ -93,6 +97,7 @@ class $AssetsImagesGen {
         commentsOffPNG,
         elonMuskAd,
         mapPlaceholder,
+        rilCleanIcon,
         squresBg
       ];
 }
@@ -342,9 +347,16 @@ class $AssetsSvgIconsGen {
   SvgGenImage get arrowBackLeft =>
       const SvgGenImage('assets/svg/icons/arrow_back_left.svg');
 
+  /// File path: assets/svg/icons/bell-solid.svg
+  SvgGenImage get bellSolid =>
+      const SvgGenImage('assets/svg/icons/bell-solid.svg');
+
   /// File path: assets/svg/icons/bell-untitled-icon.svg
   SvgGenImage get bellUntitledIcon =>
       const SvgGenImage('assets/svg/icons/bell-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/bell.svg
+  SvgGenImage get bell => const SvgGenImage('assets/svg/icons/bell.svg');
 
   /// File path: assets/svg/icons/camera.svg
   SvgGenImage get camera => const SvgGenImage('assets/svg/icons/camera.svg');
@@ -420,6 +432,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get messageChatCircleAdd =>
       const SvgGenImage('assets/svg/icons/message-chat-circle-add.svg');
 
+  /// File path: assets/svg/icons/message-chat-circle-solid.svg
+  SvgGenImage get messageChatCircleSolid =>
+      const SvgGenImage('assets/svg/icons/message-chat-circle-solid.svg');
+
   /// File path: assets/svg/icons/message-chat-circle.svg
   SvgGenImage get messageChatCircle =>
       const SvgGenImage('assets/svg/icons/message-chat-circle.svg');
@@ -471,7 +487,9 @@ class $AssetsSvgIconsGen {
         appleLogoSvgrepoCom,
         arrowNarrowLeft,
         arrowBackLeft,
+        bellSolid,
         bellUntitledIcon,
+        bell,
         camera,
         chatBubblesSolidIcon,
         chatBubblesUntitledIcon,
@@ -491,6 +509,7 @@ class $AssetsSvgIconsGen {
         manProfile,
         manProfileOutline,
         messageChatCircleAdd,
+        messageChatCircleSolid,
         messageChatCircle,
         messageCircle02,
         messageCommentsLines,

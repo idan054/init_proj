@@ -148,7 +148,6 @@ extension StringX on String {
     // actually needs to be map.
     for (var l in heb) {
       if (contains(l)){
-        print('START: return true;()');
         return true;
       }
     }

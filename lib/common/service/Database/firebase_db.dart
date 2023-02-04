@@ -169,6 +169,7 @@ class Database {
   // persistenceEnabled: true,
   // cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   // );
+
   static Stream<int> streamChatsUnreadCounter(BuildContext context) {
     var currUser = context.uniProvider.currUser;
     print('START: streamChatsUnreadCounter()');

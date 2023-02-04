@@ -89,7 +89,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
         backgroundColor: AppColors.primaryDark,
         appBar: darkAppBar(
           centerTitle: true,
-          context, title: 'Members messages',
+          context, title: 'Messages',
           hideBackButton: true,
           //     backAction: () async {
           //   await FirebaseAuth.instance.signOut();

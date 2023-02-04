@@ -22,7 +22,7 @@ _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
       enableComments: json['enableComments'] as bool? ?? false,
       originalPostId: json['originalPostId'] as String?,
       commentsLength: json['commentsLength'] as int? ?? 0,
-      commentedUsersIds: (json['commentedUsersIds'] as List<dynamic>?)
+      commentedUsersEmails: (json['commentedUsersEmails'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
@@ -43,6 +43,6 @@ Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
       'enableComments': instance.enableComments,
       'originalPostId': instance.originalPostId,
       'commentsLength': instance.commentsLength,
-      'commentedUsersIds': instance.commentedUsersIds,
+      'commentedUsersEmails': instance.commentedUsersEmails,
       'comments': instance.comments?.map((e) => e.toJson()).toList(),
     };

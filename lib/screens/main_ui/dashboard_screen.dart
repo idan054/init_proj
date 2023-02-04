@@ -33,8 +33,9 @@ import '../../widgets/my_dialog.dart';
 import '../feed_ui/create_post_screen.dart';
 import 'dart:io' show Platform;
 
-// enum TabItems { home, placeHolder, chat }
-enum TabItems { home, chat }
+import 'notification_screen.dart';
+
+enum TabItems { home, notificationScreen, dmScreen }
 
 class DashboardScreen extends StatefulWidget {
   final TabItems dashboardPage;
@@ -104,6 +105,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // onPageChanged: (i) => _handleIndexChanged(i, false),
             children: const <Widget>[
               MainFeedScreen(),
+              NotificationScreen(),
               ChatsListScreen(),
             ]),
         bottomNavigationBar: SizedBox(
@@ -125,26 +127,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     // stfSetState(() {});
                   },
                   items: [
+                    // HOME
                     BottomNavigationBarItem(
                         label: '',
                         icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.grey50),
-                        // .pOnly(right: 15),
                         activeIcon:
-                            Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.white)
-                        // .pOnly(right: 15),
-                        ),
+                            Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.white)),
+
+                    // NOTIFICATIONS SCREEN
                     BottomNavigationBarItem(
                         label: '',
                         icon: notifyBubble(
-                            // child: Assets.svg.icons.chatBubblesUntitledIcon.svg(color: AppColors.grey50)
-                            child: Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50)
-                            // .pOnly(left: 15),
-                            ),
+                            child: Assets.svg.icons.bell.svg(color: AppColors.grey50)),
+                        activeIcon:
+                            notifyBubble(child: Assets.svg.icons.bellSolid.svg(height: 23))),
+
+                    // DM SCREEN
+                    BottomNavigationBarItem(
+                        label: '',
+                        icon: notifyBubble(
+                            child: Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50)),
                         activeIcon: notifyBubble(
                             child: Assets.svg.icons.groupMultiPeopleSolid
-                                .svg(color: AppColors.white, height: 19))
-                        // .pOnly(left: 15)
-                        ),
+                                .svg(color: AppColors.white, height: 19))),
                   ],
                 ),
               ),
@@ -270,19 +275,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
           ).roundedFull,
-
-          // firstChild: FloatingActionButton.extended(
-          //   onPressed: () {
-          //   },
-          //   shape: 6.roundedShape,
-          //   label: (replyStyle ? 'New Ril' : 'Add yours').toText(bold: true, fontSize: 13),
-          //   icon: replyStyle
-          //       ? Assets.images.riltopiaAsIconPNG.image(height: 20).pad(5)
-          //       // ? Assets.svg.icons.groupMultiPeople.svg().pad(5)
-          //       // : Assets.svg.icons.messageChatCircle.svg(height: 20, color: Colors.white).pad(5),
-          //       : Assets.svg.icons.messageChatCircleAdd.svg(height: 20, color: Colors.white).pad(5),
-          //   backgroundColor: AppColors.primaryOriginal,
-          // ),
         ),
       );
     });

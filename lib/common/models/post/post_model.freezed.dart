@@ -32,7 +32,7 @@ mixin _$PostModel {
 //~ Also use as comment, Comment variables:
   String? get originalPostId => throw _privateConstructorUsedError;
   int get commentsLength => throw _privateConstructorUsedError;
-  List<String> get commentedUsersIds =>
+  List<String> get commentedUsersEmails =>
       throw _privateConstructorUsedError; // AKA conversion users
   List<PostModel>? get comments => throw _privateConstructorUsedError;
 
@@ -57,7 +57,7 @@ abstract class $PostModelCopyWith<$Res> {
       bool enableComments,
       String? originalPostId,
       int commentsLength,
-      List<String> commentedUsersIds,
+      List<String> commentedUsersEmails,
       List<PostModel>? comments});
 
   $UserModelCopyWith<$Res>? get creatorUser;
@@ -85,7 +85,7 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
     Object? enableComments = null,
     Object? originalPostId = freezed,
     Object? commentsLength = null,
-    Object? commentedUsersIds = null,
+    Object? commentedUsersEmails = null,
     Object? comments = freezed,
   }) {
     return _then(_value.copyWith(
@@ -125,9 +125,9 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
           ? _value.commentsLength
           : commentsLength // ignore: cast_nullable_to_non_nullable
               as int,
-      commentedUsersIds: null == commentedUsersIds
-          ? _value.commentedUsersIds
-          : commentedUsersIds // ignore: cast_nullable_to_non_nullable
+      commentedUsersEmails: null == commentedUsersEmails
+          ? _value.commentedUsersEmails
+          : commentedUsersEmails // ignore: cast_nullable_to_non_nullable
               as List<String>,
       comments: freezed == comments
           ? _value.comments
@@ -166,7 +166,7 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
       bool enableComments,
       String? originalPostId,
       int commentsLength,
-      List<String> commentedUsersIds,
+      List<String> commentedUsersEmails,
       List<PostModel>? comments});
 
   @override
@@ -193,7 +193,7 @@ class __$$_PostModelCopyWithImpl<$Res>
     Object? enableComments = null,
     Object? originalPostId = freezed,
     Object? commentsLength = null,
-    Object? commentedUsersIds = null,
+    Object? commentedUsersEmails = null,
     Object? comments = freezed,
   }) {
     return _then(_$_PostModel(
@@ -233,9 +233,9 @@ class __$$_PostModelCopyWithImpl<$Res>
           ? _value.commentsLength
           : commentsLength // ignore: cast_nullable_to_non_nullable
               as int,
-      commentedUsersIds: null == commentedUsersIds
-          ? _value._commentedUsersIds
-          : commentedUsersIds // ignore: cast_nullable_to_non_nullable
+      commentedUsersEmails: null == commentedUsersEmails
+          ? _value._commentedUsersEmails
+          : commentedUsersEmails // ignore: cast_nullable_to_non_nullable
               as List<String>,
       comments: freezed == comments
           ? _value._comments
@@ -259,10 +259,10 @@ class _$_PostModel implements _PostModel {
       this.enableComments = false,
       this.originalPostId,
       this.commentsLength = 0,
-      final List<String> commentedUsersIds = const [],
+      final List<String> commentedUsersEmails = const [],
       final List<PostModel>? comments = const []})
       : _likeByIds = likeByIds,
-        _commentedUsersIds = commentedUsersIds,
+        _commentedUsersEmails = commentedUsersEmails,
         _comments = comments;
 
   factory _$_PostModel.fromJson(Map<String, dynamic> json) =>
@@ -300,14 +300,14 @@ class _$_PostModel implements _PostModel {
   @override
   @JsonKey()
   final int commentsLength;
-  final List<String> _commentedUsersIds;
+  final List<String> _commentedUsersEmails;
   @override
   @JsonKey()
-  List<String> get commentedUsersIds {
-    if (_commentedUsersIds is EqualUnmodifiableListView)
-      return _commentedUsersIds;
+  List<String> get commentedUsersEmails {
+    if (_commentedUsersEmails is EqualUnmodifiableListView)
+      return _commentedUsersEmails;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_commentedUsersIds);
+    return EqualUnmodifiableListView(_commentedUsersEmails);
   }
 
 // AKA conversion users
@@ -325,7 +325,7 @@ class _$_PostModel implements _PostModel {
 
   @override
   String toString() {
-    return 'PostModel(tag: $tag, creatorUser: $creatorUser, textContent: $textContent, id: $id, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, originalPostId: $originalPostId, commentsLength: $commentsLength, commentedUsersIds: $commentedUsersIds, comments: $comments)';
+    return 'PostModel(tag: $tag, creatorUser: $creatorUser, textContent: $textContent, id: $id, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, originalPostId: $originalPostId, commentsLength: $commentsLength, commentedUsersEmails: $commentedUsersEmails, comments: $comments)';
   }
 
   @override
@@ -350,7 +350,7 @@ class _$_PostModel implements _PostModel {
             (identical(other.commentsLength, commentsLength) ||
                 other.commentsLength == commentsLength) &&
             const DeepCollectionEquality()
-                .equals(other._commentedUsersIds, _commentedUsersIds) &&
+                .equals(other._commentedUsersEmails, _commentedUsersEmails) &&
             const DeepCollectionEquality().equals(other._comments, _comments));
   }
 
@@ -367,7 +367,7 @@ class _$_PostModel implements _PostModel {
       enableComments,
       originalPostId,
       commentsLength,
-      const DeepCollectionEquality().hash(_commentedUsersIds),
+      const DeepCollectionEquality().hash(_commentedUsersEmails),
       const DeepCollectionEquality().hash(_comments));
 
   @JsonKey(ignore: true)
@@ -395,7 +395,7 @@ abstract class _PostModel implements PostModel {
       final bool enableComments,
       final String? originalPostId,
       final int commentsLength,
-      final List<String> commentedUsersIds,
+      final List<String> commentedUsersEmails,
       final List<PostModel>? comments}) = _$_PostModel;
 
   factory _PostModel.fromJson(Map<String, dynamic> json) =
@@ -422,7 +422,7 @@ abstract class _PostModel implements PostModel {
   @override
   int get commentsLength;
   @override
-  List<String> get commentedUsersIds;
+  List<String> get commentedUsersEmails;
   @override // AKA conversion users
   List<PostModel>? get comments;
   @override

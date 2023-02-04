@@ -97,7 +97,7 @@ class FsAdvanced {
           reqBase = reqBase.where('enableComments', isEqualTo: false);
         }
         if (filter == FilterTypes.conversationsPostByUser) {
-          reqBase = reqBase.where('commentedUsersIds', arrayContains: uid!); // curr / other user
+          reqBase = reqBase.where('commentedUsersEmails', arrayContains: context.uniProvider.currUser.email!); // curr / other user
         }
         if (filter == FilterTypes.postWithComments) {
           reqBase = reqBase.where('enableComments', isEqualTo: true);
@@ -146,13 +146,13 @@ class FsAdvanced {
           return chat;
         }).toList();
 
-        for (var chat in [...listModel]) {
-          var otherUser = chat.users?.firstWhere((user) => user.email != currUser.email);
-          listModel.remove(chat);
-          var user = await getUserByEmailIfNeeded(context, otherUser);
-          chat = chat.copyWith(users: [user, currUser]);
-          listModel.add(chat);
-        }
+        // for (var chat in [...listModel]) {
+        //   var otherUser = chat.users?.firstWhere((user) => user.email != currUser.email);
+        //   listModel.remove(chat);
+        //   var user = await getUserByEmailIfNeeded(context, otherUser);
+        //   chat = chat.copyWith(users: [user, currUser]);
+        //   listModel.add(chat);
+        // }
 
         break;
       case ModelTypes.messages:

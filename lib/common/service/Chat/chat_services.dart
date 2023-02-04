@@ -123,9 +123,7 @@ class ChatService {
     String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);
     // var messageIdA = const Uuid().v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
     // docName result example: [idanb] מה קורה [#b4918]
-    String messageId = '[${fromId?.substring(0, 5)}] '
-        '${content.length < 15 ? content : content.substring(0, 15)}'
-        ' ${UniqueKey()}'.replaceAll('/', '\\');
+    String messageId = '[${fromId?.substring(0, 5)}] ''${content.length < 15 ? content : content.substring(0, 15)}'' ${UniqueKey()}'.replaceAll('/', '\\');
 
 
     var messageData = MessageModel(
@@ -167,7 +165,7 @@ class ChatService {
         toJson: messageData.toJson());
 
 
-
+    otherUser = await FsAdvanced.getUserByEmailIfNeeded(context, otherUser);
     var title = postReply != null ? '${currUser.name} replied your Ril' : '${currUser.name} Sent you a message';
     print(' otherUser.fcm ${ otherUser.fcm}');
     NotificationService.sendPushMessage(

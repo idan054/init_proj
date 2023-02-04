@@ -138,7 +138,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         // controller: ,
                         itemCount: messages.length,
                         itemBuilder: (context, i) =>
-                            buildBubble(context, messages[i], (i + 1) == messages.length),
+                            buildBubble(context, messages[i]),
                       ),
                     );
                   },
@@ -231,7 +231,7 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  Widget buildBubble(BuildContext context, MessageModel message, bool isLastMessage) {
+  Widget buildBubble(BuildContext context, MessageModel message) {
     // print('START: buildBubble()');
 
     bool currUser = message.fromId == context.uniProvider.currUser.uid;

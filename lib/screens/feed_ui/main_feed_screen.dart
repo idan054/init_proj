@@ -195,7 +195,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
             indicatorColor: AppColors.primaryOriginal,
             tabs: const [
               Tab(text: 'Members'),
-              Tab(text: 'Conversions'),
+              Tab(text: 'Conversations'),
               // Tab(text: 'Latest'),
               // Tab(text: 'Questions'),
             ],
@@ -630,17 +630,17 @@ Widget buildChoiceChip(BuildContext context,
       child: ChoiceChip(
           elevation: 0,
           shadowColor: Colors.transparent,
-          shape: 11.roundedShape,
+          shape: 55.roundedShape,
           selected: selected,
           materialTapTargetSize: (padding != null) ? MaterialTapTargetSize.shrinkWrap : null,
           padding: (padding != null) ? 0.all : null,
           backgroundColor: AppColors.darkOutline,
-          selectedColor: selectedColor ?? AppColors.white,
-          side: !isUnselectedBorder
-              ? null
-              : BorderSide(
-                  width: 1.5,
-                  color: selectedColor ?? (selected ? AppColors.white : AppColors.grey50)),
+          // selectedColor: selectedColor ?? AppColors.white,
+          selectedColor: Colors.transparent,
+          side:
+          // !isUnselectedBorder ? null :
+          BorderSide(width: 1.5, color: selectedColor ?? (selected ? AppColors.white : AppColors.grey50)),
+
           // color: !selected ? AppColors.grey50 : selectedColor ?? AppColors.white),
           // side: BorderSide.none,
           labelStyle: AppStyles.text14PxRegular.copyWith(

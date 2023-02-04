@@ -49,6 +49,17 @@ class FeedService {
   //     toJson: post.toJson(),
   //   );
   // }
+
+  static void _notifyUsers(BuildContext context, PostModel comment, PostModel originalPost) {
+    for (var email in comment.commentedUsersEmails) {
+      Database.updateFirestore(
+        collection: 'users/$email/notifications',
+        docName: comment.id,
+        toJson: comment.toJson(),
+      );
+    }
+  }
+
   static void addComment(BuildContext context, PostModel comment, PostModel originalPost) {
     print('START: addComment()');
     var currUser = context.uniProvider.currUser;
@@ -63,8 +74,8 @@ class FeedService {
 
     Map<String, dynamic> postData = {};
     postData['commentsLength'] = FieldValue.increment(1);
-    if (!(originalPost.commentedUsersIds.contains(currUser.uid))) {
-      postData['commentedUsersIds'] = FieldValue.arrayUnion([currUser.uid]);
+    if (!(originalPost.commentedUsersEmails.contains(currUser.email))) {
+      postData['commentedUsersEmails'] = FieldValue.arrayUnion([currUser.email]);
     }
 
     Database.updateFirestore(

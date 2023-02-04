@@ -187,7 +187,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                   '${comments.length}/${(post.commentsLength > comments.length ? post.commentsLength : comments.length)}';
               if (post.commentsLength == 0 && comments.isEmpty) commentsCount = 'New';
               var memberCount =
-                  post.commentedUsersIds.isEmpty ? 1 : post.commentedUsersIds.length + 1;
+                  post.commentedUsersEmails.isEmpty ? 1 : post.commentedUsersEmails.length;
               return Row(
                 children: [
                   15.horizontalSpace,
@@ -228,8 +228,6 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                 var comment = PostModel(
                   textContent: sendController.text,
                   id: '${currUser.email}${UniqueKey()}',
-                  //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
-                  // details will be update if user edit his info
                   creatorUser: currUser,
                   timestamp: DateTime.now(),
                   originalPostId: post.id,
@@ -272,7 +270,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
   Builder buildComment(PostModel comment) {
     return Builder(builder: (context) {
       var userName = comment.creatorUser?.name ?? '';
-      var shortName = userName.length > 23 ? userName.substring(0, 23) + '...'.toString() : userName;
+      var shortName = userName.length > 19 ? userName.substring(0, 19) + '...'.toString() : userName;
       var postAgo = postTime(comment.timestamp!);
       var isCreatorComment = comment.creatorUser?.uid == widget.post.creatorUser?.uid;
       var isCurrUserComment = comment.creatorUser?.uid == context.uniProvider.currUser.uid;
@@ -318,6 +316,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                   5.verticalSpace,
                   comment.textContent.toTextExpanded(
                       autoExpanded: true,
+                      textDirection: isHebComment ? TextDirection.rtl : TextDirection.ltr,
                       textAlign: isHebComment ? TextAlign.right : TextAlign.left,
                       style: AppStyles.text14PxRegular.copyWith(
                         color: AppColors.white,
