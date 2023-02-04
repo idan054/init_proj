@@ -16,6 +16,7 @@ import 'dart:io' show Platform;
 
 // import 'package:example/common/service/Auth/firebase_db.dart';
 import 'package:example/common/dump/postViewOld_sts.dart';
+import 'package:example/screens/main_ui/notification_screen.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -213,11 +214,12 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
           },
           children: [
             buildFeed(
-              customTitle: 'EXPLORE MEMBERS',
+              desc: 'EXPLORE MEMBERS',
+              title: 'NEW RILS',
               context,
               postList,
               splashLoader,
-              activeFilter,
+              feedType: FeedTypes.members,
               onRefreshIndicator: () async {
                 printGreen('START: onRefresh()');
                 await _loadMore(refresh: true);
@@ -228,11 +230,11 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
               },
             ),
             buildFeed(
-              customTitle: 'JOIN PUBLIC CONVERSATION',
+              desc: 'JOIN PUBLIC CONVERSATION',
               context,
               postList,
               splashLoader,
-              activeFilter,
+              feedType: FeedTypes.conversations,
               onRefreshIndicator: () async {
                 printGreen('START: onRefresh()');
                 await _loadMore(refresh: true);
@@ -248,106 +250,81 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     );
   }
 
-// Widget getAd(BuildContext context) {
-//   BannerAdListener bannerAdListener = BannerAdListener(onAdWillDismissScreen: (ad) {
-//     ad.dispose();
-//   }, onAdClosed: (ad) {
-//     debugPrint("Ad Got Closeed");
-//   });
-//   BannerAd bannerAd = BannerAd(
-//     size: AdSize.banner,
-//     adUnitId: Platform.isAndroid
-//         ? "ca-app-pub-3940256099942544/6300978111"
-//         : "ca-app-pub-3940256099942544/2934735716",
-//     listener: bannerAdListener,
-//     request: const AdRequest(),
-//   );
-//
-//   bannerAd.load();
-//
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       '${context.uniProvider.serverConfig?.adStatus}'
-//           .toText(color: AppColors.grey50, fontSize: 10),
-//       SizedBox(
-//         width: 320,
-//         height: 50,
-//         child: AdWidget(ad: bannerAd),
-//       ),
-//     ],
-//   );
-// }
+  //~ Ad Widget:
+  //
+  /*
+Widget getAd(BuildContext context) {
+  BannerAdListener bannerAdListener = BannerAdListener(onAdWillDismissScreen: (ad) {
+    ad.dispose();
+  }, onAdClosed: (ad) {
+    debugPrint("Ad Got Closeed");
+  });
+  BannerAd bannerAd = BannerAd(
+    size: AdSize.banner,
+    adUnitId: Platform.isAndroid
+        ? "ca-app-pub-3940256099942544/6300978111"
+        : "ca-app-pub-3940256099942544/2934735716",
+    listener: bannerAdListener,
+    request: const AdRequest(),
+  );
 
-// SizedBox _feedChoiceList(BuildContext context) {
-//   return SizedBox(
-//     height: 50.0,
-//     child: ListView(
-//       // controller: chipsController,
-//       scrollDirection: Axis.horizontal,
-//       children: List<Widget>.generate(
-//         tags.length,
-//         (int i) {
-//           var isChipSelected = tagIndex == i;
-//
-//           return buildChoiceChip(
-//             context,
-//             label: Text(tags[i]),
-//             selected: isChipSelected,
-//             onSelect: (bool newSelection) {
-//               if (newSelection) tagIndex = i;
-//               context.uniProvider.updateSelectedTag(tags[i]);
-//               // feedController.jumpToPage(tagIndex);
-//               // feedController.animateToPage(selectedTag!, duration: 250.milliseconds, curve: Curves.easeIn);
-//               setState(() {});
-//             },
-//           );
-//         },
-//       ).toList(),
-//     ),
-//   );
-// }
+  bannerAd.load();
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      '${context.uniProvider.serverConfig?.adStatus}'
+          .toText(color: AppColors.grey50, fontSize: 10),
+      SizedBox(
+        width: 320,
+        height: 50,
+        child: AdWidget(ad: bannerAd),
+      ),
+    ],
+  );
 }
 
-ListTile buildTagTitle(FilterTypes activeFilter, String? customTitle) {
-  // bool isQuestionsTag = newTags[tagIndex] == 'New';
-  bool isQuestionsTag = activeFilter == FilterTypes.postWithComments;
+SizedBox _feedChoiceList(BuildContext context) {
+  return SizedBox(
+    height: 50.0,
+    child: ListView(
+      // controller: chipsController,
+      scrollDirection: Axis.horizontal,
+      children: List<Widget>.generate(
+        tags.length,
+        (int i) {
+          var isChipSelected = tagIndex == i;
 
-  return ListTile(
-    minVerticalPadding: 25,
-    tileColor: AppColors.primaryDark,
-    // horizontalTitleGap: 0,
-    // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
-    title: Row(
-      children: [
-        isQuestionsTag
-            ? Assets.svg.icons.messageChatCircle.svg(color: AppColors.grey50, height: 20)
-            : Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50, height: 20),
-        // : Assets.svg.icons.shieldTickUntitledIcon.svg(color: Colors.white70),
-        const SizedBox(width: 7),
-        // (isNewTag ? 'EXPLORE 14-17 Y.O MEMBERS' : 'MEMBERS WHO INTERESTED IN')
-        // (isQuestionsTag ? 'HELP & SHARE YOUR WISDOM' : 'EXPLORE MEMBERS')
-
-        // (customTitle ?? (isQuestionsTag ? 'JOIN PUBLIC CONVERSATION' : 'EXPLORE MEMBERS'))
-
-        if (customTitle != null)
-          customTitle.toText(fontSize: 13, color: AppColors.grey50).pOnly(top: 3)
-      ],
-    ).pOnly(bottom: isQuestionsTag ? 0 : 15),
-    // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
-    subtitle: isQuestionsTag ? null : 'NEW RILS'.toUpperCase().toText(fontSize: 18, medium: true),
+          return buildChoiceChip(
+            context,
+            label: Text(tags[i]),
+            selected: isChipSelected,
+            onSelect: (bool newSelection) {
+              if (newSelection) tagIndex = i;
+              context.uniProvider.updateSelectedTag(tags[i]);
+              // feedController.jumpToPage(tagIndex);
+              // feedController.animateToPage(selectedTag!, duration: 250.milliseconds, curve: Curves.easeIn);
+              setState(() {});
+            },
+          );
+        },
+      ).toList(),
+    ),
   );
+}
+   */
 }
 
 Widget buildFeed(
   BuildContext context,
   List<PostModel> postList,
-  bool splashLoader,
-  FilterTypes activeFilter, {
+  bool splashLoader, {
+  String? desc,
+  String? title,
   List<ReportModel>? reportList,
-  String? customTitle,
-  RefreshCallback? onRefreshIndicator,
-  EndOfPageListenerCallback? onEndOfPage,
+  required RefreshCallback onRefreshIndicator,
+  required EndOfPageListenerCallback onEndOfPage,
+  required FeedTypes feedType,
 }) {
   print('START: buildFeed()');
 
@@ -381,7 +358,7 @@ Widget buildFeed(
             },
             child: ListView(
               children: [
-                buildTagTitle(activeFilter, customTitle),
+                buildFeedTitle(feedType, desc, title),
                 1.verticalSpace,
                 //   Expanded(child:
                 ListView.builder(
@@ -390,6 +367,7 @@ Widget buildFeed(
                     itemCount: postList.length,
                     itemBuilder: (BuildContext context, int i) {
                       bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
+
                       // PostView(postList[i])
                       String reportByTitle = '';
                       bool isComment = postList[i].originalPostId != null;
@@ -401,10 +379,12 @@ Widget buildFeed(
                         reportByTitle += 'Reported by ${reportList[i].reportedBy} :';
                       }
 
-                      return Column(
-                        children: [
-                          //> if (isShowAd) getAd(context),
+                      return Column(children: [
+                        //> if (isShowAd) getAd(context),
 
+                        if (feedType == FeedTypes.notifications) ...[
+                          buildNotification(postList[i])
+                        ] else ...[
                           // Shows on AdminScreen() only
                           if (reportList != null) ...[
                             const Divider(thickness: 2, color: AppColors.darkOutline),
@@ -414,16 +394,13 @@ Widget buildFeed(
                                 .pOnly(top: 5, left: 15)
                                 .pad(3)
                                 .onTap(() {}, radius: 5),
-
-                            if(isComment)
-                            'Go to original Ril (unavailable)'
-                                .toText(color: Colors.white30, fontSize: 12)
-                                .centerLeft
-                                .pOnly(left: 15)
-                                .pad(3)
-                                .onTap(() {
-
-                            }, radius: 5),
+                            if (isComment)
+                              'Go to original Ril (unavailable)'
+                                  .toText(color: Colors.white30, fontSize: 12)
+                                  .centerLeft
+                                  .pOnly(left: 15)
+                                  .pad(3)
+                                  .onTap(() {}, radius: 5),
                           ],
 
                           if (reportList != null && reportList[i].reportedUser != null) ...[
@@ -431,13 +408,43 @@ Widget buildFeed(
                           ] else
                             PostBlock(postList[i], isReported: reportList != null),
                         ],
-                      );
+                      ]);
                     }).appearOpacity,
                 //     )
               ],
             ),
           )));
 }
+
+ListTile buildFeedTitle(FeedTypes feedType, String? desc, String? title) {
+  // bool isNewTag = newTags[tagIndex] == 'New';
+  bool isNewTag = feedType == FeedTypes.members;
+
+  return ListTile(
+    minVerticalPadding: 25,
+    tileColor: AppColors.primaryDark,
+    // horizontalTitleGap: 0,
+    // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
+    title: Row(
+      children: [
+        isNewTag
+            ? Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50, height: 20)
+            : Assets.svg.icons.messageChatCircle.svg(color: AppColors.grey50, height: 20),
+        // : Assets.svg.icons.shieldTickUntitledIcon.svg(color: Colors.white70),
+        const SizedBox(width: 7),
+        // (isNewTag ? 'EXPLORE 14-17 Y.O MEMBERS' : 'MEMBERS WHO INTERESTED IN')
+        // (isQuestionsTag ? 'HELP & SHARE YOUR WISDOM' : 'EXPLORE MEMBERS')
+
+        // (customTitle ?? (isQuestionsTag ? 'JOIN PUBLIC CONVERSATION' : 'EXPLORE MEMBERS'))
+
+        if (desc != null) desc.toText(fontSize: 13, color: AppColors.grey50).pOnly(top: 3)
+      ],
+    ).pOnly(bottom: isNewTag ? 15 : 0),
+    // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
+    subtitle: title == null ? null : (title).toUpperCase().toText(fontSize: 18, medium: true),
+  );
+}
+
 
 AppBar buildRiltopiaAppBar(
   BuildContext context, {
@@ -638,8 +645,10 @@ Widget buildChoiceChip(BuildContext context,
           // selectedColor: selectedColor ?? AppColors.white,
           selectedColor: Colors.transparent,
           side:
-          // !isUnselectedBorder ? null :
-          BorderSide(width: 1.5, color: selectedColor ?? (selected ? AppColors.white : AppColors.grey50)),
+              // !isUnselectedBorder ? null :
+              BorderSide(
+                  width: 1.5,
+                  color: selectedColor ?? (selected ? AppColors.white : AppColors.grey50)),
 
           // color: !selected ? AppColors.grey50 : selectedColor ?? AppColors.white),
           // side: BorderSide.none,

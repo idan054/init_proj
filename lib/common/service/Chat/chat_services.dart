@@ -168,7 +168,7 @@ class ChatService {
     otherUser = await FsAdvanced.getUserByEmailIfNeeded(context, otherUser);
     var title = postReply != null ? '${currUser.name} replied your Ril' : '${currUser.name} Sent you a message';
     print(' otherUser.fcm ${ otherUser.fcm}');
-    NotificationService.sendPushMessage(
+    PushNotificationService.sendPushMessage(
       token: otherUser.fcm!,
       title: title,
       // title: 'You received new message!',

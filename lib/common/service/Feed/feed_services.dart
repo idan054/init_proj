@@ -50,13 +50,17 @@ class FeedService {
   //   );
   // }
 
-  static void _notifyUsers(BuildContext context, PostModel comment, PostModel originalPost) {
-    for (var email in comment.commentedUsersEmails) {
-      Database.updateFirestore(
-        collection: 'users/$email/notifications',
-        docName: comment.id,
-        toJson: comment.toJson(),
-      );
+  // Notify when: Comment added to Conversion ur in.
+  static void _notifyOtherUsers(BuildContext context, PostModel post) {
+    print('START: notifyUsers()');
+
+    print('post.commentedUsersEmails ${post.commentedUsersEmails}');
+    for (var email in post.commentedUsersEmails) {
+      // Database.updateFirestore(
+      //   collection: 'users/$email/notifications',
+      //   docName: post.id,
+      //   toJson: post.toJson(),
+      // );
     }
   }
 
@@ -66,16 +70,33 @@ class FeedService {
     // var timeStamp = DateTime.now();
     // String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);
 
+    //~ Add comment:
     Database.updateFirestore(
       collection: 'posts/${comment.originalPostId}/comments',
       docName: comment.id,
       toJson: comment.toJson(),
     );
 
+    //~ Update conversion:
+    // Members in conversion counter
     Map<String, dynamic> postData = {};
     postData['commentsLength'] = FieldValue.increment(1);
     if (!(originalPost.commentedUsersEmails.contains(currUser.email))) {
       postData['commentedUsersEmails'] = FieldValue.arrayUnion([currUser.email]);
+    }
+
+    // Notify members
+    postData['metadata'] = {};
+    postData['metadata']['unreadNotificationCounter'] = {}; // Counter
+    postData['metadata']['usersWithUnreadNotification'] = []; // Email list for filter
+    for (var email in originalPost.commentedUsersEmails) {
+      if (email == currUser.email) {
+      } else {
+        postData['metadata']['usersWithUnreadNotification'] = FieldValue.arrayUnion([email]);
+        postData['metadata']['unreadNotificationCounter'][email] = {};
+        postData['metadata']['unreadNotificationCounter'][email] = FieldValue.increment(1);
+        // todo Also send push notification
+      }
     }
 
     Database.updateFirestore(

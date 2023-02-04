@@ -69,9 +69,11 @@ class FsAdvanced {
         ? 'timestamp not found! - Get most recent instead.'
         : 'timestamp: $timestamp');
 
-    var limit = modelType == ModelTypes.messages ? 25 : 8;
+    var currUser = context.uniProvider.currUser;
     QuerySnapshot<Map<String, dynamic>>? docs;
+    var limit = modelType == ModelTypes.messages ? 25 : 8;
     var reqBase = db.collection(collectionRef).limit(limit);
+
     if (filter == FilterTypes.sortByOldestComments) {
       // Start from OLDEST Begging 1st (Comments)
       reqBase = reqBase.orderBy('timestamp', descending: false);
@@ -97,7 +99,10 @@ class FsAdvanced {
           reqBase = reqBase.where('enableComments', isEqualTo: false);
         }
         if (filter == FilterTypes.conversationsPostByUser) {
-          reqBase = reqBase.where('commentedUsersEmails', arrayContains: context.uniProvider.currUser.email!); // curr / other user
+          // You cannot use 'array-contains' filters more than once.
+          reqBase =
+              reqBase.where('commentedUsersEmails', arrayContains: currUser.email!); // NEW VERSION
+          // reqBase = reqBase.where('commentedUsersIds', arrayContains: context.uniProvider.currUser.uid!); // OLD VERSION
         }
         if (filter == FilterTypes.postWithComments) {
           reqBase = reqBase.where('enableComments', isEqualTo: true);
@@ -105,12 +110,12 @@ class FsAdvanced {
         if (filter == FilterTypes.postWithoutComments) {
           reqBase = reqBase.where('enableComments', isEqualTo: false);
         }
+        if (filter == FilterTypes.notificationsPostByUser) {
+          reqBase = reqBase.where('metadata.usersWithUnreadNotification', arrayContains: currUser.email!);
+        }
         break;
       case ModelTypes.chats:
-        reqBase = reqBase.where(
-          'usersIds',
-          arrayContains: context.uniProvider.currUser.uid!,
-        );
+        reqBase = reqBase.where('usersIds', arrayContains: currUser.uid);
         break;
     }
     docs = await reqBase.get();
@@ -184,7 +189,8 @@ class FsAdvanced {
 
   // Also update uniProvider
   // This actually called on openChat(), PostModel & ChatModel
-  static Future<UserModel> getUserByEmailIfNeeded(BuildContext context, UserModel userSource) async {
+  static Future<UserModel> getUserByEmailIfNeeded(
+      BuildContext context, UserModel userSource) async {
     print('START: getUserByEmailIfNeeded()');
     String? userEmail = userSource.email;
     var alreadyFetchedUsers = context.uniProvider.fetchedUsers;

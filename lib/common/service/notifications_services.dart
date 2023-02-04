@@ -8,8 +8,8 @@ import 'Database/firebase_db.dart';
 // Based firebase_messaging ONLY.
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-class NotificationService {
-  static final NotificationService instance = NotificationService();
+class PushNotificationService {
+  static final PushNotificationService instance = PushNotificationService();
   static final _fcm = FirebaseMessaging.instance;
 
   static Future<bool> requestPermission() async {

@@ -106,7 +106,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                           : Assets.svg.icons.dmPlaneUntitledIcon
                               .svg(height: 15, color: AppColors.primaryLight2),
                       // label: (isComments ? 'With comments' : 'Reply style') // Reply only
-                      label: (isComments ? 'With comments' : 'Reply style') // Reply only
+                      label: (isComments ? 'With comments' : 'Reply only') // Reply only
                           .toText(color: isComments ? AppColors.primaryLight2 : AppColors.primaryLight2),
                       onSelect: (bool newSelection) {
                 isComments = !isComments;
@@ -143,6 +143,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       creatorUser: currUser,
                       timestamp: DateTime.now(),
                       enableComments: isComments,
+                      postType: isComments ? PostType.conversationRil : PostType.dmRil,
                       commentedUsersEmails: isComments ? [currUser.email.toString()] : [],
                     );
                     context.uniProvider.updatePostUploaded(true);

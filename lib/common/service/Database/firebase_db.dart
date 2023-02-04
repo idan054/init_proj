@@ -12,16 +12,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'db_advanced.dart';
 
-enum FeedTypes { members, conversations }
+enum FeedTypes { members, conversations, reports, notifications}
 
 enum FilterTypes {
-  postsByUser,             // User Screen
-  conversationsPostByUser, // User Screen
-  postWithoutComments, // Home Screen
-  postWithComments,    // Home Screen
-  reportedUsers, // Admin Screen
-  reportedRils,  // Admin Screen
-  sortByOldestComments,  // Comments Screen
+  postsByUser,             //> User Screen
+  conversationsPostByUser, //> User Screen
+  notificationsPostByUser,  //? Notifications Screen
+  postWithoutComments,     //~ Home Screen
+  postWithComments,        //~ Home Screen
+  reportedUsers,           //! Admin Screen
+  reportedRils,            //! Admin Screen
+  sortByOldestComments,    /// Comments Screen
+
 }
 
 //> MUST Be same as collection name!

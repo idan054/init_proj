@@ -131,12 +131,12 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
                     printWhite('reportList.length: ${reportList.length}');
 
                     return buildFeed(
-                      customTitle: 'NEW REPORTED RILS & COMMENTS',
+                      desc: 'NEW REPORTED RILS & COMMENTS',
                       context,
                       postList,
                       splashLoader,
-                      activeFilter,
                       reportList: reportList,
+                      feedType: FeedTypes.reports,
                       onRefreshIndicator: () async {
                         printGreen('START: onRefresh()');
                         await _loadMore(refresh: true);
@@ -159,12 +159,12 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
                     printWhite('reportList.length: ${reportList.length}');
 
                     return buildFeed(
-                      customTitle: 'SHOW LASTED REPORTS ONLY',
+                      desc: 'SHOW LASTED REPORTS ONLY',
                       context,
                       postList,
                       splashLoader,
-                      activeFilter,
                       reportList: reportList,
+                      feedType: FeedTypes.reports,
                       onRefreshIndicator: () async {
                         printGreen('START: onRefresh()');
                         await _loadMore(refresh: true);
@@ -180,4 +180,13 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
       ),
     );
   }
+}
+
+
+Widget reportBlock(){
+  return Column(
+    children: [
+
+    ],
+  );
 }

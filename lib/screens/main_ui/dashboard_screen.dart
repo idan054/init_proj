@@ -54,7 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
-    NotificationService.requestPermission();
+    PushNotificationService.requestPermission();
 
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;

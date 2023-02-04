@@ -53,139 +53,171 @@ class NotificationScreen extends StatefulWidget {
   State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
-class _NotificationScreenState extends State<NotificationScreen>
-    with SingleTickerProviderStateMixin {
+class _NotificationScreenState extends State<NotificationScreen> with SingleTickerProviderStateMixin{
+  bool splashLoader = true;
+  List<PostModel> postList = [];
+  var activeFilter = FilterTypes.notificationsPostByUser;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMore();
+  }
+
+  Future _loadMore({bool refresh = false}) async {
+    print('START: NOTIFICATIONS _loadMore()');
+
+    if (refresh) {
+      splashLoader = true;
+      postList = [];
+      setState(() {});
+    }
+
+    List newPosts = await Database.advanced.handleGetModel(
+      context,
+      ModelTypes.posts,
+      postList,
+      filter: activeFilter,
+      // collectionReference: 'reports/Reported users/users',
+    );
+
+    if (newPosts.isNotEmpty) postList = [...newPosts];
+    print('NOTIFICATIONS POSTS: ${newPosts.length}');
+    splashLoader = false;
+
+    // Temp fix
+    setState(() {});
+    // Future.delayed(350.milliseconds).then((_) => setState(() {}));
+    // Future.delayed(350.milliseconds).then((_) => setState(() {}));
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        print('START: onWillPop()');
-        // ChatService.resetChatUnread(context, widget.chatId);
-        // context.uniProvider.updateActiveChat(widget.chat?.copyWith(
-        //   messages: messages,
-        //   lastMessage: messages.last,
-        //   unreadCounter: 0,
-        // ));
-        Navigator.pop(context);
-        return false;
-      },
-      child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-        child: Scaffold(
-          backgroundColor: AppColors.primaryDark,
-          appBar: darkAppBar(
-            centerTitle: true,
-            context,
-            title: 'Notifications',
-            hideBackButton: true,
-          ),
-          body: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, i) {
-              var notifySample = Sample.post;
-              return buildNotification(notifySample);
-            },
-          ),
-        ),
+    print('START: AdminScreen()');
+
+    return Scaffold(
+      backgroundColor: AppColors.primaryDark,
+      appBar: darkAppBar(
+        centerTitle: true,
+        context, title: 'Notifications',
+        hideBackButton: true,
+      ),
+
+      body:
+      Builder(
+          builder: (context) {
+            return buildFeed(
+              desc: 'NEW ACTIVITY & COMMENTS',
+              context,
+              postList,
+              splashLoader,
+              feedType: FeedTypes.notifications,
+              onRefreshIndicator: () async {
+                printGreen('START: onRefresh()');
+                await _loadMore(refresh: true);
+              },
+              onEndOfPage: () async {
+                printGreen('START: onEndOfPage()');
+                await _loadMore();
+              },
+            );
+          }
       ),
     );
   }
+}
 
-  Builder buildNotification(PostModel comment) {
-    return Builder(builder: (context) {
-      var userName = comment.creatorUser?.name ?? '';
-      var shortName =
-          userName.length > 19 ? userName.substring(0, 19) + '...'.toString() : userName;
-      var postAgo = postTime(comment.timestamp!);
-      var notifyText = 'commented on your Ril';
+Builder buildNotification(PostModel notification) {
+  return Builder(builder: (context) {
+    var user = notification.creatorUser;
+    var userName = user!.name ?? '';
+    var shortName =
+    userName.length > 19 ? userName.substring(0, 19) + '...'.toString() : userName;
+    var postAgo = postTime(notification.timestamp!);
+    var notifyText = 'commented on your Ril';
 
-      var isCreatorComment = true;
-      var isCurrUserComment = comment.creatorUser?.uid == context.uniProvider.currUser.uid;
-      var isCurrUserAdmin = context.uniProvider.currUser.userType == UserTypes.admin;
-
-      return Column(
-        children: [
-          const Divider(thickness: 2, color: AppColors.darkOutline),
-          Row(
-            children: [
-              Stack(
+    return Column(
+      children: [
+        const Divider(thickness: 2, color: AppColors.darkOutline),
+        Row(
+          children: [
+            Stack(
+              children: [
+                CircleAvatar(
+                  radius: 24,
+                  backgroundImage: NetworkImage('${user.photoUrl}'),
+                  backgroundColor: AppColors.darkOutline,
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: CircleAvatar(
+                      radius: 9,
+                      backgroundColor: AppColors.primaryDark,
+                      child:
+                      Assets.svg.icons.messageTextCircle02.svg(color: Colors.white).pad(3)),
+                )
+              ],
+            ).pad(4).onTap(() {
+              print('PROFILE CLICKED');
+              context.router.push(UserRoute(user: user));
+            }),
+            6.horizontalSpace,
+            Builder(builder: (dialogContext) {
+              var isHebComment = notification.textContent?.isHebrew ?? false;
+              return Column(
+                crossAxisAlignment:
+                isHebComment ? CrossAxisAlignment.end : CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundImage: NetworkImage('${comment.creatorUser!.photoUrl}'),
-                    backgroundColor: AppColors.darkOutline,
+                  Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      2.horizontalSpace,
+                      isHebComment
+                          ? notifyText.toText(color: AppColors.grey50, fontSize: 12)
+                          : shortName.toText(fontSize: 13, bold: true, color: AppColors.white),
+                      10.horizontalSpace,
+                      isHebComment
+                          ? shortName.toText(fontSize: 13, bold: true, color: AppColors.white)
+                          : notifyText.toText(color: AppColors.grey50, fontSize: 12)
+                    ],
                   ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: CircleAvatar(
-                        radius: 9,
-                        backgroundColor: AppColors.primaryDark,
-                        child:
-                            Assets.svg.icons.messageTextCircle02.svg(color: Colors.white).pad(3)),
-                  )
-                ],
-              ).pad(4).onTap(() {
-                print('PROFILE CLICKED');
-                context.router.push(UserRoute(user: comment.creatorUser!));
-              }),
-              6.horizontalSpace,
-              Builder(builder: (dialogContext) {
-                var isHebComment = comment.textContent.isHebrew;
-                return Column(
-                  crossAxisAlignment:
-                      isHebComment ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  7.verticalSpace,
+                  Container(
+                    color: AppColors.chatBubble,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        2.horizontalSpace,
-                        isHebComment
-                            ? notifyText.toText(color: AppColors.grey50, fontSize: 12)
-                            : shortName.toText(fontSize: 12, bold: true, color: AppColors.white),
-                        10.horizontalSpace,
-                        isHebComment
-                            ? shortName.toText(fontSize: 12, bold: true, color: AppColors.white)
-                            : notifyText.toText(color: AppColors.grey50, fontSize: 12)
+                        (notification.textContent ?? '').toTextExpanded(
+                            autoExpanded: true,
+                            textDirection: isHebComment ? TextDirection.rtl : TextDirection.ltr,
+                            textAlign: isHebComment ? TextAlign.right : TextAlign.left,
+                            style: AppStyles.text14PxRegular.copyWith(
+                              color: AppColors.grey50,
+                            )),
+                        7.verticalSpace,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            'Show Ril'
+                                .toText(fontSize: 13, bold: true, color: AppColors.white)
+                                .pOnly(right: 5, top: 5, bottom: 10)
+                                .onTap(() async {}, radius: 5),
+                            10.horizontalSpace,
+                            postAgo.toText(color: AppColors.grey50, fontSize: 12)
+                          ],
+                        ),
                       ],
-                    ),
-                    7.verticalSpace,
-                    Container(
-                      color: AppColors.chatBubble,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          comment.textContent.toTextExpanded(
-                              autoExpanded: true,
-                              textDirection: isHebComment ? TextDirection.rtl : TextDirection.ltr,
-                              textAlign: isHebComment ? TextAlign.right : TextAlign.left,
-                              style: AppStyles.text12PxRegular.copyWith(
-                                color: AppColors.grey50,
-                                fontSize: 14,
-                              )),
-                          7.verticalSpace,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              'Show Ril'
-                                  .toText(fontSize: 12, bold: true, color: AppColors.white)
-                                  .pOnly(right: 5, top: 5, bottom: 10)
-                                  .onTap(() async {}, radius: 5),
-                              10.horizontalSpace,
-                              postAgo.toText(color: AppColors.grey50, fontSize: 12)
-                            ],
-                          ),
-                        ],
-                      ).pOnly(top: 10),
-                    ).rounded(radius: 8),
-                  ],
-                ).expanded();
-              }),
-            ],
-          ).px(15).py(15),
-        ],
-      );
-    });
-  }
+                    ).pOnly(top: 10),
+                  ).rounded(radius: 8),
+                ],
+              ).expanded();
+            }),
+          ],
+        ).px(15).py(15),
+      ],
+    );
+  });
 }

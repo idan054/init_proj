@@ -28,13 +28,13 @@ mixin _$PostModel {
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
   bool get enableComments =>
-      throw _privateConstructorUsedError; // @ColorIntConv() Color? colorCover,
-//~ Also use as comment, Comment variables:
+      throw _privateConstructorUsedError; //~ Comment variables:
   String? get originalPostId => throw _privateConstructorUsedError;
   int get commentsLength => throw _privateConstructorUsedError;
   List<String> get commentedUsersEmails =>
       throw _privateConstructorUsedError; // AKA conversion users
   List<PostModel>? get comments => throw _privateConstructorUsedError;
+  PostType? get postType => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -58,7 +58,8 @@ abstract class $PostModelCopyWith<$Res> {
       String? originalPostId,
       int commentsLength,
       List<String> commentedUsersEmails,
-      List<PostModel>? comments});
+      List<PostModel>? comments,
+      PostType? postType});
 
   $UserModelCopyWith<$Res>? get creatorUser;
 }
@@ -87,6 +88,7 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
     Object? commentsLength = null,
     Object? commentedUsersEmails = null,
     Object? comments = freezed,
+    Object? postType = freezed,
   }) {
     return _then(_value.copyWith(
       tag: freezed == tag
@@ -133,6 +135,10 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
           ? _value.comments
           : comments // ignore: cast_nullable_to_non_nullable
               as List<PostModel>?,
+      postType: freezed == postType
+          ? _value.postType
+          : postType // ignore: cast_nullable_to_non_nullable
+              as PostType?,
     ) as $Val);
   }
 
@@ -167,7 +173,8 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
       String? originalPostId,
       int commentsLength,
       List<String> commentedUsersEmails,
-      List<PostModel>? comments});
+      List<PostModel>? comments,
+      PostType? postType});
 
   @override
   $UserModelCopyWith<$Res>? get creatorUser;
@@ -195,6 +202,7 @@ class __$$_PostModelCopyWithImpl<$Res>
     Object? commentsLength = null,
     Object? commentedUsersEmails = null,
     Object? comments = freezed,
+    Object? postType = freezed,
   }) {
     return _then(_$_PostModel(
       tag: freezed == tag
@@ -241,6 +249,10 @@ class __$$_PostModelCopyWithImpl<$Res>
           ? _value._comments
           : comments // ignore: cast_nullable_to_non_nullable
               as List<PostModel>?,
+      postType: freezed == postType
+          ? _value.postType
+          : postType // ignore: cast_nullable_to_non_nullable
+              as PostType?,
     ));
   }
 }
@@ -260,7 +272,8 @@ class _$_PostModel implements _PostModel {
       this.originalPostId,
       this.commentsLength = 0,
       final List<String> commentedUsersEmails = const [],
-      final List<PostModel>? comments = const []})
+      final List<PostModel>? comments = const [],
+      this.postType = PostType.dmRil})
       : _likeByIds = likeByIds,
         _commentedUsersEmails = commentedUsersEmails,
         _comments = comments;
@@ -293,8 +306,7 @@ class _$_PostModel implements _PostModel {
   @override
   @JsonKey()
   final bool enableComments;
-// @ColorIntConv() Color? colorCover,
-//~ Also use as comment, Comment variables:
+//~ Comment variables:
   @override
   final String? originalPostId;
   @override
@@ -324,8 +336,12 @@ class _$_PostModel implements _PostModel {
   }
 
   @override
+  @JsonKey()
+  final PostType? postType;
+
+  @override
   String toString() {
-    return 'PostModel(tag: $tag, creatorUser: $creatorUser, textContent: $textContent, id: $id, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, originalPostId: $originalPostId, commentsLength: $commentsLength, commentedUsersEmails: $commentedUsersEmails, comments: $comments)';
+    return 'PostModel(tag: $tag, creatorUser: $creatorUser, textContent: $textContent, id: $id, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, originalPostId: $originalPostId, commentsLength: $commentsLength, commentedUsersEmails: $commentedUsersEmails, comments: $comments, postType: $postType)';
   }
 
   @override
@@ -351,7 +367,9 @@ class _$_PostModel implements _PostModel {
                 other.commentsLength == commentsLength) &&
             const DeepCollectionEquality()
                 .equals(other._commentedUsersEmails, _commentedUsersEmails) &&
-            const DeepCollectionEquality().equals(other._comments, _comments));
+            const DeepCollectionEquality().equals(other._comments, _comments) &&
+            (identical(other.postType, postType) ||
+                other.postType == postType));
   }
 
   @JsonKey(ignore: true)
@@ -368,7 +386,8 @@ class _$_PostModel implements _PostModel {
       originalPostId,
       commentsLength,
       const DeepCollectionEquality().hash(_commentedUsersEmails),
-      const DeepCollectionEquality().hash(_comments));
+      const DeepCollectionEquality().hash(_comments),
+      postType);
 
   @JsonKey(ignore: true)
   @override
@@ -396,7 +415,8 @@ abstract class _PostModel implements PostModel {
       final String? originalPostId,
       final int commentsLength,
       final List<String> commentedUsersEmails,
-      final List<PostModel>? comments}) = _$_PostModel;
+      final List<PostModel>? comments,
+      final PostType? postType}) = _$_PostModel;
 
   factory _PostModel.fromJson(Map<String, dynamic> json) =
       _$_PostModel.fromJson;
@@ -416,8 +436,7 @@ abstract class _PostModel implements PostModel {
   DateTime? get timestamp;
   @override
   bool get enableComments;
-  @override // @ColorIntConv() Color? colorCover,
-//~ Also use as comment, Comment variables:
+  @override //~ Comment variables:
   String? get originalPostId;
   @override
   int get commentsLength;
@@ -425,6 +444,8 @@ abstract class _PostModel implements PostModel {
   List<String> get commentedUsersEmails;
   @override // AKA conversion users
   List<PostModel>? get comments;
+  @override
+  PostType? get postType;
   @override
   @JsonKey(ignore: true)
   _$$_PostModelCopyWith<_$_PostModel> get copyWith =>

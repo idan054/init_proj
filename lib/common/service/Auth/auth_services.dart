@@ -64,7 +64,7 @@ class AuthService {
     String? fcm = await FirebaseMessaging.instance.getToken();
     print('fcm $fcm');
     if (userData['fcm'] != fcm) {
-      NotificationService.updateFcmToken(context, fcm);
+      PushNotificationService.updateFcmToken(context, fcm);
     }
 
     context.router.replace(DashboardRoute());

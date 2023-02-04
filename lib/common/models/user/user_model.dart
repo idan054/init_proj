@@ -24,6 +24,7 @@ class UserModel with _$UserModel {
     String? photoUrl,
     bool? isOnline,
     @Default(0) int unreadCounter,
+    @Default(0) int unreadNotificationCounter,
     // int? userScore, // Example: 0 = Block Forever.
     GenderTypes? gender,
     @Default(UserTypes.normal) UserTypes? userType,

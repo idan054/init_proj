@@ -231,6 +231,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                   creatorUser: currUser,
                   timestamp: DateTime.now(),
                   originalPostId: post.id,
+                  postType: PostType.comment,
                   enableComments: true,
                 );
                 // context.uniProvider.updatePostUploaded(true);

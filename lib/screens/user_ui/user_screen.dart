@@ -70,6 +70,7 @@ class _UserScreenState extends State<UserScreen> {
       isLoading = true;
       setState(() {});
     }
+
     List newPosts = await Database.advanced.handleGetModel(
       context,
       ModelTypes.posts,
