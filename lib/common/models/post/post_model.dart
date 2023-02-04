@@ -31,6 +31,8 @@ class PostModel with _$PostModel {
     @Default([]) List<PostModel>? comments,
     @Default(PostType.dmRil) PostType? postType,
 
+    //~ Notification variables:
+    @Default(0) int notificationsCounter,
   }) = _PostModel;
 
   factory PostModel.fromJson(Map<String, dynamic> json) =>

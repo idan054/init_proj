@@ -32,6 +32,7 @@ _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
           const [],
       postType: $enumDecodeNullable(_$PostTypeEnumMap, json['postType']) ??
           PostType.dmRil,
+      notificationsCounter: json['notificationsCounter'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
@@ -48,6 +49,7 @@ Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
       'commentedUsersEmails': instance.commentedUsersEmails,
       'comments': instance.comments?.map((e) => e.toJson()).toList(),
       'postType': _$PostTypeEnumMap[instance.postType],
+      'notificationsCounter': instance.notificationsCounter,
     };
 
 const _$PostTypeEnumMap = {

@@ -15,6 +15,35 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'firebase_db.dart';
 
+import 'dart:developer';
+
+import 'package:badges/badges.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/common/extensions/color_printer.dart';
+import 'package:example/common/models/user/user_model.dart';
+import 'package:example/screens/auth_ui/a_onboarding_screen.dart';
+import 'package:expandable_text/expandable_text.dart';
+import 'package:flutter/material.dart';
+import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/routes/app_router.dart';
+import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/common/service/Database/firebase_db.dart';
+import 'package:example/common/service/Database/firebase_db.dart';
+import 'package:example/common/service/Database/firebase_db.dart';
+import 'package:example/common/service/Feed/feed_services.dart';
+import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_styles.dart';
+import 'package:example/main.dart';
+import 'package:collection/collection.dart'; // You have to add this manually,
+// import 'package:example/common/service/Auth/firebase_db.dart';
+import 'package:example/common/dump/postViewOld_sts.dart';
+import 'package:example/widgets/my_widgets.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:transparent_image/transparent_image.dart';
+
 class FsAdvanced {
   static final db = FirebaseFirestore.instance;
 
@@ -111,7 +140,8 @@ class FsAdvanced {
           reqBase = reqBase.where('enableComments', isEqualTo: false);
         }
         if (filter == FilterTypes.notificationsPostByUser) {
-          reqBase = reqBase.where('metadata.usersWithUnreadNotification', arrayContains: currUser.email!);
+          reqBase =
+              reqBase.where('metadata.usersWithUnreadNotification', arrayContains: currUser.email!);
         }
         break;
       case ModelTypes.chats:
@@ -138,6 +168,7 @@ class FsAdvanced {
           listModel.remove(post);
           var user = await getUserByEmailIfNeeded(context, post.creatorUser);
           post = post.copyWith(creatorUser: user);
+          post = updatePostNotificationIfNeeded(context, post);
           listModel.add(post);
         }
         break;
@@ -213,5 +244,15 @@ class FsAdvanced {
       }
     }
     return existUser;
+  }
+
+  static PostModel updatePostNotificationIfNeeded(BuildContext context, PostModel post) {
+    var fetchedPosts = context.uniProvider.fetchedPosts;
+
+    PostModel? fetchedPost = fetchedPosts.firstWhereOrNull((_post) => _post.id == post.id);
+    if (fetchedPost != null) {
+      post = post.copyWith(notificationsCounter: fetchedPost.notificationsCounter);
+    }
+    return post;
   }
 }

@@ -34,7 +34,9 @@ mixin _$PostModel {
   List<String> get commentedUsersEmails =>
       throw _privateConstructorUsedError; // AKA conversion users
   List<PostModel>? get comments => throw _privateConstructorUsedError;
-  PostType? get postType => throw _privateConstructorUsedError;
+  PostType? get postType =>
+      throw _privateConstructorUsedError; //~ Notification variables:
+  int get notificationsCounter => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -59,7 +61,8 @@ abstract class $PostModelCopyWith<$Res> {
       int commentsLength,
       List<String> commentedUsersEmails,
       List<PostModel>? comments,
-      PostType? postType});
+      PostType? postType,
+      int notificationsCounter});
 
   $UserModelCopyWith<$Res>? get creatorUser;
 }
@@ -89,6 +92,7 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
     Object? commentedUsersEmails = null,
     Object? comments = freezed,
     Object? postType = freezed,
+    Object? notificationsCounter = null,
   }) {
     return _then(_value.copyWith(
       tag: freezed == tag
@@ -139,6 +143,10 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
           ? _value.postType
           : postType // ignore: cast_nullable_to_non_nullable
               as PostType?,
+      notificationsCounter: null == notificationsCounter
+          ? _value.notificationsCounter
+          : notificationsCounter // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 
@@ -174,7 +182,8 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
       int commentsLength,
       List<String> commentedUsersEmails,
       List<PostModel>? comments,
-      PostType? postType});
+      PostType? postType,
+      int notificationsCounter});
 
   @override
   $UserModelCopyWith<$Res>? get creatorUser;
@@ -203,6 +212,7 @@ class __$$_PostModelCopyWithImpl<$Res>
     Object? commentedUsersEmails = null,
     Object? comments = freezed,
     Object? postType = freezed,
+    Object? notificationsCounter = null,
   }) {
     return _then(_$_PostModel(
       tag: freezed == tag
@@ -253,6 +263,10 @@ class __$$_PostModelCopyWithImpl<$Res>
           ? _value.postType
           : postType // ignore: cast_nullable_to_non_nullable
               as PostType?,
+      notificationsCounter: null == notificationsCounter
+          ? _value.notificationsCounter
+          : notificationsCounter // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -273,7 +287,8 @@ class _$_PostModel implements _PostModel {
       this.commentsLength = 0,
       final List<String> commentedUsersEmails = const [],
       final List<PostModel>? comments = const [],
-      this.postType = PostType.dmRil})
+      this.postType = PostType.dmRil,
+      this.notificationsCounter = 0})
       : _likeByIds = likeByIds,
         _commentedUsersEmails = commentedUsersEmails,
         _comments = comments;
@@ -338,10 +353,14 @@ class _$_PostModel implements _PostModel {
   @override
   @JsonKey()
   final PostType? postType;
+//~ Notification variables:
+  @override
+  @JsonKey()
+  final int notificationsCounter;
 
   @override
   String toString() {
-    return 'PostModel(tag: $tag, creatorUser: $creatorUser, textContent: $textContent, id: $id, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, originalPostId: $originalPostId, commentsLength: $commentsLength, commentedUsersEmails: $commentedUsersEmails, comments: $comments, postType: $postType)';
+    return 'PostModel(tag: $tag, creatorUser: $creatorUser, textContent: $textContent, id: $id, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, originalPostId: $originalPostId, commentsLength: $commentsLength, commentedUsersEmails: $commentedUsersEmails, comments: $comments, postType: $postType, notificationsCounter: $notificationsCounter)';
   }
 
   @override
@@ -369,7 +388,9 @@ class _$_PostModel implements _PostModel {
                 .equals(other._commentedUsersEmails, _commentedUsersEmails) &&
             const DeepCollectionEquality().equals(other._comments, _comments) &&
             (identical(other.postType, postType) ||
-                other.postType == postType));
+                other.postType == postType) &&
+            (identical(other.notificationsCounter, notificationsCounter) ||
+                other.notificationsCounter == notificationsCounter));
   }
 
   @JsonKey(ignore: true)
@@ -387,7 +408,8 @@ class _$_PostModel implements _PostModel {
       commentsLength,
       const DeepCollectionEquality().hash(_commentedUsersEmails),
       const DeepCollectionEquality().hash(_comments),
-      postType);
+      postType,
+      notificationsCounter);
 
   @JsonKey(ignore: true)
   @override
@@ -416,7 +438,8 @@ abstract class _PostModel implements PostModel {
       final int commentsLength,
       final List<String> commentedUsersEmails,
       final List<PostModel>? comments,
-      final PostType? postType}) = _$_PostModel;
+      final PostType? postType,
+      final int notificationsCounter}) = _$_PostModel;
 
   factory _PostModel.fromJson(Map<String, dynamic> json) =
       _$_PostModel.fromJson;
@@ -446,6 +469,8 @@ abstract class _PostModel implements PostModel {
   List<PostModel>? get comments;
   @override
   PostType? get postType;
+  @override //~ Notification variables:
+  int get notificationsCounter;
   @override
   @JsonKey(ignore: true)
   _$$_PostModelCopyWith<_$_PostModel> get copyWith =>

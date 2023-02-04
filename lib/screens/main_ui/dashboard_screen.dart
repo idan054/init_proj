@@ -137,17 +137,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     // NOTIFICATIONS SCREEN
                     BottomNavigationBarItem(
                         label: '',
-                        icon: notifyBubble(
+                        icon: notificationBadge(
                             child: Assets.svg.icons.bell.svg(color: AppColors.grey50)),
                         activeIcon:
-                            notifyBubble(child: Assets.svg.icons.bellSolid.svg(height: 23))),
+                            notificationBadge(child: Assets.svg.icons.bellSolid.svg(height: 23))),
 
                     // DM SCREEN
                     BottomNavigationBarItem(
                         label: '',
-                        icon: notifyBubble(
+                        icon: unreadChatBadge(
                             child: Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50)),
-                        activeIcon: notifyBubble(
+                        activeIcon: unreadChatBadge(
                             child: Assets.svg.icons.groupMultiPeopleSolid
                                 .svg(color: AppColors.white, height: 19))),
                   ],
@@ -280,7 +280,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
     });
   }
 
-  Widget notifyBubble({required Widget child}) {
+  Widget notificationBadge({required Widget child}) {
+    // int? counter = context.listenUniProvider.currUser.unreadCounter;
+
+    // return StreamProvider<int?>(
+    return StreamBuilder<int>(
+      //> BETTER Because can handle stream Collection / Doc (!)
+      // stream: Database.streamUnreadCounter(context),
+      stream: Database.streamNotificationCounter(context),
+      initialData: 0,
+      builder: (context, snapshot) {
+        var counter = context.uniProvider.currUser.unreadNotificationCounter;
+        return counter == 0
+            ? child
+            : Badge(
+                badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white70, medium: true),
+                padding: const EdgeInsets.all(5),
+                elevation: 0,
+                badgeColor: AppColors.errRed,
+                // stackFit: StackFit.loose,
+                // shape:
+                child: child);
+      },
+    );
+  }
+
+  Widget unreadChatBadge({required Widget child}) {
     // int? counter = context.listenUniProvider.currUser.unreadCounter;
 
     // return StreamProvider<int?>(

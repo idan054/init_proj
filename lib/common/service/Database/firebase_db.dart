@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
@@ -12,22 +13,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'db_advanced.dart';
 
-enum FeedTypes { members, conversations, reports, notifications}
+enum FeedTypes { members, conversations, reports, notifications }
 
 enum FilterTypes {
-  postsByUser,             //> User Screen
+  postsByUser, //> User Screen
   conversationsPostByUser, //> User Screen
-  notificationsPostByUser,  //? Notifications Screen
-  postWithoutComments,     //~ Home Screen
-  postWithComments,        //~ Home Screen
-  reportedUsers,           //! Admin Screen
-  reportedRils,            //! Admin Screen
-  sortByOldestComments,    /// Comments Screen
+  notificationsPostByUser, //? Notifications Screen
+  postWithoutComments, //~ Home Screen
+  postWithComments, //~ Home Screen
+  reportedUsers, //! Admin Screen
+  reportedRils, //! Admin Screen
+  sortByOldestComments,
 
+  /// Comments Screen
 }
 
 //> MUST Be same as collection name!
-enum ModelTypes { posts, chats, messages, users, reports}
+enum ModelTypes { posts, chats, messages, users, reports }
 
 // .get() = READ.
 // .set() / .update() = WRITE.
@@ -172,6 +174,41 @@ class Database {
   // cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
   // );
 
+  static Stream<int> streamNotificationCounter(BuildContext context) {
+    var currUser = context.uniProvider.currUser;
+    print('START: streamNotificationCounter()');
+    print('START: metadata.unreadNotificationCounter#${currUser.email}()');
+    var exportedEmail = currUser.email!.replaceAll('.', 'DOT');
+    var reqBase =
+        db.collection('posts').where('metadata.${exportedEmail}_notifications', isNotEqualTo: 0);
+    // if (timestamp != null) reqBase = reqBase.startAfter([timestamp]);
+
+    return reqBase.snapshots().map((snap) {
+      print('NOTIFICATION_DOC_ID: ${snap.size}');
+      // print('USER_DOC_ID: ${snap.docs.first.data()}');
+
+      int overallNotificationsCount = 0;
+      for (var doc in snap.docs) {
+        var data = doc.data();
+
+        var postNotificationsCount = doc.get('metadata.${exportedEmail}_notifications') as int;
+        overallNotificationsCount = overallNotificationsCount + postNotificationsCount;
+
+        var fetchedPosts = context.uniProvider.fetchedPosts;
+        var post = PostModel.fromJson(doc.data());
+        post = post.copyWith(notificationsCounter: postNotificationsCount);
+
+        var fetchedPost = context.uniProvider.fetchedPosts.firstWhereOrNull((post) => post.id == post.id);
+        context.uniProvider.updateFetchedPosts([post, ...fetchedPosts]);
+      }
+      context.uniProvider.updateUser(currUser.copyWith(unreadNotificationCounter: overallNotificationsCount));
+
+      return overallNotificationsCount;
+    }).handleError((dynamic e) {
+      print('ERROR: streamUnreadCounter() E: $e');
+    });
+  }
+
   static Stream<int> streamChatsUnreadCounter(BuildContext context) {
     var currUser = context.uniProvider.currUser;
     print('START: streamChatsUnreadCounter()');
@@ -194,25 +231,6 @@ class Database {
       context.uniProvider.updateUser(currUser.copyWith(unreadCounter: chatUnreadCounter));
 
       return chatUnreadCounter;
-    }).handleError((dynamic e) {
-      print('ERROR: streamUnreadCounter() E: $e');
-    });
-  }
-
-  static Stream<int> streamUserUnreadCounter(BuildContext context) {
-    var currUser = context.uniProvider.currUser;
-    print('START: streamUnreadCounter()');
-    var reqBase = db.collection('users').doc(currUser.email);
-    // if (timestamp != null) reqBase = reqBase.startAfter([timestamp]);
-
-    return reqBase.snapshots().map((docUpdate) {
-      print('USER_DOC_ID: ${docUpdate.id}');
-      print('USER_DOC_ID: unreadCounter:${docUpdate.data()?['unreadCounter']}');
-
-      var updatedUser = UserModel.fromJson(docUpdate.data() as Map<String, dynamic>);
-      context.uniProvider.updateUser(updatedUser);
-
-      return updatedUser.unreadCounter ?? 0;
     }).handleError((dynamic e) {
       print('ERROR: streamUnreadCounter() E: $e');
     });

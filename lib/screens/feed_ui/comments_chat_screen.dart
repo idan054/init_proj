@@ -25,7 +25,7 @@ import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/themes/app_strings.dart';
 import '../../widgets/app_bar.dart';
-import '../../widgets/components/postBlock_sts.dart';
+import '../../widgets/components/postBlock_stf.dart';
 import 'create_post_screen.dart';
 import '../user_ui/user_screen.dart';
 import 'dart:io' show Platform;

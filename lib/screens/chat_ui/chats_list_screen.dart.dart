@@ -7,7 +7,7 @@ import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/themes/app_strings.dart';
 import 'package:example/common/themes/themes.dart';
-import 'package:example/widgets/components/postBlock_sts.dart';
+import 'package:example/widgets/components/postBlock_stf.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/cupertino.dart';

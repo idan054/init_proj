@@ -1,9 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/post/post_model.dart';
+import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/material.dart';
+import '../Database/db_advanced.dart';
 import '../Database/firebase_db.dart' as click;
 import '../Database/firebase_db.dart';
+import '../notifications_services.dart';
 
 /// streamMessages() Available At [click.Database] // <<---
 
@@ -50,21 +54,49 @@ class FeedService {
   //   );
   // }
 
-  // Notify when: Comment added to Conversion ur in.
-  static void _notifyOtherUsers(BuildContext context, PostModel post) {
-    print('START: notifyUsers()');
+  static void resetPostUnread(BuildContext context, String postId) {
+    print('START: resetPostUnread()');
+    print('postId $postId');
+    var currUser = context.uniProvider.currUser;
+    // var unread = chat.unreadCounter;
+    // print('unread $unread');
 
-    print('post.commentedUsersEmails ${post.commentedUsersEmails}');
-    for (var email in post.commentedUsersEmails) {
-      // Database.updateFirestore(
-      //   collection: 'users/$email/notifications',
-      //   docName: post.id,
-      //   toJson: post.toJson(),
-      // );
+    var fetchedPosts = context.uniProvider.fetchedPosts;
+    for(var post in [...fetchedPosts]){
+      if(post.id == postId) fetchedPosts.remove(post);
     }
+    context.uniProvider.updateFetchedPosts([...fetchedPosts]);
+    fetchedPosts = context.uniProvider.fetchedPosts;
+    print('fetchedPosts X  ${fetchedPosts.length}');
+
+
+    var exportedEmail = currUser.email!.replaceAll('.', 'DOT');
+    Database.updateFirestore(
+      collection: 'posts',
+      docName: postId,
+      toJson: {
+        'metadata': {'${exportedEmail}_notifications': 0}
+      },
+    );
+
+    // if (unread != null && unread != 0 && userUnreadCounter > 0) {
+    //   print('START: resetChatUnread() [if]');
+    //
+    //   // From chat & user collections.
+    //   // Database.updateFirestore(
+    //   //   collection: 'users',
+    //   //   docName: userEmail,
+    //   //   toJson: {
+    //   //     'unreadCounter': FieldValue.increment(-unread), // Overall to user
+    //   //   },
+    //   // );
+    //   //
+    //
+    //
+    // }
   }
 
-  static void addComment(BuildContext context, PostModel comment, PostModel originalPost) {
+  static void addComment(BuildContext context, PostModel comment, PostModel originalPost) async {
     print('START: addComment()');
     var currUser = context.uniProvider.currUser;
     // var timeStamp = DateTime.now();
@@ -85,17 +117,29 @@ class FeedService {
       postData['commentedUsersEmails'] = FieldValue.arrayUnion([currUser.email]);
     }
 
-    // Notify members
+    //~ Notify members
     postData['metadata'] = {};
-    postData['metadata']['unreadNotificationCounter'] = {}; // Counter
     postData['metadata']['usersWithUnreadNotification'] = []; // Email list for filter
     for (var email in originalPost.commentedUsersEmails) {
       if (email == currUser.email) {
       } else {
         postData['metadata']['usersWithUnreadNotification'] = FieldValue.arrayUnion([email]);
-        postData['metadata']['unreadNotificationCounter'][email] = {};
-        postData['metadata']['unreadNotificationCounter'][email] = FieldValue.increment(1);
-        // todo Also send push notification
+        var exportedEmail = email.replaceAll('.', 'DOT');
+        postData['metadata']['${exportedEmail}_notifications'] = FieldValue.increment(1);
+
+
+        var otherUser = await FsAdvanced.getUserByEmailIfNeeded(context, UserModel(email: email));
+        // var title = '${currUser.name} Joined your conversation';
+        var title = '${currUser.name} Commented';
+        print(' otherUser.fcm ${ otherUser.fcm}');
+        PushNotificationService.sendPushNotification(
+          token: otherUser.fcm!,
+          title: title,
+          // title: 'You received new message!',
+          // title: '$name Start a new chat with you',
+          // title: '$name joined your conversation',
+          desc: 'A new comment on conversation of yours',
+        );
       }
     }
 

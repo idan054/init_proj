@@ -13,8 +13,8 @@ import 'package:flutter/foundation.dart';
 
 class UniProvider with ChangeNotifier {
   AppConfigModel localConfig = AppConfigModel(
-    publicVersionAndroid: 1,  //> Auto set on getAppConfig()
-    publicVersionIos: 1,      //> Auto set on getAppConfig()
+    publicVersionAndroid: 1, //> Auto set on getAppConfig()
+    publicVersionIos: 1, //> Auto set on getAppConfig()
     // whatsNew: 'Here's what new!',
     // updateType: UpdateTypes.needed,
     // status: 'ok',
@@ -31,13 +31,19 @@ class UniProvider with ChangeNotifier {
   bool signupErrFound = false;
   bool postUploaded = false; // To auto refresh when user post.
   String? selectedTag = 'New'; // When filters will be in use
-  ChatModel? activeChat; // Might be unnecessary
+  ChatModel? activeChat; // Need to reset unread chat counter
   List<ChatModel> chatList = [];
-  List<UserModel> fetchedUsers = [];
+  List<UserModel> fetchedUsers = []; // To get most updated user info.
+  List<PostModel> fetchedPosts = []; // To update each post notification
+
+  void updateFetchedPosts(List<PostModel> data, {bool notify = true}) {
+    fetchedPosts = data;
+    if (notify) notifyListeners();
+  }
 
   void updateFetchedUsers(List<UserModel> data, {bool notify = true}) {
     fetchedUsers = data;
-    if(notify) notifyListeners();
+    if (notify) notifyListeners();
   }
 
   AppConfigModel updateLocalVersion(AppConfigModel data) {
@@ -58,7 +64,7 @@ class UniProvider with ChangeNotifier {
 
   void updateCurrFilter(FilterTypes data, {bool notify = true}) {
     currFilter = data;
-    if(notify) notifyListeners();
+    if (notify) notifyListeners();
   }
 
   void updateFeedType(FeedTypes data) {
@@ -73,12 +79,12 @@ class UniProvider with ChangeNotifier {
 
   void updateErrFound(bool data, {bool notify = true}) {
     signupErrFound = data;
-    if(notify) notifyListeners();
+    if (notify) notifyListeners();
   }
 
   void updatePostUploaded(bool data, {bool notify = true}) {
     postUploaded = data;
-    if(notify) notifyListeners();
+    if (notify) notifyListeners();
   }
 
   void updateSelectedTag(String data) {
@@ -86,13 +92,11 @@ class UniProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
   void updateUser(UserModel data) {
     currUser = data;
     notifyListeners();
     // return data;
   }
-
 
   void updateActiveChat(ChatModel? data) {
     activeChat = data;
@@ -101,7 +105,6 @@ class UniProvider with ChangeNotifier {
 
   void updateChatList(List<ChatModel> data, {bool notify = true}) {
     chatList = data;
-    if(notify) notifyListeners();
+    if (notify) notifyListeners();
   }
 }
-

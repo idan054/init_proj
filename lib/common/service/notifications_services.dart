@@ -65,7 +65,7 @@ class PushNotificationService {
   }
 
   //> Actually should be on SERVER!
-  static void sendPushMessage({
+  static void sendPushNotification({
     required String token,
     required String title,
     required String desc,

@@ -16,6 +16,7 @@ import 'dart:io' show Platform;
 
 // import 'package:example/common/service/Auth/firebase_db.dart';
 import 'package:example/common/dump/postViewOld_sts.dart';
+import 'package:example/screens/main_ui/admin_screen.dart';
 import 'package:example/screens/main_ui/notification_screen.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:example/widgets/my_widgets.dart';
@@ -39,7 +40,7 @@ import '../../common/service/Auth/auth_services.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/config/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
-import '../../widgets/components/postBlock_sts.dart';
+import '../../widgets/components/postBlock_stf.dart';
 import '../../widgets/components/reported_user_block.dart';
 import 'comments_chat_screen.dart';
 
@@ -250,9 +251,10 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     );
   }
 
-  //~ Ad Widget:
-  //
-  /*
+//~ Ad Widget:
+//
+
+/*
 Widget getAd(BuildContext context) {
   BannerAdListener bannerAdListener = BannerAdListener(onAdWillDismissScreen: (ad) {
     ad.dispose();
@@ -358,7 +360,7 @@ Widget buildFeed(
             },
             child: ListView(
               children: [
-                buildFeedTitle(feedType, desc, title),
+                if (desc != null || title != null) buildFeedTitle(feedType, desc, title),
                 1.verticalSpace,
                 //   Expanded(child:
                 ListView.builder(
@@ -384,29 +386,10 @@ Widget buildFeed(
 
                         if (feedType == FeedTypes.notifications) ...[
                           buildNotification(postList[i])
+                        ] else if (feedType == FeedTypes.reports && reportList != null) ...[
+                          buildReportBlock(reportList[i], isComment)
                         ] else ...[
-                          // Shows on AdminScreen() only
-                          if (reportList != null) ...[
-                            const Divider(thickness: 2, color: AppColors.darkOutline),
-                            reportByTitle
-                                .toText(color: Colors.white30, fontSize: 12)
-                                .centerLeft
-                                .pOnly(top: 5, left: 15)
-                                .pad(3)
-                                .onTap(() {}, radius: 5),
-                            if (isComment)
-                              'Go to original Ril (unavailable)'
-                                  .toText(color: Colors.white30, fontSize: 12)
-                                  .centerLeft
-                                  .pOnly(left: 15)
-                                  .pad(3)
-                                  .onTap(() {}, radius: 5),
-                          ],
-
-                          if (reportList != null && reportList[i].reportedUser != null) ...[
-                            ReportedUserBlock(reportList[i]),
-                          ] else
-                            PostBlock(postList[i], isReported: reportList != null),
+                          PostBlock(postList[i], isReported: reportList != null),
                         ],
                       ]);
                     }).appearOpacity,
@@ -417,8 +400,8 @@ Widget buildFeed(
 }
 
 ListTile buildFeedTitle(FeedTypes feedType, String? desc, String? title) {
-  // bool isNewTag = newTags[tagIndex] == 'New';
-  bool isNewTag = feedType == FeedTypes.members;
+  bool isConversationTab = feedType == FeedTypes.conversations;
+  bool isNewRilsTab = feedType == FeedTypes.members;
 
   return ListTile(
     minVerticalPadding: 25,
@@ -427,9 +410,9 @@ ListTile buildFeedTitle(FeedTypes feedType, String? desc, String? title) {
     // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
     title: Row(
       children: [
-        isNewTag
-            ? Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50, height: 20)
-            : Assets.svg.icons.messageChatCircle.svg(color: AppColors.grey50, height: 20),
+        isConversationTab
+            ? Assets.svg.icons.messageChatCircle.svg(color: AppColors.grey50, height: 20)
+            : Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50, height: 20),
         // : Assets.svg.icons.shieldTickUntitledIcon.svg(color: Colors.white70),
         const SizedBox(width: 7),
         // (isNewTag ? 'EXPLORE 14-17 Y.O MEMBERS' : 'MEMBERS WHO INTERESTED IN')
@@ -439,12 +422,11 @@ ListTile buildFeedTitle(FeedTypes feedType, String? desc, String? title) {
 
         if (desc != null) desc.toText(fontSize: 13, color: AppColors.grey50).pOnly(top: 3)
       ],
-    ).pOnly(bottom: isNewTag ? 15 : 0),
+    ).pOnly(bottom: isNewRilsTab ? 15 : 0),
     // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
     subtitle: title == null ? null : (title).toUpperCase().toText(fontSize: 18, medium: true),
   );
 }
-
 
 AppBar buildRiltopiaAppBar(
   BuildContext context, {

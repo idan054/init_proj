@@ -4,7 +4,7 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
-import 'package:example/widgets/components/postBlock_sts.dart';
+import 'package:example/widgets/components/postBlock_stf.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import '../../common/models/post/post_model.dart';
@@ -35,7 +35,7 @@ class ReportedUserBlock extends StatelessWidget {
       color: AppColors.primaryDark,
       child: Column(
         children: [
-          buildProfile(context), // Doesn't require 55 Left padding.
+          if(report.reportedUser != null) buildProfile(context), // Doesn't require 55 Left padding.
           Column(
             children: [
               buildExpandableText(reasonWhy,

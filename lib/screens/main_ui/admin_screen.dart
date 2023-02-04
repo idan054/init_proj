@@ -11,6 +11,9 @@ import '../../common/service/Database/firebase_db.dart';
 import '../../common/themes/app_styles.dart';
 import 'dart:io' show Platform;
 
+import '../../widgets/components/postBlock_stf.dart';
+import '../../widgets/components/reported_user_block.dart';
+
 class AdminScreen extends StatefulWidget {
   const AdminScreen({Key? key}) : super(key: key);
 
@@ -95,8 +98,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
       initialIndex: 0,
       child: Scaffold(
         backgroundColor: AppColors.primaryDark,
-        appBar:
-        buildRiltopiaAppBar(
+        appBar: buildRiltopiaAppBar(
           context,
           isHomePage: false,
           bottom: TabBar(
@@ -120,73 +122,89 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
             // physics: const NeverScrollableScrollPhysics(), // disable swipe
             onPageChanged: (i) => _handleIndexChanged(i, fromTabBar: false),
             children: <Widget>[
-              Builder(
-                  builder: (context) {
-                    var postList = <PostModel>[];
-                    for(var rep in reportList){
-                      if(rep.reportedPost != null) postList.add(rep.reportedPost!);
-                    }
+              Builder(builder: (context) {
+                var postList = <PostModel>[];
+                for (var rep in reportList) {
+                  if (rep.reportedPost != null) postList.add(rep.reportedPost!);
+                }
 
-                    printWhite('postList.length: ${postList.length}');
-                    printWhite('reportList.length: ${reportList.length}');
+                printWhite('postList.length: ${postList.length}');
+                printWhite('reportList.length: ${reportList.length}');
 
-                    return buildFeed(
-                      desc: 'NEW REPORTED RILS & COMMENTS',
-                      context,
-                      postList,
-                      splashLoader,
-                      reportList: reportList,
-                      feedType: FeedTypes.reports,
-                      onRefreshIndicator: () async {
-                        printGreen('START: onRefresh()');
-                        await _loadMore(refresh: true);
-                      },
-                      onEndOfPage: () async {
-                        printGreen('START: onEndOfPage()');
-                        await _loadMore();
-                      },
-                    );
-                  }
-              ),
-              Builder(
-                  builder: (context) {
-                    var postList = <PostModel>[];
-                    for(var rep in reportList){
-                      if(rep.reportedUser != null) postList.add(const PostModel());
-                    }
+                return buildFeed(
+                  desc: 'NEW REPORTED RILS & COMMENTS',
+                  context,
+                  postList,
+                  splashLoader,
+                  reportList: reportList,
+                  feedType: FeedTypes.reports,
+                  onRefreshIndicator: () async {
+                    printGreen('START: onRefresh()');
+                    await _loadMore(refresh: true);
+                  },
+                  onEndOfPage: () async {
+                    printGreen('START: onEndOfPage()');
+                    await _loadMore();
+                  },
+                );
+              }),
+              Builder(builder: (context) {
+                var postList = <PostModel>[];
+                for (var rep in reportList) {
+                  if (rep.reportedUser != null) postList.add(const PostModel());
+                }
 
-                    printWhite('postList.length: ${postList.length}');
-                    printWhite('reportList.length: ${reportList.length}');
+                printWhite('postList.length: ${postList.length}');
+                printWhite('reportList.length: ${reportList.length}');
 
-                    return buildFeed(
-                      desc: 'SHOW LASTED REPORTS ONLY',
-                      context,
-                      postList,
-                      splashLoader,
-                      reportList: reportList,
-                      feedType: FeedTypes.reports,
-                      onRefreshIndicator: () async {
-                        printGreen('START: onRefresh()');
-                        await _loadMore(refresh: true);
-                      },
-                      onEndOfPage: () async {
-                        printGreen('START: onEndOfPage()');
-                        await _loadMore();
-                      },
-                    );
-                  }
-              ),
+                return buildFeed(
+                  desc: 'NEW USERS REPORTS',
+                  context,
+                  postList,
+                  splashLoader,
+                  reportList: reportList,
+                  feedType: FeedTypes.reports,
+                  onRefreshIndicator: () async {
+                    printGreen('START: onRefresh()');
+                    await _loadMore(refresh: true);
+                  },
+                  onEndOfPage: () async {
+                    printGreen('START: onEndOfPage()');
+                    await _loadMore();
+                  },
+                );
+              }),
             ]),
       ),
     );
   }
 }
 
+Widget buildReportBlock(ReportModel report, bool isComment) {
+  String reportByTitle = '';
+  reportByTitle += '(${report.reportStatus?.name}) ';
+  reportByTitle += report.reportedUser != null ? 'User ' : (isComment ? 'Comment ' : 'Ril ');
+  reportByTitle += 'Reported by ${report.reportedBy} :';
 
-Widget reportBlock(){
   return Column(
     children: [
-
+      const Divider(thickness: 2, color: AppColors.darkOutline),
+      reportByTitle
+          .toText(color: Colors.white30, fontSize: 12)
+          .centerLeft
+          .pOnly(top: 5, left: 15)
+          .pad(3)
+          .onTap(() {}, radius: 5),
+      if (isComment)
+        'Go to original Ril (unavailable)'
+            .toText(color: Colors.white30, fontSize: 12)
+            .centerLeft
+            .pOnly(left: 15)
+            .pad(3)
+            .onTap(() {}, radius: 5),
+      report.reportedUser != null
+          ? ReportedUserBlock(report)
+          : PostBlock(report.reportedPost!, isReported: true)
     ],
   );
 }
