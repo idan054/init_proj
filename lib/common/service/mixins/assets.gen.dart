@@ -464,6 +464,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get settings01 =>
       const SvgGenImage('assets/svg/icons/settings-01.svg');
 
+  /// File path: assets/svg/icons/share-arrow-wide.svg
+  SvgGenImage get shareArrowWide =>
+      const SvgGenImage('assets/svg/icons/share-arrow-wide.svg');
+
   /// File path: assets/svg/icons/shareClassic-untitled-icon.svg
   SvgGenImage get shareClassicUntitledIcon =>
       const SvgGenImage('assets/svg/icons/shareClassic-untitled-icon.svg');
@@ -521,6 +525,7 @@ class $AssetsSvgIconsGen {
         plusAddUntitledIcon,
         refreshArrows,
         settings01,
+        shareArrowWide,
         shareClassicUntitledIcon,
         shieldTickUntitledIcon,
         trash03,

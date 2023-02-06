@@ -8,6 +8,7 @@ import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Chat/chat_services.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
+import 'package:example/common/service/dynamic_link_services.dart';
 import 'package:example/main.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,8 @@ class _PostBlockState extends State<PostBlock> {
                       // 'Example : let’s try to think of an topic or fdsk conte tou fc words as possible... I think I’ve already ',
                       widget.post.textContent,
                       maxLines: 4,
-                      textAlign: widget.post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
+                      textAlign:
+                          widget.post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
                       textDirection:
                           widget.post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
                       style: AppStyles.text16PxRegular.copyWith(color: AppColors.white))
@@ -201,7 +203,6 @@ class _PostBlockState extends State<PostBlock> {
                 color: commentEmpty ? AppColors.primaryOriginal : AppColors.transparent,
                 child: Row(
                   children: [
-
                     // TODO Add notification dot here
                     if (notificationCounter != 0) ...[
                       const CircleAvatar(backgroundColor: AppColors.errRed, radius: 3.5),
@@ -219,7 +220,7 @@ class _PostBlockState extends State<PostBlock> {
                     title.toText(color: AppColors.grey50, fontSize: 12)
                   ],
                 ).px(7).py(4),
-              ).roundedFull
+              ).roundedFull  .pOnly(bottom: 12, top: 15)
             // .onTap(() {}, radius: 10)
             : const SizedBox(height: 20),
         const Spacer(),
@@ -228,13 +229,21 @@ class _PostBlockState extends State<PostBlock> {
           // // Like Button
           // buildHeartIcon(isLiked),
           // // Divider
+
           // Container(height: 20, width: 2, color: AppColors.darkOutline50)
-          //     .customRowPadding
+          //     .customRowPadding)
           //     .roundedFull,
 
           // Chat Button
           widget.post.enableComments
-              ? const Offstage()
+              ? Assets.svg.icons.shareArrowWide
+                  .svg(height: 17, color: AppColors.grey50)
+                  .pOnly(left: 18, right: 18, bottom: 12, top: 20)
+                  .onTap(() {
+                    DynamicLinkService.sharePostLink(productUrl: 'X', productId: 'Y');
+          })
+
+              // ? const Offstage()
               //~ Comment button
               // Row(
               //     children: [
@@ -257,11 +266,14 @@ class _PostBlockState extends State<PostBlock> {
                     'Reply'.toText(fontSize: 12, color: iconColor),
                   ],
                 ).pOnly(right: 20, left: 12).customRowPadding.onTap(() {
-                  ChatService.openChat(context, otherUser: widget.post.creatorUser!, postReply: widget.post);
+                  ChatService.openChat(context,
+                      otherUser: widget.post.creatorUser!, postReply: widget.post);
                 }, radius: 10)
         ]
       ],
-    ).customRowPadding;
+    )
+        // .customRowPadding
+    ;
   }
 
   StatefulBuilder buildHeartIcon(bool isLiked) {
@@ -270,7 +282,7 @@ class _PostBlockState extends State<PostBlock> {
         opacity: isLiked ? 1.0 : 0.5,
         child: Assets.svg.icons.heartUntitledIcon
             .svg(height: 17, color: isLiked ? AppColors.likeRed : null)
-            .pOnly(left: 12, right: 12, bottom: 4)
+            .pOnly(left: 18, right: 18, bottom: 4)
             .customRowPadding
             // .pad(12)
             .onTap(() {

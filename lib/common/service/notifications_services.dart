@@ -44,7 +44,6 @@ class PushNotificationService {
     });
      */
 
-
     //Handle background notifications
     // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) => onReceived(message));
 

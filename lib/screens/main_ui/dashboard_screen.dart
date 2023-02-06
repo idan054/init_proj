@@ -27,6 +27,7 @@ import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/config/a_get_server_config.dart';
 import '../../common/service/config/check_app_update.dart';
+import '../../common/service/dynamic_link_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/notifications_services.dart';
 import '../../widgets/my_dialog.dart';
@@ -55,6 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     PushNotificationService.requestPermission();
+    DynamicLinkService.initDynamicLinks();
 
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;
