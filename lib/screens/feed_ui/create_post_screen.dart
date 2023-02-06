@@ -99,15 +99,16 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               buildChoiceChip(context,
-                      selectedColor: AppColors.primaryLight2,
+                      selectedColor: AppColors.transparent,
+                      borderColor: AppColors.primaryLight2,
                       customIcon: isComments
                           ? Assets.svg.icons.messageTextCircle02
                               .svg(height: 15, color: AppColors.primaryLight2)
                           : Assets.svg.icons.dmPlaneUntitledIcon
                               .svg(height: 15, color: AppColors.primaryLight2),
-                      // label: (isComments ? 'With comments' : 'Reply style') // Reply only
                       label: (isComments ? 'With comments' : 'Reply only') // Reply only
-                          .toText(color: isComments ? AppColors.primaryLight2 : AppColors.primaryLight2),
+                          .toText(color: AppColors.primaryLight2),
+                      //
                       onSelect: (bool newSelection) {
                 isComments = !isComments;
                 widget.onChange(isComments);
@@ -192,7 +193,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 }
 
 Widget buildSendButton(
-    {GestureTapCallback? onTap, bool isActive = true, bool isConversationSend = false, bool withBg = false}) {
+    {GestureTapCallback? onTap,
+    bool isActive = true,
+    bool isConversationSend = false,
+    bool withBg = false}) {
   return Opacity(
     opacity: isActive ? 1.0 : 0.3,
     child: Container(

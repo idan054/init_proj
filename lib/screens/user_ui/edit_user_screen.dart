@@ -74,7 +74,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
         return false;
       },
       child: Scaffold(
-        backgroundColor: AppColors.primaryDark,
+        backgroundColor: AppColors.darkBg,
         appBar: darkAppBar(
           context,
           // title: widget.otherUser.name.toString(),
@@ -121,7 +121,12 @@ class _EditUserScreenState extends State<EditUserScreen> {
         ),
         body: Stack(
           children: [
-            Container(height: 80, color: AppColors.darkBg),
+            Container(
+              width: context.width,
+              height: 80,
+              color: AppColors.primaryOriginal,
+              child: Assets.images.squresBg.image(fit: BoxFit.cover),
+            ),
             Form(
               key: editUserFormKey,
               child: ListView(
@@ -134,10 +139,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
                   'Your interests'.toText().px(25),
                   13.verticalSpace,
                   buildTagsRow(currUser,
-                          addonName: 'Edit',
-                          onAddonTap: () => context.router.push(TagsViewRoute(user: currUser)),
-                          chipColor: AppColors.darkOutline50)
-                      .px(20),
+                      addonName: 'Edit',
+                      onAddonTap: () => context.router.push(TagsViewRoute(user: currUser))).px(20),
                   30.verticalSpace,
                   rilTextField(
                     // label: 'Nickname',
@@ -232,12 +235,11 @@ class _EditUserScreenState extends State<EditUserScreen> {
   Widget buildEditProfileImage(UserModel currUser) {
     return Badge(
             position: BadgePosition.bottomEnd(bottom: 0, end: 0),
-            badgeColor: AppColors.darkOutline50,
+            badgeColor: AppColors.primaryOriginal,
             padding: 7.all,
-            badgeContent:
-                Assets.svg.icons.plusAddUntitledIcon.svg(height: 14, color: AppColors.greyLight),
+            badgeContent: Assets.svg.icons.refreshArrows.svg(height: 14, color: AppColors.white),
             child: CircleAvatar(
-              radius: 46,
+              radius: 40,
               backgroundColor: AppColors.darkOutline,
               child: Builder(builder: (context) {
                 var imageProvider = selectedImage == null

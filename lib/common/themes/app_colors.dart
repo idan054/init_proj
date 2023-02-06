@@ -35,7 +35,7 @@ class AppColors {
   static const Color darkOutline50 = Color(0xff4D4956); // OLD
   static const Color primaryLight2 = Color(0xff655A72);
 
-  static const Color primaryShiny = Color(0xff6133E4);
+  // static const Color primaryShiny = Color(0xff6133E4);
   static Color primaryDisable = AppColors.primaryOriginal.withOpacity(0.50);
   static const Color darkGrey = Color(0xff232323);
   static const Color greyUnavailable = Color(0xff5C5C5C);

@@ -456,6 +456,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get plusAddUntitledIcon =>
       const SvgGenImage('assets/svg/icons/plusAdd-untitled-icon.svg');
 
+  /// File path: assets/svg/icons/refresh-arrows.svg
+  SvgGenImage get refreshArrows =>
+      const SvgGenImage('assets/svg/icons/refresh-arrows.svg');
+
   /// File path: assets/svg/icons/settings-01.svg
   SvgGenImage get settings01 =>
       const SvgGenImage('assets/svg/icons/settings-01.svg');
@@ -515,6 +519,7 @@ class $AssetsSvgIconsGen {
         messageCommentsLines,
         messageTextCircle02,
         plusAddUntitledIcon,
+        refreshArrows,
         settings01,
         shareClassicUntitledIcon,
         shieldTickUntitledIcon,

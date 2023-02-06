@@ -83,7 +83,7 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          190.verticalSpace,
+          widget.user == null ? 190.verticalSpace :  130.verticalSpace,
           Builder(builder: (context) {
             var isTagsErr =
                 context.listenUniProvider.signupErrFound; // This will auto rebuild if err found.
@@ -109,9 +109,9 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
                   var isSelected = selectedTags.contains(tags[i]);
                   return StatefulBuilder(builder: (context, stfState) {
                     return buildChoiceChip(context,
-                        selectedColor: AppColors.darkOutline50,
-                        isUnselectedBorder: false,
+                        selectedColor: AppColors.primaryOriginal,
                         padding: 4,
+                        rounded: 8,
                         selected: isSelected,
                         label: tags[i].toText(
                             color: isSelected ? AppColors.white : AppColors.grey50,

@@ -40,6 +40,7 @@ import '../../common/service/Auth/auth_services.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/config/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
+import '../../common/service/notifications_services.dart';
 import '../../widgets/components/postBlock_stf.dart';
 import '../../widgets/components/reported_user_block.dart';
 import 'comments_chat_screen.dart';
@@ -591,7 +592,7 @@ Widget appBarProfile(BuildContext context) {
                 .pad(0)
                 .onTap(() async {
               // var isAppleLogin = context.uniProvider.currUser.email!.contains('apple');
-
+              PushNotificationService.updateFcmToken(context, '');
               await AuthService.auth.signOut();
               await FirebaseAuth.instance.signOut();
               await GoogleSignIn().signOut();
@@ -611,8 +612,9 @@ Widget buildChoiceChip(BuildContext context,
     {bool showCloseIcon = false,
     Widget? customIcon,
     Color? selectedColor,
+    Color? borderColor,
     double? padding,
-    bool isUnselectedBorder = true,
+    double rounded = 99,
     required bool selected,
     ValueChanged<bool>? onSelect,
     required Widget label}) {
@@ -623,18 +625,13 @@ Widget buildChoiceChip(BuildContext context,
       child: ChoiceChip(
           elevation: 0,
           shadowColor: Colors.transparent,
-          shape: 55.roundedShape,
+          shape: rounded.roundedShape,
           selected: selected,
           materialTapTargetSize: (padding != null) ? MaterialTapTargetSize.shrinkWrap : null,
           padding: (padding != null) ? 0.all : null,
           backgroundColor: AppColors.darkOutline,
-          // selectedColor: selectedColor ?? AppColors.white,
-          selectedColor: Colors.transparent,
-          side:
-              // !isUnselectedBorder ? null :
-              BorderSide(
-                  width: 1.5,
-                  color: selectedColor ?? (selected ? AppColors.white : AppColors.grey50)),
+          selectedColor: selectedColor ?? AppColors.transparent,
+          side: borderColor == null ? null : BorderSide(width: 1.5, color: borderColor),
 
           // color: !selected ? AppColors.grey50 : selectedColor ?? AppColors.white),
           // side: BorderSide.none,

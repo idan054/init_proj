@@ -205,7 +205,7 @@ class _UserScreenState extends State<UserScreen> {
     return Container(
       height: topPadding,
       // color: AppColors.darkOutline,
-      color: AppColors.primaryShiny,
+      color: AppColors.primaryOriginal,
       child: Stack(
         children: [
           SizedBox(
@@ -244,7 +244,8 @@ class _UserScreenState extends State<UserScreen> {
                         if (isCurrUserProfile) ...[
                           PopupMenuItem(
                             onTap: () {
-                              context.router.push(EditUserRoute(user: context.uniProvider.currUser));
+                              context.router
+                                  .push(EditUserRoute(user: context.uniProvider.currUser));
                             },
                             child: 'Edit profile'.toText(),
                           ),
@@ -295,7 +296,8 @@ class _UserScreenState extends State<UserScreen> {
                 if (!validState) return;
 
                 var nameEndAt = userName.length < 20 ? userName.length : 20;
-                var docName = 'REPORT: ${userName.substring(0, nameEndAt).toString() + UniqueKey().toString()}';
+                var docName =
+                    'REPORT: ${userName.substring(0, nameEndAt).toString() + UniqueKey().toString()}';
 
                 var postReport = ReportModel(
                   timestamp: DateTime.now(),
@@ -309,10 +311,9 @@ class _UserScreenState extends State<UserScreen> {
                 );
 
                 Database.updateFirestore(
-                  collection: 'reports/Reported users/users',
-                  docName: docName,
-                  toJson: postReport.toJson()
-                );
+                    collection: 'reports/Reported users/users',
+                    docName: docName,
+                    toJson: postReport.toJson());
                 Navigator.of(context).pop();
                 rilFlushBar(context, 'Thanks, We\'ll handle it asap');
               },
@@ -371,7 +372,7 @@ class _UserScreenState extends State<UserScreen> {
                   setState(() {});
                 }
               },
-              child: (isBlocked ? 'Unblock' :  'Block').toText(color: AppColors.primaryLight)));
+              child: (isBlocked ? 'Unblock' : 'Block').toText(color: AppColors.primaryLight)));
     });
   }
 
@@ -415,8 +416,8 @@ class _UserScreenState extends State<UserScreen> {
                           : user.tags.length == 1
                               ? buildRilChip(user.tags.first)
                               : Badge(
-                                      badgeContent: '+${user.tags.length - 1}'.toText(
-                                          fontSize: 10, color: Colors.white, medium: true),
+                                      badgeContent: '+${user.tags.length - 1}'
+                                          .toText(fontSize: 10, color: Colors.white, medium: true),
                                       padding: const EdgeInsets.all(5),
                                       elevation: 0,
                                       badgeColor: AppColors.primaryOriginal,
@@ -429,7 +430,13 @@ class _UserScreenState extends State<UserScreen> {
                                   stfSetState(() {});
                                 }, radius: 12),
                       12.horizontalSpace,
-                      buildRilChip('${user.gender?.name}', icon: Assets.svg.icons.manProfile.svg()),
+                      Builder(builder: (context) {
+                        var isOther = user.gender == GenderTypes.other;
+                        // 🚹 🚺 👩👨 💁‍♀️💁‍♂️
+                        var genderTitle = isOther ? '🏳️‍🌈 other' : '${user.gender?.name}';
+                        return buildRilChip(genderTitle,
+                            icon: isOther ? null : Assets.svg.icons.manProfile.svg());
+                      }),
                       12.horizontalSpace,
                       buildRilChip('${user.age} y.o',
                           icon: Assets.svg.icons.dateTimeCalender.svg()),
@@ -452,27 +459,21 @@ class _UserScreenState extends State<UserScreen> {
             children: [
               !haveBio && !isCurrUser
                   ? const Offstage()
-                  : buildExpandableText(haveBio ? '${user.bio}' : 'Edit your bio',
-                          // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                          // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                          // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already '
-                          // 'let’s try to think of an interesting topic or fdsk conte to fill this post  with many fdsh fh feaiufe fwhsu fc words as possible... I think I’ve already ',
-                          onChanged: (val) {
-                      isBioExpanded = !isBioExpanded;
-                      stfSetState(() {});
-                    },
-                          style: AppStyles.text14PxRegular.copyWith(
-                              color: AppColors.grey50,
-                              decoration: haveBio ? null : TextDecoration.underline),
-              )
-                      .px(12)
-                      .py(6)
-                      .onTap(
-                          haveBio
-                              ? null
-                              : () => context.router
-                                  .push(EditUserRoute(user: context.uniProvider.currUser)),
-                          radius: 6),
+                  : buildExpandableText(
+                      haveBio ? '${user.bio}' : 'Edit your bio',
+                      onChanged: (val) {
+                        isBioExpanded = !isBioExpanded;
+                        stfSetState(() {});
+                      },
+                      style: AppStyles.text14PxRegular.copyWith(
+                          color: AppColors.grey50,
+                          decoration: haveBio ? null : TextDecoration.underline),
+                    ).px(12).py(6).onTap(
+                      haveBio
+                          ? null
+                          : () => context.router
+                              .push(EditUserRoute(user: context.uniProvider.currUser)),
+                      radius: 6),
               12.verticalSpace,
               if (!isCurrUser && isBioExpanded) ...[
                 SizedBox(
@@ -504,35 +505,32 @@ class _UserScreenState extends State<UserScreen> {
                 12.verticalSpace,
               ],
               if (!isCurrUser && !isBioExpanded) ...[
-                Builder(
-                  builder: (context) {
-                    var color = AppColors.white;
-                    var bgColor = AppColors.darkBg;
-                    return SizedBox(
-                      width: context.width * 0.5,
-                      height: 40,
-                      child: OutlinedButton.icon(
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: color,
-                          // backgroundColor: AppColors.transparent,
-                          side: BorderSide(width: 2.0, color: color),
-                          shape: 99.roundedShape,
-                        ),
-                        icon: isBlocked
-                            ? const Offstage()
-                            : Assets.svg.icons.dmPlaneUntitledIcon
-                                .svg(height: 17, color: bgColor),
-                        label: (isBlocked ? 'Blocked' : 'Send DM')
-                            .toText(fontSize: 13, color: bgColor, bold: true),
-                        onPressed: isBlocked
-                            ? null
-                            : () {
-                                ChatService.openChat(context, otherUser: user);
-                              },
+                Builder(builder: (context) {
+                  var color = AppColors.white;
+                  var bgColor = AppColors.darkBg;
+                  return SizedBox(
+                    width: context.width * 0.5,
+                    height: 40,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: color,
+                        // backgroundColor: AppColors.transparent,
+                        side: BorderSide(width: 2.0, color: color),
+                        shape: 99.roundedShape,
                       ),
-                    );
-                  }
-                ),
+                      icon: isBlocked
+                          ? const Offstage()
+                          : Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: bgColor),
+                      label: (isBlocked ? 'Blocked' : 'Send DM')
+                          .toText(fontSize: 13, color: bgColor, bold: true),
+                      onPressed: isBlocked
+                          ? null
+                          : () {
+                              ChatService.openChat(context, otherUser: user);
+                            },
+                    ),
+                  );
+                }),
                 12.verticalSpace,
                 Builder(builder: (context) {
                   var commonTag = user.tags.firstWhereOrNull((tag) => currUser.tags.contains(tag));
