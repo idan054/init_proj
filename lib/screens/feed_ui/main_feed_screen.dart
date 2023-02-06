@@ -41,41 +41,10 @@ import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/config/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/notifications_services.dart';
+import '../../widgets/components/feed/buildFeed.dart';
 import '../../widgets/components/postBlock_stf.dart';
 import '../../widgets/components/reported_user_block.dart';
 import 'comments_chat_screen.dart';
-
-// region tags
-List<String> tags = [
-  'Gaming',
-  'Art',
-  'Sport',
-  'Music',
-  'Netflix',
-  'Study',
-  'Work',
-  'Tech',
-  'Travel',
-  'Cars',
-  'Nature',
-  'Architecture',
-  'Paint',
-  'Anime',
-  'Health',
-  'Memes',
-  'Food',
-  'Animals',
-  'News',
-  'Politics',
-  'Writing',
-  'TV',
-  'Science',
-  'Fashion'
-];
-// endregion tags
-
-Widget basicLoader() =>
-    const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3).center;
 
 class MainFeedScreen extends StatefulWidget {
   const MainFeedScreen({Key? key}) : super(key: key);
@@ -318,120 +287,8 @@ SizedBox _feedChoiceList(BuildContext context) {
    */
 }
 
-Widget buildFeed(
-  BuildContext context,
-  List<PostModel> postList,
-  bool splashLoader, {
-  String? desc,
-  String? title,
-  List<ReportModel>? reportList,
-  required RefreshCallback onRefreshIndicator,
-  required EndOfPageListenerCallback onEndOfPage,
-  required FeedTypes feedType,
-}) {
-  print('START: buildFeed()');
 
-  if (splashLoader) return basicLoader();
-  if (postList.isEmpty) {
-    return 'New notifications will appear here'.toText(color: AppColors.grey50).center;
-  }
 
-  // if (splashLoader || postList.isEmpty) {
-  //   return Shimmer.fromColors(
-  //       baseColor: AppColors.white,
-  //       highlightColor: AppColors.greyLight,
-  //       child: buildTagTitle(activeFilter, customTitle),
-  //       );
-  // }
-
-  return LazyLoadScrollView(
-      scrollOffset: 1500,
-      onEndOfPage: onEndOfPage ?? () async {},
-      child: RefreshIndicator(
-          backgroundColor: AppColors.primaryOriginal,
-          color: AppColors.white,
-          strokeWidth: 2,
-          onRefresh: onRefreshIndicator ?? () async {},
-          child: NotificationListener<UserScrollNotification>(
-            onNotification: (notification) {
-              final ScrollDirection direction = notification.direction;
-              if (direction == ScrollDirection.reverse) {
-                context.uniProvider.updateShowFab(false);
-              } else if (direction == ScrollDirection.forward) {
-                context.uniProvider.updateShowFab(true);
-              }
-              // setState(() {});
-              return true;
-            },
-            child: ListView(
-              children: [
-                if (desc != null || title != null) buildFeedTitle(feedType, desc, title),
-                1.verticalSpace,
-                //   Expanded(child:
-                ListView.builder(
-                    physics: const ScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: postList.length,
-                    itemBuilder: (BuildContext context, int i) {
-                      bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
-
-                      // PostView(postList[i])
-                      String reportByTitle = '';
-                      bool isComment = postList[i].originalPostId != null;
-                      if (reportList != null) {
-                        reportByTitle += '(${reportList[i].reportStatus?.name}) ';
-                        reportByTitle += reportList[i].reportedUser != null
-                            ? 'User '
-                            : (isComment ? 'Comment ' : 'Ril ');
-                        reportByTitle += 'Reported by ${reportList[i].reportedBy} :';
-                      }
-
-                      return Column(children: [
-                        //> if (isShowAd) getAd(context),
-
-                        if (feedType == FeedTypes.notifications) ...[
-                          buildNotification(postList[i])
-                        ] else if (feedType == FeedTypes.reports && reportList != null) ...[
-                          buildReportBlock(reportList[i], isComment)
-                        ] else ...[
-                          PostBlock(postList[i], isReported: reportList != null),
-                        ],
-                      ]);
-                    }).appearOpacity,
-                //     )
-              ],
-            ),
-          )));
-}
-
-ListTile buildFeedTitle(FeedTypes feedType, String? desc, String? title) {
-  bool isConversationTab = feedType == FeedTypes.conversations;
-  bool isNewRilsTab = feedType == FeedTypes.members;
-
-  return ListTile(
-    minVerticalPadding: 25,
-    tileColor: AppColors.primaryDark,
-    // horizontalTitleGap: 0,
-    // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
-    title: Row(
-      children: [
-        isConversationTab
-            ? Assets.svg.icons.messageChatCircle.svg(color: AppColors.grey50, height: 20)
-            : Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50, height: 20),
-        // : Assets.svg.icons.shieldTickUntitledIcon.svg(color: Colors.white70),
-        const SizedBox(width: 7),
-        // (isNewTag ? 'EXPLORE 14-17 Y.O MEMBERS' : 'MEMBERS WHO INTERESTED IN')
-        // (isQuestionsTag ? 'HELP & SHARE YOUR WISDOM' : 'EXPLORE MEMBERS')
-
-        // (customTitle ?? (isQuestionsTag ? 'JOIN PUBLIC CONVERSATION' : 'EXPLORE MEMBERS'))
-
-        if (desc != null) desc.toText(fontSize: 13, color: AppColors.grey50).pOnly(top: 3)
-      ],
-    ).pOnly(bottom: isNewRilsTab ? 15 : 0),
-    // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
-    subtitle: title == null ? null : (title).toUpperCase().toText(fontSize: 18, medium: true),
-  );
-}
 
 AppBar buildRiltopiaAppBar(
   BuildContext context, {

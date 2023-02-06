@@ -32,6 +32,7 @@ import '../../common/models/report/report_model.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/clean_snackbar.dart';
+import '../../widgets/components/feed/feedTitle.dart';
 import '../../widgets/components/postBlock_stf.dart';
 import '../../widgets/my_dialog.dart';
 import '../feed_ui/main_feed_screen.dart';

@@ -11,6 +11,7 @@ import '../../common/service/Database/firebase_db.dart';
 import '../../common/themes/app_styles.dart';
 import 'dart:io' show Platform;
 
+import '../../widgets/components/feed/buildFeed.dart';
 import '../../widgets/components/postBlock_stf.dart';
 import '../../widgets/components/reported_user_block.dart';
 

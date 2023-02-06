@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/app_bar.dart';
+import '../../widgets/components/feed/feedTitle.dart';
 import '../../widgets/my_dialog.dart';
 import '../../widgets/my_widgets.dart';
 import '../feed_ui/main_feed_screen.dart';
