@@ -51,7 +51,7 @@ class FsAdvanced {
     BuildContext context,
     ModelTypes modelType,
     List? currList, {
-    String? uid, // Could be different than curr user, like in UserScreen()
+    UserModel? otherUser, // For User_page.dart
     String? collectionReference,
     FilterTypes? filter,
   }) async {
@@ -67,7 +67,7 @@ class FsAdvanced {
 
     // 1/2) Set modelList from Database snap:
     print('Start fetch From: ${timeStamp == null ? 'Most recent' : 'timeStamp'}');
-    var snap = await getDocsBasedModel(context, timeStamp, modelType, collectionRef, filter, uid);
+    var snap = await getDocsBasedModel(context, timeStamp, modelType, collectionRef, filter, otherUser);
 
     // 2/2) .fromJson() To postModel, userModel etc...
     if (snap.docs.isNotEmpty) {
@@ -90,7 +90,7 @@ class FsAdvanced {
     ModelTypes modelType,
     String collectionRef,
     FilterTypes? filter,
-    String? uid,
+    UserModel? user,
   ) async {
     print('START: getDocsBasedModel() - ${modelType.name}');
 
@@ -124,14 +124,15 @@ class FsAdvanced {
         //~ Filters (query) REQUIRE an index. Check log to create it.
 
         if (filter == FilterTypes.postsByUser) {
-          reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid); // curr / other user
+          reqBase = reqBase.where('creatorUser.uid', isEqualTo: user!.uid); // curr / other user
           reqBase = reqBase.where('enableComments', isEqualTo: false);
         }
         if (filter == FilterTypes.conversationsPostByUser) {
-          // You cannot use 'array-contains' filters more than once.
-          reqBase =
-              reqBase.where('commentedUsersEmails', arrayContains: currUser.email!); // NEW VERSION
-          // reqBase = reqBase.where('commentedUsersIds', arrayContains: context.uniProvider.currUser.uid!); // OLD VERSION
+          reqBase = reqBase.where('commentedUsersEmails', arrayContains: user!.email);
+
+          // TODO Conversations User_page 2 filters: (chips Ui): (1) user Create (2) user part of.
+          // reqBase = reqBase.where('creatorUser.uid', isEqualTo: uid); // curr / other user
+          // reqBase = reqBase.where('enableComments', isEqualTo: true);
         }
         if (filter == FilterTypes.postWithComments) {
           reqBase = reqBase.where('enableComments', isEqualTo: true);

@@ -77,7 +77,7 @@ class _UserScreenState extends State<UserScreen> {
       ModelTypes.posts,
       postList,
       filter: activeFilter,
-      uid: widget.user.uid,
+      otherUser: widget.user,
     );
 
     if (newPosts.isNotEmpty) postList = [...newPosts];

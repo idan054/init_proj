@@ -115,11 +115,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
             initialData: const [],
             // builder: (context, child) {
             builder: (context, snapshot) {
-              print('START: builder()');
-
-              // if(snapshot.hasData && comments.isEmpty){
-              //   comments = snapshot.data ?? [];
-              // }
+              print('START: COMMENTS builder()');
 
               // var newMsgs = context.listenCommentPostModelList;
 
@@ -150,22 +146,20 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                       children: [
                         buildComment(post),
                         const Divider(thickness: 2.5, color: AppColors.chatBubble).px(10),
-                        ListView.builder(
-                            // controller: viewController,
-                            // reverse: true,
-                            shrinkWrap: true,
-                            physics: const ScrollPhysics(),
-                            // controller: ,
-                            itemCount: comments.length,
-                            itemBuilder: (context, i) {
-                              // I use manually reverse because reverse + LazyLoadScrollView()
-                              // make issues while scrolling
-                              // var revI = (comments.length - 1) - i;
-
-                              // return FlutterLogo();
-                              // return buildBubble(context, comments[i], (i + 1) == comments.length);
-                              return buildComment(comments[i]);
-                            }),
+                        Builder(builder: (context) {
+                          if (snapshot.data != null &&
+                              snapshot.data!.isNotEmpty &&
+                              comments.isEmpty) {
+                            return buildStfCommentsTextLoader(); // Loading...
+                          }
+                          return ListView.builder(
+                              shrinkWrap: true,
+                              physics: const ScrollPhysics(),
+                              itemCount: comments.length,
+                              itemBuilder: (context, i) {
+                                return buildComment(comments[i]);
+                              });
+                        }),
                         Builder(builder: (context) {
                           // 5 is maxLines in the TextField() this SizedBox increase the padding.
                           var size = lines.length < 5 ? lines.length * 15.0 : 15.0 * 5;
@@ -249,6 +243,32 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
     });
   }
 
+  StatefulBuilder buildStfCommentsTextLoader() {
+    var timer = 0;
+    var dots = '';
+    return StatefulBuilder(builder: (context, textState) {
+      Future.delayed(1250.milliseconds).then((_) {
+        if (timer == 3) {
+          timer = 0;
+          dots = '';
+        } else {
+          timer++;
+          if (timer == 1) dots = '.';
+          if (timer == 2) dots = '..';
+          if (timer == 3) dots = '...';
+        }
+        textState(() {});
+      });
+      return 'Loading comments$dots\n meanwhile, Join the conversation!'
+          .toText(
+            color: AppColors.grey50,
+            textAlign: TextAlign.center,
+          )
+          .center
+          .pOnly(top: 75, bottom: 25);
+    });
+  }
+
   // void setInitMessages(List<PostModel> newMsgs) {
   //   print('START: setInitMessages()');
   //   comments = newMsgs;
@@ -271,7 +291,8 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
   Builder buildComment(PostModel comment) {
     return Builder(builder: (context) {
       var userName = comment.creatorUser?.name ?? '';
-      var shortName = userName.length > 19 ? userName.substring(0, 19) + '...'.toString() : userName;
+      var shortName =
+          userName.length > 19 ? userName.substring(0, 19) + '...'.toString() : userName;
       var postAgo = postTime(comment.timestamp!);
       var isCreatorComment = comment.creatorUser?.uid == widget.post.creatorUser?.uid;
       var isCurrUserComment = comment.creatorUser?.uid == context.uniProvider.currUser.uid;
