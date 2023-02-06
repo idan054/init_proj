@@ -33,7 +33,7 @@ class UniProvider with ChangeNotifier {
   String? selectedTag = 'New'; // When filters will be in use
   ChatModel? activeChat; // Need to reset unread chat counter
   List<ChatModel> chatList = [];
-  List<UserModel> onlineUsers = []; // based online_service.dart
+  List<String?>? onlineUsers = []; // Email users list based online_service.dart
   List<UserModel> fetchedUsers = []; // To get most updated user info.
   List<PostModel> fetchedPosts = []; // To update each post notification
 
@@ -47,7 +47,7 @@ class UniProvider with ChangeNotifier {
     if (notify) notifyListeners();
   }
 
-  void onlineUsersUpdate(List<UserModel> data, {bool notify = true}) {
+  void onlineUsersUpdate(List<String?>? data, {bool notify = true}) {
     onlineUsers = data;
     if (notify) notifyListeners();
   }

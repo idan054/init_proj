@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 import 'Database/firebase_db.dart';
@@ -30,13 +31,23 @@ class OnlineService {
     );
   }
 
-  static void getUsersStatus(BuildContext context) async {
-    Timer.periodic(10.seconds, (timer) async {
-      print('START: getUsersStatus()');
-      var doc = await Database.docData('config/usersStatus');
-      print('doc $doc');
-      var onlineUsers = doc?['onlineUsers'];
-      print('onlineUsers $onlineUsers');
-    });
+  static void updateOnlineUsersStatus(BuildContext context, {bool timerCheck = false}) async {
+    print('START: updateOnlineUsersStatus()');
+    _getOnlineUsersList(context);
+    if (timerCheck) {
+      Timer.periodic((60 * 5).seconds, (timer) async {
+        printYellow('START: 5 MIN SEC PASSED! updateOnlineUsersStatus()');
+        _getOnlineUsersList(context);
+        // context.uniProvider.onlineUsersUpdate(doc?['onlineUsers']);
+      });
+    }
+  }
+
+  static Future<List<String?>?> _getOnlineUsersList(BuildContext context) async {
+    var doc = await Database.docData('config/usersStatus');
+    context.uniProvider.onlineUsersUpdate(<String>[...doc?['onlineUsers']]);
+    var onlineUsersList = context.uniProvider.onlineUsers;
+    printYellow('onlineUsersList.length ${onlineUsersList?.length}');
+    return onlineUsersList;
   }
 }

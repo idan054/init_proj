@@ -190,7 +190,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     backgroundColor: Colors.grey,
                     backgroundImage:
                         NetworkImage(widget.otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder)),
-                buildOnlineBadge(ratio: 1.0)
+                buildOnlineBadge(context, widget.otherUser, ratio: 1.0)
               ],
             ),
             10.horizontalSpace,

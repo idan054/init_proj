@@ -395,7 +395,7 @@ class _UserScreenState extends State<UserScreen> {
                 backgroundColor: AppColors.darkGrey,
               ).center,
             ),
-            buildOnlineBadge(ratio: 1.8),
+            buildOnlineBadge(context, user, ratio: 1.8),
           ],
         ),
         16.verticalSpace,

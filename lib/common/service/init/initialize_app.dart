@@ -41,9 +41,6 @@ Future initializeApp(BuildContext context) async {
     return;
   }
 
-  PushNotificationService.requestPermission();
-  DynamicLinkService.initDynamicLinks();
-  OnlineService.getUsersStatus(context);
   //> Next time:
   await AuthService.signInWith(context, autoSignIn: true);
 }

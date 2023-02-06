@@ -28,8 +28,6 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
           const [],
       birthday:
           const DateTimeStampConv().fromJson(json['birthday'] as Timestamp?),
-      lastActivity: const DateTimeStampConv()
-          .fromJson(json['lastActivity'] as Timestamp?),
       isOnline: json['isOnline'] as bool? ?? false,
     );
 
@@ -49,7 +47,6 @@ Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
       'tags': instance.tags,
       'blockedUsers': instance.blockedUsers,
       'birthday': const DateTimeStampConv().toJson(instance.birthday),
-      'lastActivity': const DateTimeStampConv().toJson(instance.lastActivity),
       'isOnline': instance.isOnline,
     };
 

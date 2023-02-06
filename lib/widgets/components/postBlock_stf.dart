@@ -140,7 +140,7 @@ class _PostBlockState extends State<PostBlock> {
                     image: '${widget.post.creatorUser!.photoUrl}',
                     fit: BoxFit.cover,
                   )).roundedFull,
-              buildOnlineBadge(),
+              buildOnlineBadge(context, widget.post.creatorUser!),
             ],
           ).pad(0).onTap(
               isUserPage
@@ -220,7 +220,7 @@ class _PostBlockState extends State<PostBlock> {
                     title.toText(color: AppColors.grey50, fontSize: 12)
                   ],
                 ).px(7).py(4),
-              ).roundedFull  .pOnly(bottom: 12, top: 15)
+              ).roundedFull.pOnly(bottom: 12, top: 15)
             // .onTap(() {}, radius: 10)
             : const SizedBox(height: 20),
         const Spacer(),
@@ -240,8 +240,8 @@ class _PostBlockState extends State<PostBlock> {
                   .svg(height: 17, color: AppColors.grey50)
                   .pOnly(left: 18, right: 18, bottom: 12, top: 20)
                   .onTap(() {
-                    DynamicLinkService.sharePostLink(productUrl: 'X', productId: 'Y');
-          })
+                  DynamicLinkService.sharePostLink(productUrl: 'X', productId: 'Y');
+                })
 
               // ? const Offstage()
               //~ Comment button
@@ -273,7 +273,7 @@ class _PostBlockState extends State<PostBlock> {
       ],
     )
         // .customRowPadding
-    ;
+        ;
   }
 
   StatefulBuilder buildHeartIcon(bool isLiked) {
@@ -371,24 +371,24 @@ void deleteRilOrCommentPopup(BuildContext context, PostModel post, {Function? on
   });
 }
 
-Positioned buildOnlineBadge({double ratio = 1.0}) {
-  return Positioned(
-    bottom: 0,
-    right: 0,
-    child: CircleAvatar(
-      radius: 6.5 * ratio,
-      backgroundColor: AppColors.primaryDark,
-      child:
-          // STATIC VERSION:
-          // CircleAvatar(
-          //   radius: 4,
-          //   backgroundColor: AppColors.green,
-          // ),
-
-          // LIVE VERSION:
-          BlinkingOnlineBadge(ratio: ratio),
-    ),
-  );
+Widget buildOnlineBadge(BuildContext context, UserModel user, {double ratio = 1.0}) {
+  var isOnline = user.email == context.uniProvider.currUser.email ||
+      (context.uniProvider.onlineUsers ?? []).contains(user.email ?? '');
+  return isOnline
+      ? Positioned(
+          bottom: 0,
+          right: 0,
+          child: CircleAvatar(
+            radius: 6.5 * ratio,
+            backgroundColor: AppColors.primaryDark,
+            child:
+                //> STATIC VERSION:
+                // CircleAvatar(radius: 4, backgroundColor: AppColors.green),
+                //> LIVE VERSION:
+                BlinkingOnlineBadge(ratio: ratio),
+          ),
+        )
+      : const Offstage();
 }
 
 class BlinkingOnlineBadge extends StatefulWidget {

@@ -27,6 +27,7 @@ import '../../common/service/Auth/dynamic_link_services.dart';
 import '../../common/service/init/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/Auth/notifications_services.dart';
+import '../../common/service/online_service.dart';
 import '../../widgets/my_dialog.dart';
 import '../feed_ui/create_post_screen.dart';
 import 'dart:io' show Platform;
@@ -52,6 +53,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
+    PushNotificationService.requestPermission();
+    DynamicLinkService.initDynamicLinks();
+    OnlineService.updateOnlineUsersStatus(context, timerCheck: true);
 
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;

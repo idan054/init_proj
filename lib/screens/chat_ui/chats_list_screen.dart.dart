@@ -213,7 +213,7 @@ class ChatBlockSts extends StatelessWidget {
                     image: otherUser.photoUrl ?? AppStrings.monkeyPlaceHolder,
                     fit: BoxFit.cover,
                   )).roundedFull,
-              buildOnlineBadge(ratio: 1.0)
+              buildOnlineBadge(context, otherUser, ratio: 1.0)
             ],
           ),
           title: Text(

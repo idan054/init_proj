@@ -36,9 +36,8 @@ mixin _$UserModel {
   List<String> get blockedUsers =>
       throw _privateConstructorUsedError; // Hide content from (server based)
   @DateTimeStampConv()
-  DateTime? get birthday => throw _privateConstructorUsedError;
-  @DateTimeStampConv()
-  DateTime? get lastActivity => throw _privateConstructorUsedError;
+  DateTime? get birthday =>
+      throw _privateConstructorUsedError; // @DateTimeStampConv() DateTime? lastActivity,
   bool get isOnline => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -67,7 +66,6 @@ abstract class $UserModelCopyWith<$Res> {
       List<String> tags,
       List<String> blockedUsers,
       @DateTimeStampConv() DateTime? birthday,
-      @DateTimeStampConv() DateTime? lastActivity,
       bool isOnline});
 }
 
@@ -98,7 +96,6 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? tags = null,
     Object? blockedUsers = null,
     Object? birthday = freezed,
-    Object? lastActivity = freezed,
     Object? isOnline = null,
   }) {
     return _then(_value.copyWith(
@@ -158,10 +155,6 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.birthday
           : birthday // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      lastActivity: freezed == lastActivity
-          ? _value.lastActivity
-          : lastActivity // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       isOnline: null == isOnline
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
@@ -192,7 +185,6 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       List<String> tags,
       List<String> blockedUsers,
       @DateTimeStampConv() DateTime? birthday,
-      @DateTimeStampConv() DateTime? lastActivity,
       bool isOnline});
 }
 
@@ -221,7 +213,6 @@ class __$$_UserModelCopyWithImpl<$Res>
     Object? tags = null,
     Object? blockedUsers = null,
     Object? birthday = freezed,
-    Object? lastActivity = freezed,
     Object? isOnline = null,
   }) {
     return _then(_$_UserModel(
@@ -281,10 +272,6 @@ class __$$_UserModelCopyWithImpl<$Res>
           ? _value.birthday
           : birthday // ignore: cast_nullable_to_non_nullable
               as DateTime?,
-      lastActivity: freezed == lastActivity
-          ? _value.lastActivity
-          : lastActivity // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       isOnline: null == isOnline
           ? _value.isOnline
           : isOnline // ignore: cast_nullable_to_non_nullable
@@ -312,7 +299,6 @@ class _$_UserModel implements _UserModel {
       final List<String> tags = const [],
       final List<String> blockedUsers = const [],
       @DateTimeStampConv() this.birthday,
-      @DateTimeStampConv() this.lastActivity,
       this.isOnline = false})
       : _tags = tags,
         _blockedUsers = blockedUsers;
@@ -368,16 +354,14 @@ class _$_UserModel implements _UserModel {
   @override
   @DateTimeStampConv()
   final DateTime? birthday;
-  @override
-  @DateTimeStampConv()
-  final DateTime? lastActivity;
+// @DateTimeStampConv() DateTime? lastActivity,
   @override
   @JsonKey()
   final bool isOnline;
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, bio: $bio, fcm: $fcm, age: $age, photoUrl: $photoUrl, unreadCounter: $unreadCounter, unreadNotificationCounter: $unreadNotificationCounter, gender: $gender, userType: $userType, tags: $tags, blockedUsers: $blockedUsers, birthday: $birthday, lastActivity: $lastActivity, isOnline: $isOnline)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, bio: $bio, fcm: $fcm, age: $age, photoUrl: $photoUrl, unreadCounter: $unreadCounter, unreadNotificationCounter: $unreadNotificationCounter, gender: $gender, userType: $userType, tags: $tags, blockedUsers: $blockedUsers, birthday: $birthday, isOnline: $isOnline)';
   }
 
   @override
@@ -406,8 +390,6 @@ class _$_UserModel implements _UserModel {
                 .equals(other._blockedUsers, _blockedUsers) &&
             (identical(other.birthday, birthday) ||
                 other.birthday == birthday) &&
-            (identical(other.lastActivity, lastActivity) ||
-                other.lastActivity == lastActivity) &&
             (identical(other.isOnline, isOnline) ||
                 other.isOnline == isOnline));
   }
@@ -430,7 +412,6 @@ class _$_UserModel implements _UserModel {
       const DeepCollectionEquality().hash(_tags),
       const DeepCollectionEquality().hash(_blockedUsers),
       birthday,
-      lastActivity,
       isOnline);
 
   @JsonKey(ignore: true)
@@ -463,7 +444,6 @@ abstract class _UserModel implements UserModel {
       final List<String> tags,
       final List<String> blockedUsers,
       @DateTimeStampConv() final DateTime? birthday,
-      @DateTimeStampConv() final DateTime? lastActivity,
       final bool isOnline}) = _$_UserModel;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
@@ -498,10 +478,7 @@ abstract class _UserModel implements UserModel {
   @override // Hide content from (server based)
   @DateTimeStampConv()
   DateTime? get birthday;
-  @override
-  @DateTimeStampConv()
-  DateTime? get lastActivity;
-  @override
+  @override // @DateTimeStampConv() DateTime? lastActivity,
   bool get isOnline;
   @override
   @JsonKey(ignore: true)

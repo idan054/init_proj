@@ -307,7 +307,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                 backgroundImage: NetworkImage('${comment.creatorUser!.photoUrl}'),
                 backgroundColor: AppColors.darkOutline,
               ),
-              buildOnlineBadge(),
+              buildOnlineBadge(context, comment.creatorUser!),
             ],
           ).pad(4).onTap(() {
             print('PROFILE CLICKED');

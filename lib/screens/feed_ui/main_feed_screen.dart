@@ -123,6 +123,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     print('START: FEED _loadMore()');
 
     if (refresh) {
+      OnlineService.updateOnlineUsersStatus(context);
+
       splashLoader = true;
       postList = [];
       if (mounted) setState(() {});
