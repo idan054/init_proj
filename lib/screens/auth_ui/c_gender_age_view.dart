@@ -105,7 +105,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
             selectedGender = newValue!;
             var index = genderItems.indexWhere((item) => item == newValue);
             var gender = GenderTypes.values[index];
-            context.uniProvider.updateUser(currUser.copyWith(gender: gender));
+            context.uniProvider.currUserUpdate(currUser.copyWith(gender: gender));
             // stfSetState(() {});
           }),
           // rilTextField(label: 'Gender', hint: 'Choose your gender...'),
@@ -191,7 +191,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
     // print('bDay $bDay');
     // print('age $age');
 
-    context.uniProvider.updateUser(currUser.copyWith(
+    context.uniProvider.currUserUpdate(currUser.copyWith(
       age: age,
       birthday: bDay,
     ));

@@ -26,7 +26,7 @@ void checkForUpdate(
   );
 
   context.uniProvider
-      .updateLocalVersion(localConfig.copyWith(isUpdateAvailable: serverVer != localVer));
+      .localVersionUpdate(localConfig.copyWith(isUpdateAvailable: serverVer != localVer));
 
   print('localVer != serverVer ${localVer != serverVer}');
   if (localVer != serverVer || mustShowPopup) {

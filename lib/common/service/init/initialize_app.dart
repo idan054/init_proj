@@ -8,6 +8,7 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Auth/auth_services.dart';
 import 'package:example/common/service/mixins/after_layout_mixin.dart';
+import 'package:example/common/service/online_service.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/screens/main_ui/widgets/riv_splash_screen.dart';
 import 'package:example/widgets/my_dialog.dart';
@@ -17,13 +18,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../common/config.dart';
-import '../../common/models/appConfig/app_config_model.dart';
-import '../../common/service/Database/firebase_db.dart';
-import '../../common/service/config/a_get_server_config.dart';
-import '../../common/service/hive_services.dart';
-import '../../widgets/my_widgets.dart';
-import 'notifications_services.dart';
+import '../../models/appConfig/app_config_model.dart';
+import '../Auth/dynamic_link_services.dart';
+import '../Database/firebase_db.dart';
+import '../../dump/hive_services.dart';
+import '../../../widgets/my_widgets.dart';
+import '../Auth/notifications_services.dart';
+import 'a_get_server_config.dart';
 
 Future initializeApp(BuildContext context) async {
   // await Future.delayed(3.seconds);
@@ -40,6 +41,9 @@ Future initializeApp(BuildContext context) async {
     return;
   }
 
+  PushNotificationService.requestPermission();
+  DynamicLinkService.initDynamicLinks();
+  OnlineService.getUsersStatus(context);
   //> Next time:
   await AuthService.signInWith(context, autoSignIn: true);
 }

@@ -16,7 +16,7 @@ import 'common/models/universalModel.dart';
 import 'common/service/Database/firebase_db.dart';
 import 'common/service/Database/firebase_options.dart';
 import 'common/service/life_cycle.dart';
-import 'common/service/notifications_services.dart';
+import 'common/service/Auth/notifications_services.dart';
 import 'common/themes/app_colors.dart';
 
 Future<void> _handleNotificationReceived(RemoteMessage message) async {

@@ -55,7 +55,7 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
                 backAction: () => _discardPopup(widget.user!),
                 actions: [
                   'Save'.toText().px(14).center.onTap(() {
-                    context.uniProvider.updateUser(widget.user!.copyWith(tags: selectedTags));
+                    context.uniProvider.currUserUpdate(widget.user!.copyWith(tags: selectedTags));
                     context.router.replace(EditUserRoute(user: widget.user!));
                   }, radius: 10).pOnly(right: 5)
                 ],
@@ -122,7 +122,7 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
                       var currUser = context.uniProvider.currUser;
                       if (!isEditMode) {
                         // On edit mode - this will be save only if 'Save' button clicked.
-                        context.uniProvider.updateUser(currUser.copyWith(tags: selectedTags));
+                        context.uniProvider.currUserUpdate(currUser.copyWith(tags: selectedTags));
                       }
                       stfState(() {});
                     });

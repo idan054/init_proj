@@ -33,77 +33,83 @@ class UniProvider with ChangeNotifier {
   String? selectedTag = 'New'; // When filters will be in use
   ChatModel? activeChat; // Need to reset unread chat counter
   List<ChatModel> chatList = [];
+  List<UserModel> onlineUsers = []; // based online_service.dart
   List<UserModel> fetchedUsers = []; // To get most updated user info.
   List<PostModel> fetchedPosts = []; // To update each post notification
 
-  void updateFetchedPosts(List<PostModel> data, {bool notify = true}) {
+  void fetchedPostsUpdate(List<PostModel> data, {bool notify = true}) {
     fetchedPosts = data;
     if (notify) notifyListeners();
   }
 
-  void updateFetchedUsers(List<UserModel> data, {bool notify = true}) {
+  void fetchedUsersUpdate(List<UserModel> data, {bool notify = true}) {
     fetchedUsers = data;
     if (notify) notifyListeners();
   }
 
-  AppConfigModel updateLocalVersion(AppConfigModel data) {
+  void onlineUsersUpdate(List<UserModel> data, {bool notify = true}) {
+    onlineUsers = data;
+    if (notify) notifyListeners();
+  }
+
+  AppConfigModel localVersionUpdate(AppConfigModel data) {
     localConfig = data;
     notifyListeners();
     return data;
   }
 
-  void updateServerConfig(AppConfigModel? data) {
+  void serverConfigUpdate(AppConfigModel? data) {
     serverConfig = data;
     notifyListeners();
   }
 
-  void updateShowFab(bool data) {
+  void showFabUpdate(bool data) {
     showFab = data;
     notifyListeners();
   }
 
-  void updateCurrFilter(FilterTypes data, {bool notify = true}) {
+  void currFilterUpdate(FilterTypes data, {bool notify = true}) {
     currFilter = data;
     if (notify) notifyListeners();
   }
 
-  void updateFeedType(FeedTypes data) {
+  void feedTypeUpdate(FeedTypes data) {
     feedType = data;
     notifyListeners();
   }
 
-  void updateIsLoading(bool data) {
+  void isLoadingUpdate(bool data) {
     isLoading = data;
     notifyListeners();
   }
 
-  void updateErrFound(bool data, {bool notify = true}) {
+  void errFoundUpdate(bool data, {bool notify = true}) {
     signupErrFound = data;
     if (notify) notifyListeners();
   }
 
-  void updatePostUploaded(bool data, {bool notify = true}) {
+  void postUploadedUpdate(bool data, {bool notify = true}) {
     postUploaded = data;
     if (notify) notifyListeners();
   }
 
-  void updateSelectedTag(String data) {
+  void selectedTagUpdate(String data) {
     selectedTag = data;
     notifyListeners();
   }
 
-  void updateUser(UserModel data) {
+  void currUserUpdate(UserModel data) {
     currUser = data;
     notifyListeners();
     // return data;
   }
 
-  void updateActiveChat(ChatModel? data) {
+  void activeChatUpdate(ChatModel? data) {
     activeChat = data;
     notifyListeners();
   }
 
-  void updateChatList(List<ChatModel> data, {bool notify = true}) {
+  void chatListUpdate(List<ChatModel> data, {bool notify = true}) {
     chatList = data;
     if (notify) notifyListeners();
   }

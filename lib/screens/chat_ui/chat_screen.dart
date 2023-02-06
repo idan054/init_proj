@@ -80,7 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
       onWillPop: () async {
         print('START: onWillPop()');
         ChatService.resetChatUnread(context, widget.chatId);
-        context.uniProvider.updateActiveChat(widget.chat?.copyWith(
+        context.uniProvider.activeChatUpdate(widget.chat?.copyWith(
           messages: messages,
           lastMessage: messages.last,
           unreadCounter: 0,

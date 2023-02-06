@@ -40,7 +40,6 @@ import '../../common/models/universalModel.dart';
 import '../../common/models/user/user_model.dart';
 import '../../common/service/Auth/auth_services.dart';
 import '../../common/service/Chat/chat_services.dart';
-import '../../common/service/config/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/components/feed/buildFeed.dart';

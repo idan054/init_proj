@@ -199,9 +199,9 @@ class Database {
         post = post.copyWith(notificationsCounter: postNotificationsCount);
 
         var fetchedPost = context.uniProvider.fetchedPosts.firstWhereOrNull((post) => post.id == post.id);
-        context.uniProvider.updateFetchedPosts([post, ...fetchedPosts]);
+        context.uniProvider.fetchedPostsUpdate([post, ...fetchedPosts]);
       }
-      context.uniProvider.updateUser(currUser.copyWith(unreadNotificationCounter: overallNotificationsCount));
+      context.uniProvider.currUserUpdate(currUser.copyWith(unreadNotificationCounter: overallNotificationsCount));
 
       return overallNotificationsCount;
     }).handleError((dynamic e) {
@@ -228,7 +228,7 @@ class Database {
             (chatUnreadCounter + doc.get('metadata.unreadCounter#${currUser.uid}')) as int;
       }
       // var updatedUser = UserModel.fromJson(snap.data() as Map<String, dynamic>);
-      context.uniProvider.updateUser(currUser.copyWith(unreadCounter: chatUnreadCounter));
+      context.uniProvider.currUserUpdate(currUser.copyWith(unreadCounter: chatUnreadCounter));
 
       return chatUnreadCounter;
     }).handleError((dynamic e) {

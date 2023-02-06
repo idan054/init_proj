@@ -139,14 +139,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                 title: tags_e_View ? "Let's Start!" : 'Next ',
                 color: AppColors.white,
                 textColor: AppColors.darkBg, onPressed: () {
-              context.uniProvider.updateErrFound(false);
+              context.uniProvider.errFoundUpdate(false);
 
               // Image validation
               var currUser = context.uniProvider.currUser;
               var imageErr =
                   nameProfile_b_View && (currUser.photoUrl == null || currUser.photoUrl!.isEmpty);
               var tagsErr = tags_e_View && (currUser.tags.isEmpty);
-              if (imageErr || tagsErr) context.uniProvider.updateErrFound(true);
+              if (imageErr || tagsErr) context.uniProvider.errFoundUpdate(true);
 
               // formKey - Name, Age, Gender validation
               var validState = registerFormKey.currentState!.validate();

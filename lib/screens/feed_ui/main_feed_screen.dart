@@ -38,9 +38,10 @@ import '../../common/models/universalModel.dart';
 import '../../common/models/user/user_model.dart';
 import '../../common/service/Auth/auth_services.dart';
 import '../../common/service/Chat/chat_services.dart';
-import '../../common/service/config/check_app_update.dart';
+import '../../common/service/init/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
-import '../../common/service/notifications_services.dart';
+import '../../common/service/Auth/notifications_services.dart';
+import '../../common/service/online_service.dart';
 import '../../widgets/components/feed/buildFeed.dart';
 import '../../widgets/components/postBlock_stf.dart';
 import '../../widgets/components/reported_user_block.dart';
@@ -107,13 +108,13 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
 
       if (i == 0) {
         activeFilter = FilterTypes.postWithoutComments;
-        context.uniProvider.updateFeedType(FeedTypes.members);
+        context.uniProvider.feedTypeUpdate(FeedTypes.members);
       }
       if (i == 1) {
         activeFilter = FilterTypes.postWithComments;
-        context.uniProvider.updateFeedType(FeedTypes.conversations);
+        context.uniProvider.feedTypeUpdate(FeedTypes.conversations);
       }
-      context.uniProvider.updateCurrFilter(activeFilter);
+      context.uniProvider.currFilterUpdate(activeFilter);
       await _loadMore(refresh: true);
     }
   }
@@ -449,6 +450,7 @@ Widget appBarProfile(BuildContext context) {
                 .pad(0)
                 .onTap(() async {
               // var isAppleLogin = context.uniProvider.currUser.email!.contains('apple');
+              OnlineService.setUserOffline(context);
               PushNotificationService.updateFcmToken(context, '');
               await AuthService.auth.signOut();
               await FirebaseAuth.instance.signOut();

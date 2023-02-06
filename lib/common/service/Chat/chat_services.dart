@@ -14,7 +14,7 @@ import '../../models/user/user_model.dart';
 import '../Database/db_advanced.dart';
 import '../Database/firebase_db.dart';
 import '../Database/firebase_db.dart' as click;
-import '../notifications_services.dart';
+import '../Auth/notifications_services.dart';
 
 // ChatService Usage At [screen.ChatScreen] // <<---
 // streamMessages() Available At [click.Database] // <<---

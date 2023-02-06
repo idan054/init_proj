@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import '../Database/db_advanced.dart';
 import '../Database/firebase_db.dart' as click;
 import '../Database/firebase_db.dart';
-import '../notifications_services.dart';
+import '../Auth/notifications_services.dart';
 
 /// streamMessages() Available At [click.Database] // <<---
 
@@ -65,7 +65,7 @@ class FeedService {
     for(var post in [...fetchedPosts]){
       if(post.id == postId) fetchedPosts.remove(post);
     }
-    context.uniProvider.updateFetchedPosts([...fetchedPosts]);
+    context.uniProvider.fetchedPostsUpdate([...fetchedPosts]);
     fetchedPosts = context.uniProvider.fetchedPosts;
     print('fetchedPosts X  ${fetchedPosts.length}');
 

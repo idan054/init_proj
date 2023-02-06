@@ -17,7 +17,7 @@ import '../Database/firebase_db.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import '../notifications_services.dart';
+import 'notifications_services.dart';
 // import 'package:apple_sign_in/apple_sign_in.dart' as apl;
 
 class AuthService {
@@ -59,7 +59,7 @@ class AuthService {
 
   static void _handleExistUser(BuildContext context, Map<String, dynamic> userData) async {
     var currUser = UserModel.fromJson(userData);
-    context.uniProvider.updateUser(currUser);
+    context.uniProvider.currUserUpdate(currUser);
 
     String? fcm = await FirebaseMessaging.instance.getToken();
     if (userData['fcm'] != fcm) {
@@ -76,7 +76,7 @@ class AuthService {
       email: authUser!.email,
       fcm: fcm,
     );
-    context.uniProvider.updateUser(user);
+    context.uniProvider.currUserUpdate(user);
     context.router.replace(const OnBoardingRoute());
     // Data will upload to server when sign up Done,
   }

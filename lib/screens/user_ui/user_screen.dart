@@ -190,7 +190,7 @@ class _UserScreenState extends State<UserScreen> {
             onTap: (value) async {
               if (value == 0) activeFilter = FilterTypes.postsByUser;
               if (value == 1) activeFilter = FilterTypes.conversationsPostByUser;
-              context.uniProvider.updateCurrFilter(activeFilter);
+              context.uniProvider.currFilterUpdate(activeFilter);
               await _loadMore(refresh: true);
             },
           );
@@ -342,7 +342,7 @@ class _UserScreenState extends State<UserScreen> {
                   var blockedUsers = [...currUser.blockedUsers];
                   blockedUsers.remove(user.uid);
                   currUser = currUser.copyWith(blockedUsers: blockedUsers);
-                  context.uniProvider.updateUser(currUser);
+                  context.uniProvider.currUserUpdate(currUser);
 
                   Database.updateFirestore(
                     collection: 'users',
@@ -359,7 +359,7 @@ class _UserScreenState extends State<UserScreen> {
                   var blockedUsers = [...currUser.blockedUsers];
                   blockedUsers.add(user.uid.toString());
                   currUser = currUser.copyWith(blockedUsers: blockedUsers);
-                  context.uniProvider.updateUser(currUser);
+                  context.uniProvider.currUserUpdate(currUser);
 
                   Database.updateFirestore(
                     collection: 'users',

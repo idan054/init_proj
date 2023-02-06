@@ -18,7 +18,7 @@ Future updateServerVersionIfNeeded(
 ) async {
   void updateServerConfig({required bool isIos})async {
     try {
-      context.uniProvider.updateServerConfig(serverConfig.copyWith(
+      context.uniProvider.serverConfigUpdate(serverConfig.copyWith(
         publicVersionAndroid: localConfig.publicVersionAndroid,
         publicVersionIos: localConfig.publicVersionAndroid,
       ));

@@ -3,7 +3,7 @@ import 'package:app_settings/app_settings.dart';
 import 'package:example/common/extensions/context_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'Database/firebase_db.dart';
+import '../Database/firebase_db.dart';
 
 // Based firebase_messaging ONLY.
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -60,7 +60,7 @@ class PushNotificationService {
     await Database.updateFirestore(
         collection: 'users', docName: currUser.email.toString(), toJson: {'fcm': fcm});
     currUser = currUser.copyWith(fcm: fcm);
-    context.uniProvider.updateUser(currUser);
+    context.uniProvider.currUserUpdate(currUser);
   }
 
   //> Actually should be on SERVER!

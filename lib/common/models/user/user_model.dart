@@ -8,7 +8,6 @@ part 'user_model.g.dart';
 enum GenderTypes { male, female, other}
 enum UserTypes { normal, admin, blocked}
 
-
 // flutter pub run build_runner build --delete-conflicting-outputs
 @freezed
 //~ Don't forget to manually add in HIVE Model!
@@ -22,7 +21,6 @@ class UserModel with _$UserModel {
     String? fcm,
     int? age,
     String? photoUrl,
-    bool? isOnline,
     @Default(0) int unreadCounter,
     @Default(0) int unreadNotificationCounter,
     // int? userScore, // Example: 0 = Block Forever.
@@ -31,6 +29,9 @@ class UserModel with _$UserModel {
     @Default([]) List<String> tags,
     @Default([]) List<String> blockedUsers, // Hide content from (server based)
     @DateTimeStampConv() DateTime? birthday,
+
+    // @DateTimeStampConv() DateTime? lastActivity,
+    @Default(false) bool isOnline,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

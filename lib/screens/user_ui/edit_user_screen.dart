@@ -87,7 +87,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
               tempBio == null;
               var updatedUser =
                   currUser.copyWith(name: nameController.text, bio: bioController.text);
-              context.uniProvider.updateUser(updatedUser);
+              context.uniProvider.currUserUpdate(updatedUser);
 
               Database.updateFirestore(
                   collection: 'users',
@@ -96,7 +96,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
 
               //~ The NEW method
               var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
-              context.uniProvider.updateFetchedUsers([updatedUser, ...alreadyFetchedUsers]);
+              context.uniProvider.fetchedUsersUpdate([updatedUser, ...alreadyFetchedUsers]);
 
               //! Expensive Way! REPLACED by getUserByEmailIfNeeded() method
               // var snap = await FsAdvanced.db
@@ -266,7 +266,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
         thenAction: (_) => isPhotoUploaded = true,
       );
       // context.uniProvider.updateIsLoading(false);
-      context.uniProvider.updateUser(currUser.copyWith(photoUrl: imageUrl));
+      context.uniProvider.currUserUpdate(currUser.copyWith(photoUrl: imageUrl));
     })
         // .centerLeft
         .center;

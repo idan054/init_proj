@@ -147,7 +147,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       postType: isComments ? PostType.conversationRil : PostType.dmRil,
                       commentedUsersEmails: isComments ? [currUser.email.toString()] : [],
                     );
-                    context.uniProvider.updatePostUploaded(true);
+                    context.uniProvider.postUploadedUpdate(true);
                     FeedService.uploadPost(context, post);
                     context.router.pop();
                   },

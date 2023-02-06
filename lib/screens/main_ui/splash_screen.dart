@@ -14,12 +14,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../common/config.dart';
-import '../../common/models/appConfig/app_config_model.dart';
 import '../../common/service/Database/firebase_db.dart';
-import '../../common/service/config/a_get_server_config.dart';
-import '../../common/service/hive_services.dart';
-import '../../common/service/initialize_app.dart';
+import '../../common/dump/hive_services.dart';
+import '../../common/service/init/initialize_app.dart';
 import '../../widgets/my_widgets.dart';
 
 class SplashScreen extends StatefulWidget {

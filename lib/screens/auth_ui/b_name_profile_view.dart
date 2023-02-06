@@ -76,7 +76,7 @@ class _NameProfileViewState extends State<NameProfileView> {
               thenAction: (_) => isPhotoUploaded = true,
             );
             // context.uniProvider.updateIsLoading(false);
-            context.uniProvider.updateUser(currUser.copyWith(photoUrl: imageUrl));
+            context.uniProvider.currUserUpdate(currUser.copyWith(photoUrl: imageUrl));
           }),
           20.verticalSpace,
           'Add a profile picture'.toText(fontSize: 13, medium: true),
@@ -94,7 +94,7 @@ class _NameProfileViewState extends State<NameProfileView> {
               return null;
             },
             // errorText: nameErr ? '' : null,
-            onChanged: (val) => context.uniProvider.updateUser(currUser.copyWith(name: val)),
+            onChanged: (val) => context.uniProvider.currUserUpdate(currUser.copyWith(name: val)),
           )
         ],
       ),

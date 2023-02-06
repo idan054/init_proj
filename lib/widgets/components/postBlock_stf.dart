@@ -8,7 +8,7 @@ import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Chat/chat_services.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
-import 'package:example/common/service/dynamic_link_services.dart';
+import 'package:example/common/service/Auth/dynamic_link_services.dart';
 import 'package:example/main.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
@@ -406,7 +406,7 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
 
   @override
   void initState() {
-    _animationController = AnimationController(vsync: this, duration: 2.seconds);
+    _animationController = AnimationController(vsync: this, duration: 1500.milliseconds);
     _animationController.repeat(reverse: true);
     super.initState();
   }
@@ -416,7 +416,7 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
     var size = widget.ratio * 4.0;
     return CircleAvatar(
       radius: size,
-      backgroundColor: AppColors.greenOld,
+      backgroundColor: AppColors.greenOld.withOpacity(0.35),
       child: FadeTransition(
         opacity: _animationController,
         child: CircleAvatar(

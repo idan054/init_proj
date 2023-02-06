@@ -10,7 +10,7 @@ import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/report/report_model.dart';
 import 'package:example/common/models/user/user_model.dart';
-import 'package:example/common/service/hive_services.dart';
+import 'package:example/common/dump/hive_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'firebase_db.dart';
@@ -240,7 +240,7 @@ class FsAdvanced {
       } else {
         printOrange('USER STATUS: $userEmail FETCHED SUCCESSFULLY!');
         var newUser = UserModel.fromJson(userData);
-        context.uniProvider.updateFetchedUsers([newUser, ...alreadyFetchedUsers]);
+        context.uniProvider.fetchedUsersUpdate([newUser, ...alreadyFetchedUsers]);
         return newUser;
       }
     }

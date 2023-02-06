@@ -1,7 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:example/common/service/config/check_app_status.dart';
-import 'package:example/common/service/config/update_server_if_needed.dart';
 import 'package:flutter/material.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
@@ -10,13 +8,14 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../models/appConfig/app_config_model.dart';
 import '../Database/firebase_db.dart';
 import 'dart:io' show Platform;
+import 'check_app_status.dart';
 import 'check_app_update.dart';
 
 Future<bool> updateAppConfigModel(BuildContext context) async {
   print('START: getAppConfig()');
   var jsonData = await Database.docData('config/appConfigDoc');
   var serverConfig = AppConfigModel.fromJson(jsonData ?? {});
-  context.uniProvider.updateServerConfig(serverConfig);
+  context.uniProvider.serverConfigUpdate(serverConfig);
 
   // Get & Update local version
   var packageInfo = await PackageInfo.fromPlatform();
@@ -24,7 +23,7 @@ Future<bool> updateAppConfigModel(BuildContext context) async {
   print('buildNumber $buildNumber');
 
   var localConfig = context.uniProvider.localConfig;
-  localConfig = context.uniProvider.updateLocalVersion(localConfig.copyWith(
+  localConfig = context.uniProvider.localVersionUpdate(localConfig.copyWith(
     publicVersionAndroid: buildNumber,
     publicVersionIos: buildNumber,
   ));

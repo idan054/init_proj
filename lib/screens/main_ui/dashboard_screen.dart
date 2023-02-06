@@ -19,17 +19,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-
-import '../../common/config.dart';
 import '../../common/models/appConfig/app_config_model.dart';
 import '../../common/routes/app_router.gr.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../common/service/Database/firebase_db.dart';
-import '../../common/service/config/a_get_server_config.dart';
-import '../../common/service/config/check_app_update.dart';
-import '../../common/service/dynamic_link_services.dart';
+import '../../common/service/Auth/dynamic_link_services.dart';
+import '../../common/service/init/check_app_update.dart';
 import '../../common/service/mixins/assets.gen.dart';
-import '../../common/service/notifications_services.dart';
+import '../../common/service/Auth/notifications_services.dart';
 import '../../widgets/my_dialog.dart';
 import '../feed_ui/create_post_screen.dart';
 import 'dart:io' show Platform;
@@ -55,8 +52,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   void initState() {
-    PushNotificationService.requestPermission();
-    DynamicLinkService.initDynamicLinks();
 
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;
@@ -74,8 +69,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void _handleIndexChanged(int i, bool navBar) {
     sItem = TabItems.values[i];
     if (sItem == TabItems.home) {
-      context.uniProvider.updateFeedType(FeedTypes.members);
-      context.uniProvider.updateCurrFilter(FilterTypes.postWithoutComments);
+      context.uniProvider.feedTypeUpdate(FeedTypes.members);
+      context.uniProvider.currFilterUpdate(FilterTypes.postWithoutComments);
     }
 
     // 0 = home, 2 = chat
@@ -261,8 +256,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   ? FilterTypes.postWithComments
                                   : FilterTypes.postWithoutComments;
 
-                              context.uniProvider.updateCurrFilter(activeFilter, notify: false);
-                              context.uniProvider.updateFeedType(feedType); // rebuilt listeners
+                              context.uniProvider.currFilterUpdate(activeFilter, notify: false);
+                              context.uniProvider.feedTypeUpdate(feedType); // rebuilt listeners
                             },
                           );
                         });

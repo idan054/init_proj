@@ -86,7 +86,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
     if (i == 1) {
       activeFilter = FilterTypes.postWithComments;
     }
-    context.uniProvider.updateCurrFilter(activeFilter);
+    context.uniProvider.currFilterUpdate(activeFilter);
     await _loadMore(refresh: true);
   }
 
