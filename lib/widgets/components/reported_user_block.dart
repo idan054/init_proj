@@ -35,7 +35,8 @@ class ReportedUserBlock extends StatelessWidget {
       color: AppColors.primaryDark,
       child: Column(
         children: [
-          if(report.reportedUser != null) buildProfile(context), // Doesn't require 55 Left padding.
+          if (report.reportedUser != null)
+            buildProfile(context), // Doesn't require 55 Left padding.
           Column(
             children: [
               buildExpandableText(reasonWhy,
@@ -84,12 +85,10 @@ class ReportedUserBlock extends StatelessWidget {
                 backgroundColor: AppColors.darkOutline,
               ),
             ],
-          ).pad(0).onTap(
-             () {
-                      print('PROFILE CLICKED');
-                      context.router.push(UserRoute(user: reportedUser));
-                    },
-              radius: 5),
+          ).pad(0).onTap(() {
+            print('PROFILE CLICKED');
+            context.router.push(UserRoute(user: reportedUser));
+          }, radius: 5),
           // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
           trailing: PopupMenuButton(
               icon: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50),
@@ -98,32 +97,36 @@ class ReportedUserBlock extends StatelessWidget {
               itemBuilder: (context) {
                 return [
                   PopupMenuItem(
-                    child: 'Temp'
-                        .toText(),
-                    onTap: () {}
-                  ),
+                      child: 'BLOCK From Riltopia'.toText(),
+                      onTap: () {
+                        blockUserFromRiltopiaPopup(context, reportedUser);
+                      }),
                 ];
               }),
         ));
   }
 
-  // void deleteRilPopup(BuildContext context) {
-  //   var myPost = reportedUser?.uid == context.uniProvider.currUser.uid;
-  //
-  //   Future.delayed(150.milliseconds).then((_) {
-  //     showRilDialog(context,
-  //         // title: 'Delete your Ril?',
-  //         title: 'Delete ${myPost ? 'Your' : reportedUser?.email} Ril?',
-  //         desc: '"${report.textContent}"'.toText(fontSize: 13),
-  //         barrierDismissible: true,
-  //         secondaryBtn: TextButton(
-  //             onPressed: () {
-  //               Database.deleteDoc(collection: 'posts', docName: report.id);
-  //               Navigator.of(context).pop();
-  //               rilFlushBar(context, 'Your Ril has been deleted');
-  //             },
-  //             child: 'Delete'.toText(color: AppColors.primaryLight)));
-  //   });
-  // }
+  void blockUserFromRiltopiaPopup(BuildContext context, UserModel user) {
+    Future.delayed(150.milliseconds).then((_) {
+      String userName = '${user.name}';
+      showRilDialog(context,
+          title: 'Are you sure?',
+          desc: 'Once member blocked, he can only chat with Riltopia Team'
+              // 'You can\'t Undo it. Are you sure?'
+              .toText(maxLines: 10),
+          barrierDismissible: true,
+          secondaryBtn: TextButton(
+              onPressed: () async {
+                Database.updateFirestore(
+                  collection: 'users',
+                  docName: user.email.toString(),
+                  toJson: {'userType': UserTypes.blocked.name},
+                );
 
+                Navigator.of(context).pop();
+                rilFlushBar(context, '$userName blocked.');
+              },
+              child: ('BLOCK from RilTopia').toText(color: AppColors.primaryLight)));
+    });
+  }
 }

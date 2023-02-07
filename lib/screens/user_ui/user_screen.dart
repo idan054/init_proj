@@ -57,7 +57,8 @@ class _UserScreenState extends State<UserScreen> {
   @override
   void initState() {
     print('START: initState()');
-    isBlocked = context.uniProvider.currUser.blockedUsers.contains(widget.user.uid);
+    isBlocked = widget.user.userType == UserTypes.blocked ||
+        context.uniProvider.currUser.blockedUsers.contains(widget.user.uid);
     _loadMore(refresh: true);
     super.initState();
   }

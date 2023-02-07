@@ -6,9 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../screens/user_ui/user_screen.dart';
 
-
-
-
 extension StringNullX on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
 
@@ -55,6 +52,7 @@ extension StringX on String {
           bool medium = false,
           int maxLines = 2,
           bool bold = false,
+          bool underline = false,
           bool softWrap = false}) =>
       Text(this,
           softWrap: softWrap,
@@ -64,18 +62,24 @@ extension StringX on String {
           overflow: TextOverflow.ellipsis,
           style: bold
               ? AppStyles.text14PxBold.copyWith(
-                  color: color, fontSize: fontSize ?? 14.sp,
+                  color: color,
+                  fontSize: fontSize ?? 14.sp,
+                  decoration: underline ? TextDecoration.underline : null
                   // height: 1
-                ) // line spacing
+                  ) // line spacing
               : medium
                   ? AppStyles.text14PxMedium.copyWith(
-                      color: color, fontSize: fontSize ?? 14.sp,
+                      color: color,
+                      fontSize: fontSize ?? 14.sp,
+                      decoration: underline ? TextDecoration.underline : null
                       // height: 1
-                    )
+                      )
                   : AppStyles.text14PxRegular.copyWith(
-                      color: color, fontSize: fontSize ?? 14.sp,
+                      color: color,
+                      fontSize: fontSize ?? 14.sp,
+                      decoration: underline ? TextDecoration.underline : null
                       // height: 1
-                    )); // line spacing
+                      )); // line spacing
 
   ExpandableText toTextExpanded( // String text,
           {
@@ -83,7 +87,7 @@ extension StringX on String {
     TextAlign? textAlign,
     TextDirection? textDirection,
     int? maxLines,
-        Color? linkColor,
+    Color? linkColor,
     ValueChanged<bool>? onChanged,
     bool autoExpanded = false,
   }) =>
@@ -132,9 +136,6 @@ extension StringX on String {
       'ץ'
     ];
 
-
-
-
     // if (heb.any((item) => contains(item))) {
     //   // Lists have at least one common element
     //   return true;
@@ -147,7 +148,7 @@ extension StringX on String {
     // ----------
     // actually needs to be map.
     for (var l in heb) {
-      if (contains(l)){
+      if (contains(l)) {
         return true;
       }
     }

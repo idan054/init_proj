@@ -73,9 +73,9 @@ class UniProvider with ChangeNotifier {
     if (notify) notifyListeners();
   }
 
-  void feedTypeUpdate(FeedTypes data) {
+  void feedTypeUpdate(FeedTypes data, {bool notify = true}) {
     feedType = data;
-    notifyListeners();
+    if (notify) notifyListeners();
   }
 
   void isLoadingUpdate(bool data) {

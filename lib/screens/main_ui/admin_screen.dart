@@ -29,9 +29,11 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
   List<ReportModel> reportList = [];
   var activeFilter = FilterTypes.reportedRils;
 
+  FeedTypes? comeFromFeed;
   @override
   void initState() {
     super.initState();
+    comeFromFeed = context.uniProvider.feedType;
     _tabController = TabController(vsync: this, length: 2);
     _loadMore();
   }
@@ -103,7 +105,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
           context,
           isHomePage: false,
           bottom: TabBar(
-            isScrollable: true,
+            // isScrollable: true,
             controller: _tabController,
             indicator: UnderlineTabIndicator(
                 borderSide: const BorderSide(width: 2.5, color: AppColors.errRed),
@@ -111,8 +113,8 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
             labelStyle: AppStyles.text14PxRegular,
             indicatorColor: AppColors.primaryOriginal,
             tabs: const [
-              Tab(text: 'Reported Rils & Comments'),
-              Tab(text: 'Reported Users'),
+              Tab(text: 'Rils & Comments'),
+              Tab(text: 'Users'),
             ],
             onTap: (i) async => _handleIndexChanged(i, fromTabBar: true),
           ),
@@ -183,9 +185,9 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
 
 Widget buildReportBlock(ReportModel report, bool isComment) {
   String reportByTitle = '';
-  reportByTitle += '(${report.reportStatus?.name}) ';
   reportByTitle += report.reportedUser != null ? 'User ' : (isComment ? 'Comment ' : 'Ril ');
-  reportByTitle += 'Reported by ${report.reportedBy} :';
+  reportByTitle += 'Reported by ${report.reportedBy} ';
+  reportByTitle += '(${report.reportStatus?.name}) ';
 
   return Column(
     children: [
@@ -196,13 +198,13 @@ Widget buildReportBlock(ReportModel report, bool isComment) {
           .pOnly(top: 5, left: 15)
           .pad(3)
           .onTap(() {}, radius: 5),
-      if (isComment)
-        'Go to original Ril (unavailable)'
-            .toText(color: Colors.white30, fontSize: 12)
-            .centerLeft
-            .pOnly(left: 15)
-            .pad(3)
-            .onTap(() {}, radius: 5),
+      // if (isComment)
+      //   'Go to original Ril (unavailable)'
+      //       .toText(color: Colors.white30, fontSize: 12)
+      //       .centerLeft
+      //       .pOnly(left: 15)
+      //       .pad(3)
+      //       .onTap(() {}, radius: 5),
       report.reportedUser != null
           ? ReportedUserBlock(report)
           : PostBlock(report.reportedPost!, isReported: true)

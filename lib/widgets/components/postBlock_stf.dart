@@ -85,21 +85,23 @@ class _PostBlockState extends State<PostBlock> {
         ],
       ).pOnly(left: 15),
     ).onTap(
-        widget.post.enableComments
-            ? () {
-                // isUserPage ? Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //             builder: (context) =>
-                //                 Scaffold(body: CommentsChatScreen(post, isFullScreen: isUserPage))),
-                //       ) :
+        widget.isReported && widget.post.originalPostId != null // AKA comment
+            ? null
+            : widget.post.enableComments
+                ? () {
+                    // isUserPage ? Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) =>
+                    //                 Scaffold(body: CommentsChatScreen(post, isFullScreen: isUserPage))),
+                    //       ) :
 
-                setState(() {});
-                notificationCounter = 0;
-                FeedService.resetPostUnread(context, widget.post.id);
-                handleShowBottomPost(context, widget.post);
-              }
-            : null,
+                    setState(() {});
+                    notificationCounter = 0;
+                    FeedService.resetPostUnread(context, widget.post.id);
+                    handleShowBottomPost(context, widget.post);
+                  }
+                : null,
         radius: 10);
   }
 
@@ -194,35 +196,14 @@ class _PostBlockState extends State<PostBlock> {
     var iconColor = Colors.white60;
     var commentEmpty = widget.post.commentsLength == 0;
     var title = commentEmpty ? 'New' : '${widget.post.commentsLength} comments';
+    var isConversation = widget.post.enableComments && widget.post.originalPostId == null;
+    var isComment = widget.post.originalPostId != null;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        widget.post.enableComments && widget.post.originalPostId == null // AKA its not comment
-            ? Container(
-                color: commentEmpty ? AppColors.primaryOriginal : AppColors.transparent,
-                child: Row(
-                  children: [
-                    // TODO Add notification dot here
-                    if (notificationCounter != 0) ...[
-                      const CircleAvatar(backgroundColor: AppColors.errRed, radius: 3.5),
-                      const SizedBox(width: 7),
-                    ],
-
-                    // if(!commentEmpty)
-                    (commentEmpty
-                            ? Assets.svg.icons.wisdomLightStar
-                            : Assets.svg.icons.messageCircle02)
-                        .svg(height: 13, color: AppColors.grey50),
-                    // if(!commentEmpty)
-                    SizedBox(width: commentEmpty ? 4 : 7),
-                    // 'available soon'
-                    title.toText(color: AppColors.grey50, fontSize: 12)
-                  ],
-                ).px(7).py(4),
-              ).roundedFull.pOnly(bottom: 12, top: 15)
-            // .onTap(() {}, radius: 10)
-            : const SizedBox(height: 20),
+        isConversation ? _buildCommentsCounter(commentEmpty, title) : const SizedBox(height: 20),
+        if (isComment && widget.isReported) buildOriginalPostButton(iconColor),
         const Spacer(),
         if (widget.post.creatorUser!.uid != currUser.uid) ...[
           // TODO ADD ON POST MVP ONLY (Send like)
@@ -234,29 +215,13 @@ class _PostBlockState extends State<PostBlock> {
           //     .customRowPadding)
           //     .roundedFull,
 
-          // Chat Button
-          widget.post.enableComments
+          isConversation
               ? Assets.svg.icons.shareArrowWide
                   .svg(height: 17, color: AppColors.grey50)
                   .pOnly(left: 18, right: 18, bottom: 12, top: 20)
                   .onTap(() {
                   DynamicLinkService.sharePostLink(productUrl: 'X', productId: 'Y');
                 })
-
-              // ? const Offstage()
-              //~ Comment button
-              // Row(
-              //     children: [
-              //       Assets.svg.icons.messageCommentsLines.svg(height: 17, color: iconColor),
-              //       10.horizontalSpace,
-              //       'Answer'.toText(fontSize: 12, color: iconColor),
-              //     ],
-              //   ).pOnly(right: 20, left: 12).customRowPadding.onTap(
-              //   // onAnswerTap
-              //         () {
-              //
-              //   }
-              //   , radius: 10)
 
               //~ Reply button
               : Row(
@@ -274,6 +239,50 @@ class _PostBlockState extends State<PostBlock> {
     )
         // .customRowPadding
         ;
+  }
+
+  Widget buildOriginalPostButton(Color iconColor) {
+    var isLoading = false;
+    return StatefulBuilder(
+          builder: (context, buttonState) {
+            return (isLoading  ? 'Loading...' : 'Original Ril')
+                .toText(fontSize: 12, color: iconColor, underline: true)
+                .pOnly(right: 20, left: 12)
+                .customRowPadding
+                .onTap(() async {
+              isLoading = true;
+              buttonState(() {});
+              var data = await Database.docData('posts/${widget.post.originalPostId}');
+              var post = PostModel.fromJson(data!);
+              isLoading = false;
+              buttonState(() {});
+              handleShowBottomPost(context, post); // Original post comment.
+            }, radius: 10);
+          }
+        );
+  }
+
+  Widget _buildCommentsCounter(bool commentEmpty, String title) {
+    return Container(
+      color: commentEmpty ? AppColors.primaryOriginal : AppColors.transparent,
+      child: Row(
+        children: [
+          // TODO Add notification dot here
+          if (notificationCounter != 0) ...[
+            const CircleAvatar(backgroundColor: AppColors.errRed, radius: 3.5),
+            const SizedBox(width: 7),
+          ],
+
+          // if(!commentEmpty)
+          (commentEmpty ? Assets.svg.icons.wisdomLightStar : Assets.svg.icons.messageCircle02)
+              .svg(height: 13, color: AppColors.grey50),
+          // if(!commentEmpty)
+          SizedBox(width: commentEmpty ? 4 : 7),
+          // 'available soon'
+          title.toText(color: AppColors.grey50, fontSize: 12)
+        ],
+      ).px(7).py(4),
+    ).roundedFull.pOnly(bottom: 12, top: 15);
   }
 
   StatefulBuilder buildHeartIcon(bool isLiked) {
@@ -327,6 +336,7 @@ void reportRilOrCommentPopup(BuildContext context, PostModel post, {bool isRepor
                   collection: 'reports/Reported rils/rils',
                   docName: docName,
                   toJson: postReport.toJson());
+
               Navigator.of(context).pop();
               if (isReported) {
                 rilFlushBar(context, 'Thanks, $type handled successfully');
