@@ -14,7 +14,6 @@ void checkForUpdate(
   AppConfigModel serverConfig, {
   bool mustShowPopup = false,
 }) async {
-
   var serverVer =
       Platform.isAndroid ? serverConfig.publicVersionAndroid : serverConfig.publicVersionIos;
   var localVer =
@@ -28,8 +27,9 @@ void checkForUpdate(
   context.uniProvider
       .localVersionUpdate(localConfig.copyWith(isUpdateAvailable: serverVer != localVer));
 
-  print('localVer != serverVer ${localVer != serverVer}');
-  if (localVer != serverVer || mustShowPopup) {
+  localVer = (localVer ?? 1).toInt();
+  serverVer = (serverVer ?? 1).toInt();
+  if (localVer < serverVer || mustShowPopup) {
     print('START: localVer != serverVer()');
     showRilDialog(
       context,
@@ -40,7 +40,7 @@ void checkForUpdate(
         children: [
           'Please update from V$localVer to V$serverVer'.toText(color: AppColors.grey50),
           // '\n${mustShowPopup ? 'Whats new?' : ''}'
-                  (serverConfig.whatsNew ?? '')
+          (serverConfig.whatsNew ?? '')
               // .toTextExpanded(
               .toText(
             maxLines: 5,

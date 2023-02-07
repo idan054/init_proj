@@ -90,22 +90,22 @@ class ChatService {
     // }
   }
 
-  static void chatWithUs(BuildContext context) {
-    ChatService.openChat(context,
-        otherUser: UserModel(
-            uid: 'IVGr0VcKbhOg5jK23r9DTzvGhar2',
-            age: 20,
-            name: 'Riltopia Team',
-            gender: GenderTypes.other,
-            photoUrl:
-                'https://firebasestorage.googleapis.com/v0/b/biton-messanger.appspot.com/o/The%20Biton_Profile_2023-01-21%2023%3A05%3A48.369962?alt=media&token=62ab2f84-8d74-4b7f-8e79-5f1a0bee85fc',
-            email: 'idanbit80@gmail.com',
-            bio: 'Tell us what u think!',
-            isOnline: true,
-            tags: ['Tech'],
-            birthday: DateTime.fromMillisecondsSinceEpoch(1041552000) // 03.01.03
-            ));
-  }
+  static var riltopiaTeamUser = UserModel(
+      age: 20,
+      name: 'Riltopia Team',
+      gender: GenderTypes.other,
+      uid: 'IVGr0VcKbhOg5jK23r9DTzvGhar2',
+      // photoUrl: 'https://firebasestorage.googleapis.com/v0/b/biton-messanger.appspot.com/o/The%20Biton_Profile_2023-01-21%2023%3A05%3A48.369962?alt=media&token=62ab2f84-8d74-4b7f-8e79-5f1a0bee85fc',
+      photoUrl: 'https://i.ibb.co/GswnV8X/The-Biton-Profile-2023-01-21-23-05-48.jpg',
+      email: 'idanbit80@gmail.com',
+      bio: 'Tell us what u think!',
+      isOnline: true,
+      tags: ['Tech'],
+      birthday: DateTime.fromMillisecondsSinceEpoch(1041552000) // 03.01.03
+      );
+
+  static void chatWithUs(BuildContext context) =>
+      ChatService.openChat(context, otherUser: riltopiaTeamUser);
 
   void sendMessage(
     BuildContext context, {
@@ -123,8 +123,10 @@ class ChatService {
     String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);
     // var messageIdA = const Uuid().v1(); // -> '6c84fb90-12c4-11e1-840d-7b25c5ee775a'
     // docName result example: [idanb] מה קורה [#b4918]
-    String messageId = '[${fromId?.substring(0, 5)}] ''${content.length < 15 ? content : content.substring(0, 15)}'' ${UniqueKey()}'.replaceAll('/', '\\');
-
+    String messageId = '[${fromId?.substring(0, 5)}] '
+            '${content.length < 15 ? content : content.substring(0, 15)}'
+            ' ${UniqueKey()}'
+        .replaceAll('/', '\\');
 
     var messageData = MessageModel(
       id: messageId,
@@ -164,10 +166,11 @@ class ChatService {
         docName: messageId,
         toJson: messageData.toJson());
 
-
     otherUser = await FsAdvanced.getUserByEmailIfNeeded(context, otherUser);
-    var title = postReply != null ? '${currUser.name} replied your Ril' : '${currUser.name} Sent you a message';
-    print(' otherUser.fcm ${ otherUser.fcm}');
+    var title = postReply != null
+        ? '${currUser.name} replied your Ril'
+        : '${currUser.name} Sent you a message';
+    print(' otherUser.fcm ${otherUser.fcm}');
     PushNotificationService.sendPushNotification(
       token: otherUser.fcm!,
       title: title,

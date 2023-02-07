@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print, invalid_return_type_for_catch_error
 
+import 'dart:convert';
+
 import 'package:badges/badges.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
@@ -12,6 +14,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import '../../common/models/user/user_model.dart';
 import '../../common/service/mixins/assets.gen.dart';
+import '../../common/service/uploadServices.dart';
 import '../../widgets/clean_snackbar.dart';
 import '../../widgets/my_widgets.dart';
 import '../feed_ui/main_feed_screen.dart';
@@ -27,11 +30,13 @@ class NameProfileView extends StatefulWidget {
 class _NameProfileViewState extends State<NameProfileView> {
   XFile? image;
   bool isPhotoUploaded = false;
+  bool isLoading = false;
   var nameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    var isImageErr = context.listenUniProvider.signupErrFound; // This will auto rebuild if err found.
+    var isImageErr =
+        context.listenUniProvider.signupErrFound; // This will auto rebuild if err found.
     var currUser = context.uniProvider.currUser;
 
     // bool nameErr = false;
@@ -52,8 +57,12 @@ class _NameProfileViewState extends State<NameProfileView> {
             position: BadgePosition.bottomEnd(bottom: 0, end: 0),
             badgeColor: isImageErr ? AppColors.errRed : AppColors.primaryOriginal,
             padding: 10.all,
-            badgeContent:
-                Assets.svg.icons.plusAddUntitledIcon.svg(height: 20, color: AppColors.white),
+            badgeContent: isLoading
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 2,
+                  ).sizedBox(20, 20)
+                : Assets.svg.icons.plusAddUntitledIcon.svg(height: 20, color: AppColors.white),
             child: CircleAvatar(
               radius: 60,
               backgroundColor: isImageErr ? AppColors.errRed : AppColors.darkOutline50,
@@ -66,17 +75,27 @@ class _NameProfileViewState extends State<NameProfileView> {
             ),
           ).onTap(() async {
             final ImagePicker picker = ImagePicker();
-            image =
-                await picker.pickImage(source: ImageSource.gallery, maxHeight: 400, maxWidth: 400);
-            // context.uniProvider.updateIsLoading(true);
-            setState(() {});
-            var imageUrl = await uploadProfilePhoto(
-              currUser,
-              File(image!.path),
-              thenAction: (_) => isPhotoUploaded = true,
+            image = await picker.pickImage(
+              source: ImageSource.gallery,
+              maxHeight: 200,
+              maxWidth: 200,
             );
-            // context.uniProvider.updateIsLoading(false);
-            context.uniProvider.currUserUpdate(currUser.copyWith(photoUrl: imageUrl));
+            isLoading = true;
+            setState(() {});
+
+            if (image == null) return;
+            var bytes = await image!.readAsBytes();
+            String base64Image = base64Encode(bytes);
+
+            var imageUrl = await UploadServices.imgbbUploadPhoto(base64Image);
+            if (imageUrl == null) {
+              image = null;
+            } else {
+              context.uniProvider.currUserUpdate(currUser.copyWith(photoUrl: imageUrl));
+            }
+
+            isLoading = false;
+            setState(() {});
           }),
           20.verticalSpace,
           'Add a profile picture'.toText(fontSize: 13, medium: true),
@@ -100,21 +119,4 @@ class _NameProfileViewState extends State<NameProfileView> {
       ),
     );
   }
-}
-
-Future<String> uploadProfilePhoto(UserModel currUser, File image,
-    {required Function(TaskSnapshot) thenAction}) async {
-  print('START: uploadProfilePhoto()');
-  // rilFlushBar(context, 'Uploading photo...', duration: 2, isShimmer: true);
-  // cleanSnack(context, text: 'Update profile photo...', sec: 2, showSnackAction: false);
-
-  var refFile = FirebaseStorage.instance
-      .ref()
-      .child('${FirebaseAuth.instance.currentUser?.displayName}_Profile_${DateTime.now()}');
-
-  await refFile.putFile(image).then(thenAction).catchError((e) => print('putFile ERR: $e'));
-
-  var imageUrl = await refFile.getDownloadURL();
-  FirebaseAuth.instance.currentUser?.updatePhotoURL(imageUrl);
-  return imageUrl;
 }

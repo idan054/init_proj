@@ -290,9 +290,6 @@ SizedBox _feedChoiceList(BuildContext context) {
    */
 }
 
-
-
-
 AppBar buildRiltopiaAppBar(
   BuildContext context, {
   PreferredSizeWidget? bottom,
@@ -413,10 +410,11 @@ Widget appBarProfile(BuildContext context) {
                 .pad(0)
                 .onTap(() {
               Navigator.pop(context);
-              var localConfig = context.uniProvider.localConfig;
-              var serverConfig = context.uniProvider.serverConfig;
+              // var localConfig = context.uniProvider.localConfig;
+              // var serverConfig = context.uniProvider.serverConfig;
 
-              checkForUpdate(context, localConfig, serverConfig!, mustShowPopup: true);
+              // checkForUpdate(context, localConfig, serverConfig!, mustShowPopup: true);
+              context.router.push(UserRoute(user: ChatService.riltopiaTeamUser));
             }, radius: 5),
           ),
 

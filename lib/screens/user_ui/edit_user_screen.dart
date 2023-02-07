@@ -1,5 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:badges/badges.dart';
 import 'package:camera/camera.dart';
 import 'package:example/common/extensions/extensions.dart';
@@ -24,6 +27,7 @@ import '../../common/models/user/user_model.dart';
 import '../../common/service/Database/db_advanced.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/mixins/assets.gen.dart';
+import '../../common/service/uploadServices.dart';
 import '../../widgets/clean_snackbar.dart';
 import '../../widgets/my_widgets.dart';
 import '../auth_ui/a_onboarding_screen.dart';
@@ -33,6 +37,7 @@ import '../../common/service/mixins/assets.gen.dart';
 import '../../common/themes/app_colors.dart';
 import '../../widgets/app_bar.dart';
 import 'dart:io' show Platform;
+import 'package:http/http.dart' as http;
 
 class EditUserScreen extends StatefulWidget {
   final UserModel user;
@@ -52,6 +57,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
   bool isPhotoUploaded = false;
   var nameController = TextEditingController();
   var bioController = TextEditingController();
+  var isLoading = false;
 
   @override
   void initState() {
@@ -82,41 +88,42 @@ class _EditUserScreenState extends State<EditUserScreen> {
           centerTitle: true,
           backAction: () => _discardPopup(currUser),
           actions: [
-            'Save'.toText().px(14).center.onTap(() async {
-              tempName = null;
-              tempBio == null;
-              var updatedUser =
-                  currUser.copyWith(name: nameController.text, bio: bioController.text);
-              context.uniProvider.currUserUpdate(updatedUser);
+            if (!isLoading)
+              'Save'.toText().px(14).center.onTap(() async {
+                tempName = null;
+                tempBio == null;
+                var updatedUser =
+                    currUser.copyWith(name: nameController.text, bio: bioController.text);
+                context.uniProvider.currUserUpdate(updatedUser);
 
-              Database.updateFirestore(
-                  collection: 'users',
-                  docName: '${updatedUser.email}',
-                  toJson: updatedUser.toJson());
+                Database.updateFirestore(
+                    collection: 'users',
+                    docName: '${updatedUser.email}',
+                    toJson: updatedUser.toJson());
 
-              //~ The NEW method
-              var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
-              context.uniProvider.fetchedUsersUpdate([updatedUser, ...alreadyFetchedUsers]);
+                //~ The NEW method
+                var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
+                context.uniProvider.fetchedUsersUpdate([updatedUser, ...alreadyFetchedUsers]);
 
-              //! Expensive Way! REPLACED by getUserByEmailIfNeeded() method
-              // var snap = await FsAdvanced.db
-              //     .collection('posts')
-              //     .orderBy('timestamp', descending: true)
-              //     .where('creatorUser.uid', isEqualTo: updatedUser.uid)
-              //     .get();
-              //
-              // List posts = await FsAdvanced().docsToModelList(context, snap, ModelTypes.posts);
-              // for (PostModel post in posts) {
-              //   var updatedPost = post.copyWith(creatorUser: updatedUser);
-              //   // print('posts.length ${posts.length}');
-              //   // print('updatedPost.toJson() ${updatedPost.toJson()}');
-              //   Database.updateFirestore(
-              //       collection: 'posts', docName: updatedPost.id, toJson: updatedPost.toJson());
-              //   // return;
-              // }
+                //! Expensive Way! REPLACED by getUserByEmailIfNeeded() method
+                // var snap = await FsAdvanced.db
+                //     .collection('posts')
+                //     .orderBy('timestamp', descending: true)
+                //     .where('creatorUser.uid', isEqualTo: updatedUser.uid)
+                //     .get();
+                //
+                // List posts = await FsAdvanced().docsToModelList(context, snap, ModelTypes.posts);
+                // for (PostModel post in posts) {
+                //   var updatedPost = post.copyWith(creatorUser: updatedUser);
+                //   // print('posts.length ${posts.length}');
+                //   // print('updatedPost.toJson() ${updatedPost.toJson()}');
+                //   Database.updateFirestore(
+                //       collection: 'posts', docName: updatedPost.id, toJson: updatedPost.toJson());
+                //   // return;
+                // }
 
-              context.router.replace(UserRoute(user: updatedUser, fromEditScreen: true));
-            }, radius: 10).pOnly(right: 5)
+                context.router.replace(UserRoute(user: updatedUser, fromEditScreen: true));
+              }, radius: 10).pOnly(right: 5)
           ],
         ),
         body: Stack(
@@ -237,7 +244,12 @@ class _EditUserScreenState extends State<EditUserScreen> {
             position: BadgePosition.bottomEnd(bottom: 0, end: 0),
             badgeColor: AppColors.primaryOriginal,
             padding: 7.all,
-            badgeContent: Assets.svg.icons.refreshArrows.svg(height: 14, color: AppColors.white),
+            badgeContent: isLoading
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                    strokeWidth: 1,
+                  ).sizedBox(14, 14)
+                : Assets.svg.icons.refreshArrows.svg(height: 14, color: AppColors.white),
             child: CircleAvatar(
               radius: 40,
               backgroundColor: AppColors.darkOutline,
@@ -252,21 +264,30 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 );
               }),
             )).pad(5).onTap(() async {
+      print('START: ImagePicker()');
       final ImagePicker picker = ImagePicker();
       selectedImage = await picker.pickImage(
         source: ImageSource.gallery,
-        maxHeight: 400,
-        maxWidth: 400,
+        maxHeight: 200,
+        maxWidth: 200,
       );
-      // context.uniProvider.updateIsLoading(true);
+
+      isLoading = true;
       setState(() {});
-      var imageUrl = await uploadProfilePhoto(
-        currUser,
-        File(selectedImage!.path),
-        thenAction: (_) => isPhotoUploaded = true,
-      );
-      // context.uniProvider.updateIsLoading(false);
-      context.uniProvider.currUserUpdate(currUser.copyWith(photoUrl: imageUrl));
+
+      if (selectedImage == null) return;
+      var bytes = await selectedImage!.readAsBytes();
+      String base64Image = base64Encode(bytes);
+
+      var imageUrl = await UploadServices.imgbbUploadPhoto(base64Image);
+      if (imageUrl == null) {
+        selectedImage = null;
+      } else {
+        context.uniProvider.currUserUpdate(currUser.copyWith(photoUrl: imageUrl));
+      }
+
+      isLoading = false;
+      setState(() {});
     })
         // .centerLeft
         .center;

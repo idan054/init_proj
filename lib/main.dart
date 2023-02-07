@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/delete_me.dart';
 import 'package:example/screens/main_ui/splash_screen.dart' as click;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -46,6 +47,7 @@ void main() async {
         // builder:(context, child) =>
 
         child: const App()),
+        // child: const MaterialApp(home: ImgbbConverterScreen())),
   );
 }
 
