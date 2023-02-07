@@ -10,7 +10,9 @@ import 'dart:io';
 
 class OnlineService {
   static void setUserOnline(BuildContext context) {
+    print('START: setUserOnline()');
     var currUser = context.uniProvider.currUser;
+    print('currUser.email ${currUser.email}');
     Database.updateFirestore(
       collection: 'config',
       docName: 'usersStatus',
@@ -33,12 +35,12 @@ class OnlineService {
 
   static void updateOnlineUsersStatus(BuildContext context, {bool timerCheck = false}) async {
     print('START: updateOnlineUsersStatus()');
+    setUserOnline(context);
     _getOnlineUsersList(context);
     if (timerCheck) {
       Timer.periodic((60 * 5).seconds, (timer) async {
         printYellow('START: 5 MIN SEC PASSED! updateOnlineUsersStatus()');
         _getOnlineUsersList(context);
-        // context.uniProvider.onlineUsersUpdate(doc?['onlineUsers']);
       });
     }
   }
