@@ -208,11 +208,11 @@ class FsAdvanced {
   }
 
   List _removeBlockedUsers(BuildContext context, List listModel) {
-    printYellow('START: _removeBlockedUsers()');
+    print('START: _removeBlockedUsers()');
     var blockedUsers = context.uniProvider.currUser.blockedUsers;
     for (var post in [...listModel]) {
       if (blockedUsers.contains(post.creatorUser!.uid)) {
-        print('POST Remove locally from ${post.creatorUser?.email}');
+        printYellow('POST Remove locally from ${post.creatorUser?.email}');
         listModel.remove(post);
       }
     }

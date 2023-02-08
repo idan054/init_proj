@@ -61,7 +61,7 @@ mixin SplashScreenStateMixin<T extends StatefulWidget> on State<T> implements Ti
     });
   }
 
-  Widget buildAnimation() => Stack(
+  Widget buildAnimation({bool showText = true, double ratio = 1, double radius = 999}) => Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.center,
         children: [
@@ -71,18 +71,18 @@ mixin SplashScreenStateMixin<T extends StatefulWidget> on State<T> implements Ti
               Container(
                       alignment: Alignment.center,
                       // constraints: const BoxConstraints.expand(),
-                      width: 170,
-                      height: 170,
+                      width: 170 * ratio,
+                      height: 170 * ratio,
                       // color: colorAnimation.value,
                       color: AppColors.primaryOriginal,
                       // child: const RiveAnimation.asset('assets/riv/rilManBlackWhite.riv')
                       child: const RiveAnimation.asset('assets/riv/rilmanblackwhitefaster.riv')
-                          .sizedBox(null, 150).bottom
+                          .sizedBox(null, 150 * ratio).bottom
                           // .offset(0, 10)
               )
-                  .roundedFull,
+                  .rounded(radius: radius),
               30.verticalSpace,
-              'Riltopia'.toText(fontSize: 30)
+              if(showText)'Riltopia'.toText(fontSize: 30)
             ],
           ).center,
           AnimatedBuilder(

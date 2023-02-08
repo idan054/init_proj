@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/color_printer.dart';
+import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -13,6 +14,8 @@ import 'package:http/http.dart' as http;
 
 import '../Feed/feed_services.dart';
 import 'dart:convert' show utf8;
+import 'dart:io' show Platform;
+
 
 class DynamicLinkService {
   static void initDynamicLinks(BuildContext context) async {
@@ -24,7 +27,7 @@ class DynamicLinkService {
     FirebaseDynamicLinks.instance.onLink.listen((PendingDynamicLinkData data) async {
       // var appModel = Provider.of<AppModel>(context, listen: false);
       // appModel.changeIsLoading(true);
-      print('data.asMap() ${data.asMap()}');
+      // print('data.asMap() ${data.asMap()}');
       await _handleDynamicLink(context, data.link.toString());
       // appModel.changeIsLoading(false);
     });
@@ -40,13 +43,15 @@ class DynamicLinkService {
 
   // FULL RESTART The app needed while edit this.
   static Future<void> _handleDynamicLink(BuildContext context, String link) async {
-    print('START: _handleDynamicLink()');
+    printYellow('START: _handleDynamicLink()');
     print('link $link'); // https://riltopia.page.link/talme20@gmail.com%5B#a6459%5D
     var postId = Uri.decodeFull(link.split('.link/').last);
     print('postId $postId');
     try {
+      context.uniProvider.isLoadingUpdate(true);
       var post = await FeedService.getPostById(postId);
       print('post textContent ${post?.textContent}');
+      context.uniProvider.isLoadingUpdate(false);
       context.router.push(CommentsChatRoute(post: post!, isFullScreen: true));
     } catch (err) {
       printYellow('[firebase-dynamic-link] Error: ${err.toString()}');
@@ -94,7 +99,9 @@ class DynamicLinkService {
     );
     // var firebaseDynamicLink = await FirebaseDynamicLinks.instance.buildShortLink(productParams);
     var firebaseDynamicLink = await FirebaseDynamicLinks.instance.buildLink(productParams);
-    // await Share.share(firebaseDynamicLink.previewLink.toString());
+
+    // print('firebaseDynamicLink.shortUrl.toString() ${firebaseDynamicLink.shortUrl.toString()}');
+    // await Share.share(firebaseDynamicLink.toString());
     // return;
 
     http.Response response;
@@ -111,6 +118,7 @@ class DynamicLinkService {
           body: jsonEncode({
             // 'domain': {'id': 'c0f887ba9eb4461cab7d12b714f8644b'},
             'slashtag': slash,
+            // 'destination': '${firebaseDynamicLink.shortUrl}',
             'destination': '$firebaseDynamicLink',
           }));
       printYellow(response.body);
@@ -118,6 +126,8 @@ class DynamicLinkService {
         await Share.share(
           'https://${(jsonDecode(response.body) as Map<String, dynamic>)['shortUrl']}',
         );
+      }else{
+        await Share.share(firebaseDynamicLink.toString());
       }
     } catch (e) {
       printRed('$e');

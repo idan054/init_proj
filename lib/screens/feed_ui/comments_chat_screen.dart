@@ -61,6 +61,13 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    var isLoading = context.uniProvider.isLoading;
+    if (isLoading) context.uniProvider.isLoadingUpdate(false);
+    super.dispose();
+  }
+
   Future _loadOlderMessages() async {
     // splashLoader = true; setState(() {});
     List withOlderComments = await Database.advanced.handleGetModel(
@@ -257,7 +264,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
           if (timer == 2) dots = '..';
           if (timer == 3) dots = '...';
         }
-        textState(() {});
+        if (mounted) textState(() {});
       });
       return 'Loading comments$dots\n meanwhile, Join the conversation!'
           .toText(

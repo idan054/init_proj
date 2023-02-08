@@ -13,6 +13,7 @@ import 'package:example/main.dart';
 import 'package:example/screens/chat_ui/chats_list_screen.dart.dart';
 import 'package:example/screens/feed_ui/main_feed_screen.dart';
 import 'package:example/screens/main_ui/splash_screen.dart';
+import 'package:example/screens/main_ui/widgets/riv_splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +32,7 @@ import '../../common/service/online_service.dart';
 import '../../widgets/my_dialog.dart';
 import '../feed_ui/create_post_screen.dart';
 import 'dart:io' show Platform;
-
+import 'package:rive_splash_screen/rive_splash_screen.dart';
 import 'notification_screen.dart';
 
 enum TabItems { home, notificationScreen, dmScreen }
@@ -45,7 +46,9 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+// class _DashboardScreenState extends State<DashboardScreen> {
+class _DashboardScreenState extends State<DashboardScreen>
+    with SplashScreenStateMixin, TickerProviderStateMixin {
   PageController _pageController = PageController();
   TabItems sItem = TabItems.home; // initial
   bool homePage = true;
@@ -59,8 +62,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       checkForUpdate(context, localConfig, serverConfig!);
     });
 
@@ -95,6 +97,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     print('START: DashboardScreen()');
     _pageController = PageController(initialPage: widget.dashboardPage.index);
     var currUser = context.uniProvider.currUser;
+    var isLoading = context.uniProvider.isLoading;
 
     if (currUser.userType == UserTypes.blocked) {
       return buildUserBlockedScaffold(context);
@@ -102,70 +105,79 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return Scaffold(
         backgroundColor: AppColors.primaryDark,
-        body: PageView(
-            controller: _pageController,
-            physics: const NeverScrollableScrollPhysics(), // disable swipe
-            // onPageChanged: (i) => _handleIndexChanged(i, false),
-            children: const <Widget>[
-              MainFeedScreen(),
-              NotificationScreen(),
-              ChatsListScreen(),
-            ]),
-        bottomNavigationBar: Builder(
-          builder: (context) {
-            print('START: BUILDER DashboardScreen()');
-            // context.listenUniProvider.currUser; // rebuilt when update.
-
-            return SizedBox(
-              height: Platform.isAndroid ? 55 + 3 : null,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(color: AppColors.darkOutline, height: 2, width: double.maxFinite),
-                  SizedBox(
-                    height: Platform.isAndroid ? 55 : null,
-                    child: BottomNavigationBar(
-                      selectedFontSize: 0,
-                      unselectedFontSize: 0,
-                      backgroundColor: AppColors.primaryDark,
-                      // backgroundColor: AppColors.darkBg,
-                      currentIndex: sItem.index,
-                      onTap: (i) {
-                        _handleIndexChanged(i, true);
-                        // stfSetState(() {});
-                      },
-                      items: [
-                        // HOME
-                        BottomNavigationBarItem(
-                            label: '',
-                            icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.grey50),
-                            activeIcon:
-                                Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.white)),
-
-                        // NOTIFICATIONS SCREEN
-                        BottomNavigationBarItem(
-                            label: '',
-                            icon: notificationBadge(
-                                child: Assets.svg.icons.bell.svg(color: AppColors.grey50)),
-                            activeIcon:
-                                notificationBadge(child: Assets.svg.icons.bellSolid.svg(height: 23))),
-
-                        // DM SCREEN
-                        BottomNavigationBarItem(
-                            label: '',
-                            icon: unreadChatBadge(
-                                child: Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50)),
-                            activeIcon: unreadChatBadge(
-                                child: Assets.svg.icons.groupMultiPeopleSolid
-                                    .svg(color: AppColors.white, height: 19))),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
+        body: Stack(
+          children: [
+            PageView(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(), // disable swipe
+                // onPageChanged: (i) => _handleIndexChanged(i, false),
+                children: const <Widget>[
+                  MainFeedScreen(),
+                  NotificationScreen(),
+                  ChatsListScreen(),
+                ]),
+            if (isLoading)
+              buildAnimation(
+                showText: false,
+                ratio: 0.6,
+                radius: 20,
+              ).center
+          ],
         ),
+        bottomNavigationBar: Builder(builder: (context) {
+          print('START: BUILDER DashboardScreen()');
+          // context.listenUniProvider.currUser; // rebuilt when update.
+
+          return SizedBox(
+            height: Platform.isAndroid ? 55 + 3 : null,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(color: AppColors.darkOutline, height: 2, width: double.maxFinite),
+                SizedBox(
+                  height: Platform.isAndroid ? 55 : null,
+                  child: BottomNavigationBar(
+                    selectedFontSize: 0,
+                    unselectedFontSize: 0,
+                    backgroundColor: AppColors.primaryDark,
+                    // backgroundColor: AppColors.darkBg,
+                    currentIndex: sItem.index,
+                    onTap: (i) {
+                      _handleIndexChanged(i, true);
+                      // stfSetState(() {});
+                    },
+                    items: [
+                      // HOME
+                      BottomNavigationBarItem(
+                          label: '',
+                          icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.grey50),
+                          activeIcon:
+                              Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.white)),
+
+                      // NOTIFICATIONS SCREEN
+                      BottomNavigationBarItem(
+                          label: '',
+                          icon: notificationBadge(
+                              child: Assets.svg.icons.bell.svg(color: AppColors.grey50)),
+                          activeIcon:
+                              notificationBadge(child: Assets.svg.icons.bellSolid.svg(height: 23))),
+
+                      // DM SCREEN
+                      BottomNavigationBarItem(
+                          label: '',
+                          icon: unreadChatBadge(
+                              child:
+                                  Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50)),
+                          activeIcon: unreadChatBadge(
+                              child: Assets.svg.icons.groupMultiPeopleSolid
+                                  .svg(color: AppColors.white, height: 19))),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
         // floatingActionButton: sItem != TabItems.home ? null : buildFab(),
         floatingActionButton: sItem != TabItems.home ? null : buildFab());
   }
