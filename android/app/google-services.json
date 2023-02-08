@@ -14,6 +14,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "751941760525-848rsi0pte52cild11es7ek3le7kg64o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.biton.messaging",
+            "certificate_hash": "eead951418725b6ad97c69f27cb6b5f6e2d38a77"
+          }
+        },
+        {
+          "client_id": "751941760525-akpl2kuvob2dl192us8vjaggm6ggq83r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.biton.messaging",
+            "certificate_hash": "e111882925f9fa0b31d3a3ae2bdcdb70a654f7e2"
+          }
+        },
+        {
           "client_id": "751941760525-bevg596i7s9t12ol49fkr4pfavl1jj91.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -27,6 +43,22 @@
           "android_info": {
             "package_name": "com.biton.messaging",
             "certificate_hash": "29e244cce8dfdccdc051e6b780a460460fdbcf70"
+          }
+        },
+        {
+          "client_id": "751941760525-f053ttl484mee4a683nhlh9ia7gc90j5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.biton.messaging",
+            "certificate_hash": "86f8563eb2bc262b536c065f158eccee4aac2539"
+          }
+        },
+        {
+          "client_id": "751941760525-fdfb0lfsimujdppc5e1cib01j6a89nta.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.biton.messaging",
+            "certificate_hash": "3f439ea6c76b20df05000e293d692e9fa490737d"
           }
         },
         {

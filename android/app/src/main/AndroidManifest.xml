@@ -35,9 +35,8 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="spider3d.co.il" />
-                <data android:scheme="https" android:host="spider3d.co.il" />
-                <data android:scheme="spider" android:host="spider3d.co.il" />
+                <data android:host="riltopia.page.link" android:scheme="http"/>
+                <data android:host="riltopia.page.link" android:scheme="https"/>
             </intent-filter>
         </activity>
 

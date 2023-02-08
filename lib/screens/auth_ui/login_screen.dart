@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
           // googleLoginButton(),
           28.verticalSpace,
           wMainButton(context,
-                  radius: 10,
+                  radius: 99,
                   isWide: true,
                   title: isLoading ? 'Loading...' : 'Join with Google',
                   icon: Assets.svg.gLogoIcon.svg(height: 25),
@@ -65,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
           15.verticalSpace,
           if (Platform.isIOS)
             wMainButton(context,
-                    radius: 10,
+                    radius: 99,
                     isWide: true,
                     icon: Assets.svg.apple.svg(height: 23).pOnly(right: 6),
                     title: isLoading ? 'Loading...' : 'Join with Apple',
@@ -106,7 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Uri.parse(
                     'https://www.privacypolicies.com/live/4ae28974-cd40-4c8e-b265-6d6da2c7690b'),
                 mode: LaunchMode.externalApplication);
-          }, radius: 10),
+          }, radius: 6),
           const Spacer(flex: 15),
         ],
       ).center,

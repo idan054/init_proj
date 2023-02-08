@@ -1,15 +1,21 @@
 // ignore_for_file: omit_local_variable_types
 
 import 'dart:convert';
+import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/color_printer.dart';
+import 'package:example/common/models/post/post_model.dart';
+import 'package:example/common/routes/app_router.gr.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:http/http.dart' as http;
 
+import '../Feed/feed_services.dart';
+import 'dart:convert' show utf8;
+
 class DynamicLinkService {
-  static void initDynamicLinks() async {
+  static void initDynamicLinks(BuildContext context) async {
     print('START: initDynamicLinks()');
     FirebaseDynamicLinks.instance;
     final data = await FirebaseDynamicLinks.instance.getInitialLink();
@@ -19,7 +25,7 @@ class DynamicLinkService {
       // var appModel = Provider.of<AppModel>(context, listen: false);
       // appModel.changeIsLoading(true);
       print('data.asMap() ${data.asMap()}');
-      await _handleDynamicLink(data.link.toString());
+      await _handleDynamicLink(context, data.link.toString());
       // appModel.changeIsLoading(false);
     });
 
@@ -28,50 +34,74 @@ class DynamicLinkService {
 
     if (deepLink != null) {
       printYellow('[firebase-dynamic-link] getInitialLink: $deepLink');
-      await _handleDynamicLink(deepLink.toString());
+      await _handleDynamicLink(context, deepLink.toString());
     }
   }
 
-  //Navigate to ProductDetail screen by entering productURL
-  static Future<void> _handleDynamicLink(String productUrl) async {
+  // FULL RESTART The app needed while edit this.
+  static Future<void> _handleDynamicLink(BuildContext context, String link) async {
     print('START: _handleDynamicLink()');
-    print('productUrl $productUrl');
-    var productId = productUrl.split('?p=').last;
+    print('link $link'); // https://riltopia.page.link/talme20@gmail.com%5B#a6459%5D
+    var postId = Uri.decodeFull(link.split('.link/').last);
+    print('postId $postId');
     try {
-      // final product = await Services().api.getProductByPermalink(context, productUrl);
-      // await Navigator.of(context).pushNamed(
+      var post = await FeedService.getPostById(postId);
+      print('post textContent ${post?.textContent}');
+      context.router.push(CommentsChatRoute(post: post!, isFullScreen: true));
     } catch (err) {
       printYellow('[firebase-dynamic-link] Error: ${err.toString()}');
     }
   }
 
-  static DynamicLinkParameters productParameters({
-    required String productUrl,
-    required String productId,
+  static DynamicLinkParameters postParams({
+    required String postId,
+    required SocialMetaTagParameters socialShareMeta,
   }) {
-    print('https://www.spider3d.co.il/?p=$productId');
-
+    var gPlayLink = 'https://play.google.com/store/apps/details?id=com.biton.messaging';
+    var iosLink = 'https://apps.apple.com/us/app/riltopia-social-chat-app/id1668583703';
     return DynamicLinkParameters(
-      uriPrefix: 'https://riltopia.page.link',
-      link: Uri.parse('https://www.spider3d.co.il/?p=$productId'),
-      androidParameters: const AndroidParameters(packageName: 'com.biton.messaging'),
-      iosParameters: const IOSParameters(bundleId: 'com.biton.messaging'),
-    );
+        uriPrefix: 'https://riltopia.page.link',
+        link: Uri.parse('https://riltopia.page.link/$postId'),
+        androidParameters: AndroidParameters(
+            packageName: 'com.biton.messaging',
+            minimumVersion: 309, // When Share button added
+            fallbackUrl: Uri.parse(gPlayLink)),
+        iosParameters: IOSParameters(
+            bundleId: 'com.biton.messaging',
+            minimumVersion: '3.0.9',
+            fallbackUrl: Uri.parse(iosLink)),
+        socialMetaTagParameters: socialShareMeta);
   }
 
   /// share product link that contains Dynamic link
   static void sharePostLink({
-    required String productUrl,
-    required String productId,
+    required PostModel post,
   }) async {
-    var productParams = productParameters(productUrl: productUrl, productId: productId);
-    var firebaseDynamicLink = await FirebaseDynamicLinks.instance.buildShortLink(productParams);
-    print('firebaseDynamicLink $firebaseDynamicLink');
-    await Share.share(firebaseDynamicLink.toString());
-    return;
-    http.Response response;
+    var images = [
+      'https://i.ibb.co/17gtzMP/A-Purple-People-Like-You.png',
+      'https://i.ibb.co/7rbVQTT/C-Blue-Whats-Around.png',
+      'https://i.ibb.co/3BBqJCN/B-Orange-Great-Converstions.png',
+      'https://i.ibb.co/PZkFYs2/D-Yellow-Response-Now.png',
+    ];
 
+    var productParams = postParams(
+      postId: post.id,
+      socialShareMeta: SocialMetaTagParameters(
+        title: "Join ${post.creatorUser?.name}'s Conversation",
+        description: 'RilTopia - Social Chat App',
+        imageUrl: Uri.parse((images..shuffle()).first),
+      ),
+    );
+    // var firebaseDynamicLink = await FirebaseDynamicLinks.instance.buildShortLink(productParams);
+    var firebaseDynamicLink = await FirebaseDynamicLinks.instance.buildLink(productParams);
+    // await Share.share(firebaseDynamicLink.previewLink.toString());
+    // return;
+
+    http.Response response;
     try {
+      var keyA = UniqueKey().toString().replaceAll('[', '').replaceAll(']', '').replaceAll('#', '');
+      var slash = 'RiTopia-$keyA';
+      print('slash $slash');
       response = await http.post(Uri.https("api.rebrandly.com", "/v1/links"),
           headers: {
             "apikey": "b4d30300ce9e4a609d7776e4a1df5f8f",
@@ -79,9 +109,9 @@ class DynamicLinkService {
             'Content-Type': 'application/json'
           },
           body: jsonEncode({
-            'domain': {'id': 'c0f887ba9eb4461cab7d12b714f8644b'},
+            // 'domain': {'id': 'c0f887ba9eb4461cab7d12b714f8644b'},
+            'slashtag': slash,
             'destination': '$firebaseDynamicLink',
-            'title': 'product: $productId'
           }));
       printYellow(response.body);
       if (response.statusCode == 200) {

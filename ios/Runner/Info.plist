@@ -2,27 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>FlutterDeepLinkingEnabled</key>
-    <true/>
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-        <key>CFBundleTypeRole</key>
-        <string>Editor</string>
-        <key>CFBundleURLName</key>
-        <string>flutterbooksample.com</string>
-        <key>CFBundleURLSchemes</key>
-        <array>
-        <string>customscheme</string>
-        </array>
-        </dict>
-    </array>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Pick an image for your profile</string>
-    <key>NSCameraUsageDescription</key>
-    <string>Pick an image for your profile</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Pick an image for your profile</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
@@ -43,14 +22,53 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.biton.messaging</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.751941760525-c36e2n06atejirfn2l1vg4rmino205o8</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.751941760525-c36e2n06atejirfn2l1vg4rmino205o8</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.biton.messaging</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
 	<string>your usage description here</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>your usage description here</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Pick an image for your profile</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -77,32 +95,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>com.biton.messaging</string>
-            </array>
-        </dict>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>com.googleusercontent.apps.751941760525-c36e2n06atejirfn2l1vg4rmino205o8</string>
-            </array>
-        </dict>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>com.googleusercontent.apps.751941760525-c36e2n06atejirfn2l1vg4rmino205o8</string>
-            </array>
-        </dict>
-    </array>
 </dict>
 </plist>

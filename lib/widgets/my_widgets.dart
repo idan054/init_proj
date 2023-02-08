@@ -89,7 +89,8 @@ Widget wMainButton(BuildContext context,
 }
 
 // New logo
-Row riltopiaHorizontalLogo(BuildContext context, {double ratio = 1.0, bool showSubText = false, bool isHomePage = true}) {
+Row riltopiaHorizontalLogo(BuildContext context,
+    {double ratio = 1.0, bool showSubText = false, bool isHomePage = true}) {
   var isAdmin = context.uniProvider.currUser.userType == UserTypes.admin;
   return Row(
     mainAxisSize: MainAxisSize.min,
@@ -104,7 +105,8 @@ Row riltopiaHorizontalLogo(BuildContext context, {double ratio = 1.0, bool showS
           // Text(isAdmin ? 'RilTopia Admin' : 'RilTopia', style: TextStyle(fontFamily: FontFamily.rilTopia, fontWeight: FontWeight.w500, fontSize: 18)),
           if (showSubText) ...[
             3.verticalSpace,
-            ' A Social Chat App'.toText(fontSize: 7 * ratio),
+            Text('Social Chat App',
+                style: AppStyles.text14PxBold.copyWith(fontSize: 7 * ratio, color: Colors.white)),
           ]
         ],
       )

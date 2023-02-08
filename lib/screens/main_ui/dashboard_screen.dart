@@ -54,13 +54,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     PushNotificationService.requestPermission();
-    DynamicLinkService.initDynamicLinks();
+    DynamicLinkService.initDynamicLinks(context);
     OnlineService.updateOnlineUsersStatus(context, timerCheck: true);
 
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => checkForUpdate(context, localConfig, serverConfig!));
+        .addPostFrameCallback((_) {
+      checkForUpdate(context, localConfig, serverConfig!);
+    });
 
     // NotificationService.sendPushMessage();
 

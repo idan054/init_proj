@@ -220,7 +220,7 @@ class _PostBlockState extends State<PostBlock> {
                   .svg(height: 17, color: AppColors.grey50)
                   .pOnly(left: 18, right: 18, bottom: 12, top: 20)
                   .onTap(() {
-                  DynamicLinkService.sharePostLink(productUrl: 'X', productId: 'Y');
+                  DynamicLinkService.sharePostLink(post: widget.post);
                 })
 
               //~ Reply button
@@ -252,11 +252,10 @@ class _PostBlockState extends State<PostBlock> {
                 .onTap(() async {
               isLoading = true;
               buttonState(() {});
-              var data = await Database.docData('posts/${widget.post.originalPostId}');
-              var post = PostModel.fromJson(data!);
+              var post = await FeedService.getPostById('${widget.post.originalPostId}');
               isLoading = false;
               buttonState(() {});
-              handleShowBottomPost(context, post); // Original post comment.
+              handleShowBottomPost(context, post!); // Original post comment.
             }, radius: 10);
           }
         );

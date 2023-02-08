@@ -62,13 +62,12 @@ class FeedService {
     // print('unread $unread');
 
     var fetchedPosts = context.uniProvider.fetchedPosts;
-    for(var post in [...fetchedPosts]){
-      if(post.id == postId) fetchedPosts.remove(post);
+    for (var post in [...fetchedPosts]) {
+      if (post.id == postId) fetchedPosts.remove(post);
     }
     context.uniProvider.fetchedPostsUpdate([...fetchedPosts]);
     fetchedPosts = context.uniProvider.fetchedPosts;
     print('fetchedPosts X  ${fetchedPosts.length}');
-
 
     var exportedEmail = currUser.email!.replaceAll('.', 'DOT');
     Database.updateFirestore(
@@ -94,6 +93,12 @@ class FeedService {
     //
     //
     // }
+  }
+
+  static Future<PostModel?> getPostById(String postId) async {
+    var data = await Database.docData('posts/$postId');
+    var post = PostModel.fromJson(data!);
+    return post;
   }
 
   static void addComment(BuildContext context, PostModel comment, PostModel originalPost) async {
@@ -127,11 +132,10 @@ class FeedService {
         var exportedEmail = email.replaceAll('.', 'DOT');
         postData['metadata']['${exportedEmail}_notifications'] = FieldValue.increment(1);
 
-
         var otherUser = await FsAdvanced.getUserByEmailIfNeeded(context, UserModel(email: email));
         // var title = '${currUser.name} Joined your conversation';
         var title = '${currUser.name} Commented';
-        print(' otherUser.fcm ${ otherUser.fcm}');
+        print(' otherUser.fcm ${otherUser.fcm}');
         PushNotificationService.sendPushNotification(
           token: otherUser.fcm!,
           title: title,
