@@ -16,7 +16,6 @@ import '../Feed/feed_services.dart';
 import 'dart:convert' show utf8;
 import 'dart:io' show Platform;
 
-
 class DynamicLinkService {
   static void initDynamicLinks(BuildContext context) async {
     print('START: initDynamicLinks()');
@@ -83,17 +82,24 @@ class DynamicLinkService {
     required PostModel post,
   }) async {
     var images = [
-      'https://i.ibb.co/17gtzMP/A-Purple-People-Like-You.png',
-      'https://i.ibb.co/7rbVQTT/C-Blue-Whats-Around.png',
-      'https://i.ibb.co/3BBqJCN/B-Orange-Great-Converstions.png',
-      'https://i.ibb.co/PZkFYs2/D-Yellow-Response-Now.png',
+      // 'https://i.ibb.co/17gtzMP/A-Purple-People-Like-You.png',
+      // 'https://i.ibb.co/7rbVQTT/C-Blue-Whats-Around.png',
+      // 'https://i.ibb.co/3BBqJCN/B-Orange-Great-Converstions.png',
+      // 'https://i.ibb.co/PZkFYs2/D-Yellow-Response-Now.png',
+
+      // Same, But with RilTopia logo
+      'https://i.ibb.co/b3yL41g/A-Purple-People-Like-You-Ril.png',
+      'https://i.ibb.co/JrgsT2D/B-Orange-Great-Converstions-Ril.png',
+      'https://i.ibb.co/TRFsh8s/D-Yellow-Response-Now-Ril.png',
+      'https://i.ibb.co/4Yf64Ff/C-Blue-Whats-Around-Ril.png',
     ];
 
     var productParams = postParams(
       postId: post.id,
       socialShareMeta: SocialMetaTagParameters(
         title: "Join ${post.creatorUser?.name}'s Conversation",
-        description: 'RilTopia - Social Chat App',
+        // description: 'RilTopia - Social Chat App',
+        description: post.textContent,
         imageUrl: Uri.parse((images..shuffle()).first),
       ),
     );
@@ -126,7 +132,7 @@ class DynamicLinkService {
         await Share.share(
           'https://${(jsonDecode(response.body) as Map<String, dynamic>)['shortUrl']}',
         );
-      }else{
+      } else {
         await Share.share(firebaseDynamicLink.toString());
       }
     } catch (e) {
