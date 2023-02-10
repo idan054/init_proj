@@ -28,8 +28,8 @@ import 'a_get_server_config.dart';
 
 Future initializeApp(BuildContext context) async {
   // await Future.delayed(3.seconds);
-  // await HiveServices.openBoxes();
-  // if (clearHiveBoxes) await HiveServices.clearAllBoxes();
+  await HiveServices.openBoxes();
+  // await HiveServices.clearAllBoxes();
 
   var succeed = await updateAppConfigModel(context);
   if (!succeed) return;

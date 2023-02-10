@@ -7,6 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../themes/app_colors.dart';
 
 var appearDuration = 650;
+// var appearDuration = 1550;
 
 extension IconDataX on IconData {
   Icon icon({Color color = AppColors.white, double size = 20}) => Icon(

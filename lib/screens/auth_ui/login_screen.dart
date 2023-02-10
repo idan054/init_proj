@@ -44,12 +44,12 @@ class _LoginScreenState extends State<LoginScreen> {
           Assets.images.adPrt2.image().px(15),
           // googleLoginButton(),
           28.verticalSpace,
-          wMainButton(context,
+          rilClassicButton(context,
                   radius: 99,
                   isWide: true,
-                  title: isLoading ? 'Loading...' : 'Join with Google',
+                  title: isLoading ? 'Loading...' : '${Platform.isIOS ? 'Sign in' : 'Join'} with Google',
                   icon: Assets.svg.gLogoIcon.svg(height: 25),
-                  color: isLoading ? AppColors.greyUnavailable : AppColors.white,
+                  bgColor: isLoading ? AppColors.greyUnavailable : AppColors.white,
                   textColor: AppColors.darkBg,
                   onPressed: isLoading
                       ? null
@@ -64,12 +64,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
           15.verticalSpace,
           if (Platform.isIOS)
-            wMainButton(context,
+            rilClassicButton(context,
                     radius: 99,
                     isWide: true,
                     icon: Assets.svg.apple.svg(height: 23).pOnly(right: 6),
-                    title: isLoading ? 'Loading...' : 'Join with Apple',
-                    color: isLoading ? AppColors.greyUnavailable : AppColors.white,
+                    title: isLoading ? 'Loading...' : 'Sign in with Apple',
+                    bgColor: isLoading ? AppColors.greyUnavailable : AppColors.white,
                     textColor: AppColors.darkBg,
                     onPressed: isLoading
                         ? null

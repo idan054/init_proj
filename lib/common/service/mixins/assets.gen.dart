@@ -44,6 +44,22 @@ class $AssetsImagesGen {
   AssetGenImage get circleCover =>
       const AssetGenImage('assets/images/CircleCover.png');
 
+  /// File path: assets/images/Filter-Preview-Full-1.png
+  AssetGenImage get filterPreviewFull1 =>
+      const AssetGenImage('assets/images/Filter-Preview-Full-1.png');
+
+  /// File path: assets/images/Filter-Preview-Full-2.png
+  AssetGenImage get filterPreviewFull2 =>
+      const AssetGenImage('assets/images/Filter-Preview-Full-2.png');
+
+  /// File path: assets/images/Filter-Preview-Full-3.png
+  AssetGenImage get filterPreviewFull3 =>
+      const AssetGenImage('assets/images/Filter-Preview-Full-3.png');
+
+  /// File path: assets/images/Filter-Preview-Full-4.png
+  AssetGenImage get filterPreviewFull4 =>
+      const AssetGenImage('assets/images/Filter-Preview-Full-4.png');
+
   /// File path: assets/images/LogoCircularRilTopiaLogo.png
   AssetGenImage get logoCircularRilTopiaLogo =>
       const AssetGenImage('assets/images/LogoCircularRilTopiaLogo.png');
@@ -89,6 +105,10 @@ class $AssetsImagesGen {
         adPrt1,
         adPrt2,
         circleCover,
+        filterPreviewFull1,
+        filterPreviewFull2,
+        filterPreviewFull3,
+        filterPreviewFull4,
         logoCircularRilTopiaLogo,
         riltopiaAsIconPNG,
         appIcon,

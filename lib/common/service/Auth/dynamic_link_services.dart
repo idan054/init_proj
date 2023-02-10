@@ -86,6 +86,7 @@ class DynamicLinkService {
       // 'https://i.ibb.co/7rbVQTT/C-Blue-Whats-Around.png',
       // 'https://i.ibb.co/3BBqJCN/B-Orange-Great-Converstions.png',
       // 'https://i.ibb.co/PZkFYs2/D-Yellow-Response-Now.png',
+      // 'https://i.ibb.co/vPtjSMp/Filter-Preview-Full-4.png'
 
       // Same, But with RilTopia logo
       'https://i.ibb.co/b3yL41g/A-Purple-People-Like-You-Ril.png',

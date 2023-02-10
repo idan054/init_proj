@@ -61,19 +61,19 @@ Widget wMainTextField(
   ).px(55);
 }
 
-Widget wMainButton(BuildContext context,
+Widget rilClassicButton(BuildContext context,
     {required String title,
     bool isWide = true,
     double radius = 12,
     Widget? icon,
-    double? width,
-    Color color = AppColors.primaryOriginal,
+    double? padding,
+    Color bgColor = AppColors.primaryOriginal,
     Color borderColor = AppColors.transparent,
     Color textColor = AppColors.white,
     required VoidCallback? onPressed}) {
   return TextButton.icon(
           style: TextButton.styleFrom(
-              backgroundColor: color,
+              backgroundColor: bgColor,
               shape: RoundedRectangleBorder(
                 side: BorderSide(width: 2, color: borderColor),
                 borderRadius: BorderRadius.circular(radius), // <-- Radius
@@ -84,8 +84,8 @@ Widget wMainButton(BuildContext context,
             title,
             style: AppStyles.text18PxBold.copyWith(color: textColor),
           ).offset(icon == null ? -5 : 0, 0))
-      .advancedSizedBox(context, width: width ?? context.width, height: 55)
-      .px(width == null ? (isWide ? 55 : 85) : 0);
+      .advancedSizedBox(context, width: context.width, height: 55)
+      .px(padding ?? (isWide ? 55 : 85));
 }
 
 // New logo

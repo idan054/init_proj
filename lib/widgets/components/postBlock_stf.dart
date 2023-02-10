@@ -205,6 +205,14 @@ class _PostBlockState extends State<PostBlock> {
         isConversation ? _buildCommentsCounter(commentEmpty, title) : const SizedBox(height: 20),
         if (isComment && widget.isReported) buildOriginalPostButton(iconColor),
         const Spacer(),
+        isConversation
+            ? Assets.svg.icons.shareArrowWide
+                .svg(height: 17, color: AppColors.grey50)
+                .pOnly(left: 18, right: 18, bottom: 12, top: 20)
+                .onTap(() {
+                DynamicLinkService.sharePostLink(post: widget.post);
+              })
+            : const Offstage(),
         if (widget.post.creatorUser!.uid != currUser.uid) ...[
           // TODO ADD ON POST MVP ONLY (Send like)
           // // Like Button
@@ -216,12 +224,7 @@ class _PostBlockState extends State<PostBlock> {
           //     .roundedFull,
 
           isConversation
-              ? Assets.svg.icons.shareArrowWide
-                  .svg(height: 17, color: AppColors.grey50)
-                  .pOnly(left: 18, right: 18, bottom: 12, top: 20)
-                  .onTap(() {
-                  DynamicLinkService.sharePostLink(post: widget.post);
-                })
+              ? const Offstage()
 
               //~ Reply button
               : Row(
@@ -243,22 +246,20 @@ class _PostBlockState extends State<PostBlock> {
 
   Widget buildOriginalPostButton(Color iconColor) {
     var isLoading = false;
-    return StatefulBuilder(
-          builder: (context, buttonState) {
-            return (isLoading  ? 'Loading...' : 'Original Ril')
-                .toText(fontSize: 12, color: iconColor, underline: true)
-                .pOnly(right: 20, left: 12)
-                .customRowPadding
-                .onTap(() async {
-              isLoading = true;
-              buttonState(() {});
-              var post = await FeedService.getPostById('${widget.post.originalPostId}');
-              isLoading = false;
-              buttonState(() {});
-              handleShowBottomPost(context, post!); // Original post comment.
-            }, radius: 10);
-          }
-        );
+    return StatefulBuilder(builder: (context, buttonState) {
+      return (isLoading ? 'Loading...' : 'Original Ril')
+          .toText(fontSize: 12, color: iconColor, underline: true)
+          .pOnly(right: 20, left: 12)
+          .customRowPadding
+          .onTap(() async {
+        isLoading = true;
+        buttonState(() {});
+        var post = await FeedService.getPostById('${widget.post.originalPostId}');
+        isLoading = false;
+        buttonState(() {});
+        handleShowBottomPost(context, post!); // Original post comment.
+      }, radius: 10);
+    });
   }
 
   Widget _buildCommentsCounter(bool commentEmpty, String title) {

@@ -132,12 +132,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
               borderStyle: BorderStyle.none,
             ).center,
             25.verticalSpace,
-            wMainButton(context,
+            rilClassicButton(context,
                 radius: 99,
                 isWide: true,
                 // title: isLoading ? 'Loading... ' : tags_e_View ? "Let's Start!" : 'Next ',
                 title: tags_e_View ? "Let's Start!" : 'Next ',
-                color: AppColors.white,
+                bgColor: AppColors.white,
                 textColor: AppColors.darkBg, onPressed: () {
               context.uniProvider.errFoundUpdate(false);
 

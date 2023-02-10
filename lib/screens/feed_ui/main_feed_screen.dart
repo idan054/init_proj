@@ -32,6 +32,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import '../../common/dump/hive_services.dart';
 import '../../common/extensions/color_printer.dart';
 import '../../common/models/post/post_model.dart';
 import '../../common/models/universalModel.dart';
@@ -296,6 +297,7 @@ AppBar buildRiltopiaAppBar(
   bool isHomePage = true,
 }) {
   var currUser = context.uniProvider.currUser;
+  bool isPreviewFilterChecked = HiveServices.uniBox.get('isPreviewFilterChecked') ?? false;
 
   return AppBar(
     elevation: 2,
@@ -309,17 +311,38 @@ AppBar buildRiltopiaAppBar(
       //~ Report Screen
       if ((currUser.userType == UserTypes.admin) && isHomePage)
         CircleAvatar(
-            backgroundColor: AppColors.darkOutline50,
+            backgroundColor: AppColors.primaryLight2,
             radius: 14,
             child: Assets.svg.icons.flag03.svg(
               color: AppColors.white,
               height: 15,
-            )).pad(3).onTap(() {
+            )).pad(6).onTap(() {
           context.router.push(const AdminRoute());
         }),
 
+      //~ Filter Preview Screen
+      if (isHomePage)
+        StatefulBuilder(builder: (context, stfState) {
+          return CircleAvatar(
+                  backgroundColor:
+                      isPreviewFilterChecked ? AppColors.transparent : AppColors.primaryLight,
+                  radius: 14,
+                  child: Assets.svg.icons.wisdomMultiLightStar
+                      .svg(
+                        color: isPreviewFilterChecked ? Colors.white30 : Colors.white,
+                        height: 22,
+                      )
+                      .pad(6))
+              .onTap(() {
+            isPreviewFilterChecked = true;
+            stfState(() {});
+            HiveServices.uniBox.put('isPreviewFilterChecked', true);
+            context.router.push(const FilterPreviewRoute());
+          }, radius: 5).pad(4);
+        }),
+
       // child: Icons.flag.icon(color: AppColors.white,)),
-      if (isHomePage) appBarProfile(context),
+      if (isHomePage) profileCircle(context),
     ],
 
     // TODO ADD ON POST MVP ONLY (Notification page)
@@ -338,18 +361,18 @@ AppBar buildRiltopiaAppBar(
   );
 }
 
-Widget appBarProfile(BuildContext context) {
+Widget profileCircle(BuildContext context) {
   var currUser = context.uniProvider.currUser;
 
   return CircleAvatar(
-    backgroundColor: AppColors.darkOutline,
+    backgroundColor: AppColors.transparent,
     radius: 18,
     child: CircleAvatar(
       radius: 16,
       backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl!),
       backgroundColor: AppColors.darkOutline50,
     ),
-  ).px(10).py(5).onTap(() {
+  ).pOnly(right: 10, left: 5).py(5).onTap(() {
     showRilDialog(
       context,
       title: null,
@@ -464,7 +487,7 @@ Widget appBarProfile(BuildContext context) {
       showCancelBtn: false,
     );
     // context.router.push(UserRoute(user: context.uniProvider.currUser));
-  });
+  }, radius: 5);
 }
 
 Widget buildChoiceChip(BuildContext context,

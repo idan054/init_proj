@@ -189,12 +189,12 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 ],
               ),
             ),
-            if (Platform.isIOS)
-              wMainButton(context,
+            // if (Platform.isIOS)
+              rilClassicButton(context,
                   radius: 10,
                   isWide: true,
                   title: 'Delete my account',
-                  color: AppColors.errRed,
+                  bgColor: AppColors.errRed,
                   textColor: AppColors.greyLight, onPressed: () async {
                 _deleteUserPopup(context);
               }).scale(scale: 0.7).bottom.pOnly(bottom: 25)
