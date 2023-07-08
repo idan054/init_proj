@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/models/user/user_model.dart';
@@ -417,7 +417,7 @@ class _UserScreenState extends State<UserScreen> {
                           ? const Offstage()
                           : user.tags.length == 1
                               ? buildRilChip(user.tags.first)
-                              : Badge(
+                              : badge.Badge(
                                       badgeContent: '+${user.tags.length - 1}'
                                           .toText(fontSize: 10, color: Colors.white, medium: true),
                                       padding: const EdgeInsets.all(5),

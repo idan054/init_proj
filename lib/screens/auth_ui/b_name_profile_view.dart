@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart'  as badge;
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
@@ -53,8 +53,8 @@ class _NameProfileViewState extends State<NameProfileView> {
           200.verticalSpace,
           'Let’s set up your profile!'.toText(fontSize: 18, medium: true),
           50.verticalSpace,
-          Badge(
-            position: BadgePosition.bottomEnd(bottom: 0, end: 0),
+          badge.Badge(
+            position:  badge.BadgePosition.bottomEnd(bottom: 0, end: 0),
             badgeColor: isImageErr ? AppColors.errRed : AppColors.primaryOriginal,
             padding: 10.all,
             badgeContent: isLoading

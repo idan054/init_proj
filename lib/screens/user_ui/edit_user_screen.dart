@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart'  as badge;
 import 'package:camera/camera.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/post/post_model.dart';
@@ -240,8 +240,8 @@ class _EditUserScreenState extends State<EditUserScreen> {
   }
 
   Widget buildEditProfileImage(UserModel currUser) {
-    return Badge(
-            position: BadgePosition.bottomEnd(bottom: 0, end: 0),
+    return badge.Badge(
+            position: badge.BadgePosition.bottomEnd(bottom: 0, end: 0),
             badgeColor: AppColors.primaryOriginal,
             padding: 7.all,
             badgeContent: isLoading

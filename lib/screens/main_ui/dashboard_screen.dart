@@ -4,7 +4,7 @@ import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:auto_route/auto_route.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/user/user_model.dart';
@@ -316,7 +316,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         var counter = snapshot.data ?? 0;
         return counter == 0
             ? child
-            : Badge(
+            : badge.Badge(
                 badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white70, medium: true),
                 padding: const EdgeInsets.all(5),
                 elevation: 0,
@@ -342,7 +342,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         var counter = snapshot.data ?? 0;
         return counter == 0
             ? child
-            : Badge(
+            : badge.Badge(
                 badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white70, medium: true),
                 padding: const EdgeInsets.all(5),
                 elevation: 0,
