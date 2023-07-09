@@ -2,7 +2,7 @@ import 'package:example/common/extensions/color_printer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../../models/appConfig/app_config_model.dart';

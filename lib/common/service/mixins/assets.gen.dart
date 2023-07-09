@@ -92,6 +92,10 @@ class $AssetsImagesGen {
   AssetGenImage get mapPlaceholder =>
       const AssetGenImage('assets/images/map_placeholder.png');
 
+  /// File path: assets/images/onboarding-new-banner.png
+  AssetGenImage get onboardingNewBanner =>
+      const AssetGenImage('assets/images/onboarding-new-banner.png');
+
   /// File path: assets/images/ril-clean-icon.png
   AssetGenImage get rilCleanIcon =>
       const AssetGenImage('assets/images/ril-clean-icon.png');
@@ -99,6 +103,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/squresBg.png
   AssetGenImage get squresBg =>
       const AssetGenImage('assets/images/squresBg.png');
+
+  /// File path: assets/images/white-logo.png
+  AssetGenImage get whiteLogo =>
+      const AssetGenImage('assets/images/white-logo.png');
 
   /// List of all assets
   List<AssetGenImage> get values => [
@@ -117,8 +125,10 @@ class $AssetsImagesGen {
         commentsOffPNG,
         elonMuskAd,
         mapPlaceholder,
+        onboardingNewBanner,
         rilCleanIcon,
-        squresBg
+        squresBg,
+        whiteLogo
       ];
 }
 
@@ -409,6 +419,14 @@ class $AssetsSvgIconsGen {
   SvgGenImage get dateTimeCalender =>
       const SvgGenImage('assets/svg/icons/date_time_calender.svg');
 
+  /// File path: assets/svg/icons/dmPlane-untitled-icon-orginal.svg
+  SvgGenImage get dmPlaneUntitledIconOrginal =>
+      const SvgGenImage('assets/svg/icons/dmPlane-untitled-icon-orginal.svg');
+
+  /// File path: assets/svg/icons/dmPlane-untitled-icon-outlined.svg
+  SvgGenImage get dmPlaneUntitledIconOutlined =>
+      const SvgGenImage('assets/svg/icons/dmPlane-untitled-icon-outlined.svg');
+
   /// File path: assets/svg/icons/dmPlane-untitled-icon.svg
   SvgGenImage get dmPlaneUntitledIcon =>
       const SvgGenImage('assets/svg/icons/dmPlane-untitled-icon.svg');
@@ -526,6 +544,8 @@ class $AssetsSvgIconsGen {
         commentUntitledIcon,
         commentsOff,
         dateTimeCalender,
+        dmPlaneUntitledIconOrginal,
+        dmPlaneUntitledIconOutlined,
         dmPlaneUntitledIcon,
         flag03,
         groupMultiPeople,

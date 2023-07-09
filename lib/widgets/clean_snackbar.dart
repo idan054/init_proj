@@ -1,11 +1,11 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 Widget rilFlushBar(BuildContext context, String text,
-    {Color bgColor = AppColors.darkOutline50, Color textColor = AppColors
+    {Color bgColor = AppColors.lightOutline50, Color textColor = AppColors
         .white, int? duration, bool isShimmer = false}) {
   return Flushbar(
     backgroundColor: bgColor,
@@ -17,7 +17,7 @@ Widget rilFlushBar(BuildContext context, String text,
     duration: (duration ?? 3).seconds,
     messageText: Shimmer.fromColors(
         baseColor: textColor,
-        highlightColor: isShimmer ? AppColors.darkOutline50 : textColor,
+        highlightColor: isShimmer ? AppColors.lightOutline50 : textColor,
         child: text.toText(color: textColor, medium: true, fontSize: 14)),
   )
     ..show(context);

@@ -5,7 +5,7 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -48,9 +48,9 @@ class _ChatScreenState extends State<ChatScreen> {
   bool isLoadOlderMessages = false;
   PostModel? post;
 
-  Color otherUserBubble = AppColors.chatBubble;
+  Color otherUserBubble = AppColors.darkGrey;
   Color currUserBubble = AppColors.primaryOriginal;
-  Color textFieldBg = AppColors.chatBubble;
+  Color textFieldBg = AppColors.darkGrey;
 
   // var splashLoader = true;
   // List<MessageModel> chatList = [];
@@ -95,6 +95,8 @@ class _ChatScreenState extends State<ChatScreen> {
           appBar: buildDarkAppBar(context),
           body: Column(
             children: [
+              const Divider(thickness: 2, color: AppColors.darkGrey, height: 2),
+
               // StreamProvider<List<MessageModel>>.value(
               NotificationListener<UserScrollNotification>(
                 onNotification: (notification) {
@@ -137,8 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         reverse: true,
                         // controller: ,
                         itemCount: messages.length,
-                        itemBuilder: (context, i) =>
-                            buildBubble(context, messages[i]),
+                        itemBuilder: (context, i) => buildBubble(context, messages[i]),
                       ),
                     );
                   },
@@ -275,7 +276,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             Text(message.textContent!,
                                 textAlign: isHebrew ? TextAlign.right : TextAlign.left,
                                 textDirection: isHebrew ? TextDirection.rtl : TextDirection.ltr,
-                                style: AppStyles.text16PxRegular.white),
+                                style: AppStyles.text16PxRegular.copyWith(
+                                  color: currUser ? AppColors.darkBg : AppColors.white,
+                                )),
                             5.verticalSpace,
                             Builder(builder: (context) {
                               // AKA if today, show time only, no date.
@@ -286,8 +289,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                   : message.createdAt!.substring(0, 14);
 
                               return Text(time,
-                                  style: AppStyles.text10PxRegular
-                                      .copyWith(color: AppColors.greyLight));
+                                  style: AppStyles.text10PxRegular.copyWith(
+                                      color: currUser
+                                          ? AppColors.darkGrey
+                                          : AppColors.greyLight));
                             })
                           ],
                         ))).px(6).pOnly(
@@ -322,6 +327,7 @@ class _ChatScreenState extends State<ChatScreen> {
             // showNip: false,
             child: buildReplyProfile(
               context,
+              currUser,
               message.postReply!,
               // actionButton: 'View Ril'.toText(medium: true).pad(13).onTap(() {
               //   TODO LATER LIST: Add View Ril Reply OnTap
@@ -336,7 +342,7 @@ Widget buildReplyField(PostModel post, Color textFieldBg, {GestureTapCallback? o
             color: textFieldBg,
             // color: AppColors.primaryLight,
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: buildReplyProfile(context, post,
+            child: buildReplyProfile(context, false, post,
                 actionButton: Icons.close_rounded
                     .icon(size: 22, color: AppColors.grey50)
                     // Assets.svg.close.svg(height: 17, color: AppColors.grey50)
@@ -387,8 +393,10 @@ Widget buildTextField(
             fillColor: textFieldBg,
             hintStyle: AppStyles.text14PxRegular.greyLight,
             focusedBorder: InputBorder.none,
+            border: InputBorder.none,
             hintText: hintText,
             suffixIcon: buildSendButton(
+              color: AppColors.greyLight,
               isActive:
                   controller.text.isNotEmpty && (controller.text.replaceAll(' ', '').isNotEmpty),
               onTap: onTap,
@@ -405,7 +413,8 @@ Widget buildTextField(
   ).px(8);
 }
 
-Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionButton}) {
+Column buildReplyProfile(BuildContext context, bool currUser, PostModel post,
+    {Widget? actionButton}) {
   var name = '${post.creatorUser?.name}';
   var shortName = name.length > 13 ? name.substring(0, 13) + '...'.toString() : name;
   var postAgo = postTime(post.timestamp!);
@@ -430,9 +439,13 @@ Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionBu
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              shortName.toText(fontSize: 14, bold: true, color: AppColors.white, softWrap: false),
+              shortName.toText(
+                  fontSize: 14,
+                  bold: true,
+                  color: currUser ? AppColors.darkGrey : AppColors.greyLight,
+                  softWrap: false),
               postAgo
-                  .toText(color: AppColors.greyLight, fontSize: 11)
+                  .toText(color: currUser ? AppColors.darkGrey : AppColors.greyLight, fontSize: 11)
                   .pOnly(right: 10, top: 0, bottom: 0),
             ],
           ),
@@ -451,7 +464,9 @@ Column buildReplyProfile(BuildContext context, PostModel post, {Widget? actionBu
         maxLines: 4,
         textAlign: post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
         textDirection: post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
-        style: AppStyles.text14PxRegular.copyWith(color: AppColors.greyLight),
+        style: AppStyles.text14PxRegular.copyWith(
+          color: currUser ? AppColors.darkBg : AppColors.white,
+        ),
         linkColor: AppColors.white,
       ).advancedSizedBox(context, maxWidth: true).pOnly(left: 50, bottom: 5, right: 45)
     ],

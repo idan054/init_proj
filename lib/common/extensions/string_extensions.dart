@@ -1,4 +1,4 @@
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';

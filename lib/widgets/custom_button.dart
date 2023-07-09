@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../common/themes/app_colors.dart';
+import '../common/themes/app_colors_inverted.dart';
 import '../common/themes/app_styles.dart';
 
 class CustomButton extends StatelessWidget {

@@ -10,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../common/routes/app_router.gr.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/mixins/assets.gen.dart';
-import '../../common/themes/app_colors.dart';
+import '../../common/themes/app_colors_inverted.dart';
 import '../../common/themes/app_styles.dart';
 import '../../widgets/clean_snackbar.dart';
 import '../../widgets/my_dialog.dart';
@@ -128,7 +128,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
               controller: _tabController,
               indicatorSize: 8,
               selectedColor: AppColors.white,
-              color: AppColors.darkOutline50,
+              color: AppColors.lightOutline50,
               borderStyle: BorderStyle.none,
             ).center,
             25.verticalSpace,
@@ -160,7 +160,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                 var title = "You're ${user.age} y.o $gender";
                 showRilDialog(context,
                     title: title,
-                    desc: "For a safe community, You CAN'T change your age & gender later".toText(fontSize: 13),
+                    desc: "For a safe community, You CAN'T change your age & gender later"
+                        .toText(fontSize: 13),
                     secondaryBtn: TextButton(
                         child: 'Confirm'.toText(color: AppColors.primaryLight),
                         onPressed: () {
@@ -192,7 +193,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                   SizedBox(
                       height: 20,
                       child: 'Thanks, I don’t want verification'
-                          .toText(fontSize: 15, color: AppColors.darkOutline50))
+                          .toText(fontSize: 15, color: AppColors.lightOutline50))
                   // .appearOpacity
                 ],
               )
@@ -210,7 +211,7 @@ var fieldBorderDeco = OutlineInputBorder(
     borderRadius: BorderRadius.circular(10));
 
 var fieldFocusBorderDeco = OutlineInputBorder(
-    borderSide: const BorderSide(color: AppColors.grey50, width: 2.5),
+    borderSide: const BorderSide(color: AppColors.darkOutline50, width: 2.5),
     borderRadius: BorderRadius.circular(10));
 
 var fieldErrBorderDeco = OutlineInputBorder(
@@ -248,7 +249,7 @@ Widget rilTextField(
               labelText: label,
               hintText: hint,
               // labelStyle: AppStyles.text16PxMedium.copyWith(color: errorText != null ? AppColors.errRed : AppColors.darkOutline50),
-              labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.darkOutline50),
+              labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.greyUnavailable),
               hintStyle: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
               // errorText: errorText,
               errorBorder: fieldErrBorderDeco,

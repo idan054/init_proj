@@ -1,6 +1,6 @@
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/user/user_model.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -80,12 +80,11 @@ Widget rilClassicButton(BuildContext context,
               )),
           onPressed: onPressed,
           icon: icon ?? const Offstage(),
-          label: Text(
-            title,
-            style: AppStyles.text18PxBold.copyWith(color: textColor),
-          ).offset(icon == null ? -5 : 0, 0))
+          label: title
+              .toText(color: textColor, bold: true, fontSize: 16)
+              .offset(icon == null ? -5 : 0, 0))
       .advancedSizedBox(context, width: context.width, height: 55)
-      .px(padding ?? (isWide ? 55 : 85));
+      .px(padding ?? (isWide ? 35 : 85));
 }
 
 // New logo
@@ -95,18 +94,20 @@ Row riltopiaHorizontalLogo(BuildContext context,
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Assets.images.logoCircularRilTopiaLogo.image(height: 27 * ratio),
+      Assets.images.logoCircularRilTopiaLogo.image(height: 24 * ratio),
       10.horizontalSpace,
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // (isAdmin ? 'RilTopia Admin' : 'RilTopia').toText(fontSize: 15 * ratio),
-          (isAdmin && !isHomePage ? 'RilTopia Admin' : 'RilTopia').toText(fontSize: 15 * ratio),
+          (isAdmin && !isHomePage ? 'RilTopia Admin' : 'RilTopia')
+              .toText(fontSize: 15 * ratio, bold: true),
           // Text(isAdmin ? 'RilTopia Admin' : 'RilTopia', style: TextStyle(fontFamily: FontFamily.rilTopia, fontWeight: FontWeight.w500, fontSize: 18)),
           if (showSubText) ...[
             3.verticalSpace,
             Text('Social Chat App',
-                style: AppStyles.text14PxBold.copyWith(fontSize: 7 * ratio, color: Colors.white)),
+                style:
+                    AppStyles.text14PxMedium.copyWith(fontSize: 7 * ratio, color: AppColors.white)),
           ]
         ],
       )

@@ -4,34 +4,19 @@ class AppColors {
   const AppColors._();
 
   // New colors
-  // static const Color white = Colors.white; // OLD
   static const Color white = Color(0xffEDEDF8);
-
-  // static const Color grey50 = Color(0xff8D8C92); // OLD
   static const Color grey50 = Color(0xffCACACA); // AKA greyLight
-
-
-  // static const Color darkOutline = Color(0xff292533); // OLD
   static const Color darkOutline = Color(0xff211c2d); // OLD - NEW
   static const Color chatBubble = Color(0xff292535);
-
-  // static const Color primaryDark = Color(0xff221F2B); // OLD
-  // static const Color primaryDark = Color(0xff1D1928);
   static const Color primaryDark = Color(0xff1A1626);
-
-  // static const Color darkBg = Color(0xff15131a); // OLD
   static const Color darkBg = Color(0xff15121E);
-
   static const Color green = Color(0xffB2F4B0);
   static const Color likeRed = Color(0xfff4b0b0);
 
   // Originals colors
-  // static const Color primaryOriginal = Color(0xff621BEE); // OLD
-  // static const Color primaryDarkOriginal = Color(0xff4914B2); // OLD
-  static const Color primaryOriginal = Color(0xff6133E4);
-
+  // static const Color primaryOriginal = Color(0xff6133E4);
+  static const Color primaryOriginal = Color(0xff7047E7);
   static const Color primaryLight = Color(0xff624b99);
-
   static const Color darkOutline50 = Color(0xff4D4956); // OLD
   static const Color primaryLight2 = Color(0xff655A72);
 

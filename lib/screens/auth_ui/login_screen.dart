@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -34,23 +34,27 @@ class _LoginScreenState extends State<LoginScreen> {
       backgroundColor: AppColors.darkBg,
       body: Column(
         children: [
-          const Spacer(flex: 20),
-          riltopiaHorizontalLogo(context, ratio: 1.8, showSubText: true),
-          28.verticalSpace,
+          // const Spacer(flex: 20),
+          // riltopiaHorizontalLogo(context, ratio: 1.8, showSubText: true),
+          // 28.verticalSpace,
           // const Spacer(flex: 80),
           // const Placeholder(fallbackHeight: 450),
-          Assets.images.adPrt1.image().px(15),
-          4.verticalSpace,
-          Assets.images.adPrt2.image().px(15),
+          // Assets.images.adPrt1.image().px(15),
+          // 4.verticalSpace,
+          // Assets.images.adPrt2.image().px(15),
+          Assets.images.onboardingNewBanner.image(),
           // googleLoginButton(),
-          28.verticalSpace,
+          const Spacer(flex: 7),
+
           rilClassicButton(context,
                   radius: 99,
                   isWide: true,
-                  title: isLoading ? 'Loading...' : '${Platform.isIOS ? 'Sign in' : 'Join'} with Google',
-                  icon: Assets.svg.gLogoIcon.svg(height: 25),
-                  bgColor: isLoading ? AppColors.greyUnavailable : AppColors.white,
-                  textColor: AppColors.darkBg,
+                  title: isLoading
+                      ? 'Loading...'
+                      : '${Platform.isIOS ? 'Sign in' : 'Continue'} with Google',
+                  icon: Assets.svg.gLogoIcon.svg(height: 29),
+                  bgColor: isLoading ? AppColors.primaryDark : AppColors.darkGrey,
+                  textColor: isLoading ? AppColors.darkGrey : AppColors.greyLight,
                   onPressed: isLoading
                       ? null
                       : () async {
@@ -62,15 +66,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         })
               .appearAll,
 
-          15.verticalSpace,
           if (Platform.isIOS)
             rilClassicButton(context,
                     radius: 99,
                     isWide: true,
                     icon: Assets.svg.apple.svg(height: 23).pOnly(right: 6),
-                    title: isLoading ? 'Loading...' : 'Sign in with Apple',
-                    bgColor: isLoading ? AppColors.greyUnavailable : AppColors.white,
-                    textColor: AppColors.darkBg,
+                    title: isLoading ? 'Loading...' : 'Continue with Apple',
+                    bgColor: isLoading ? AppColors.primaryDark : AppColors.darkGrey,
+                    textColor: isLoading ? AppColors.darkGrey : AppColors.greyLight,
                     onPressed: isLoading
                         ? null
                         : () async {
@@ -85,8 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             isLoading = false;
                             setState(() {});
                           })
-                .appearAll,
-          const Spacer(flex: 5),
+                .appearAll
+                .pOnly(top: 15),
+          const Spacer(flex: 7),
           RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
@@ -95,8 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: Platform.isAndroid
                         ? "By Join with Google, you agree to our "
                         : "By 'Join with Google' or 'Join with Apple', you agree to our ",
-                    style: AppStyles.text14PxRegular),
-                TextSpan(text: '\nTerms & Conditions', style: AppStyles.text14PxBold
+                    style: AppStyles.text14PxRegular.greyLight),
+                TextSpan(text: '\nTerms & Conditions', style: AppStyles.text14PxBold.greyLight
                     // .copyWith(decoration: TextDecoration.underline)
                     ),
               ],
@@ -107,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'https://www.privacypolicies.com/live/4ae28974-cd40-4c8e-b265-6d6da2c7690b'),
                 mode: LaunchMode.externalApplication);
           }, radius: 6),
-          const Spacer(flex: 15),
+          const Spacer(flex: 7),
         ],
       ).center,
     );

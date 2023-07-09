@@ -2,7 +2,7 @@
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/report/report_model.dart';
 import 'package:example/common/models/user/user_model.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/screens/feed_ui/main_feed_screen.dart';
 import 'package:flutter/material.dart';
 import '../../common/extensions/color_printer.dart';

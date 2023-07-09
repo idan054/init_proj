@@ -12,10 +12,11 @@ import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/screens/user_ui/user_screen.dart';
 import 'package:example/widgets/my_dialog.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -34,7 +35,7 @@ import '../auth_ui/a_onboarding_screen.dart';
 import '../auth_ui/b_name_profile_view.dart';
 import '../feed_ui/main_feed_screen.dart';
 import '../../common/service/mixins/assets.gen.dart';
-import '../../common/themes/app_colors.dart';
+import '../../common/themes/app_colors_inverted.dart';
 import '../../widgets/app_bar.dart';
 import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
@@ -189,13 +190,13 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 ],
               ),
             ),
-            // if (Platform.isIOS)
+            if (Platform.isIOS || kDebugMode)
               rilClassicButton(context,
                   radius: 10,
                   isWide: true,
                   title: 'Delete my account',
                   bgColor: AppColors.errRed,
-                  textColor: AppColors.greyLight, onPressed: () async {
+                  textColor: AppColors.darkBg, onPressed: () async {
                 _deleteUserPopup(context);
               }).scale(scale: 0.7).bottom.pOnly(bottom: 25)
           ],
@@ -249,7 +250,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
                     color: Colors.white,
                     strokeWidth: 1,
                   ).sizedBox(14, 14)
-                : Assets.svg.icons.refreshArrows.svg(height: 14, color: AppColors.white),
+                : Assets.svg.icons.refreshArrows.svg(height: 14, color: AppColors.darkBg),
             child: CircleAvatar(
               radius: 40,
               backgroundColor: AppColors.darkOutline,

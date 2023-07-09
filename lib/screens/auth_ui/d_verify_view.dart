@@ -6,7 +6,7 @@ import 'package:example/screens/auth_ui/widgets/camera_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart' as badge;
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -88,7 +88,7 @@ class _VerifyViewState extends State<VerifyView> {
                   return Stack(
                     children: [
                       Container(
-                              color: AppColors.darkOutline50,
+                              color: AppColors.lightOutline50,
                               height: 240,
                               width: 140,
                               child: imageAvailable
@@ -146,7 +146,7 @@ class _VerifyViewState extends State<VerifyView> {
       bottom: 10,
       child: CircleAvatar(
         radius: 25,
-        backgroundColor: AppColors.darkOutline50,
+        backgroundColor: AppColors.lightOutline50,
         child: CircleAvatar(
           backgroundColor: AppColors.darkBg,
           radius: 22,
@@ -176,8 +176,8 @@ class _VerifyViewState extends State<VerifyView> {
                 radius: 30,
                 backgroundColor: AppColors.darkBg,
                 child: permissionDenied
-                    ? Assets.svg.icons.settings01.svg(color: AppColors.darkOutline50, height: 30)
-                    : Assets.svg.icons.camera.svg(color: AppColors.darkOutline50, height: 30)),
+                    ? Assets.svg.icons.settings01.svg(color: AppColors.lightOutline50, height: 30)
+                    : Assets.svg.icons.camera.svg(color: AppColors.lightOutline50, height: 30)),
             15.verticalSpace,
             (permissionDenied ? 'Camera permission needed' : 'Take shot')
                 .toText(color: AppColors.grey50, textAlign: TextAlign.center, maxLines: 3)

@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
 import '../common/service/mixins/assets.gen.dart';
-import '../common/themes/app_colors.dart';
+import '../common/themes/app_colors_inverted.dart';
 import '../common/themes/app_styles.dart';
 
 AppBar darkAppBar(BuildContext context,
@@ -14,10 +14,11 @@ AppBar darkAppBar(BuildContext context,
     List<Widget> actions = const []}) {
   Widget backButton(VoidCallback onPressed) => IconButton(
         onPressed: onPressed,
-        icon: Assets.svg.icons.arrowNarrowLeft.svg(color: Colors.white),
+        icon: Assets.svg.icons.arrowNarrowLeft.svg(color: AppColors.white),
       );
   return AppBar(
-    elevation: 3,
+    // elevation: 3,
+    elevation: 0,
     titleSpacing: 0.0,
     backgroundColor: AppColors.primaryDark,
     centerTitle: centerTitle,

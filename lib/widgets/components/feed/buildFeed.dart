@@ -8,7 +8,7 @@ import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import '../../../common/models/post/post_model.dart';
 import '../../../common/models/report/report_model.dart';
 import '../../../common/service/Database/firebase_db.dart';
-import '../../../common/themes/app_colors.dart';
+import '../../../common/themes/app_colors_inverted.dart';
 import '../../../screens/feed_ui/main_feed_screen.dart';
 import '../../../screens/main_ui/admin_screen.dart';
 import '../../../screens/main_ui/notification_screen.dart';
@@ -45,7 +45,7 @@ Widget buildFeed(
       onEndOfPage: onEndOfPage ?? () async {},
       child: RefreshIndicator(
           backgroundColor: AppColors.primaryOriginal,
-          color: AppColors.white,
+          color: AppColors.darkBg,
           strokeWidth: 2,
           onRefresh: onRefreshIndicator ?? () async {},
           child: NotificationListener<UserScrollNotification>(
@@ -61,6 +61,8 @@ Widget buildFeed(
             },
             child: ListView(
               children: [
+                if(feedType == FeedTypes.notifications)
+                  const Divider(thickness: 2, color: AppColors.darkGrey),
                 if (desc != null || title != null) buildFeedTitle(feedType, desc, title),
                 1.verticalSpace,
                 //   Expanded(child:

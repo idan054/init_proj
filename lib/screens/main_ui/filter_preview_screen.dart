@@ -4,7 +4,7 @@ import 'dart:async';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/report/report_model.dart';
 import 'package:example/common/models/user/user_model.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/screens/feed_ui/main_feed_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -60,14 +60,13 @@ class _FilterPreviewScreenState extends State<FilterPreviewScreen> {
           30.verticalSpace,
           Column(
             children: [
-              Assets.svg.icons.wisdomMultiLightStar.svg(color: AppColors.white, height: 22),
+              15.verticalSpace,
+              'Age, Distance & More filters will be available soon!'
+                  .toText(fontSize: 18, medium: true, textAlign: TextAlign.center)
+                  .px(15),
               10.verticalSpace,
-              'Filters will be available soon!'.toText(fontSize: 18, medium: true),
-              10.verticalSpace,
-              'by Interests, Age, Gender, Distance...'
-                  .toText(fontSize: 13, color: AppColors.grey50, textAlign: TextAlign.center),
               2.verticalSpace,
-              'Share & Rate us to support'
+              'Share & Rate us now to support (:'
                   .toText(fontSize: 13, color: AppColors.grey50, textAlign: TextAlign.center),
             ],
           ).appearAll,
@@ -90,13 +89,18 @@ class _FilterPreviewScreenState extends State<FilterPreviewScreen> {
             padding: 35,
             isWide: true,
             title: 'Just Rate us',
+            icon: Assets.svg.icons.wisdomMultiLightStar.svg(color: AppColors.white, height: 22),
             bgColor: AppColors.transparent,
             borderColor: AppColors.white,
             textColor: AppColors.white,
             onPressed: () async {
               final inAppReview = InAppReview.instance;
-              var isAvailable = await inAppReview.isAvailable();
-              if (isAvailable) inAppReview.requestReview();
+              try {
+                var isAvailable = await inAppReview.isAvailable();
+
+                isAvailable ? inAppReview.requestReview() : inAppReview.openStoreListing();
+              } catch (e, s) {}
+              inAppReview.openStoreListing();
             },
           ),
           20.verticalSpace,

@@ -98,7 +98,7 @@ class DynamicLinkService {
     var productParams = postParams(
       postId: post.id,
       socialShareMeta: SocialMetaTagParameters(
-        title: "Join ${post.creatorUser?.name}'s Conversation",
+        title: "Join ${post.creatorUser?.name}'s Talk",
         // description: 'RilTopia - Social Chat App',
         description: post.textContent,
         imageUrl: Uri.parse((images..shuffle()).first),

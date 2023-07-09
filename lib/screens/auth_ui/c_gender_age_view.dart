@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -114,17 +114,29 @@ class _GenderAgeViewState extends State<GenderAgeView> {
           18.verticalSpace,
           Row(
             children: [
+              // rilDropdownField(label: 'DD', hintText: 'Day', daysItems,
+              //     onChanged: (String? newValue) {
+              //   selectedDay = newValue!;
+              //   dayController.text = newValue;
+              //   updateUserAge();
+              // }).sizedBox(95, 60),
+
               rilDropdownField(label: 'DD', hintText: 'Day', margin: 0, daysItems,
                   onChanged: (String? newValue) {
                 selectedDay = newValue!;
                 dayController.text = newValue;
+                isErr = false;
+                setState(() {});
                 updateUserAge();
               }).sizedBox(95, 60),
+
               10.horizontalSpace,
               rilDropdownField(label: 'MM', hintText: 'Month', margin: 0, monthItems,
                   onChanged: (String? newValue) {
                 selectedMonth = newValue!;
                 monthController.text = newValue;
+                isErr = false;
+                setState(() {});
                 updateUserAge();
               }).sizedBox(95, 60),
               10.horizontalSpace,
@@ -143,7 +155,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
 
                   var age = context.uniProvider.currUser.age ?? -404;
                   var validAge = age > 10 && age < 100;
-                  if(!validAge) return "Age can't be $age";
+                  if (!validAge) return "Age can't be $age";
 
                   return null;
                 },
@@ -221,7 +233,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: label,
             hintText: hintText,
-            labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.darkOutline50),
+            labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.greyUnavailable),
             hintStyle: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
           ),
           dropdownColor: AppColors.primaryDark,

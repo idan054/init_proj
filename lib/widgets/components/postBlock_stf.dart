@@ -22,7 +22,7 @@ import '../../common/models/report/report_model.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/mixins/fonts.gen.dart';
-import '../../common/themes/app_colors.dart';
+import '../../common/themes/app_colors_inverted.dart';
 import '../../common/themes/app_styles.dart';
 import '../../screens/feed_ui/comments_chat_screen.dart';
 import '../../screens/user_ui/user_screen.dart';
@@ -59,31 +59,11 @@ class _PostBlockState extends State<PostBlock> {
     notificationCounter ??= widget.post.notificationsCounter;
 
     return Card(
+      elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
-      margin: const EdgeInsets.symmetric(vertical: 1.5),
+      margin: const EdgeInsets.symmetric(vertical: 6.5),
       color: AppColors.primaryDark,
-      child: Column(
-        children: [
-          buildProfile(context, widget.isUserPage), // Doesn't require 55 Left padding.
-          Column(
-            children: [
-              buildExpandableText(
-                      // 'Example : let’s try to think of an topic or fdsk conte tou fc words as possible... I think I’ve already ',
-                      widget.post.textContent,
-                      maxLines: 4,
-                      textAlign:
-                          widget.post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
-                      textDirection:
-                          widget.post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
-                      style: AppStyles.text16PxRegular.copyWith(color: AppColors.white))
-                  .pOnly(right: 20)
-                  .advancedSizedBox(context, maxWidth: true),
-              buildActionRow(context),
-            ],
-            // ).pOnly(left: 5)
-          ).pOnly(left: 55)
-        ],
-      ).pOnly(left: 15),
+      child: buildPostBody(context, widget.isUserPage).pOnly(left: 15),
     ).onTap(
         widget.isReported && widget.post.originalPostId != null // AKA comment
             ? null
@@ -101,99 +81,174 @@ class _PostBlockState extends State<PostBlock> {
                     FeedService.resetPostUnread(context, widget.post.id);
                     handleShowBottomPost(context, widget.post);
                   }
-                : null,
+                : () {
+                    ChatService.openChat(context,
+                        otherUser: widget.post.creatorUser!, postReply: widget.post);
+                  },
         radius: 10);
   }
 
-  Widget buildProfile(BuildContext context, bool isUserPage) {
+  Widget buildPostBody(BuildContext context, bool isUserPage) {
     var currUser = context.uniProvider.currUser;
     var isCurrUser = currUser.uid == widget.post.creatorUser!.uid;
     var isAdmin = currUser.userType == UserTypes.admin;
-
     var postAgo = postTime(widget.post.timestamp!);
 
+    final isConversation = widget.post.enableComments && widget.post.originalPostId == null;
+    const paddingFromImage = 10.0;
+    var pyBody = isConversation ? 0.0 : 11.0;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        buildProfilePic(context, isUserPage),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            buildProfileRow(postAgo, isAdmin, isCurrUser, isUserPage),
+            //~ Text Content
+            buildExpandableText(widget.post.textContent,
+                    maxLines: 4,
+                    textAlign: widget.post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
+                    textDirection:
+                        widget.post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+                    style: AppStyles.text14PxRegular.copyWith(color: AppColors.white))
+                .pOnly(right: 50, bottom: pyBody, top: 5),
+            //~ Reply Button
+            buildActionRow(context)
+          ],
+        ).pOnly(left: paddingFromImage).expanded(),
+      ],
+    ).py(pyBody).pOnly(top: isConversation ? 11 : 0);
+
+    // return SizedBox(
+    //     // height: 55,
+    //     // height: 72, // 72: original size 60: min size
+    //     child: ListTile(
+    //   dense: true,
+    //   contentPadding: EdgeInsets.zero,
+    //   horizontalTitleGap: 0,
+    //   minVerticalPadding: 0,
+    //
+    //   // title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.grey50),
+    //   title: Row(
+    //     children: [
+    //       SizedBox(
+    //           width: postAgo.length > 5 ? 150 : 190,
+    //           child: '${widget.post.creatorUser?.name}'.toText(
+    //               fontSize: 13.5,
+    //               medium: false,
+    //               color: AppColors.white,
+    //               textAlign: TextAlign.left)),
+    //       const Spacer(),
+    //       postAgo.toText(color: AppColors.greyUnavailable, fontSize: 14)
+    //     ],
+    //   ).top.pOnly(left: 10, top: 5),
+    //   subtitle: buildExpandableText(widget.post.textContent,
+    //           maxLines: 4,
+    //           textAlign: widget.post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
+    //           textDirection:
+    //               widget.post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+    //           style: AppStyles.text16PxRegular.copyWith(color: AppColors.white))
+    //       .pOnly(left: 10),
+    //   leading: buildProfilePic(context, isUserPage),
+    //   // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
+    //
+    //   trailing: SizedBox(
+    //     child: buildMoreMenu(isAdmin, isCurrUser),
+    //   ).offset(0, -10),
+    // )).pOnly(top: 5).testContainer;
+  }
+
+  Row buildProfileRow(String postAgo, bool isAdmin, bool isCurrUser, bool isUserPage) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+            width: postAgo.length > 5 ? 150 : 190,
+            child: '${widget.post.creatorUser?.name}'.toText(
+                fontSize: 13.0, medium: true, color: AppColors.white, textAlign: TextAlign.left)),
+        const Spacer(),
+        postAgo.toText(color: AppColors.greyUnavailable, fontSize: 14),
+        buildMoreMenu(isAdmin, isCurrUser)
+      ],
+    );
+  }
+
+  Widget buildMoreMenu(bool isAdmin, bool isCurrUser) {
     return SizedBox(
-        height: 68,
-        // height: 72, // 72: original size 60: min size
-        child: ListTile(
-          contentPadding: EdgeInsets.zero,
-          // title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.grey50),
-          title: '${widget.post.creatorUser?.name}'
-              .toText(fontSize: 14, bold: true, color: AppColors.white, textAlign: TextAlign.left),
-          subtitle: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
-              postAgo
-                  .toText(color: AppColors.grey50, fontSize: 12)
-                  .pOnly(right: 10, top: 4, bottom: 10)
-              // .onTap(() {}, radius: 10), // TODO Add move to Tag
-            ],
-          ),
-          leading: Stack(
-            children: [
-              Container(
-                  // radius: 20,
-                  height: 40,
-                  width: 40,
-                  color: AppColors.darkBg,
-                  child: FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage,
-                    image: '${widget.post.creatorUser!.photoUrl}',
-                    fit: BoxFit.cover,
-                  )).roundedFull,
-              buildOnlineBadge(context, widget.post.creatorUser!),
-            ],
-          ).pad(0).onTap(
-              isUserPage
-                  ? null
-                  : () {
-                      print('PROFILE CLICKED');
-                      context.router.push(UserRoute(user: widget.post.creatorUser!));
-                    },
-              radius: 5),
-          // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
-          trailing: PopupMenuButton(
-              icon: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50),
-              shape: 10.roundedShape,
-              color: AppColors.darkOutline50,
-              itemBuilder: (context) {
-                return [
-                  if (widget.isReported)
-                    PopupMenuItem(
-                      child: 'Cancel Report'.toText(),
-                      onTap: () async {
-                        reportRilOrCommentPopup(context, widget.post, isReported: true);
+      height: 15,
+      child: PopupMenuButton(
+          padding: EdgeInsets.zero,
+          constraints: null,
+          // icon: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50),
+          // icon: Icons.more_horiz.icon(size: 24, color: AppColors.darkOutline50),
+          icon: Icons.more_horiz.icon(size: 24, color: AppColors.greyUnavailable),
+          shape: 10.roundedShape,
+          color: AppColors.lightOutline50,
+          itemBuilder: (context) {
+            return [
+              if (widget.isReported)
+                PopupMenuItem(
+                  child: 'Cancel Report'.toText(),
+                  onTap: () async {
+                    reportRilOrCommentPopup(context, widget.post, isReported: true);
+                  },
+                ),
+              PopupMenuItem(
+                child: (isAdmin && !isCurrUser
+                        ? 'Admin Delete Ril'
+                        : isCurrUser
+                            ? 'Delete Ril'
+                            : 'Report Ril')
+                    .toText(),
+                onTap: (isCurrUser || isAdmin)
+                    //> Open DELETE POPUP
+                    ? () {
+                        print('SETTINGS DELETE CLICKED');
+                        deleteRilOrCommentPopup(context, widget.post);
+                      }
+                    //> Open Report POPUP
+                    : () async {
+                        print('SETTINGS REPORT CLICKED');
+                        reportRilOrCommentPopup(context, widget.post);
                       },
-                    ),
-                  PopupMenuItem(
-                    child: (isAdmin && !isCurrUser
-                            ? 'Admin Delete Ril'
-                            : isCurrUser
-                                ? 'Delete Ril'
-                                : 'Report Ril')
-                        .toText(),
-                    onTap: (isCurrUser || isAdmin)
-                        //> Open DELETE POPUP
-                        ? () {
-                            print('SETTINGS DELETE CLICKED');
-                            deleteRilOrCommentPopup(context, widget.post);
-                          }
-                        //> Open Report POPUP
-                        : () async {
-                            print('SETTINGS REPORT CLICKED');
-                            reportRilOrCommentPopup(context, widget.post);
-                          },
-                  ),
-                ];
-              }),
-        ));
+              ),
+            ];
+          }),
+    ).offset(0, -1);
+  }
+
+  Widget buildProfilePic(BuildContext context, bool isUserPage) {
+    return Stack(
+      children: [
+        Container(
+            // radius: 20,
+            height: 40,
+            width: 40,
+            color: AppColors.darkBg,
+            child: FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: '${widget.post.creatorUser!.photoUrl}',
+              fit: BoxFit.cover,
+            )).roundedFull,
+        buildOnlineBadge(context, widget.post.creatorUser!),
+      ],
+    ).onTap(
+        isUserPage
+            ? null
+            : () {
+                print('PROFILE CLICKED');
+                context.router.push(UserRoute(user: widget.post.creatorUser!));
+              },
+        radius: 5);
   }
 
   Widget buildActionRow(BuildContext context) {
     var isLiked = widget.post.likeByIds.contains(context.uniProvider.currUser.uid);
     var currUser = context.uniProvider.currUser;
-    var iconColor = Colors.white60;
+    var buttonColor = AppColors.greyLight;
+    // var buttonColor = AppColors.darkOutline50;
     var commentEmpty = widget.post.commentsLength == 0;
     var title = commentEmpty ? 'New' : '${widget.post.commentsLength} comments';
     var isConversation = widget.post.enableComments && widget.post.originalPostId == null;
@@ -201,17 +256,22 @@ class _PostBlockState extends State<PostBlock> {
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        isConversation ? _buildCommentsCounter(commentEmpty, title) : const SizedBox(height: 20),
-        if (isComment && widget.isReported) buildOriginalPostButton(iconColor),
+        isConversation
+            ? _buildCommentsCounter(commentEmpty, title, buttonColor).py(6)
+            : const SizedBox(height: 0),
+        if (isComment && widget.isReported) buildOriginalPostButton(buttonColor),
+        // if(isConversation)
         const Spacer(),
         isConversation
             ? Assets.svg.icons.shareArrowWide
-                .svg(height: 17, color: AppColors.grey50)
-                .pOnly(left: 18, right: 18, bottom: 12, top: 20)
+                .svg(height: 15, color: buttonColor)
+                .pOnly(left: 18, right: 18)
+                .py(11)
                 .onTap(() {
                 DynamicLinkService.sharePostLink(post: widget.post);
-              })
+              }, radius: 5)
             : const Offstage(),
         if (widget.post.creatorUser!.uid != currUser.uid) ...[
           // TODO ADD ON POST MVP ONLY (Send like)
@@ -229,14 +289,15 @@ class _PostBlockState extends State<PostBlock> {
               //~ Reply button
               : Row(
                   children: [
-                    Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: iconColor),
-                    10.horizontalSpace,
-                    'Reply'.toText(fontSize: 12, color: iconColor),
+                    Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: buttonColor),
+                    7.horizontalSpace,
+                    // 'Reply'.toText(fontSize: 12, color: iconColor),
+                    'Chat'.toText(fontSize: 12, color: buttonColor, medium: true),
                   ],
-                ).pOnly(right: 20, left: 12).customRowPadding.onTap(() {
+                ).pOnly(right: 15).onTap(() {
                   ChatService.openChat(context,
                       otherUser: widget.post.creatorUser!, postReply: widget.post);
-                }, radius: 10)
+                }, radius: 10),
         ]
       ],
     )
@@ -262,9 +323,9 @@ class _PostBlockState extends State<PostBlock> {
     });
   }
 
-  Widget _buildCommentsCounter(bool commentEmpty, String title) {
+  Widget _buildCommentsCounter(bool commentEmpty, String title, Color buttonColor) {
     return Container(
-      color: commentEmpty ? AppColors.primaryOriginal : AppColors.transparent,
+      color: commentEmpty ? AppColors.lightOutline50 : AppColors.transparent,
       child: Row(
         children: [
           // TODO Add notification dot here
@@ -275,14 +336,18 @@ class _PostBlockState extends State<PostBlock> {
 
           // if(!commentEmpty)
           (commentEmpty ? Assets.svg.icons.wisdomLightStar : Assets.svg.icons.messageCircle02)
-              .svg(height: 13, color: AppColors.grey50),
+              .svg(height: 14, color: commentEmpty ? AppColors.primaryOriginal : buttonColor),
           // if(!commentEmpty)
-          SizedBox(width: commentEmpty ? 4 : 7),
+          SizedBox(width: commentEmpty ? 4 : 5),
           // 'available soon'
-          title.toText(color: AppColors.grey50, fontSize: 12)
+          title.toText(
+            color: commentEmpty ? AppColors.primaryOriginal : buttonColor,
+            fontSize: 12,
+            medium: !commentEmpty,
+          )
         ],
-      ).px(7).py(4),
-    ).roundedFull.pOnly(bottom: 12, top: 15);
+      ).px(commentEmpty ? 7 : 1).py(4),
+    ).roundedFull.pOnly(bottom: 0, top: 0);
   }
 
   StatefulBuilder buildHeartIcon(bool isLiked) {
@@ -446,11 +511,10 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
 
 String postTime(DateTime time) {
   var postDiff = DateTime.now().difference(time);
-  var postAgo =
-      postDiff.inSeconds < 60 ? '${postDiff.inSeconds} sec ago' : '${postDiff.inMinutes} min ago';
+  var postAgo = postDiff.inSeconds < 60 ? '${postDiff.inSeconds}s' : '${postDiff.inMinutes}m';
   if (postDiff.inSeconds == 0) postAgo = 'Just now';
   if (2 < postDiff.inHours && postDiff.inHours < 24) {
-    postAgo = '${postDiff.inHours} hours ago';
+    postAgo = '${postDiff.inHours}h';
   } else if (postDiff.inHours > 24) {
     // postAgo = intl.DateFormat('yMMMMEEEEd').format(post.timestamp!);
     postAgo = intl.DateFormat('MMMM d, y').format(time);

@@ -8,7 +8,7 @@ import 'package:badges/badges.dart' as badge;
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/user/user_model.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/main.dart';
 import 'package:example/screens/chat_ui/chats_list_screen.dart.dart';
 import 'package:example/screens/feed_ui/main_feed_screen.dart';
@@ -150,27 +150,27 @@ class _DashboardScreenState extends State<DashboardScreen>
                       // HOME
                       BottomNavigationBarItem(
                           label: '',
-                          icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.grey50),
+                          icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.greyLight),
                           activeIcon:
-                              Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.white)),
+                              Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.greyLight)),
 
                       // NOTIFICATIONS SCREEN
                       BottomNavigationBarItem(
                           label: '',
                           icon: notificationBadge(
-                              child: Assets.svg.icons.bell.svg(color: AppColors.grey50)),
+                              child: Assets.svg.icons.bell.svg(color: AppColors.greyLight)),
                           activeIcon:
-                              notificationBadge(child: Assets.svg.icons.bellSolid.svg(height: 23))),
+                              notificationBadge(child: Assets.svg.icons.bellSolid.svg(height: 23, color: AppColors.greyLight))),
 
                       // DM SCREEN
                       BottomNavigationBarItem(
                           label: '',
                           icon: unreadChatBadge(
                               child:
-                                  Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50)),
+                                  Assets.svg.icons.groupMultiPeople.svg(color: AppColors.greyLight)),
                           activeIcon: unreadChatBadge(
                               child: Assets.svg.icons.groupMultiPeopleSolid
-                                  .svg(color: AppColors.white, height: 19))),
+                                  .svg(color: AppColors.greyLight, height: 19))),
                     ],
                   ),
                 ),
@@ -243,8 +243,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                     child: Assets.images.circleCover.image(fit: BoxFit.fill)),
                 SpeedDial(
                   child: replyStyle
-                      ? Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.white)
-                      : Assets.svg.icons.messageChatCircleAdd.svg(color: AppColors.white),
+                      ? Assets.svg.icons.dmPlaneUntitledIconOutlined.svg(color: AppColors.darkBg, height: 25)
+                      // ? Assets.svg.icons.dmPlaneUntitledIconOrginal.svg(color: AppColors.darkBg, height: 25)
+                      : Assets.svg.icons.messageChatCircleAdd.svg(color: AppColors.darkBg),
 
                   childrenButtonSize: const Size(50, 50),
                   backgroundColor: AppColors.transparent,
@@ -317,7 +318,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         return counter == 0
             ? child
             : badge.Badge(
-                badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white70, medium: true),
+                badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white, medium: true),
                 padding: const EdgeInsets.all(5),
                 elevation: 0,
                 badgeColor: AppColors.errRed,
@@ -343,7 +344,7 @@ class _DashboardScreenState extends State<DashboardScreen>
         return counter == 0
             ? child
             : badge.Badge(
-                badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white70, medium: true),
+                badgeContent: '$counter'.toText(fontSize: 10, color: AppColors.darkBg, medium: true),
                 padding: const EdgeInsets.all(5),
                 elevation: 0,
                 badgeColor: AppColors.errRed,

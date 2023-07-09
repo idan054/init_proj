@@ -12,7 +12,7 @@ import '../../common/models/report/report_model.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/mixins/fonts.gen.dart';
-import '../../common/themes/app_colors.dart';
+import '../../common/themes/app_colors_inverted.dart';
 import '../../common/themes/app_styles.dart';
 import '../../screens/feed_ui/comments_chat_screen.dart';
 import '../../screens/user_ui/user_screen.dart';
@@ -93,7 +93,7 @@ class ReportedUserBlock extends StatelessWidget {
           trailing: PopupMenuButton(
               icon: Assets.svg.moreVert.svg(height: 17, color: AppColors.grey50),
               shape: 10.roundedShape,
-              color: AppColors.darkOutline50,
+              color: AppColors.lightOutline50,
               itemBuilder: (context) {
                 return [
                   PopupMenuItem(

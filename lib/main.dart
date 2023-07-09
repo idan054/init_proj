@@ -18,7 +18,7 @@ import 'common/service/Database/firebase_db.dart';
 import 'common/service/Database/firebase_options.dart';
 import 'common/service/life_cycle.dart';
 import 'common/service/Auth/notifications_services.dart';
-import 'common/themes/app_colors.dart';
+import 'common/themes/app_colors_inverted.dart';
 
 Future<void> _handleNotificationReceived(RemoteMessage message) async {
   print("Handling a background message: ${message.toMap()}");

@@ -14,7 +14,7 @@ import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:example/main.dart';
 import 'package:collection/collection.dart'; // You have to add this manually,
@@ -133,7 +133,7 @@ class _UserScreenState extends State<UserScreen> {
 
                           var text = activeFilter == FilterTypes.postsByUser
                               ? "${isCurrUserProfile ? 'Your' : "${user.name}'s"} Rils will appear here"
-                              : 'Conversations ${isCurrUserProfile ? 'you' : "${user.name}"} joined will appear here';
+                              : 'Talks ${isCurrUserProfile ? 'you' : "${user.name}"} joined will appear here';
 
                           if (postList.isEmpty || isBlocked) {
                             return text.toText(color: AppColors.grey50).pOnly(top: 100);
@@ -172,7 +172,7 @@ class _UserScreenState extends State<UserScreen> {
         child: Builder(builder: (context) {
           // var rilTitle = isCurrUserProfile ? 'Your Rils' : "Rils";
           var rilTitle = "Rils";
-          var convTitle = isCurrUserProfile ? 'Your Conversions' : "${user.name}'s Conversions";
+          var convTitle = isCurrUserProfile ? 'My Talks' : "${user.name}'s Talks";
 
           // return title.toText(fontSize: 18, medium: true).centerLeft.py(12).px(25);
           return TabBar(
@@ -180,6 +180,8 @@ class _UserScreenState extends State<UserScreen> {
                 borderSide: const BorderSide(width: 2.5, color: AppColors.primaryOriginal),
                 insets: 30.horizontal),
             labelStyle: AppStyles.text14PxRegular,
+            labelColor: AppColors.white,
+            unselectedLabelColor: AppColors.greyLight,
             indicatorColor: AppColors.primaryOriginal,
             tabs: [
               Tab(text: rilTitle),
@@ -223,7 +225,7 @@ class _UserScreenState extends State<UserScreen> {
                 backgroundColor: Colors.black45,
                 // backgroundColor: AppColors.darkOutline50,
                 // child: Icons.arrow_back_rounded.icon(size: 18, color: AppColors.white),
-                child: Assets.svg.icons.arrowBackLeft.svg(height: 14, color: AppColors.white),
+                child: Assets.svg.icons.arrowBackLeft.svg(height: 14, color: AppColors.darkBg),
               ).onTap(() {
                 widget.fromEditScreen
                     ? context.router.replaceAll([DashboardRoute()])
@@ -238,9 +240,9 @@ class _UserScreenState extends State<UserScreen> {
                 backgroundColor: Colors.black45,
                 // backgroundColor: AppColors.darkOutline50,
                 child: PopupMenuButton(
-                    icon: Assets.svg.moreVert.svg(height: 18, color: AppColors.white),
+                    icon: Assets.svg.moreVert.svg(height: 18, color: AppColors.darkBg),
                     shape: 10.roundedShape,
-                    color: AppColors.darkOutline50,
+                    color: AppColors.lightOutline50,
                     itemBuilder: (context) {
                       return [
                         if (isCurrUserProfile) ...[
@@ -388,7 +390,7 @@ class _UserScreenState extends State<UserScreen> {
         Stack(
           children: [
             CircleAvatar(
-              radius: 40,
+              radius: 45,
               backgroundColor: AppColors.darkBg,
               child: CircleAvatar(
                 radius: 40,
@@ -437,11 +439,11 @@ class _UserScreenState extends State<UserScreen> {
                         // 🚹 🚺 👩👨 💁‍♀️💁‍♂️
                         var genderTitle = isOther ? '🏳️‍🌈 other' : '${user.gender?.name}';
                         return buildRilChip(genderTitle,
-                            icon: isOther ? null : Assets.svg.icons.manProfile.svg());
+                            icon: isOther ? null : Assets.svg.icons.manProfile.svg(color: AppColors.greyLight));
                       }),
                       12.horizontalSpace,
                       buildRilChip('${user.age} y.o',
-                          icon: Assets.svg.icons.dateTimeCalender.svg()),
+                          icon: Assets.svg.icons.dateTimeCalender.svg(color: AppColors.greyLight)),
                       if (user.userType == UserTypes.admin) ...[
                         12.horizontalSpace,
                         buildRilChip('Admin',
@@ -625,7 +627,7 @@ ExpandableText buildExpandableText(
       expandText: 'Expand',
       collapseText: 'Collapse',
       expanded: autoExpanded,
-      linkColor: linkColor ?? AppColors.primaryLight2,
+      linkColor: linkColor ?? AppColors.primaryLight,
       animation: true,
       animationDuration: 1000.milliseconds,
       textDirection: textDirection,

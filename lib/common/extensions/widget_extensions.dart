@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../themes/app_colors.dart';
+import '../themes/app_colors_inverted.dart';
 
 var appearDuration = 650;
 // var appearDuration = 1550;

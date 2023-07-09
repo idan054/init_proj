@@ -4,7 +4,7 @@ import 'package:example/common/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -115,7 +115,7 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
                         rounded: 8,
                         selected: isSelected,
                         label: tags[i].toText(
-                            color: isSelected ? AppColors.white : AppColors.grey50,
+                            color: isSelected ? AppColors.darkBg : AppColors.grey50,
                             fontSize: 14), onSelect: (bool newSelection) {
                       isSelected = !isSelected;
                       isSelected ? selectedTags.add(tags[i]) : selectedTags.remove(tags[i]);

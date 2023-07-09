@@ -1,5 +1,5 @@
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 

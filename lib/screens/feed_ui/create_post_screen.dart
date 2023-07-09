@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../common/models/post/post_model.dart';
@@ -89,8 +89,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             cursorColor: Colors.white,
             decoration: InputDecoration(
               filled: true,
-              hintText: isComments ? 'Start a conversion about...' : 'Share your Ril thoughts...',
-              hintStyle: AppStyles.text16PxRegular.copyWith(color: AppColors.grey50),
+              hintText: isComments ? 'Start a Talk about...' : 'Share your Ril thoughts...',
+              hintStyle: AppStyles.text16PxRegular.copyWith(color: AppColors.greyUnavailable),
               fillColor: Colors.transparent,
               border: InputBorder.none,
             ),
@@ -106,7 +106,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                               .svg(height: 15, color: AppColors.primaryLight2)
                           : Assets.svg.icons.dmPlaneUntitledIcon
                               .svg(height: 15, color: AppColors.primaryLight2),
-                      label: (isComments ? 'With comments' : 'Reply only') // Reply only
+                      // label: (isComments ? 'With comments' : 'Reply only') // Reply only
+                      label: (isComments ? 'With comments' : 'Chat only') // Reply only
                           .toText(color: AppColors.primaryLight2),
                       //
                       onSelect: (bool newSelection) {
@@ -194,6 +195,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
 Widget buildSendButton(
     {GestureTapCallback? onTap,
+      Color? color,
     bool isActive = true,
     bool isConversationSend = false,
     bool withBg = false}) {
@@ -206,8 +208,8 @@ Widget buildSendButton(
       // color: AppColors.primaryOriginal,
       // color: ,
       child: (isConversationSend
-              ? Assets.svg.icons.messageChatCircleAdd.svg(color: Colors.white)
-              : Assets.svg.icons.iconSendButton.svg())
+              ? Assets.svg.icons.messageChatCircleAdd.svg(color: color?? Colors.white)
+              : Assets.svg.icons.iconSendButton.svg(color: color ??Colors.white))
           .pad(isConversationSend ? 8 : 9),
     )
         .roundedFull

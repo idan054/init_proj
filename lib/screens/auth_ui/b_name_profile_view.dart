@@ -4,7 +4,7 @@ import 'dart:convert';
 
 import 'package:badges/badges.dart'  as badge;
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -62,7 +62,7 @@ class _NameProfileViewState extends State<NameProfileView> {
                     color: Colors.white,
                     strokeWidth: 2,
                   ).sizedBox(20, 20)
-                : Assets.svg.icons.plusAddUntitledIcon.svg(height: 20, color: AppColors.white),
+                : Assets.svg.icons.plusAddUntitledIcon.svg(height: 20, color: AppColors.darkBg),
             child: CircleAvatar(
               radius: 60,
               backgroundColor: isImageErr ? AppColors.errRed : AppColors.darkOutline50,
@@ -70,7 +70,7 @@ class _NameProfileViewState extends State<NameProfileView> {
                 backgroundColor: AppColors.darkBg,
                 backgroundImage: image == null ? null : FileImage(File(image!.path)),
                 radius: 57,
-                child: image != null ? null : Assets.svg.icons.manProfileOutline.svg(height: 55),
+                child: image != null ? null : Assets.svg.icons.manProfileOutline.svg(height: 55, color: AppColors.darkOutline50),
               ),
             ),
           ).onTap(() async {

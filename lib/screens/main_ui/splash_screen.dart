@@ -8,7 +8,7 @@ import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Auth/auth_services.dart';
 import 'package:example/common/service/mixins/after_layout_mixin.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/screens/main_ui/widgets/riv_splash_screen.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';

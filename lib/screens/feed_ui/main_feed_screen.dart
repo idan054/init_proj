@@ -9,7 +9,7 @@ import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:example/main.dart';
 import 'dart:io' show Platform;
@@ -159,19 +159,23 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
       length: 2,
       initialIndex: 0,
       child: Scaffold(
-        backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.darkOutline,
+        backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.darkGrey,
+        // backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.grey50,
         appBar: buildRiltopiaAppBar(
           context,
+
           bottom: TabBar(
             controller: _tabController,
             indicator: UnderlineTabIndicator(
                 borderSide: const BorderSide(width: 2.5, color: AppColors.primaryOriginal),
                 insets: 30.horizontal),
             labelStyle: AppStyles.text14PxRegular,
+            labelColor: AppColors.white,
+            unselectedLabelColor: AppColors.greyLight,
             indicatorColor: AppColors.primaryOriginal,
             tabs: const [
               Tab(text: 'Members'),
-              Tab(text: 'Conversations'),
+              Tab(text: 'Talks'),
               // Tab(text: 'Latest'),
               // Tab(text: 'Questions'),
             ],
@@ -205,7 +209,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
               },
             ),
             buildFeed(
-              desc: 'JOIN PUBLIC CONVERSATION',
+              desc: 'JOIN PUBLIC TALK',
               context,
               postList,
               splashLoader,
@@ -301,6 +305,7 @@ AppBar buildRiltopiaAppBar(
 
   return AppBar(
     elevation: 2,
+    // elevation: 0,
     backgroundColor: AppColors.primaryDark,
     // backgroundColor: AppColors.darkBg,
     title: riltopiaHorizontalLogo(context, ratio: 1.15, isHomePage: isHomePage)
@@ -325,11 +330,11 @@ AppBar buildRiltopiaAppBar(
         StatefulBuilder(builder: (context, stfState) {
           return CircleAvatar(
                   backgroundColor:
-                      isPreviewFilterChecked ? AppColors.transparent : AppColors.primaryLight,
+                      isPreviewFilterChecked ? AppColors.transparent : AppColors.lightOutline50,
                   radius: 14,
                   child: Assets.svg.icons.wisdomMultiLightStar
                       .svg(
-                        color: isPreviewFilterChecked ? Colors.white30 : Colors.white,
+                        color: isPreviewFilterChecked ? AppColors.greyUnavailable : AppColors.primaryOriginal,
                         height: 22,
                       )
                       .pad(6))
@@ -338,7 +343,7 @@ AppBar buildRiltopiaAppBar(
             stfState(() {});
             HiveServices.uniBox.put('isPreviewFilterChecked', true);
             context.router.push(const FilterPreviewRoute());
-          }, radius: 5).pad(4);
+          }).pad(1);
         }),
 
       // child: Icons.flag.icon(color: AppColors.white,)),
@@ -370,7 +375,7 @@ Widget profileCircle(BuildContext context) {
     child: CircleAvatar(
       radius: 16,
       backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl!),
-      backgroundColor: AppColors.darkOutline50,
+      backgroundColor: AppColors.lightOutline50,
     ),
   ).pOnly(right: 10, left: 5).py(5).onTap(() {
     showRilDialog(
@@ -402,7 +407,7 @@ Widget profileCircle(BuildContext context) {
             }, radius: 5),
           ),
           // TODO ADD ON POST MVP ONLY: Add Edit Tags https://prnt.sc/6wXKp7BfpcKx
-          const Divider(thickness: 2.5, color: AppColors.darkOutline).py(10),
+          const Divider(thickness: 2.5, color: AppColors.darkGrey).py(10),
 
           //~ Chat with us
           SizedBox(

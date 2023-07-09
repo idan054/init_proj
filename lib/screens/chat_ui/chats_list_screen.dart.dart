@@ -86,7 +86,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     // context.listenUniProvider..currUser.unreadCounter; // Rebuilt when get new message
 
     return Scaffold(
-        backgroundColor: AppColors.primaryDark,
+        backgroundColor: AppColors.darkGrey,
         appBar: darkAppBar(
           centerTitle: true,
           context, title: 'Messages',
@@ -131,7 +131,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                 itemCount: chatList.length,
                 itemBuilder: (context, i) {
                   if (chatList.isEmpty) {
-                    return 'Your conversations \nwill be show here'.toText().center;
+                    return 'Your Talks \nwill be show here'.toText().center;
                   }
 
                   // var chatList = context.listenchatListModelList;
@@ -157,7 +157,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                 },
               ).pOnly(top: 10),
             ),
-          );
+          ).pOnly(top: 2);
         }));
   }
 }
@@ -196,7 +196,7 @@ class ChatBlockSts extends StatelessWidget {
                 CircleAvatar(
                   radius: 10,
                   backgroundColor: AppColors.errRed,
-                  child: chat.unreadCounter.toString().toText(fontSize: 12),
+                  child: chat.unreadCounter.toString().toText(fontSize: 12, color: AppColors.darkBg),
                 )
             ],
           ),

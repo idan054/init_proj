@@ -31,7 +31,7 @@ import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:example/main.dart';
 import 'package:collection/collection.dart'; // You have to add this manually,

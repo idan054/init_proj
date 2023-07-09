@@ -8,7 +8,7 @@ import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -152,7 +152,8 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                       controller: viewController,
                       children: [
                         buildComment(post),
-                        const Divider(thickness: 2.5, color: AppColors.chatBubble).px(10),
+                        Divider(thickness: 2.5, color: AppColors.darkOutline50.withOpacity(0.55))
+                            .px(10),
                         Builder(builder: (context) {
                           if (snapshot.data != null &&
                               snapshot.data!.isNotEmpty &&
@@ -181,7 +182,8 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
 
           //~ Bottom sheet Title
           Container(
-            color: AppColors.darkOutline,
+            // color: AppColors.darkOutline,
+            color: AppColors.darkBg,
             padding: const EdgeInsets.only(top: 5, bottom: 5),
             child: Builder(builder: (context) {
               var commentsCount =
@@ -205,7 +207,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                   // if (isTagScreen)
                   //   '#$selectedTag'.toText(color: AppColors.darkOutline50).pOnly(left: 10, top: 10).centerLeft,
                   const Spacer(),
-                  'Back'.toText(bold: true).pad(10).onTap(() {
+                  'Back'.toText(bold: true, color: AppColors.grey50).pad(10).onTap(() {
                     Navigator.pop(context);
                   }, radius: 5),
                   20.horizontalSpace,
@@ -219,12 +221,11 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
               color: AppColors.primaryDark,
               padding: EdgeInsets.only(top: 5, bottom: Platform.isIOS ? 15 : 5),
               child: buildTextField(context,
-                  controller: sendController,
-                  hintText: 'Join ${post.creatorUser?.name}\'s conversion',
+                  controller: sendController, hintText: 'Join ${post.creatorUser?.name}\'s Talk',
                   // post: post,
                   onChanged: (value) {
                 bodyStfState(() {});
-              }, onTap: () async {
+              }, onTapSend: () async {
                 UserModel currUser = context.uniProvider.currUser;
                 var comment = PostModel(
                   textContent: sendController.text,
@@ -324,7 +325,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
           Builder(builder: (dialogContext) {
             var isHebComment = comment.textContent.isHebrew;
             return Container(
-              color: isCreatorComment ? AppColors.primaryOriginal : AppColors.chatBubble,
+              color: isCreatorComment ? AppColors.primaryOriginal : AppColors.darkGrey,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 crossAxisAlignment:
@@ -334,12 +335,22 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       isHebComment
-                          ? postAgo.toText(color: AppColors.grey50, fontSize: 12)
-                          : shortName.toText(fontSize: 14, bold: true, color: AppColors.white),
+                          ? postAgo.toText(
+                              color: isCreatorComment ? AppColors.darkOutline : AppColors.grey50,
+                              fontSize: 12)
+                          : shortName.toText(
+                              fontSize: 14,
+                              bold: true,
+                              color: isCreatorComment ? AppColors.darkBg : AppColors.white),
                       10.horizontalSpace,
                       isHebComment
-                          ? shortName.toText(fontSize: 14, bold: true, color: AppColors.white)
-                          : postAgo.toText(color: AppColors.grey50, fontSize: 12)
+                          ? shortName.toText(
+                              fontSize: 14,
+                              bold: true,
+                              color: isCreatorComment ? AppColors.darkBg : AppColors.white)
+                          : postAgo.toText(
+                              color: isCreatorComment ? AppColors.darkOutline : AppColors.grey50,
+                              fontSize: 12)
                     ],
                   ),
                   5.verticalSpace,
@@ -348,7 +359,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                       textDirection: isHebComment ? TextDirection.rtl : TextDirection.ltr,
                       textAlign: isHebComment ? TextAlign.right : TextAlign.left,
                       style: AppStyles.text14PxRegular.copyWith(
-                        color: AppColors.white,
+                        color: isCreatorComment ? AppColors.darkBg : AppColors.white,
                         fontSize: 14,
                       ))
                 ],
@@ -378,7 +389,7 @@ Widget buildTextField(
   BuildContext context, {
   required TextEditingController controller,
   ValueChanged<String>? onChanged,
-  GestureTapCallback? onTap,
+  GestureTapCallback? onTapSend,
   PostModel? post,
   GestureTapCallback? postOnCloseReply,
   String? hintText,
@@ -404,17 +415,16 @@ Widget buildTextField(
         onChanged: onChanged,
         decoration: InputDecoration(
             filled: true,
-            // fillColor: AppColors.primaryLight,
-            // fillColor: AppColors.darkOutline50,
-            // fillColor: AppColors.primaryLight2,
-            fillColor: AppColors.chatBubble,
+            fillColor: AppColors.darkGrey,
             hintStyle: AppStyles.text14PxRegular.greyLight,
+            border: InputBorder.none,
             focusedBorder: InputBorder.none,
             hintText: hintText,
             suffixIcon: buildSendButton(
+              color: AppColors.greyLight,
               isActive:
                   controller.text.isNotEmpty && (controller.text.replaceAll(' ', '').isNotEmpty),
-              onTap: onTap,
+              onTap: onTapSend,
             )),
       ).roundedOnly(
         bottomLeft: 12,

@@ -11,7 +11,7 @@ import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
 import 'package:example/common/service/Feed/feed_services.dart';
-import 'package:example/common/themes/app_colors.dart';
+import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:example/main.dart';
 import 'dart:io' show Platform;
@@ -137,7 +137,6 @@ Builder buildNotification(PostModel notification) {
 
     return Column(
       children: [
-        const Divider(thickness: 2, color: AppColors.darkOutline),
         Row(
           children: [
             // Stack(
@@ -179,12 +178,17 @@ Builder buildNotification(PostModel notification) {
                       8.horizontalSpace,
                       // shortName.toText(fontSize: 13, bold: true, color: AppColors.white),
                       // 10.horizontalSpace,
-                      notifyText.toText(color: AppColors.grey50, fontSize: 12)
+                      notifyText.toText(color: AppColors.grey50, fontSize: 13)
                     ],
                   ),
                   7.verticalSpace,
                   Container(
-                    color: AppColors.chatBubble,
+                    decoration: BoxDecoration(
+                    color: AppColors.darkBg,
+                      borderRadius: BorderRadius.all(12.circular),
+                      border: Border.all(color: AppColors.darkGrey, width: 2),
+                    ),
+                    // color: AppColors.chatBubble,
                     padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Column(
                       crossAxisAlignment:
@@ -202,7 +206,7 @@ Builder buildNotification(PostModel notification) {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             'Show Ril'
-                                .toText(fontSize: 13, bold: true, color: AppColors.white)
+                                .toText(fontSize: 13, bold: true, color: AppColors.primaryOriginal)
                                 .pOnly(right: 5, top: 5, bottom: 10),
                             // .onTap(() => handleShowBottomPost(context, notification), radius: 5),
                             10.horizontalSpace,
