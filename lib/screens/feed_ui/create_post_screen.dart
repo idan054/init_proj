@@ -47,7 +47,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.darkOutline,
+        // color: AppColors.darkOutline,
+        color: AppColors.darkBg,
         borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
         boxShadow: [
           BoxShadow(
@@ -86,7 +87,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             style: AppStyles.text16PxRegular.copyWith(color: AppColors.white),
             onChanged: (val) => setState(() {}),
             // inputFormatters: [LengthLimitingTextInputFormatter(350)],
-            cursorColor: Colors.white,
+            cursorColor: AppColors.yellowAlert,
             decoration: InputDecoration(
               filled: true,
               hintText: isComments ? 'Start a Talk about...' : 'Share your Ril thoughts...',
@@ -102,8 +103,8 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       selectedColor: AppColors.transparent,
                       borderColor: AppColors.primaryLight2,
                       customIcon: isComments
-                          ? Assets.svg.icons.messageTextCircle02
-                              .svg(height: 15, color: AppColors.primaryLight2)
+                          ? Assets.svg.icons.messageSmile
+                              .svg(height: 20, color: AppColors.primaryLight2)
                           : Assets.svg.icons.dmPlaneUntitledIcon
                               .svg(height: 15, color: AppColors.primaryLight2),
                       // label: (isComments ? 'With comments' : 'Reply only') // Reply only
@@ -208,7 +209,8 @@ Widget buildSendButton(
       // color: AppColors.primaryOriginal,
       // color: ,
       child: (isConversationSend
-              ? Assets.svg.icons.messageChatCircleAdd.svg(color: color?? Colors.white)
+              // ? Assets.svg.icons.messageChatCircleAdd.svg(color: color?? Colors.white)
+              ? Assets.images.messageSmileIconPng.image()
               : Assets.svg.icons.iconSendButton.svg(color: color ??Colors.white))
           .pad(isConversationSend ? 8 : 9),
     )

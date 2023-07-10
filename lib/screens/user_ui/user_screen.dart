@@ -22,6 +22,8 @@ import 'package:collection/collection.dart'; // You have to add this manually,
 import 'package:example/common/dump/postViewOld_sts.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:flutter/gestures.dart';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -415,6 +417,11 @@ class _UserScreenState extends State<UserScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      if (user.userType == UserTypes.admin) ...[
+                        12.horizontalSpace,
+                        buildRilChip('Admin',
+                            icon: Assets.svg.icons.riltopiaIcon.svg(color: AppColors.greyLight, height: 16)),
+                      ],
                       user.tags.isEmpty
                           ? const Offstage()
                           : user.tags.length == 1
@@ -444,13 +451,6 @@ class _UserScreenState extends State<UserScreen> {
                       12.horizontalSpace,
                       buildRilChip('${user.age} y.o',
                           icon: Assets.svg.icons.dateTimeCalender.svg(color: AppColors.greyLight)),
-                      if (user.userType == UserTypes.admin) ...[
-                        12.horizontalSpace,
-                        buildRilChip('Admin',
-                            icon: Opacity(
-                                opacity: 0.8,
-                                child: Assets.images.riltopiaAsIconPNG.image(height: 14))),
-                      ]
                     ],
                   ),
                 );
@@ -458,6 +458,9 @@ class _UserScreenState extends State<UserScreen> {
         8.verticalSpace,
         StatefulBuilder(builder: (context, stfSetState) {
           var haveBio = user.bio != null && user.bio!.isNotEmpty;
+          // var color = AppColors.white;
+          var color = AppColors.primaryOriginal;
+          var bgColor = AppColors.darkBg;
 
           return Column(
             children: [
@@ -486,13 +489,13 @@ class _UserScreenState extends State<UserScreen> {
                   child: OutlinedButton.icon(
                     style: OutlinedButton.styleFrom(
                       // backgroundColor: AppColors.white,
-                      side: const BorderSide(width: 2.0, color: AppColors.white),
+                      side: BorderSide(width: 2.0, color: color),
                       foregroundColor: AppColors.darkOutline,
                       shape: 99.roundedShape,
                     ),
                     icon: Assets.svg.icons.dmPlaneUntitledIcon
-                        .svg(height: 17, color: AppColors.white),
-                    label: 'Reply bio'.toText(fontSize: 13, color: AppColors.white, bold: true),
+                        .svg(height: 17, color: color),
+                    label: 'Reply bio'.toText(fontSize: 13, color: color, bold: true),
                     onPressed: () {
                       // TODO LATER LIST: Add Reply bio action
                       var replyBio = PostModel(
@@ -510,8 +513,6 @@ class _UserScreenState extends State<UserScreen> {
               ],
               if (!isCurrUser && !isBioExpanded) ...[
                 Builder(builder: (context) {
-                  var color = AppColors.white;
-                  var bgColor = AppColors.darkBg;
                   return SizedBox(
                     width: context.width * 0.5,
                     height: 40,
@@ -525,7 +526,8 @@ class _UserScreenState extends State<UserScreen> {
                       icon: isBlocked
                           ? const Offstage()
                           : Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: bgColor),
-                      label: (isBlocked ? 'Blocked' : 'Send DM')
+                      // label: (isBlocked ? 'Blocked' : 'Send DM')
+                      label: (isBlocked ? 'Blocked' : 'Start Chat')
                           .toText(fontSize: 13, color: bgColor, bold: true),
                       onPressed: isBlocked
                           ? null
@@ -634,3 +636,5 @@ ExpandableText buildExpandableText(
       linkStyle: AppStyles.text14PxMedium,
       style: style ?? AppStyles.text14PxRegular.copyWith(color: AppColors.grey50));
 }
+
+const invertMatrix = <double>[-1, 0, 0, 0, 255, 0, -1, 0, 0, 255, 0, 0, -1, 0, 255, 0, 0, 0, 1, 0,];

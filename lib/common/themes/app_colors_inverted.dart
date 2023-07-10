@@ -31,7 +31,8 @@ class AppColors {
   static const Color greyUnavailable = Color(0xffa3a3a3);
   static const Color greyLight = Color(0xff64678B);
   static const Color errRed = Color(0xffc22f2f);
-  static const Color greenOld = Color(0xff41BE7B);
+  static const Color yellowAlert = Color(0xffFFBB38);
+  static const Color greenOld = Color(0xff18C58A);
 
   static Color testGreen = AppColors.green.withOpacity(0.40);
   static const Color transparent = Colors.transparent;

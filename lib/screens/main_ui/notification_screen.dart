@@ -172,7 +172,8 @@ Builder buildNotification(PostModel notification) {
                       4.horizontalSpace,
                       if (notification.notificationsCounter != 0)
                         const CircleAvatar(
-                          backgroundColor: AppColors.errRed,
+                          //~ Beside new notification in the notification screen
+                          backgroundColor: AppColors.yellowAlert,
                           radius: 3.5,
                         ),
                       8.horizontalSpace,

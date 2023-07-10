@@ -15,16 +15,16 @@ import '../../../screens/main_ui/notification_screen.dart';
 import 'feedTitle.dart';
 
 Widget buildFeed(
-    BuildContext context,
-    List<PostModel> postList,
-    bool splashLoader, {
-      String? desc,
-      String? title,
-      List<ReportModel>? reportList,
-      required RefreshCallback onRefreshIndicator,
-      required EndOfPageListenerCallback onEndOfPage,
-      required FeedTypes feedType,
-    }) {
+  BuildContext context,
+  List<PostModel> postList,
+  bool splashLoader, {
+  String? desc,
+  String? title,
+  List<ReportModel>? reportList,
+  required RefreshCallback onRefreshIndicator,
+  required EndOfPageListenerCallback onEndOfPage,
+  required FeedTypes feedType,
+}) {
   // print('START: buildFeed() - ${feedType.name}');
 
   if (splashLoader) return basicLoader();
@@ -61,9 +61,13 @@ Widget buildFeed(
             },
             child: ListView(
               children: [
-                if(feedType == FeedTypes.notifications)
+                if (feedType == FeedTypes.notifications)
                   const Divider(thickness: 2, color: AppColors.darkGrey),
-                if (desc != null || title != null) buildFeedTitle(feedType, desc, title),
+
+                if (feedType == FeedTypes.reports && (desc != null || title != null))
+                  buildFeedTitle(feedType, desc, title),
+
+                if (feedType == FeedTypes.members) buildFeedSort(context, feedType),
                 1.verticalSpace,
                 //   Expanded(child:
                 ListView.builder(

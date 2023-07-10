@@ -101,7 +101,7 @@ class FsAdvanced {
 
     var currUser = context.uniProvider.currUser;
     QuerySnapshot<Map<String, dynamic>>? docs;
-    var limit = modelType == ModelTypes.messages ? 25 : 8;
+    var limit = modelType == ModelTypes.messages ? 24 : 16; // Original: 24 : 8
     var reqBase = db.collection(collectionRef).limit(limit);
 
     if (filter == FilterTypes.sortByOldestComments) {

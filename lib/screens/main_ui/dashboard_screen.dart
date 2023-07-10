@@ -245,7 +245,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                   child: replyStyle
                       ? Assets.svg.icons.dmPlaneUntitledIconOutlined.svg(color: AppColors.darkBg, height: 25)
                       // ? Assets.svg.icons.dmPlaneUntitledIconOrginal.svg(color: AppColors.darkBg, height: 25)
-                      : Assets.svg.icons.messageChatCircleAdd.svg(color: AppColors.darkBg),
+                      // : Assets.svg.icons.messageChatCircleAdd.svg(color: AppColors.darkBg),
+                      : Assets.images.messageSmileIconPng.image(height: 24),
 
                   childrenButtonSize: const Size(50, 50),
                   backgroundColor: AppColors.transparent,
@@ -318,10 +319,10 @@ class _DashboardScreenState extends State<DashboardScreen>
         return counter == 0
             ? child
             : badge.Badge(
-                badgeContent: '$counter'.toText(fontSize: 10, color: Colors.white, medium: true),
+                badgeContent: '$counter'.toText(fontSize: 10, color: AppColors.white, medium: true),
                 padding: const EdgeInsets.all(5),
                 elevation: 0,
-                badgeColor: AppColors.errRed,
+                badgeColor: AppColors.yellowAlert,
                 // stackFit: StackFit.loose,
                 // shape:
                 child: child);
@@ -344,10 +345,10 @@ class _DashboardScreenState extends State<DashboardScreen>
         return counter == 0
             ? child
             : badge.Badge(
-                badgeContent: '$counter'.toText(fontSize: 10, color: AppColors.darkBg, medium: true),
+                badgeContent: '$counter'.toText(fontSize: 10, color: AppColors.white, medium: true),
                 padding: const EdgeInsets.all(5),
                 elevation: 0,
-                badgeColor: AppColors.errRed,
+                badgeColor: AppColors.yellowAlert,
                 // stackFit: StackFit.loose,
                 // shape:
                 child: child);

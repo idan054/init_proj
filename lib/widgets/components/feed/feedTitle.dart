@@ -11,6 +11,34 @@ import 'package:flutter/material.dart';
 Widget basicLoader() =>
     const CircularProgressIndicator(color: AppColors.primaryOriginal, strokeWidth: 6).center;
 
+Widget buildFeedSort(BuildContext context, FeedTypes feedType) {
+  bool isConversationTab = feedType == FeedTypes.conversations;
+  bool isNewRilsTab = feedType == FeedTypes.members;
+
+  return ListTile(
+      // minVerticalPadding: 15,
+      tileColor: AppColors.primaryDark,
+      // horizontalTitleGap: 0,
+      // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
+      title: Row(
+        children: [
+           Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.yellowAlert, height: 20),
+          const SizedBox(width: 7),
+          'Sort Rils by '.toText(fontSize: 13, color: AppColors.greyLight).pOnly(top: 3),
+          'Default'.toText(bold: true, fontSize: 13, color: AppColors.white).pOnly(top: 3)
+        ],
+      ).pOnly(bottom: isNewRilsTab ? 5 : 0),
+      trailing: Assets.svg.icons.changeSortArrows
+          .svg(color: AppColors.greyLight, height: 24)
+          .pad(15)
+          .onTap(
+            () {},
+            radius: 5,
+          )
+      // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
+      ).pOnly(bottom: 5, top: 15);
+}
+
 Widget buildFeedTitle(FeedTypes feedType, String? desc, String? title) {
   bool isConversationTab = feedType == FeedTypes.conversations;
   bool isNewRilsTab = feedType == FeedTypes.members;

@@ -92,6 +92,10 @@ class $AssetsImagesGen {
   AssetGenImage get mapPlaceholder =>
       const AssetGenImage('assets/images/map_placeholder.png');
 
+  /// File path: assets/images/message-smile-icon-png.png
+  AssetGenImage get messageSmileIconPng =>
+      const AssetGenImage('assets/images/message-smile-icon-png.png');
+
   /// File path: assets/images/onboarding-new-banner.png
   AssetGenImage get onboardingNewBanner =>
       const AssetGenImage('assets/images/onboarding-new-banner.png');
@@ -129,6 +133,7 @@ class $AssetsImagesGen {
         commentsOffPNG,
         elonMuskAd,
         mapPlaceholder,
+        messageSmileIconPng,
         onboardingNewBanner,
         rilCleanIcon,
         squresBgOriginal,
@@ -400,6 +405,10 @@ class $AssetsSvgIconsGen {
   /// File path: assets/svg/icons/camera.svg
   SvgGenImage get camera => const SvgGenImage('assets/svg/icons/camera.svg');
 
+  /// File path: assets/svg/icons/change-sort-arrows.svg
+  SvgGenImage get changeSortArrows =>
+      const SvgGenImage('assets/svg/icons/change-sort-arrows.svg');
+
   /// File path: assets/svg/icons/chatBubbles-solid-icon.svg
   SvgGenImage get chatBubblesSolidIcon =>
       const SvgGenImage('assets/svg/icons/chatBubbles-solid-icon.svg');
@@ -495,6 +504,18 @@ class $AssetsSvgIconsGen {
   SvgGenImage get messageCommentsLines =>
       const SvgGenImage('assets/svg/icons/message-comments-Lines.svg');
 
+  /// File path: assets/svg/icons/message-smile-plus.svg
+  SvgGenImage get messageSmilePlus =>
+      const SvgGenImage('assets/svg/icons/message-smile-plus.svg');
+
+  /// File path: assets/svg/icons/message-smile.svg
+  SvgGenImage get messageSmile =>
+      const SvgGenImage('assets/svg/icons/message-smile.svg');
+
+  /// File path: assets/svg/icons/message-text-circle-02-original.svg
+  SvgGenImage get messageTextCircle02Original =>
+      const SvgGenImage('assets/svg/icons/message-text-circle-02-original.svg');
+
   /// File path: assets/svg/icons/message-text-circle-02.svg
   SvgGenImage get messageTextCircle02 =>
       const SvgGenImage('assets/svg/icons/message-text-circle-02.svg');
@@ -506,6 +527,10 @@ class $AssetsSvgIconsGen {
   /// File path: assets/svg/icons/refresh-arrows.svg
   SvgGenImage get refreshArrows =>
       const SvgGenImage('assets/svg/icons/refresh-arrows.svg');
+
+  /// File path: assets/svg/icons/riltopia-admin-logo.svg
+  SvgGenImage get riltopiaAdminLogo =>
+      const SvgGenImage('assets/svg/icons/riltopia-admin-logo.svg');
 
   /// File path: assets/svg/icons/settings-01.svg
   SvgGenImage get settings01 =>
@@ -551,6 +576,7 @@ class $AssetsSvgIconsGen {
         bellUntitledIcon,
         bell,
         camera,
+        changeSortArrows,
         chatBubblesSolidIcon,
         chatBubblesUntitledIcon,
         checkVerifiedOutline,
@@ -575,9 +601,13 @@ class $AssetsSvgIconsGen {
         messageChatCircle,
         messageCircle02,
         messageCommentsLines,
+        messageSmilePlus,
+        messageSmile,
+        messageTextCircle02Original,
         messageTextCircle02,
         plusAddUntitledIcon,
         refreshArrows,
+        riltopiaAdminLogo,
         settings01,
         shareArrowWideOutline,
         shareArrowWide,

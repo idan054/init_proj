@@ -63,8 +63,10 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
 
   @override
   void dispose() {
-    var isLoading = context.uniProvider.isLoading;
-    if (isLoading) context.uniProvider.isLoadingUpdate(false);
+    if (mounted) {
+      // var isLoading = context.uniProvider.isLoading;
+      // if (isLoading) context.uniProvider.isLoadingUpdate(false);
+    }
     super.dispose();
   }
 
@@ -151,13 +153,13 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                     child: ListView(
                       controller: viewController,
                       children: [
-                        buildComment(post),
-                        Divider(thickness: 2.5, color: AppColors.darkOutline50.withOpacity(0.55))
-                            .px(10),
+                        // buildComment(post),
+                        PostBlock(post, isCommentsPage: true),
+                        const Divider(thickness: 1.5, color: AppColors.darkOutline50),
                         Builder(builder: (context) {
                           if (snapshot.data != null &&
                               snapshot.data!.isNotEmpty &&
-                              comments.isEmpty) {
+                              comments.isEmpty && mounted) {
                             return buildStfCommentsTextLoader(); // Loading...
                           }
                           return ListView.builder(
@@ -221,7 +223,8 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
               color: AppColors.primaryDark,
               padding: EdgeInsets.only(top: 5, bottom: Platform.isIOS ? 15 : 5),
               child: buildTextField(context,
-                  controller: sendController, hintText: 'Join ${post.creatorUser?.name}\'s Talk',
+                  // controller: sendController, hintText: 'Join ${post.creatorUser?.name}\'s Talk',
+                  controller: sendController, hintText: 'Write a comment...',
                   // post: post,
                   onChanged: (value) {
                 bodyStfState(() {});
@@ -267,7 +270,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
         }
         if (mounted) textState(() {});
       });
-      return 'Loading comments$dots\n meanwhile, Join the conversation!'
+      return 'Loading comments$dots\n meanwhile, write your comment!'
           .toText(
             color: AppColors.grey50,
             textAlign: TextAlign.center,
@@ -325,7 +328,8 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
           Builder(builder: (dialogContext) {
             var isHebComment = comment.textContent.isHebrew;
             return Container(
-              color: isCreatorComment ? AppColors.primaryOriginal : AppColors.darkGrey,
+              // color: isCreatorComment ? AppColors.primaryOriginal : AppColors.darkGrey,
+              color: isCurrUserComment ? AppColors.primaryOriginal : AppColors.darkGrey,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Column(
                 crossAxisAlignment:
@@ -336,20 +340,20 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                     children: [
                       isHebComment
                           ? postAgo.toText(
-                              color: isCreatorComment ? AppColors.darkOutline : AppColors.grey50,
+                              color: isCurrUserComment ? AppColors.darkOutline : AppColors.grey50,
                               fontSize: 12)
                           : shortName.toText(
                               fontSize: 14,
                               bold: true,
-                              color: isCreatorComment ? AppColors.darkBg : AppColors.white),
+                              color: isCurrUserComment ? AppColors.darkBg : AppColors.white),
                       10.horizontalSpace,
                       isHebComment
                           ? shortName.toText(
                               fontSize: 14,
                               bold: true,
-                              color: isCreatorComment ? AppColors.darkBg : AppColors.white)
+                              color: isCurrUserComment ? AppColors.darkBg : AppColors.white)
                           : postAgo.toText(
-                              color: isCreatorComment ? AppColors.darkOutline : AppColors.grey50,
+                              color: isCurrUserComment ? AppColors.darkOutline : AppColors.grey50,
                               fontSize: 12)
                     ],
                   ),
@@ -359,7 +363,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                       textDirection: isHebComment ? TextDirection.rtl : TextDirection.ltr,
                       textAlign: isHebComment ? TextAlign.right : TextAlign.left,
                       style: AppStyles.text14PxRegular.copyWith(
-                        color: isCreatorComment ? AppColors.darkBg : AppColors.white,
+                        color: isCurrUserComment ? AppColors.darkBg : AppColors.white,
                         fontSize: 14,
                       ))
                 ],

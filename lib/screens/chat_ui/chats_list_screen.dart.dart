@@ -64,7 +64,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     print('START: CHAT _loadMore()');
     // await Future.delayed(100.milliseconds);
     splashLoader = true;
-    setState(() {});
+    if (mounted) setState(() {});
     if (refresh) chatList = [];
     var updatedList = <ChatModel>[
       ...await Database.advanced.handleGetModel(
@@ -76,7 +76,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     if (updatedList.isNotEmpty) chatList = updatedList;
     // initLoader = false;
     splashLoader = false;
-    setState(() {});
+    if (mounted) setState(() {});
   }
 
   @override
@@ -146,7 +146,8 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                       if (!mounted) return;
                       chatList[i] = chat;
                       // var chatId = ChatService.openChat(context, otherUser: otherUser);
-                      await context.router.push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));
+                      await context.router
+                          .push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));
                       if (_context.uniProvider.activeChat != null) {
                         print('START: stfSetState()');
                         chat = _context.uniProvider.activeChat!;
@@ -195,8 +196,8 @@ class ChatBlockSts extends StatelessWidget {
               if (showUnreadCount)
                 CircleAvatar(
                   radius: 10,
-                  backgroundColor: AppColors.errRed,
-                  child: chat.unreadCounter.toString().toText(fontSize: 12, color: AppColors.darkBg),
+                  backgroundColor: AppColors.yellowAlert,
+                  child: chat.unreadCounter.toString().toText(fontSize: 12, color: AppColors.white),
                 )
             ],
           ),

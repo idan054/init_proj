@@ -43,8 +43,9 @@ class PostBlock extends StatefulWidget {
   final PostModel post;
   final ReportModel? report;
   final bool isUserPage;
+  final bool isCommentsPage;
 
-  const PostBlock(this.post, {this.report, this.isUserPage = false, Key? key}) : super(key: key);
+  const PostBlock(this.post, {this.report, this.isUserPage = false, this.isCommentsPage = false, Key? key}) : super(key: key);
 
   @override
   State<PostBlock> createState() => _PostBlockState();
@@ -64,7 +65,9 @@ class _PostBlockState extends State<PostBlock> {
       color: AppColors.primaryDark,
       child: buildPostBody(context, widget.isUserPage).pOnly(left: 15),
     ).onTap(
-        widget.report != null && widget.post.originalPostId != null // AKA comment
+       // AKA comment
+       ( widget.report != null && widget.post.originalPostId != null)
+       || widget.isCommentsPage
             ? null
             : widget.post.enableComments
                 ? () {
@@ -265,7 +268,7 @@ class _PostBlockState extends State<PostBlock> {
         const Spacer(),
         isConversation
             ? Assets.svg.icons.shareArrowWide
-                .svg(height: 15, color: buttonColor)
+                .svg(height: 14, color: buttonColor)
                 .pOnly(left: 18, right: 18)
                 .py(11)
                 .onTap(() {
@@ -329,13 +332,14 @@ class _PostBlockState extends State<PostBlock> {
         children: [
           // TODO Add notification dot here
           if (notificationCounter != 0) ...[
-            const CircleAvatar(backgroundColor: AppColors.errRed, radius: 3.5),
+            //~ Beside new notification in the feed screen
+            const CircleAvatar(backgroundColor: AppColors.yellowAlert, radius: 3.5),
             const SizedBox(width: 7),
           ],
 
           // if(!commentEmpty)
-          (commentEmpty ? Assets.svg.icons.wisdomLightStar : Assets.svg.icons.messageCircle02)
-              .svg(height: 14, color: commentEmpty ? AppColors.primaryOriginal : buttonColor),
+          (commentEmpty ? Assets.svg.icons.wisdomLightStar : Assets.svg.icons.messageSmile)
+              .svg(height: commentEmpty ? 14 : 17, color: commentEmpty ? AppColors.primaryOriginal : buttonColor),
           // if(!commentEmpty)
           SizedBox(width: commentEmpty ? 4 : 5),
           // 'available soon'
@@ -504,12 +508,12 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
     var size = widget.ratio * 4.0;
     return CircleAvatar(
       radius: size,
-      backgroundColor: AppColors.greenOld.withOpacity(0.35),
+      backgroundColor: AppColors.greenOld.withOpacity(0.45),
       child: FadeTransition(
         opacity: _animationController,
         child: CircleAvatar(
           radius: size,
-          backgroundColor: AppColors.green,
+          backgroundColor: AppColors.greenOld,
         ),
       ),
     );
