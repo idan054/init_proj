@@ -32,6 +32,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
 import '../../common/dump/hive_services.dart';
 import '../../common/extensions/color_printer.dart';
 import '../../common/models/post/post_model.dart';
@@ -65,6 +66,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
 
   // var feedController = PageController();
   // var chipsController = ScrollController();
+
+  int? currentPatchNumber;
 
   @override
   void initState() {
@@ -439,7 +442,7 @@ Widget profileCircle(BuildContext context) {
             child: ListTile(
                     contentPadding: EdgeInsets.zero,
                     horizontalTitleGap: 0,
-                    title: 'Whats new? V${context.uniProvider.localConfig.publicVersionAndroid}'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
+                    title: 'Whats new?'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
                     leading: Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50))
                 .pad(0)
                 .onTap(() {
@@ -492,6 +495,15 @@ Widget profileCircle(BuildContext context) {
               context.router.replaceAll([const LoginRoute()]);
             }, radius: 5),
           ),
+          Builder(builder: (context) {
+            var patchVer = context.uniProvider.localConfig.currentPatchNumber ?? '(Debug)';
+            if(patchVer != '(Debug)') patchVer = '+ $patchVer';
+            return 'Version: ${context.uniProvider.localConfig.publicVersionAndroid}'
+                ' $patchVer'
+                .toText(fontSize: 12, color: AppColors.grey50)
+                .pOnly(top: 10)
+                .centerLeft;
+          })
         ],
       ),
       barrierDismissible: true,

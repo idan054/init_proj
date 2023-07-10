@@ -5,6 +5,7 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shorebird_code_push/shorebird_code_push.dart';
 import '../../models/appConfig/app_config_model.dart';
 import '../Database/firebase_db.dart';
 import 'dart:io' show Platform;
@@ -22,10 +23,12 @@ Future<bool> updateAppConfigModel(BuildContext context) async {
   int buildNumber = int.parse(packageInfo.buildNumber);
   print('buildNumber $buildNumber');
 
+  final currentPatchNumber = await ShorebirdCodePush().currentPatchNumber();
   var localConfig = context.uniProvider.localConfig;
   localConfig = context.uniProvider.localVersionUpdate(localConfig.copyWith(
     publicVersionAndroid: buildNumber,
     publicVersionIos: buildNumber,
+    currentPatchNumber: currentPatchNumber,
   ));
 
   // Make sure server ver > local ver.

@@ -19,6 +19,7 @@ _$_AppConfigModel _$$_AppConfigModelFromJson(Map<String, dynamic> json) =>
       isUpdateAvailable: json['isUpdateAvailable'] as bool?,
       updateIosLink: json['updateIosLink'] as String?,
       updateAndroidLink: json['updateAndroidLink'] as String?,
+      currentPatchNumber: json['currentPatchNumber'] as int?,
     );
 
 Map<String, dynamic> _$$_AppConfigModelToJson(_$_AppConfigModel instance) =>
@@ -34,6 +35,7 @@ Map<String, dynamic> _$$_AppConfigModelToJson(_$_AppConfigModel instance) =>
       'isUpdateAvailable': instance.isUpdateAvailable,
       'updateIosLink': instance.updateIosLink,
       'updateAndroidLink': instance.updateAndroidLink,
+      'currentPatchNumber': instance.currentPatchNumber,
     };
 
 const _$OsTypesEnumMap = {

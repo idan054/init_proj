@@ -31,6 +31,7 @@ mixin _$AppConfigModel {
   bool? get isUpdateAvailable => throw _privateConstructorUsedError;
   String? get updateIosLink => throw _privateConstructorUsedError;
   String? get updateAndroidLink => throw _privateConstructorUsedError;
+  int? get currentPatchNumber => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -55,7 +56,8 @@ abstract class $AppConfigModelCopyWith<$Res> {
       UpdateTypes? updateType,
       bool? isUpdateAvailable,
       String? updateIosLink,
-      String? updateAndroidLink});
+      String? updateAndroidLink,
+      int? currentPatchNumber});
 }
 
 /// @nodoc
@@ -82,6 +84,7 @@ class _$AppConfigModelCopyWithImpl<$Res, $Val extends AppConfigModel>
     Object? isUpdateAvailable = freezed,
     Object? updateIosLink = freezed,
     Object? updateAndroidLink = freezed,
+    Object? currentPatchNumber = freezed,
   }) {
     return _then(_value.copyWith(
       status: freezed == status
@@ -128,6 +131,10 @@ class _$AppConfigModelCopyWithImpl<$Res, $Val extends AppConfigModel>
           ? _value.updateAndroidLink
           : updateAndroidLink // ignore: cast_nullable_to_non_nullable
               as String?,
+      currentPatchNumber: freezed == currentPatchNumber
+          ? _value.currentPatchNumber
+          : currentPatchNumber // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -151,7 +158,8 @@ abstract class _$$_AppConfigModelCopyWith<$Res>
       UpdateTypes? updateType,
       bool? isUpdateAvailable,
       String? updateIosLink,
-      String? updateAndroidLink});
+      String? updateAndroidLink,
+      int? currentPatchNumber});
 }
 
 /// @nodoc
@@ -176,6 +184,7 @@ class __$$_AppConfigModelCopyWithImpl<$Res>
     Object? isUpdateAvailable = freezed,
     Object? updateIosLink = freezed,
     Object? updateAndroidLink = freezed,
+    Object? currentPatchNumber = freezed,
   }) {
     return _then(_$_AppConfigModel(
       status: freezed == status
@@ -222,6 +231,10 @@ class __$$_AppConfigModelCopyWithImpl<$Res>
           ? _value.updateAndroidLink
           : updateAndroidLink // ignore: cast_nullable_to_non_nullable
               as String?,
+      currentPatchNumber: freezed == currentPatchNumber
+          ? _value.currentPatchNumber
+          : currentPatchNumber // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -241,7 +254,8 @@ class _$_AppConfigModel implements _AppConfigModel {
       this.updateType,
       this.isUpdateAvailable,
       this.updateIosLink,
-      this.updateAndroidLink});
+      this.updateAndroidLink,
+      this.currentPatchNumber});
 
   factory _$_AppConfigModel.fromJson(Map<String, dynamic> json) =>
       _$$_AppConfigModelFromJson(json);
@@ -268,10 +282,12 @@ class _$_AppConfigModel implements _AppConfigModel {
   final String? updateIosLink;
   @override
   final String? updateAndroidLink;
+  @override
+  final int? currentPatchNumber;
 
   @override
   String toString() {
-    return 'AppConfigModel(status: $status, adStatus: $adStatus, statusCode: $statusCode, osType: $osType, publicVersionAndroid: $publicVersionAndroid, publicVersionIos: $publicVersionIos, whatsNew: $whatsNew, updateType: $updateType, isUpdateAvailable: $isUpdateAvailable, updateIosLink: $updateIosLink, updateAndroidLink: $updateAndroidLink)';
+    return 'AppConfigModel(status: $status, adStatus: $adStatus, statusCode: $statusCode, osType: $osType, publicVersionAndroid: $publicVersionAndroid, publicVersionIos: $publicVersionIos, whatsNew: $whatsNew, updateType: $updateType, isUpdateAvailable: $isUpdateAvailable, updateIosLink: $updateIosLink, updateAndroidLink: $updateAndroidLink, currentPatchNumber: $currentPatchNumber)';
   }
 
   @override
@@ -298,7 +314,9 @@ class _$_AppConfigModel implements _AppConfigModel {
             (identical(other.updateIosLink, updateIosLink) ||
                 other.updateIosLink == updateIosLink) &&
             (identical(other.updateAndroidLink, updateAndroidLink) ||
-                other.updateAndroidLink == updateAndroidLink));
+                other.updateAndroidLink == updateAndroidLink) &&
+            (identical(other.currentPatchNumber, currentPatchNumber) ||
+                other.currentPatchNumber == currentPatchNumber));
   }
 
   @JsonKey(ignore: true)
@@ -315,7 +333,8 @@ class _$_AppConfigModel implements _AppConfigModel {
       updateType,
       isUpdateAvailable,
       updateIosLink,
-      updateAndroidLink);
+      updateAndroidLink,
+      currentPatchNumber);
 
   @JsonKey(ignore: true)
   @override
@@ -343,7 +362,8 @@ abstract class _AppConfigModel implements AppConfigModel {
       final UpdateTypes? updateType,
       final bool? isUpdateAvailable,
       final String? updateIosLink,
-      final String? updateAndroidLink}) = _$_AppConfigModel;
+      final String? updateAndroidLink,
+      final int? currentPatchNumber}) = _$_AppConfigModel;
 
   factory _AppConfigModel.fromJson(Map<String, dynamic> json) =
       _$_AppConfigModel.fromJson;
@@ -370,6 +390,8 @@ abstract class _AppConfigModel implements AppConfigModel {
   String? get updateIosLink;
   @override
   String? get updateAndroidLink;
+  @override
+  int? get currentPatchNumber;
   @override
   @JsonKey(ignore: true)
   _$$_AppConfigModelCopyWith<_$_AppConfigModel> get copyWith =>

@@ -25,7 +25,8 @@ class AppConfigModel with _$AppConfigModel {
     UpdateTypes? updateType,
     bool? isUpdateAvailable,
     String? updateIosLink,
-    String? updateAndroidLink
+    String? updateAndroidLink,
+    int? currentPatchNumber
   }) = _AppConfigModel;
 
   factory AppConfigModel.fromJson(Map<String, dynamic> json) => _$AppConfigModelFromJson(json);

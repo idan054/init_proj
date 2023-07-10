@@ -430,10 +430,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: a38574032c5f1dd06c4aee541789906c12ccaab8ba01446e800d9c5b79c4a978
+      sha256: ed5337a5660c506388a9f012be0288fb38b49020ce2b45fe1f8b8323fe429f99
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   file:
     dependency: "direct main"
     description:
@@ -1361,6 +1361,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.0"
+  shorebird_code_push:
+    dependency: "direct main"
+    description:
+      name: shorebird_code_push
+      sha256: "6e82199a8f8b26422e570e214084717e9943919a05282bdbc9fa29573b2603a4"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   sign_in_with_apple:
     dependency: "direct main"
     description:
