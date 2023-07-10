@@ -11,6 +11,7 @@ _$_SortFeedModel _$$_SortFeedModelFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String,
       desc: json['desc'] as String,
       svg: json['svg'],
+      solidSvg: json['solidSvg'],
       type: $enumDecode(_$FilterTypesEnumMap, json['type']),
     );
 
@@ -19,18 +20,19 @@ Map<String, dynamic> _$$_SortFeedModelToJson(_$_SortFeedModel instance) =>
       'title': instance.title,
       'desc': instance.desc,
       'svg': instance.svg,
+      'solidSvg': instance.solidSvg,
       'type': _$FilterTypesEnumMap[instance.type]!,
     };
 
 const _$FilterTypesEnumMap = {
   FilterTypes.postsByUser: 'postsByUser',
   FilterTypes.conversationsPostByUser: 'conversationsPostByUser',
+  FilterTypes.sortByOldestComments: 'sortByOldestComments',
   FilterTypes.notificationsPostByUser: 'notificationsPostByUser',
-  FilterTypes.postWithoutComments: 'postWithoutComments',
-  FilterTypes.postWithComments: 'postWithComments',
   FilterTypes.reportedUsers: 'reportedUsers',
   FilterTypes.reportedRils: 'reportedRils',
-  FilterTypes.sortByOldestComments: 'sortByOldestComments',
+  FilterTypes.postWithComments: 'postWithComments',
+  FilterTypes.postWithoutComments: 'postWithoutComments',
   FilterTypes.sortFeedByDefault: 'sortFeedByDefault',
   FilterTypes.sortFeedByLocation: 'sortFeedByLocation',
   FilterTypes.sortFeedByTopics: 'sortFeedByTopics',

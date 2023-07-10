@@ -16,6 +16,7 @@ class SortFeedModel with _$SortFeedModel {
     required String title,
     required String desc,
     required SvgGenImage svg,
+    required SvgGenImage solidSvg,
     required FilterTypes type,
   }) = _SortFeedModel;
 

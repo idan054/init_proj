@@ -4,6 +4,7 @@ import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'dart:io' show Platform;
+import '../../widgets/components/feed/bottom_sort_sheet.dart';
 import '../service/Database/firebase_db.dart';
 import 'chat/chat_model.dart';
 import 'package:flutter/foundation.dart';
@@ -30,7 +31,7 @@ class UniProvider with ChangeNotifier {
   bool showFab = true;
 
   FilterTypes currFilter = FilterTypes.postWithoutComments;
-  FilterTypes? currFilterTemp;
+  SortFeedModel sortFeedBy = sortByDefault;
 
   FeedTypes feedType = FeedTypes.members;
   bool isLoading = false;
@@ -73,8 +74,8 @@ class UniProvider with ChangeNotifier {
     if (notify) notifyListeners();
   }
 
-  void currFilterTempUpdate(FilterTypes data, {bool notify = true}) {
-    currFilterTemp = data;
+  void sortFeedByUpdate(SortFeedModel data, {bool notify = true}) {
+    sortFeedBy = data;
     if (notify) notifyListeners();
   }
 

@@ -12,6 +12,7 @@ import '../../../common/themes/app_colors_inverted.dart';
 import '../../../screens/feed_ui/main_feed_screen.dart';
 import '../../../screens/main_ui/admin_screen.dart';
 import '../../../screens/main_ui/notification_screen.dart';
+import 'bottom_sort_sheet.dart';
 import 'feedTitle.dart';
 
 Widget buildFeed(
@@ -47,7 +48,7 @@ Widget buildFeed(
           backgroundColor: AppColors.primaryOriginal,
           color: AppColors.darkBg,
           strokeWidth: 2,
-          onRefresh: onRefreshIndicator ?? () async {},
+          onRefresh: onRefreshIndicator,
           child: NotificationListener<UserScrollNotification>(
             onNotification: (notification) {
               final ScrollDirection direction = notification.direction;
@@ -67,7 +68,19 @@ Widget buildFeed(
                 if (feedType == FeedTypes.reports && (desc != null || title != null))
                   buildFeedTitle(feedType, desc, title),
 
-                if (feedType == FeedTypes.members) buildFeedSort(context, feedType),
+                if (feedType == FeedTypes.members)
+                  buildFeedSort(
+                    context,
+                    feedType,
+                    onFeedSort: () async {
+                      await showModalBottomSheet(
+                        backgroundColor: AppColors.transparent,
+                        context: context,
+                        builder: (BuildContext context) => const BottomSortSheet(),
+                      );
+                      onRefreshIndicator();
+                    },
+                  ),
                 1.verticalSpace,
                 //   Expanded(child:
                 ListView.builder(

@@ -11,6 +11,36 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../common/models/feedFilterModel/sort_feed_model.dart';
 import '../../../common/service/mixins/assets.gen.dart';
 
+final sortByDefault = SortFeedModel(
+  title: 'Default',
+  desc: 'Latest Rils by timeline',
+  svg: Assets.svg.icons.sortByDefault,
+  solidSvg: Assets.svg.icons.sortByDefaultSolid,
+  type: FilterTypes.sortFeedByDefault,
+);
+final sortByLocation = SortFeedModel(
+  title: 'Your location',
+  desc: 'Latest Rils by members around you',
+  svg: Assets.svg.icons.sortByLocation,
+  solidSvg: Assets.svg.icons.sortByLocationSolid,
+  type: FilterTypes.sortFeedByLocation,
+);
+final sortByTopic = SortFeedModel(
+  title: 'Your topics',
+  desc: 'Latest Rils by members like you',
+  // svg: Assets.svg.icons.wisdomMultiLightStar,
+  svg: Assets.svg.icons.sortByTopic,
+  solidSvg: Assets.svg.icons.sortByTopicSolid,
+  type: FilterTypes.sortFeedByTopics,
+);
+final sortByAge = SortFeedModel(
+  title: 'Your age',
+  desc: 'Latest Rils by members in your age',
+  svg: Assets.svg.icons.sortByAge,
+  solidSvg: Assets.svg.icons.sortByAgeSolid,
+  type: FilterTypes.sortFeedByAge,
+);
+
 class BottomSortSheet extends StatefulWidget {
   const BottomSortSheet({Key? key}) : super(key: key);
 
@@ -19,35 +49,11 @@ class BottomSortSheet extends StatefulWidget {
 }
 
 class _BottomSortSheetState extends State<BottomSortSheet> {
-  late SortFeedModel sFilter;
-  final defaultFilter = SortFeedModel(
-    title: 'Default',
-    desc: 'View Rils by Timeline',
-    svg: Assets.svg.icons.sortByDefault,
-    type: FilterTypes.sortFeedByDefault,
-  );
-  final locationFilter = SortFeedModel(
-    title: 'Your location',
-    desc: 'View Rils from members around you',
-    svg: Assets.svg.icons.sortByLocation,
-    type: FilterTypes.sortFeedByLocation,
-  );
-  final topicsFilter = SortFeedModel(
-    title: 'Your topics',
-    desc: 'View Rils from members like you',
-    svg: Assets.svg.icons.wisdomMultiLightStar,
-    type: FilterTypes.sortFeedByTopics,
-  );
-  final ageFilter = SortFeedModel(
-    title: 'Your age',
-    desc: 'View Rils from members in your age',
-    svg: Assets.svg.icons.sortByAge,
-    type: FilterTypes.sortFeedByAge,
-  );
+  late SortFeedModel selectedFeedSort;
 
   @override
   void initState() {
-    sFilter = defaultFilter;
+    selectedFeedSort = context.uniProvider.sortFeedBy;
     setState(() {});
     super.initState();
   }
@@ -69,12 +75,12 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
             25.verticalSpace,
             'Sort by'.toText(bold: true, fontSize: 20),
             10.verticalSpace,
-            sFilter.desc.toText(fontSize: 14, color: AppColors.greyLight),
+            selectedFeedSort.desc.toText(fontSize: 14, color: AppColors.greyLight),
             10.verticalSpace,
-            buildRadioItem(defaultFilter),
-            buildRadioItem(locationFilter),
-            buildRadioItem(topicsFilter),
-            buildRadioItem(ageFilter),
+            buildRadioItem(sortByDefault),
+            buildRadioItem(sortByLocation, isActive: false),
+            buildRadioItem(sortByTopic, isActive: false),
+            buildRadioItem(sortByAge),
             20.verticalSpace,
           ],
         ).px(20),
@@ -82,33 +88,41 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
     );
   }
 
-  Widget buildRadioItem(SortFeedModel filter) {
+  Widget buildRadioItem(SortFeedModel filter, {bool isActive = true}) {
     void updateValue() {
-      sFilter = filter;
-      context.uniProvider.currFilterTempUpdate(filter.type);
+      selectedFeedSort = filter;
+      context.uniProvider.sortFeedByUpdate(filter);
       setState(() {});
+      Navigator.pop(context);
     }
 
     return ListTile(
       shape: 10.roundedShape,
-      onTap: updateValue,
+      onTap: isActive ? updateValue : null,
       horizontalTitleGap: 10,
       minLeadingWidth: 0,
       contentPadding: EdgeInsets.zero,
       title: filter.title.toText(
         medium: true,
         fontSize: 15,
-        color: sFilter == filter ? AppColors.primaryOriginal : AppColors.white,
+        color: isActive
+            // ? (selectedFeedSort == filter ? AppColors.primaryOriginal : AppColors.white)
+            ? AppColors.white
+            : AppColors.darkOutline50,
       ),
       leading: filter.svg.svg(
-        color: sFilter == filter ? AppColors.primaryOriginal : AppColors.white,
+        color: isActive
+            // ? (selectedFeedSort == filter ? AppColors.primaryOriginal : AppColors.white)
+            ? AppColors.white
+            : AppColors.darkOutline50,
         height: 22,
       ),
       trailing: Radio(
         activeColor: AppColors.primaryOriginal,
+        fillColor: isActive ? null : MaterialStateProperty.all(AppColors.darkOutline50),
         value: filter,
-        groupValue: sFilter,
-        onChanged: (value) => updateValue(),
+        groupValue: selectedFeedSort,
+        onChanged: isActive ? (value) => updateValue() : null,
       ).scale(scale: 1.15),
     );
   }

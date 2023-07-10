@@ -45,7 +45,9 @@ class PostBlock extends StatefulWidget {
   final bool isUserPage;
   final bool isCommentsPage;
 
-  const PostBlock(this.post, {this.report, this.isUserPage = false, this.isCommentsPage = false, Key? key}) : super(key: key);
+  const PostBlock(this.post,
+      {this.report, this.isUserPage = false, this.isCommentsPage = false, Key? key})
+      : super(key: key);
 
   @override
   State<PostBlock> createState() => _PostBlockState();
@@ -65,9 +67,8 @@ class _PostBlockState extends State<PostBlock> {
       color: AppColors.primaryDark,
       child: buildPostBody(context, widget.isUserPage).pOnly(left: 15),
     ).onTap(
-       // AKA comment
-       ( widget.report != null && widget.post.originalPostId != null)
-       || widget.isCommentsPage
+        // AKA comment
+        (widget.report != null && widget.post.originalPostId != null) || widget.isCommentsPage
             ? null
             : widget.post.enableComments
                 ? () {
@@ -163,13 +164,22 @@ class _PostBlockState extends State<PostBlock> {
   }
 
   Row buildProfileRow(String postAgo, bool isAdmin, bool isCurrUser, bool isUserPage) {
+    final creatorUser = widget.post.creatorUser;
+    final nameTitle = context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByAge
+        ? ('${creatorUser?.age} y.o · ' '${creatorUser?.name}')
+        : creatorUser?.name;
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-            width: postAgo.length > 5 ? 150 : 190,
-            child: '${widget.post.creatorUser?.name}'.toText(
-                fontSize: 13.0, medium: true, color: AppColors.white, textAlign: TextAlign.left)),
+            // width: postAgo.length > 5 ? 150 : 190,
+            width: 185,
+            child: '$nameTitle'.toText(
+                maxLines: 1,
+                fontSize: 13.0,
+                medium: true,
+                color: AppColors.white,
+                textAlign: TextAlign.left)),
         const Spacer(),
         postAgo.toText(color: AppColors.greyUnavailable, fontSize: 14),
         buildMoreMenu(isAdmin, isCurrUser)
@@ -338,8 +348,9 @@ class _PostBlockState extends State<PostBlock> {
           ],
 
           // if(!commentEmpty)
-          (commentEmpty ? Assets.svg.icons.wisdomLightStar : Assets.svg.icons.messageSmile)
-              .svg(height: commentEmpty ? 14 : 17, color: commentEmpty ? AppColors.primaryOriginal : buttonColor),
+          (commentEmpty ? Assets.svg.icons.wisdomLightStar : Assets.svg.icons.messageSmile).svg(
+              height: commentEmpty ? 14 : 17,
+              color: commentEmpty ? AppColors.primaryOriginal : buttonColor),
           // if(!commentEmpty)
           SizedBox(width: commentEmpty ? 4 : 5),
           // 'available soon'
@@ -529,14 +540,16 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
 
 String postTime(DateTime time) {
   var postDiff = DateTime.now().difference(time);
+
   var postAgo = postDiff.inSeconds < 60 ? '${postDiff.inSeconds}s' : '${postDiff.inMinutes}m';
+  if (1 < postDiff.inMinutes && postDiff.inMinutes < 60) '${postDiff.inMinutes}m';
   if (postDiff.inSeconds == 0) postAgo = 'Just now';
-  if (2 < postDiff.inHours && postDiff.inHours < 24) {
+  if (1 <= postDiff.inHours && postDiff.inHours < 24) {
     postAgo = '${postDiff.inHours}h';
   } else if (postDiff.inHours > 24) {
     // postAgo = intl.DateFormat('yMMMMEEEEd').format(post.timestamp!);
     // postAgo = intl.DateFormat('MMMM d, y').format(time);
-    postAgo = intl.DateFormat('MMM d, y').format(time);
+    postAgo = intl.DateFormat('MMM d').format(time);
   }
 
   return postAgo;

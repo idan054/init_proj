@@ -552,17 +552,33 @@ class $AssetsSvgIconsGen {
   SvgGenImage get shieldTickUntitledIcon =>
       const SvgGenImage('assets/svg/icons/shieldTick-untitled-icon.svg');
 
+  /// File path: assets/svg/icons/sort-by-age-solid.svg
+  SvgGenImage get sortByAgeSolid =>
+      const SvgGenImage('assets/svg/icons/sort-by-age-solid.svg');
+
   /// File path: assets/svg/icons/sort-by-age.svg
   SvgGenImage get sortByAge =>
       const SvgGenImage('assets/svg/icons/sort-by-age.svg');
+
+  /// File path: assets/svg/icons/sort-by-default-solid.svg
+  SvgGenImage get sortByDefaultSolid =>
+      const SvgGenImage('assets/svg/icons/sort-by-default-solid.svg');
 
   /// File path: assets/svg/icons/sort-by-default.svg
   SvgGenImage get sortByDefault =>
       const SvgGenImage('assets/svg/icons/sort-by-default.svg');
 
+  /// File path: assets/svg/icons/sort-by-location-solid.svg
+  SvgGenImage get sortByLocationSolid =>
+      const SvgGenImage('assets/svg/icons/sort-by-location-solid.svg');
+
   /// File path: assets/svg/icons/sort-by-location.svg
   SvgGenImage get sortByLocation =>
       const SvgGenImage('assets/svg/icons/sort-by-location.svg');
+
+  /// File path: assets/svg/icons/sort-by-topic-solid.svg
+  SvgGenImage get sortByTopicSolid =>
+      const SvgGenImage('assets/svg/icons/sort-by-topic-solid.svg');
 
   /// File path: assets/svg/icons/sort-by-topic.svg
   SvgGenImage get sortByTopic =>
@@ -629,9 +645,13 @@ class $AssetsSvgIconsGen {
         shareArrowWide,
         shareClassicUntitledIcon,
         shieldTickUntitledIcon,
+        sortByAgeSolid,
         sortByAge,
+        sortByDefaultSolid,
         sortByDefault,
+        sortByLocationSolid,
         sortByLocation,
+        sortByTopicSolid,
         sortByTopic,
         trash03,
         wisdomMultiLightStar,

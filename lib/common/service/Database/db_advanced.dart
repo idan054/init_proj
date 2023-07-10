@@ -140,6 +140,22 @@ class FsAdvanced {
         }
         if (filter == FilterTypes.postWithoutComments) {
           reqBase = reqBase.where('enableComments', isEqualTo: false);
+
+          //~ NEW SortFeedBy:
+          final sortFeedBy = context.uniProvider.sortFeedBy.type;
+          if (sortFeedBy == FilterTypes.sortFeedByDefault) {}
+          if (sortFeedBy == FilterTypes.sortFeedByTopics) {}
+          if (sortFeedBy == FilterTypes.sortFeedByLocation) {}
+          //
+          if (sortFeedBy == FilterTypes.sortFeedByAge) {
+            int age = currUser.age!;
+            int range = 3;
+            List ageRangeList = []; // Example: 12, 13, 14, (15), 16, 17, 18
+            for (int i = age - range; i <= age + range; i++) {
+              ageRangeList.add(i);
+            }
+            reqBase = reqBase.where('creatorUser.age', whereIn: ageRangeList);
+          }
         }
         if (filter == FilterTypes.notificationsPostByUser) {
           reqBase =

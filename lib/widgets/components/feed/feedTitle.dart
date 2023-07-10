@@ -13,9 +13,14 @@ import 'bottom_sort_sheet.dart';
 Widget basicLoader() =>
     const CircularProgressIndicator(color: AppColors.primaryOriginal, strokeWidth: 6).center;
 
-Widget buildFeedSort(BuildContext context, FeedTypes feedType) {
+Widget buildFeedSort(
+  BuildContext context,
+  FeedTypes feedType, {
+  required GestureTapCallback onFeedSort,
+}) {
   bool isConversationTab = feedType == FeedTypes.conversations;
   bool isNewRilsTab = feedType == FeedTypes.members;
+  final currfilter = context.uniProvider.sortFeedBy;
 
   return ListTile(
       // minVerticalPadding: 15,
@@ -24,10 +29,10 @@ Widget buildFeedSort(BuildContext context, FeedTypes feedType) {
       // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
       title: Row(
         children: [
-          Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.yellowAlert, height: 20),
+          currfilter.solidSvg.svg(color: AppColors.yellowAlert, height: 20),
           const SizedBox(width: 7),
           'Sort Rils by '.toText(fontSize: 13, color: AppColors.greyLight).pOnly(top: 3),
-          (context.uniProvider.currFilterTemp?.name ?? 'Default')
+          currfilter.title
               .replaceAll('sortFeedBy', '')
               .toText(bold: true, fontSize: 13, color: AppColors.white)
               .pOnly(top: 3)
@@ -37,15 +42,9 @@ Widget buildFeedSort(BuildContext context, FeedTypes feedType) {
           .svg(color: AppColors.greyLight, height: 24)
           .pad(15)
           .onTap(
-        () {
-          showModalBottomSheet(
-            backgroundColor: AppColors.transparent,
-            context: context,
-            builder: (BuildContext context) => const BottomSortSheet(),
-          );
-        },
-        radius: 5,
-      )
+            onFeedSort,
+            radius: 5,
+          )
       // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
       ).pOnly(bottom: 5, top: 15);
 }
