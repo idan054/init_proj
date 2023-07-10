@@ -93,7 +93,7 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
       selectedFeedSort = filter;
       context.uniProvider.sortFeedByUpdate(filter);
       setState(() {});
-      Navigator.pop(context);
+      Navigator.pop(context, true);
     }
 
     return ListTile(

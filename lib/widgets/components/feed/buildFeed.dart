@@ -73,12 +73,12 @@ Widget buildFeed(
                     context,
                     feedType,
                     onFeedSort: () async {
-                      await showModalBottomSheet(
+                      bool? shouldRefresh = await showModalBottomSheet(
                         backgroundColor: AppColors.transparent,
                         context: context,
                         builder: (BuildContext context) => const BottomSortSheet(),
                       );
-                      onRefreshIndicator();
+                      if (shouldRefresh ?? false) onRefreshIndicator();
                     },
                   ),
                 1.verticalSpace,
