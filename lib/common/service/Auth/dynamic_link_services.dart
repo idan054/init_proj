@@ -18,7 +18,7 @@ import 'dart:io' show Platform;
 
 class DynamicLinkService {
   static void initDynamicLinks(BuildContext context) async {
-    print('START: initDynamicLinks()');
+    // print('START: initDynamicLinks()');
     FirebaseDynamicLinks.instance;
     final data = await FirebaseDynamicLinks.instance.getInitialLink();
     // A listener for link callbacks when the app is in background calling

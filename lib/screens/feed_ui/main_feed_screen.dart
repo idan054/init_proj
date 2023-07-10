@@ -67,7 +67,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
   // var feedController = PageController();
   // var chipsController = ScrollController();
 
-  int? currentPatchNumber;
+  bool initTabHandle = true;
 
   @override
   void initState() {
@@ -75,12 +75,10 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     _tabController = TabController(vsync: this, length: 2);
 
     WidgetsBinding.instance.addPostFrameCallback((_) => context.uniProvider.addListener(() {
-          if (mounted) {
-            _handleIndexChanged(
-              context.uniProvider.feedType.index,
-              fromTabBar: false,
-              fromListener: true,
-            );
+          if (mounted && initTabHandle) {
+            initTabHandle = false;
+            _handleIndexChanged(context.uniProvider.feedType.index,
+                fromTabBar: false, fromListener: true);
           }
         }));
 
@@ -124,14 +122,16 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
   }
 
   Future _loadMore({bool refresh = false}) async {
-    print('START: FEED _loadMore()');
+    printYellow('START: FEED _loadMore()');
 
+    //~ Only at refresh
     if (refresh) {
       OnlineService.updateOnlineUsersStatus(context);
 
       splashLoader = true;
       postList = [];
-      if (mounted) setState(() {});
+      // if (mounted)
+      setState(() {});
     }
 
     List newPosts = await Database.advanced
@@ -140,11 +140,11 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     splashLoader = false;
 
     // Temp fix
-    if (mounted) {
-      setState(() {});
-      Future.delayed(350.milliseconds).then((_) => setState(() {}));
-      Future.delayed(350.milliseconds).then((_) => setState(() {}));
-    }
+    // if (mounted) {
+    setState(() {});
+    // Future.delayed(350.milliseconds).then((_) => setState(() {}));
+    // Future.delayed(350.milliseconds).then((_) => setState(() {}));
+    // }
   }
 
   @override
@@ -497,9 +497,9 @@ Widget profileCircle(BuildContext context) {
           ),
           Builder(builder: (context) {
             var patchVer = context.uniProvider.localConfig.currentPatchNumber ?? '(Debug)';
-            if(patchVer != '(Debug)') patchVer = '+ $patchVer';
+            if (patchVer != '(Debug)') patchVer = '+ $patchVer';
             return 'Version: ${context.uniProvider.localConfig.publicVersionAndroid}'
-                ' $patchVer'
+                    ' $patchVer'
                 .toText(fontSize: 12, color: AppColors.grey50)
                 .pOnly(top: 10)
                 .centerLeft;

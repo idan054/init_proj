@@ -67,11 +67,12 @@ class FsAdvanced {
 
     // 1/2) Set modelList from Database snap:
     print('Start fetch From: ${timeStamp == null ? 'Most recent' : 'timeStamp'}');
-    var snap = await getDocsBasedModel(context, timeStamp, modelType, collectionRef, filter, otherUser);
+    var snap =
+        await getDocsBasedModel(context, timeStamp, modelType, collectionRef, filter, otherUser);
 
     // 2/2) .fromJson() To postModel, userModel etc...
     if (snap.docs.isNotEmpty) {
-      var newItems = await docsToModelList(context, snap, modelType);
+      var newItems = await _docsToModelList(context, snap, modelType);
 
       modelList = [...modelList, ...newItems];
       print('✴️ SUMMARY: ${modelList.length} ${collectionRef.toUpperCase()}');
@@ -155,7 +156,7 @@ class FsAdvanced {
   }
 
   // 2/2
-  Future<List> docsToModelList(
+  Future<List> _docsToModelList(
       BuildContext context, QuerySnapshot<Map<String, dynamic>> snap, ModelTypes modelType) async {
     print('START: docsToModelList() - ${modelType.name}');
     var currUser = context.uniProvider.currUser;
@@ -223,7 +224,7 @@ class FsAdvanced {
   // This actually called on openChat(), PostModel & ChatModel
   static Future<UserModel> getUserByEmailIfNeeded(
       BuildContext context, UserModel userSource) async {
-    print('START: getUserByEmailIfNeeded()');
+    // print('START: getUserByEmailIfNeeded()');
     String? userEmail = userSource.email;
     var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
     var isAlreadyFetched = alreadyFetchedUsers.any((user) => user.email == userEmail);
@@ -240,7 +241,10 @@ class FsAdvanced {
       } else {
         printOrange('USER STATUS: $userEmail FETCHED SUCCESSFULLY!');
         var newUser = UserModel.fromJson(userData);
-        context.uniProvider.fetchedUsersUpdate([newUser, ...alreadyFetchedUsers]);
+        // Will rebuild
+        // context.uniProvider.fetchedUsersUpdate([newUser, ...alreadyFetchedUsers]);
+        // Will NOT rebuild
+        context.uniProvider.fetchedUsers = [newUser, ...alreadyFetchedUsers];
         return newUser;
       }
     }

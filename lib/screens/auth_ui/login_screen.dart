@@ -53,8 +53,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ? 'Loading...'
                       : '${Platform.isIOS ? 'Sign in' : 'Continue'} with Google',
                   icon: Assets.svg.gLogoIcon.svg(height: 29),
-                  bgColor: isLoading ? AppColors.primaryDark : AppColors.darkGrey,
-                  textColor: isLoading ? AppColors.darkGrey : AppColors.greyLight,
+                  bgColor: isLoading ? AppColors.darkOutline50: AppColors.darkGrey,
+                  textColor: isLoading ? AppColors.primaryDark: AppColors.greyLight,
                   onPressed: isLoading
                       ? null
                       : () async {

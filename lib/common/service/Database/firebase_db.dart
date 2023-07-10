@@ -176,8 +176,8 @@ class Database {
 
   static Stream<int> streamNotificationCounter(BuildContext context) {
     var currUser = context.uniProvider.currUser;
-    print('START: streamNotificationCounter()');
-    print('START: metadata.unreadNotificationCounter#${currUser.email}()');
+    // print('START: streamNotificationCounter()');
+    // print('START: metadata.unreadNotificationCounter#${currUser.email}()');
     var exportedEmail = currUser.email!.replaceAll('.', 'DOT');
     var reqBase =
         db.collection('posts').where('metadata.${exportedEmail}_notifications', isNotEqualTo: 0);
