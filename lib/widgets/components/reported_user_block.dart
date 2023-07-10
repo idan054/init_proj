@@ -30,6 +30,7 @@ class ReportedUserBlock extends StatelessWidget {
     var reasonWhy = report.reasonWhy ?? '';
 
     return Card(
+      elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
       margin: const EdgeInsets.symmetric(vertical: 1.5),
       color: AppColors.primaryDark,

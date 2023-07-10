@@ -100,7 +100,8 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
       length: 2,
       initialIndex: 0,
       child: Scaffold(
-        backgroundColor: AppColors.primaryDark,
+        backgroundColor: AppColors.darkGrey,
+        // backgroundColor: AppColors.green,
         appBar: buildRiltopiaAppBar(
           context,
           isHomePage: false,
@@ -111,6 +112,8 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
                 borderSide: const BorderSide(width: 2.5, color: AppColors.errRed),
                 insets: 30.horizontal),
             labelStyle: AppStyles.text14PxRegular,
+            labelColor: AppColors.white,
+            unselectedLabelColor: AppColors.greyLight,
             indicatorColor: AppColors.primaryOriginal,
             tabs: const [
               Tab(text: 'Rils & Comments'),
@@ -189,25 +192,30 @@ Widget buildReportBlock(ReportModel report, bool isComment) {
   reportByTitle += 'Reported by ${report.reportedBy} ';
   reportByTitle += '(${report.reportStatus?.name}) ';
 
-  return Column(
-    children: [
-      const Divider(thickness: 2, color: AppColors.darkOutline),
-      reportByTitle
-          .toText(color: Colors.white30, fontSize: 12)
-          .centerLeft
-          .pOnly(top: 5, left: 15)
-          .pad(3)
-          .onTap(() {}, radius: 5),
-      // if (isComment)
-      //   'Go to original Ril (unavailable)'
-      //       .toText(color: Colors.white30, fontSize: 12)
-      //       .centerLeft
-      //       .pOnly(left: 15)
-      //       .pad(3)
-      //       .onTap(() {}, radius: 5),
-      report.reportedUser != null
-          ? ReportedUserBlock(report)
-          : PostBlock(report.reportedPost!, isReported: true)
-    ],
-  );
+  return Container(
+    color: AppColors.darkBg,
+    child: Column(
+      children: [
+        // const Divider(thickness: 2, color: AppColors.darkOutline),
+
+        // if (isComment)
+        //   'Go to original Ril (unavailable)'
+        //       .toText(color: Colors.white30, fontSize: 12)
+        //       .centerLeft
+        //       .pOnly(left: 15)
+        //       .pad(3)
+        //       .onTap(() {}, radius: 5),
+        report.reportedUser != null
+            ? ReportedUserBlock(report)
+            : PostBlock(report.reportedPost!, isReported: true),
+
+        reportByTitle
+            .toText(color: AppColors.white, fontSize: 12, underline:  true)
+            .centerLeft
+            .pOnly(top: 0, left: 15)
+            .pad(3)
+            .onTap(() {}, radius: 5).offset(0, -5),
+      ],
+    ),
+  ).py(7);
 }

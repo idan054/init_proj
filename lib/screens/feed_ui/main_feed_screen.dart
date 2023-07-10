@@ -163,7 +163,6 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
         // backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.grey50,
         appBar: buildRiltopiaAppBar(
           context,
-
           bottom: TabBar(
             controller: _tabController,
             indicator: UnderlineTabIndicator(
@@ -302,11 +301,16 @@ AppBar buildRiltopiaAppBar(
 }) {
   var currUser = context.uniProvider.currUser;
   bool isPreviewFilterChecked = HiveServices.uniBox.get('isPreviewFilterChecked') ?? false;
+  Widget backButton(VoidCallback onPressed) => IconButton(
+        onPressed: onPressed,
+        icon: Assets.svg.icons.arrowNarrowLeft.svg(color: AppColors.white),
+      );
 
   return AppBar(
     elevation: 2,
     // elevation: 0,
     backgroundColor: AppColors.primaryDark,
+    leading: isHomePage ? null : backButton(() async => await context.router.pop()),
     // backgroundColor: AppColors.darkBg,
     title: riltopiaHorizontalLogo(context, ratio: 1.15, isHomePage: isHomePage)
         .pOnly(bottom: 5, right: 5, left: 5, top: 5)
@@ -316,10 +320,10 @@ AppBar buildRiltopiaAppBar(
       //~ Report Screen
       if ((currUser.userType == UserTypes.admin) && isHomePage)
         CircleAvatar(
-            backgroundColor: AppColors.primaryLight2,
+            backgroundColor: AppColors.lightOutline50,
             radius: 14,
             child: Assets.svg.icons.flag03.svg(
-              color: AppColors.white,
+              color: AppColors.primaryOriginal,
               height: 15,
             )).pad(6).onTap(() {
           context.router.push(const AdminRoute());
@@ -334,7 +338,9 @@ AppBar buildRiltopiaAppBar(
                   radius: 14,
                   child: Assets.svg.icons.wisdomMultiLightStar
                       .svg(
-                        color: isPreviewFilterChecked ? AppColors.greyUnavailable : AppColors.primaryOriginal,
+                        color: isPreviewFilterChecked
+                            ? AppColors.greyUnavailable
+                            : AppColors.primaryOriginal,
                         height: 22,
                       )
                       .pad(6))

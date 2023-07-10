@@ -517,7 +517,8 @@ String postTime(DateTime time) {
     postAgo = '${postDiff.inHours}h';
   } else if (postDiff.inHours > 24) {
     // postAgo = intl.DateFormat('yMMMMEEEEd').format(post.timestamp!);
-    postAgo = intl.DateFormat('MMMM d, y').format(time);
+    // postAgo = intl.DateFormat('MMMM d, y').format(time);
+    postAgo = intl.DateFormat('MMM d, y').format(time);
   }
 
   return postAgo;
