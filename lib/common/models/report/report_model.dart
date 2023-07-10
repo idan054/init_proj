@@ -16,6 +16,7 @@ class ReportModel with _$ReportModel {
   @JsonSerializable(explicitToJson: true) // This needed for sub classes Only
   const factory ReportModel({
     @DateTimeStampConv() DateTime? timestamp,
+    String? id,
     String? reportedBy,
     String? reasonWhy,
     String? userName,

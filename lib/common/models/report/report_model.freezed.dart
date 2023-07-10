@@ -22,6 +22,7 @@ ReportModel _$ReportModelFromJson(Map<String, dynamic> json) {
 mixin _$ReportModel {
   @DateTimeStampConv()
   DateTime? get timestamp => throw _privateConstructorUsedError;
+  String? get id => throw _privateConstructorUsedError;
   String? get reportedBy => throw _privateConstructorUsedError;
   String? get reasonWhy => throw _privateConstructorUsedError;
   String? get userName => throw _privateConstructorUsedError;
@@ -44,6 +45,7 @@ abstract class $ReportModelCopyWith<$Res> {
   @useResult
   $Res call(
       {@DateTimeStampConv() DateTime? timestamp,
+      String? id,
       String? reportedBy,
       String? reasonWhy,
       String? userName,
@@ -70,6 +72,7 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
   @override
   $Res call({
     Object? timestamp = freezed,
+    Object? id = freezed,
     Object? reportedBy = freezed,
     Object? reasonWhy = freezed,
     Object? userName = freezed,
@@ -83,6 +86,10 @@ class _$ReportModelCopyWithImpl<$Res, $Val extends ReportModel>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       reportedBy: freezed == reportedBy
           ? _value.reportedBy
           : reportedBy // ignore: cast_nullable_to_non_nullable
@@ -149,6 +156,7 @@ abstract class _$$_ReportModelCopyWith<$Res>
   @useResult
   $Res call(
       {@DateTimeStampConv() DateTime? timestamp,
+      String? id,
       String? reportedBy,
       String? reasonWhy,
       String? userName,
@@ -175,6 +183,7 @@ class __$$_ReportModelCopyWithImpl<$Res>
   @override
   $Res call({
     Object? timestamp = freezed,
+    Object? id = freezed,
     Object? reportedBy = freezed,
     Object? reasonWhy = freezed,
     Object? userName = freezed,
@@ -188,6 +197,10 @@ class __$$_ReportModelCopyWithImpl<$Res>
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String?,
       reportedBy: freezed == reportedBy
           ? _value.reportedBy
           : reportedBy // ignore: cast_nullable_to_non_nullable
@@ -226,6 +239,7 @@ class __$$_ReportModelCopyWithImpl<$Res>
 class _$_ReportModel implements _ReportModel {
   const _$_ReportModel(
       {@DateTimeStampConv() this.timestamp,
+      this.id,
       this.reportedBy,
       this.reasonWhy,
       this.userName,
@@ -240,6 +254,8 @@ class _$_ReportModel implements _ReportModel {
   @override
   @DateTimeStampConv()
   final DateTime? timestamp;
+  @override
+  final String? id;
   @override
   final String? reportedBy;
   @override
@@ -257,7 +273,7 @@ class _$_ReportModel implements _ReportModel {
 
   @override
   String toString() {
-    return 'ReportModel(timestamp: $timestamp, reportedBy: $reportedBy, reasonWhy: $reasonWhy, userName: $userName, reportStatus: $reportStatus, reportType: $reportType, reportedPost: $reportedPost, reportedUser: $reportedUser)';
+    return 'ReportModel(timestamp: $timestamp, id: $id, reportedBy: $reportedBy, reasonWhy: $reasonWhy, userName: $userName, reportStatus: $reportStatus, reportType: $reportType, reportedPost: $reportedPost, reportedUser: $reportedUser)';
   }
 
   @override
@@ -267,6 +283,7 @@ class _$_ReportModel implements _ReportModel {
             other is _$_ReportModel &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.reportedBy, reportedBy) ||
                 other.reportedBy == reportedBy) &&
             (identical(other.reasonWhy, reasonWhy) ||
@@ -285,8 +302,17 @@ class _$_ReportModel implements _ReportModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, timestamp, reportedBy, reasonWhy,
-      userName, reportStatus, reportType, reportedPost, reportedUser);
+  int get hashCode => Object.hash(
+      runtimeType,
+      timestamp,
+      id,
+      reportedBy,
+      reasonWhy,
+      userName,
+      reportStatus,
+      reportType,
+      reportedPost,
+      reportedUser);
 
   @JsonKey(ignore: true)
   @override
@@ -305,6 +331,7 @@ class _$_ReportModel implements _ReportModel {
 abstract class _ReportModel implements ReportModel {
   const factory _ReportModel(
       {@DateTimeStampConv() final DateTime? timestamp,
+      final String? id,
       final String? reportedBy,
       final String? reasonWhy,
       final String? userName,
@@ -319,6 +346,8 @@ abstract class _ReportModel implements ReportModel {
   @override
   @DateTimeStampConv()
   DateTime? get timestamp;
+  @override
+  String? get id;
   @override
   String? get reportedBy;
   @override

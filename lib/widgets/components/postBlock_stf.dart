@@ -41,11 +41,10 @@ import 'package:intl/intl.dart' as intl;
 
 class PostBlock extends StatefulWidget {
   final PostModel post;
+  final ReportModel? report;
   final bool isUserPage;
-  final bool isReported;
 
-  const PostBlock(this.post, {this.isUserPage = false, this.isReported = false, Key? key})
-      : super(key: key);
+  const PostBlock(this.post, {this.report, this.isUserPage = false, Key? key}) : super(key: key);
 
   @override
   State<PostBlock> createState() => _PostBlockState();
@@ -65,7 +64,7 @@ class _PostBlockState extends State<PostBlock> {
       color: AppColors.primaryDark,
       child: buildPostBody(context, widget.isUserPage).pOnly(left: 15),
     ).onTap(
-        widget.isReported && widget.post.originalPostId != null // AKA comment
+        widget.report != null && widget.post.originalPostId != null // AKA comment
             ? null
             : widget.post.enableComments
                 ? () {
@@ -188,11 +187,11 @@ class _PostBlockState extends State<PostBlock> {
           color: AppColors.lightOutline50,
           itemBuilder: (context) {
             return [
-              if (widget.isReported)
+              if (widget.report != null)
                 PopupMenuItem(
                   child: 'Cancel Report'.toText(),
                   onTap: () async {
-                    reportRilOrCommentPopup(context, widget.post, isReported: true);
+                    reportRilOrCommentPopup(context, widget.post, report: widget.report);
                   },
                 ),
               PopupMenuItem(
@@ -206,12 +205,12 @@ class _PostBlockState extends State<PostBlock> {
                     //> Open DELETE POPUP
                     ? () {
                         print('SETTINGS DELETE CLICKED');
-                        deleteRilOrCommentPopup(context, widget.post);
+                        deleteRilOrCommentPopup(context, widget.post, report: widget.report);
                       }
                     //> Open Report POPUP
                     : () async {
                         print('SETTINGS REPORT CLICKED');
-                        reportRilOrCommentPopup(context, widget.post);
+                        reportRilOrCommentPopup(context, widget.post, report: widget.report);
                       },
               ),
             ];
@@ -261,7 +260,7 @@ class _PostBlockState extends State<PostBlock> {
         isConversation
             ? _buildCommentsCounter(commentEmpty, title, buttonColor).py(6)
             : const SizedBox(height: 0),
-        if (isComment && widget.isReported) buildOriginalPostButton(buttonColor),
+        if (isComment && widget.report != null) buildOriginalPostButton(buttonColor),
         // if(isConversation)
         const Spacer(),
         isConversation
@@ -369,7 +368,8 @@ class _PostBlockState extends State<PostBlock> {
   }
 }
 
-void reportRilOrCommentPopup(BuildContext context, PostModel post, {bool isReported = false}) {
+void reportRilOrCommentPopup(BuildContext context, PostModel post, {ReportModel? report}) {
+  final isReported = report != null;
   var isCommentPost = post.originalPostId != null;
   var type = isCommentPost ? 'Comment' : 'Ril';
 
@@ -381,26 +381,31 @@ void reportRilOrCommentPopup(BuildContext context, PostModel post, {bool isRepor
         // showCancelBtn: !isReported,
         secondaryBtn: TextButton(
             onPressed: () {
-              var nameEndAt = post.textContent.length < 20 ? post.textContent.length : 20;
-              var docName = 'REPORT:'
-                  '${post.textContent.substring(0, nameEndAt).toString() + UniqueKey().toString()}';
+              if (isReported) {
+                Database.deleteDoc(collection: 'reports/Reported rils/rils', docName: report.id);
+              } else {
+                var nameEndAt = post.textContent.length < 20 ? post.textContent.length : 20;
+                var docName = 'REPORT:'
+                    '${post.textContent.substring(0, nameEndAt).toString() + UniqueKey().toString()}';
 
-              var postReport = ReportModel(
-                timestamp: DateTime.now(),
-                reportedBy: context.uniProvider.currUser.name,
-                reportedPost: post,
-                // reportedUser: user,
-                // reasonWhy: reasonController.text,
-                reportStatus: isReported ? ReportStatus.completedReport : ReportStatus.newReport,
-                reportType: isCommentPost
-                    ? ReportType.comment
-                    : (post.enableComments ? ReportType.conversation : ReportType.ril),
-              );
+                var postReport = ReportModel(
+                  id: docName,
+                  timestamp: DateTime.now(),
+                  reportedBy: context.uniProvider.currUser.name,
+                  reportedPost: post,
+                  // reportedUser: user,
+                  // reasonWhy: reasonController.text,
+                  reportStatus: isReported ? ReportStatus.completedReport : ReportStatus.newReport,
+                  reportType: isCommentPost
+                      ? ReportType.comment
+                      : (post.enableComments ? ReportType.conversation : ReportType.ril),
+                );
 
-              Database.updateFirestore(
-                  collection: 'reports/Reported rils/rils',
-                  docName: docName,
-                  toJson: postReport.toJson());
+                Database.updateFirestore(
+                    collection: 'reports/Reported rils/rils',
+                    docName: docName,
+                    toJson: postReport.toJson());
+              }
 
               Navigator.of(context).pop();
               if (isReported) {
@@ -414,7 +419,12 @@ void reportRilOrCommentPopup(BuildContext context, PostModel post, {bool isRepor
   });
 }
 
-void deleteRilOrCommentPopup(BuildContext context, PostModel post, {Function? onDelete}) {
+void deleteRilOrCommentPopup(
+  BuildContext context,
+  PostModel post, {
+  ReportModel? report,
+  Function? onDelete,
+}) {
   var myPost = post.creatorUser?.uid == context.uniProvider.currUser.uid;
   var isCommentPost = post.originalPostId != null;
   var type = isCommentPost ? 'Comment' : 'Ril';
@@ -427,6 +437,9 @@ void deleteRilOrCommentPopup(BuildContext context, PostModel post, {Function? on
         barrierDismissible: true,
         secondaryBtn: TextButton(
             onPressed: () {
+              if (report != null) {
+                Database.deleteDoc(collection: 'reports/Reported rils/rils', docName: report.id);
+              }
               if (isCommentPost) {
                 Database.deleteDoc(
                     collection: 'posts', docName: '${post.originalPostId}/comments/${post.id}');

@@ -100,6 +100,10 @@ class $AssetsImagesGen {
   AssetGenImage get rilCleanIcon =>
       const AssetGenImage('assets/images/ril-clean-icon.png');
 
+  /// File path: assets/images/squresBg-original.png
+  AssetGenImage get squresBgOriginal =>
+      const AssetGenImage('assets/images/squresBg-original.png');
+
   /// File path: assets/images/squresBg.png
   AssetGenImage get squresBg =>
       const AssetGenImage('assets/images/squresBg.png');
@@ -127,6 +131,7 @@ class $AssetsImagesGen {
         mapPlaceholder,
         onboardingNewBanner,
         rilCleanIcon,
+        squresBgOriginal,
         squresBg,
         whiteLogo
       ];
@@ -357,6 +362,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get iconClose =>
       const SvgGenImage('assets/svg/icons/Icon-close.svg');
 
+  /// File path: assets/svg/icons/Icon-send-Button-original.svg
+  SvgGenImage get iconSendButtonOriginal =>
+      const SvgGenImage('assets/svg/icons/Icon-send-Button-original.svg');
+
   /// File path: assets/svg/icons/Icon-send-Button.svg
   SvgGenImage get iconSendButton =>
       const SvgGenImage('assets/svg/icons/Icon-send-Button.svg');
@@ -502,6 +511,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get settings01 =>
       const SvgGenImage('assets/svg/icons/settings-01.svg');
 
+  /// File path: assets/svg/icons/share-arrow-wide-outline.svg
+  SvgGenImage get shareArrowWideOutline =>
+      const SvgGenImage('assets/svg/icons/share-arrow-wide-outline.svg');
+
   /// File path: assets/svg/icons/share-arrow-wide.svg
   SvgGenImage get shareArrowWide =>
       const SvgGenImage('assets/svg/icons/share-arrow-wide.svg');
@@ -528,6 +541,7 @@ class $AssetsSvgIconsGen {
   /// List of all assets
   List<SvgGenImage> get values => [
         iconClose,
+        iconSendButtonOriginal,
         iconSendButton,
         riltopiaIcon,
         appleLogoSvgrepoCom,
@@ -565,6 +579,7 @@ class $AssetsSvgIconsGen {
         plusAddUntitledIcon,
         refreshArrows,
         settings01,
+        shareArrowWideOutline,
         shareArrowWide,
         shareClassicUntitledIcon,
         shieldTickUntitledIcon,

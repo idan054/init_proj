@@ -92,7 +92,7 @@ Widget buildFeed(
                         ] else if (feedType == FeedTypes.reports && reportList != null) ...[
                           buildReportBlock(reportList[i], isComment)
                         ] else ...[
-                          PostBlock(postList[i], isReported: reportList != null),
+                          PostBlock(postList[i], report: reportList?.first),
                         ],
                       ]);
                     }).appearOpacity,

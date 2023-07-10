@@ -10,6 +10,7 @@ _$_ReportModel _$$_ReportModelFromJson(Map<String, dynamic> json) =>
     _$_ReportModel(
       timestamp:
           const DateTimeStampConv().fromJson(json['timestamp'] as Timestamp?),
+      id: json['id'] as String?,
       reportedBy: json['reportedBy'] as String?,
       reasonWhy: json['reasonWhy'] as String?,
       userName: json['userName'] as String?,
@@ -27,6 +28,7 @@ _$_ReportModel _$$_ReportModelFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_ReportModelToJson(_$_ReportModel instance) =>
     <String, dynamic>{
       'timestamp': const DateTimeStampConv().toJson(instance.timestamp),
+      'id': instance.id,
       'reportedBy': instance.reportedBy,
       'reasonWhy': instance.reasonWhy,
       'userName': instance.userName,

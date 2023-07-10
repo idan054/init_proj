@@ -370,15 +370,16 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
       ).px(15).py(10).onTap(() async {
         if (isCurrUserComment || isCurrUserAdmin) {
           print('COMMENT DELETE LONG CLICKED');
-          deleteRilOrCommentPopup(context, comment, onDelete: () {
-            comments.remove(comment);
-            setState(() {});
-          });
-        } else {
-          reportRilOrCommentPopup(
+          deleteRilOrCommentPopup(
             context,
             comment,
+            onDelete: () {
+              comments.remove(comment);
+              setState(() {});
+            },
           );
+        } else {
+          reportRilOrCommentPopup(context, comment);
         }
       }, onLongPress: true, radius: 10);
     });

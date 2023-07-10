@@ -439,7 +439,7 @@ Widget profileCircle(BuildContext context) {
             child: ListTile(
                     contentPadding: EdgeInsets.zero,
                     horizontalTitleGap: 0,
-                    title: 'Whats new?'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
+                    title: 'Whats new? V${context.uniProvider.localConfig.publicVersionAndroid}'.toText(fontSize: 14, medium: true, color: AppColors.grey50),
                     leading: Assets.svg.icons.wisdomLightStar.svg(color: AppColors.grey50))
                 .pad(0)
                 .onTap(() {

@@ -207,7 +207,7 @@ Widget buildReportBlock(ReportModel report, bool isComment) {
         //       .onTap(() {}, radius: 5),
         report.reportedUser != null
             ? ReportedUserBlock(report)
-            : PostBlock(report.reportedPost!, isReported: true),
+            : PostBlock(report.reportedPost!, report: report),
 
         reportByTitle
             .toText(color: AppColors.white, fontSize: 12, underline:  true)
