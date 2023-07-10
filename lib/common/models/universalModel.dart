@@ -1,4 +1,5 @@
 import 'package:example/common/models/appConfig/app_config_model.dart';
+
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
@@ -6,6 +7,8 @@ import 'dart:io' show Platform;
 import '../service/Database/firebase_db.dart';
 import 'chat/chat_model.dart';
 import 'package:flutter/foundation.dart';
+
+import 'feedFilterModel/sort_feed_model.dart';
 
 // class OnBoardingProvider with ChangeNotifier {
 //
@@ -25,7 +28,10 @@ class UniProvider with ChangeNotifier {
   AppConfigModel? serverConfig;
   UserModel currUser = const UserModel();
   bool showFab = true;
+
   FilterTypes currFilter = FilterTypes.postWithoutComments;
+  FilterTypes? currFilterTemp;
+
   FeedTypes feedType = FeedTypes.members;
   bool isLoading = false;
   bool signupErrFound = false;
@@ -33,7 +39,6 @@ class UniProvider with ChangeNotifier {
   String? selectedTag = 'New'; // When filters will be in use
   ChatModel? activeChat; // Need to reset unread chat counter
   List<ChatModel> chatList = [];
-  List<String?>? onlineUsers = []; // Email users list based online_service.dart
   List<UserModel> fetchedUsers = []; // To get most updated user info.
   List<PostModel> fetchedPosts = []; // To update each post notification
 
@@ -44,11 +49,6 @@ class UniProvider with ChangeNotifier {
 
   void fetchedUsersUpdate(List<UserModel> data, {bool notify = true}) {
     fetchedUsers = data;
-    if (notify) notifyListeners();
-  }
-
-  void onlineUsersUpdate(List<String?>? data, {bool notify = true}) {
-    onlineUsers = data;
     if (notify) notifyListeners();
   }
 
@@ -70,6 +70,11 @@ class UniProvider with ChangeNotifier {
 
   void currFilterUpdate(FilterTypes data, {bool notify = true}) {
     currFilter = data;
+    if (notify) notifyListeners();
+  }
+
+  void currFilterTempUpdate(FilterTypes data, {bool notify = true}) {
+    currFilterTemp = data;
     if (notify) notifyListeners();
   }
 

@@ -552,6 +552,22 @@ class $AssetsSvgIconsGen {
   SvgGenImage get shieldTickUntitledIcon =>
       const SvgGenImage('assets/svg/icons/shieldTick-untitled-icon.svg');
 
+  /// File path: assets/svg/icons/sort-by-age.svg
+  SvgGenImage get sortByAge =>
+      const SvgGenImage('assets/svg/icons/sort-by-age.svg');
+
+  /// File path: assets/svg/icons/sort-by-default.svg
+  SvgGenImage get sortByDefault =>
+      const SvgGenImage('assets/svg/icons/sort-by-default.svg');
+
+  /// File path: assets/svg/icons/sort-by-location.svg
+  SvgGenImage get sortByLocation =>
+      const SvgGenImage('assets/svg/icons/sort-by-location.svg');
+
+  /// File path: assets/svg/icons/sort-by-topic.svg
+  SvgGenImage get sortByTopic =>
+      const SvgGenImage('assets/svg/icons/sort-by-topic.svg');
+
   /// File path: assets/svg/icons/trash-03.svg
   SvgGenImage get trash03 => const SvgGenImage('assets/svg/icons/trash-03.svg');
 
@@ -613,6 +629,10 @@ class $AssetsSvgIconsGen {
         shareArrowWide,
         shareClassicUntitledIcon,
         shieldTickUntitledIcon,
+        sortByAge,
+        sortByDefault,
+        sortByLocation,
+        sortByTopic,
         trash03,
         wisdomMultiLightStar,
         wisdomLightStar

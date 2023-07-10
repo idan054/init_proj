@@ -126,8 +126,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
 
     //~ Only at refresh
     if (refresh) {
-      OnlineService.updateOnlineUsersStatus(context);
-
+      context.uniProvider.fetchedUsers = [];
       splashLoader = true;
       postList = [];
       // if (mounted)
@@ -488,7 +487,7 @@ Widget profileCircle(BuildContext context) {
                 .pad(0)
                 .onTap(() async {
               // var isAppleLogin = context.uniProvider.currUser.email!.contains('apple');
-              OnlineService.setUserOffline(context);
+              OnlineService.setUserOnlineStatus(context, isOnline: false);
               PushNotificationService.updateFcmToken(context, '');
               await AuthService.auth.signOut();
               await FirebaseAuth.instance.signOut();

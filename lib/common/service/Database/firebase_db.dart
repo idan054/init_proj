@@ -13,19 +13,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'db_advanced.dart';
 
-enum FeedTypes { members, conversations, reports, notifications }
+enum FeedTypes {
+  members,
+  conversations,
+  reports,
+  notifications,
+}
 
+// Mostly post filters
 enum FilterTypes {
   postsByUser, //> User Screen
   conversationsPostByUser, //> User Screen
+  sortByOldestComments,
   notificationsPostByUser, //? Notifications Screen
-  postWithoutComments, //~ Home Screen
-  postWithComments, //~ Home Screen
   reportedUsers, //! Admin Screen
   reportedRils, //! Admin Screen
-  sortByOldestComments,
+  postWithComments, //~ Home Screen
+  postWithoutComments, //~ Home Screen
 
-  /// Comments Screen
+  /// Main Feed
+  sortFeedByDefault,
+  sortFeedByLocation,
+  sortFeedByTopics,
+  sortFeedByAge,
 }
 
 //> MUST Be same as collection name!
@@ -198,10 +208,12 @@ class Database {
         var post = PostModel.fromJson(doc.data());
         post = post.copyWith(notificationsCounter: postNotificationsCount);
 
-        var fetchedPost = context.uniProvider.fetchedPosts.firstWhereOrNull((post) => post.id == post.id);
+        var fetchedPost =
+            context.uniProvider.fetchedPosts.firstWhereOrNull((post) => post.id == post.id);
         context.uniProvider.fetchedPostsUpdate([post, ...fetchedPosts]);
       }
-      context.uniProvider.currUserUpdate(currUser.copyWith(unreadNotificationCounter: overallNotificationsCount));
+      context.uniProvider
+          .currUserUpdate(currUser.copyWith(unreadNotificationCounter: overallNotificationsCount));
 
       return overallNotificationsCount;
     }).handleError((dynamic e) {

@@ -58,7 +58,6 @@ class _DashboardScreenState extends State<DashboardScreen>
   void initState() {
     PushNotificationService.requestPermission();
     DynamicLinkService.initDynamicLinks(context);
-    OnlineService.updateOnlineUsersStatus(context, timerCheck: true);
 
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;

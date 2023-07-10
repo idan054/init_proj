@@ -464,9 +464,10 @@ void deleteRilOrCommentPopup(
 }
 
 Widget buildOnlineBadge(BuildContext context, UserModel user, {double ratio = 1.0}) {
-  var isOnline = user.email == context.uniProvider.currUser.email ||
-      (context.uniProvider.onlineUsers ?? []).contains(user.email ?? '');
-  return isOnline
+  // var isOnline = user.uid == context.uniProvider.currUser.uid ||
+  //     (context.uniProvider.onlineUsers ?? []).contains(user.email ?? '');
+
+  return user.isOnline
       ? Positioned(
           bottom: 0,
           right: 0,

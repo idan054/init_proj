@@ -42,14 +42,14 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
     if (appState == AppLifecycleState.resumed) {
       print('START: onAppResumed()');
-      OnlineService.setUserOnline(context);
+      OnlineService.setUserOnlineStatus(context, isOnline: true);
     }
     if (
         //  appState == AppLifecycleState.inactive ||
         //  appState == AppLifecycleState.detached ||
         appState == AppLifecycleState.paused) {
       print('START: onAppPaused()');
-      OnlineService.setUserOffline(context);
+      OnlineService.setUserOnlineStatus(context, isOnline: false);
     }
   }
 

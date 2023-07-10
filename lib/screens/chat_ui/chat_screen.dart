@@ -59,7 +59,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     post = widget.postReply;
-    _loadOlderMessages().then((_) => messages.remove(messages.first));
+    _loadOlderMessages().then(
+      (_) => messages.isEmpty ? null : messages.remove(messages.first),
+    );
     super.initState();
   }
 
@@ -290,9 +292,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
                               return Text(time,
                                   style: AppStyles.text10PxRegular.copyWith(
-                                      color: currUser
-                                          ? AppColors.darkGrey
-                                          : AppColors.greyLight));
+                                      color: currUser ? AppColors.darkGrey : AppColors.greyLight));
                             })
                           ],
                         ))).px(6).pOnly(

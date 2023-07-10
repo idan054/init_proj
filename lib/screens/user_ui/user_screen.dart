@@ -61,6 +61,7 @@ class _UserScreenState extends State<UserScreen> {
     print('START: initState()');
     isBlocked = widget.user.userType == UserTypes.blocked ||
         context.uniProvider.currUser.blockedUsers.contains(widget.user.uid);
+    context.uniProvider.fetchedUsers.remove(widget.user); // No rebuild
     _loadMore(refresh: true);
     super.initState();
   }
@@ -420,7 +421,8 @@ class _UserScreenState extends State<UserScreen> {
                       if (user.userType == UserTypes.admin) ...[
                         12.horizontalSpace,
                         buildRilChip('Admin',
-                            icon: Assets.svg.icons.riltopiaIcon.svg(color: AppColors.greyLight, height: 16)),
+                            icon: Assets.svg.icons.riltopiaIcon
+                                .svg(color: AppColors.greyLight, height: 16)),
                       ],
                       user.tags.isEmpty
                           ? const Offstage()
@@ -446,7 +448,9 @@ class _UserScreenState extends State<UserScreen> {
                         // 🚹 🚺 👩👨 💁‍♀️💁‍♂️
                         var genderTitle = isOther ? '🏳️‍🌈 other' : '${user.gender?.name}';
                         return buildRilChip(genderTitle,
-                            icon: isOther ? null : Assets.svg.icons.manProfile.svg(color: AppColors.greyLight));
+                            icon: isOther
+                                ? null
+                                : Assets.svg.icons.manProfile.svg(color: AppColors.greyLight));
                       }),
                       12.horizontalSpace,
                       buildRilChip('${user.age} y.o',
@@ -493,8 +497,7 @@ class _UserScreenState extends State<UserScreen> {
                       foregroundColor: AppColors.darkOutline,
                       shape: 99.roundedShape,
                     ),
-                    icon: Assets.svg.icons.dmPlaneUntitledIcon
-                        .svg(height: 17, color: color),
+                    icon: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: color),
                     label: 'Reply bio'.toText(fontSize: 13, color: color, bold: true),
                     onPressed: () {
                       // TODO LATER LIST: Add Reply bio action
@@ -637,4 +640,25 @@ ExpandableText buildExpandableText(
       style: style ?? AppStyles.text14PxRegular.copyWith(color: AppColors.grey50));
 }
 
-const invertMatrix = <double>[-1, 0, 0, 0, 255, 0, -1, 0, 0, 255, 0, 0, -1, 0, 255, 0, 0, 0, 1, 0,];
+const invertMatrix = <double>[
+  -1,
+  0,
+  0,
+  0,
+  255,
+  0,
+  -1,
+  0,
+  0,
+  255,
+  0,
+  0,
+  -1,
+  0,
+  255,
+  0,
+  0,
+  0,
+  1,
+  0,
+];

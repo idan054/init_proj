@@ -8,6 +8,8 @@ import '../../../screens/main_ui/admin_screen.dart';
 import '../../../screens/main_ui/notification_screen.dart';
 import 'package:flutter/material.dart';
 
+import 'bottom_sort_sheet.dart';
+
 Widget basicLoader() =>
     const CircularProgressIndicator(color: AppColors.primaryOriginal, strokeWidth: 6).center;
 
@@ -22,19 +24,28 @@ Widget buildFeedSort(BuildContext context, FeedTypes feedType) {
       // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
       title: Row(
         children: [
-           Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.yellowAlert, height: 20),
+          Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.yellowAlert, height: 20),
           const SizedBox(width: 7),
           'Sort Rils by '.toText(fontSize: 13, color: AppColors.greyLight).pOnly(top: 3),
-          'Default'.toText(bold: true, fontSize: 13, color: AppColors.white).pOnly(top: 3)
+          (context.uniProvider.currFilterTemp?.name ?? 'Default')
+              .replaceAll('sortFeedBy', '')
+              .toText(bold: true, fontSize: 13, color: AppColors.white)
+              .pOnly(top: 3)
         ],
       ).pOnly(bottom: isNewRilsTab ? 5 : 0),
       trailing: Assets.svg.icons.changeSortArrows
           .svg(color: AppColors.greyLight, height: 24)
           .pad(15)
           .onTap(
-            () {},
-            radius: 5,
-          )
+        () {
+          showModalBottomSheet(
+            backgroundColor: AppColors.transparent,
+            context: context,
+            builder: (BuildContext context) => const BottomSortSheet(),
+          );
+        },
+        radius: 5,
+      )
       // subtitle: newTags[tagIndex].toUpperCase().toText(fontSize: 18, medium: true).appearAll,
       ).pOnly(bottom: 5, top: 15);
 }

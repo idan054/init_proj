@@ -67,11 +67,7 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     if (mounted) setState(() {});
     if (refresh) chatList = [];
     var updatedList = <ChatModel>[
-      ...await Database.advanced.handleGetModel(
-        context,
-        ModelTypes.chats,
-        chatList,
-      )
+      ...await Database.advanced.handleGetModel(context, ModelTypes.chats, chatList)
     ];
     if (updatedList.isNotEmpty) chatList = updatedList;
     // initLoader = false;
