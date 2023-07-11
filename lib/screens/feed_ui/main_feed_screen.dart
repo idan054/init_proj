@@ -496,10 +496,10 @@ Widget profileCircle(BuildContext context) {
             }, radius: 5),
           ),
           Builder(builder: (context) {
-            var patchVer = context.uniProvider.localConfig.currentPatchNumber ?? '(Debug)';
-            if (patchVer != '(Debug)') patchVer = '+ $patchVer';
+            var patchVer = context.uniProvider.localConfig.currentPatchNumber.toString().replaceAll(' ', '') ?? '(Debug)';
+            if (patchVer != '(Debug)') patchVer = '+$patchVer';
             return 'Version: ${context.uniProvider.localConfig.publicVersionAndroid}'
-                    ' $patchVer'
+                    '$patchVer'
                 .toText(fontSize: 12, color: AppColors.grey50)
                 .pOnly(top: 10)
                 .centerLeft;

@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:rive/rive.dart';
 
 import '../../../common/models/post/post_model.dart';
 import '../../../common/models/report/report_model.dart';
 import '../../../common/service/Database/firebase_db.dart';
+import '../../../common/service/mixins/assets.gen.dart';
 import '../../../common/themes/app_colors_inverted.dart';
 import '../../../screens/feed_ui/main_feed_screen.dart';
 import '../../../screens/main_ui/admin_screen.dart';
@@ -28,7 +30,33 @@ Widget buildFeed(
 }) {
   // print('START: buildFeed() - ${feedType.name}');
 
-  if (splashLoader) return basicLoader();
+  // if (splashLoader) return basicLoader();
+  if (splashLoader) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TweenAnimationBuilder(
+            duration: 1.seconds,
+            tween: Tween<double>(begin: 0, end: 1),
+            builder: (BuildContext context, double value, Widget? child) {
+              return Stack(
+                children: [
+                  Container(
+                          color: AppColors.primaryOriginal.withOpacity(value),
+                          height: 80,
+                          width: 80,
+                          padding: 5.all,
+                          child:
+                              RiveAnimation.asset('assets/riv/rilmanblackwhitefaster.riv').offset(0, 5))
+                      .roundedFull,
+                  Assets.images.circleCover.image(fit: BoxFit.fill).sizedBox(80, 80),
+                ],
+              );
+            }),
+      ],
+    );
+  }
+
   if (postList.isEmpty) {
     return 'New notifications will appear here'.toText(color: AppColors.grey50).center;
   }

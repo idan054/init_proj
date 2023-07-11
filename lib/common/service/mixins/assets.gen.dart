@@ -560,6 +560,14 @@ class $AssetsSvgIconsGen {
   SvgGenImage get sortByAge =>
       const SvgGenImage('assets/svg/icons/sort-by-age.svg');
 
+  /// File path: assets/svg/icons/sort-by-default-clock-solid.svg
+  SvgGenImage get sortByDefaultClockSolid =>
+      const SvgGenImage('assets/svg/icons/sort-by-default-clock-solid.svg');
+
+  /// File path: assets/svg/icons/sort-by-default-clock.svg
+  SvgGenImage get sortByDefaultClock =>
+      const SvgGenImage('assets/svg/icons/sort-by-default-clock.svg');
+
   /// File path: assets/svg/icons/sort-by-default-solid.svg
   SvgGenImage get sortByDefaultSolid =>
       const SvgGenImage('assets/svg/icons/sort-by-default-solid.svg');
@@ -647,6 +655,8 @@ class $AssetsSvgIconsGen {
         shieldTickUntitledIcon,
         sortByAgeSolid,
         sortByAge,
+        sortByDefaultClockSolid,
+        sortByDefaultClock,
         sortByDefaultSolid,
         sortByDefault,
         sortByLocationSolid,

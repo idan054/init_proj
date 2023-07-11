@@ -71,8 +71,8 @@ mixin SplashScreenStateMixin<T extends StatefulWidget> on State<T> implements Ti
               Container(
                       alignment: Alignment.center,
                       // constraints: const BoxConstraints.expand(),
-                      width: 170 * ratio,
-                      height: 170 * ratio,
+                      width: 165 * ratio,
+                      height: 165 * ratio,
                       // color: colorAnimation.value,
                       color: AppColors.primaryOriginal,
                       // child: const RiveAnimation.asset('assets/riv/rilManBlackWhite.riv')
@@ -81,8 +81,8 @@ mixin SplashScreenStateMixin<T extends StatefulWidget> on State<T> implements Ti
                           // .offset(0, 10)
               )
                   .rounded(radius: radius),
-              30.verticalSpace,
-              if(showText)'Riltopia'.toText(fontSize: 30)
+              20.verticalSpace,
+              if(showText)'Riltopia'.toText(fontSize: 33, bold: true)
             ],
           ).center,
           AnimatedBuilder(
