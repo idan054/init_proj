@@ -36,7 +36,12 @@ Widget buildFeedSort(
           // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
           title: Row(
             children: [
-              currfilter.solidSvg.svg(color: AppColors.yellowAlert, height: 20),
+              Stack(
+                children: [
+                  currfilter.solidSvg.svg(color: AppColors.yellowAlert, height: 20),
+                  if(currfilter.type == FilterTypes.sortFeedByIsOnline) buildUserCircleOnline(true),
+                ],
+              ),
               const SizedBox(width: 7),
               'Sort Rils by '.toText(fontSize: 13, color: AppColors.greyLight).pOnly(top: 3),
               currfilter.title

@@ -86,7 +86,7 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
             selectedFeedSort.desc.toText(fontSize: 14, color: AppColors.greyLight),
             10.verticalSpace,
             buildRadioItem(sortByDefault),
-            buildRadioItem(sortByLocation, isActive: false),
+            buildRadioItem(sortByLocation),
             buildRadioItem(sortByTopic),
             buildRadioItem(sortByAge),
             buildRadioItem(sortByIsOnline, isActive: false),
@@ -134,7 +134,7 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
                 : AppColors.darkOutline50,
             height: 22,
           ),
-          if (filter.type == FilterTypes.sortFeedByIsOnline) _buildIconOnlineBadge(isActive),
+          if (filter.type == FilterTypes.sortFeedByIsOnline) buildUserCircleOnline(isActive),
         ],
       ),
       trailing: Radio(
@@ -146,15 +146,17 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
       ).scale(scale: 1.15),
     );
   }
+}
 
-  Positioned _buildIconOnlineBadge(bool isActive) {
-    return Positioned(
-        top: -2,
-        right: -2,
-        child: CircleAvatar(
-            radius: 6,
-            backgroundColor: AppColors.darkBg,
-            child: Opacity(
-                opacity: isActive ? 1.0 : 0.35, child: const BlinkingOnlineBadge(ratio: 1))));
-  }
+//~Main widget is buildOnlineBadge()
+// This Used only for userCircleSolid user-circle ICON
+Positioned buildUserCircleOnline(bool isActive) {
+  return Positioned(
+      top: -2,
+      right: -2,
+      child: CircleAvatar(
+          radius: 6,
+          backgroundColor: AppColors.darkBg,
+          child:
+              Opacity(opacity: isActive ? 1.0 : 0.35, child: const BlinkingOnlineBadge(ratio: 1))));
 }

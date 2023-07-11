@@ -93,6 +93,7 @@ dependencies:
   in_app_review: ^2.0.6
   shorebird_code_push: ^1.0.0
   firebase_analytics: ^10.4.3
+  geoflutterfire2: ^2.3.15
 
 #  apple_sign_in: ^0.1.0
 #  google_mobile_ads: ^2.3.0
