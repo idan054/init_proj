@@ -34,6 +34,7 @@ const _$FilterTypesEnumMap = {
   FilterTypes.postWithComments: 'postWithComments',
   FilterTypes.postWithoutComments: 'postWithoutComments',
   FilterTypes.sortFeedByDefault: 'sortFeedByDefault',
+  FilterTypes.sortFeedByIsOnline: 'sortFeedByIsOnline',
   FilterTypes.sortFeedByLocation: 'sortFeedByLocation',
   FilterTypes.sortFeedByTopics: 'sortFeedByTopics',
   FilterTypes.sortFeedByAge: 'sortFeedByAge',

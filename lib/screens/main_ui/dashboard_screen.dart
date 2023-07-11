@@ -35,6 +35,23 @@ import 'dart:io' show Platform;
 import 'package:rive_splash_screen/rive_splash_screen.dart';
 import 'notification_screen.dart';
 
+import 'package:camera/camera.dart';
+import 'package:example/common/extensions/color_printer.dart';
+import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/delete_me.dart';
+import 'package:example/screens/main_ui/splash_screen.dart' as click;
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+
 enum TabItems { home, notificationScreen, dmScreen }
 
 class DashboardScreen extends StatefulWidget {
@@ -62,6 +79,13 @@ class _DashboardScreenState extends State<DashboardScreen>
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;
     WidgetsBinding.instance.addPostFrameCallback((_) {
+
+      // BETA TEST:
+      FirebaseAnalytics.instance.setCurrentScreen(
+        screenName: 'Dashboard',
+        screenClassOverride: 'DashboardScreen()',
+      );
+
       checkForUpdate(context, localConfig, serverConfig!);
     });
 
@@ -150,23 +174,24 @@ class _DashboardScreenState extends State<DashboardScreen>
                       BottomNavigationBarItem(
                           label: '',
                           icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.greyLight),
-                          activeIcon:
-                              Assets.svg.icons.homeSolidUntitledIcon.svg(color: AppColors.greyLight)),
+                          activeIcon: Assets.svg.icons.homeSolidUntitledIcon
+                              .svg(color: AppColors.greyLight)),
 
                       // NOTIFICATIONS SCREEN
                       BottomNavigationBarItem(
                           label: '',
                           icon: notificationBadge(
                               child: Assets.svg.icons.bell.svg(color: AppColors.greyLight)),
-                          activeIcon:
-                              notificationBadge(child: Assets.svg.icons.bellSolid.svg(height: 23, color: AppColors.greyLight))),
+                          activeIcon: notificationBadge(
+                              child: Assets.svg.icons.bellSolid
+                                  .svg(height: 23, color: AppColors.greyLight))),
 
                       // DM SCREEN
                       BottomNavigationBarItem(
                           label: '',
                           icon: unreadChatBadge(
-                              child:
-                                  Assets.svg.icons.groupMultiPeople.svg(color: AppColors.greyLight)),
+                              child: Assets.svg.icons.groupMultiPeople
+                                  .svg(color: AppColors.greyLight)),
                           activeIcon: unreadChatBadge(
                               child: Assets.svg.icons.groupMultiPeopleSolid
                                   .svg(color: AppColors.greyLight, height: 19))),
@@ -242,7 +267,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                     child: Assets.images.circleCover.image(fit: BoxFit.fill)),
                 SpeedDial(
                   child: replyStyle
-                      ? Assets.svg.icons.dmPlaneUntitledIconOutlined.svg(color: AppColors.darkBg, height: 25)
+                      ? Assets.svg.icons.dmPlaneUntitledIconOutlined
+                          .svg(color: AppColors.darkBg, height: 25)
                       // ? Assets.svg.icons.dmPlaneUntitledIconOrginal.svg(color: AppColors.darkBg, height: 25)
                       // : Assets.svg.icons.messageChatCircleAdd.svg(color: AppColors.darkBg),
                       : Assets.images.messageSmileIconPng.image(height: 24),

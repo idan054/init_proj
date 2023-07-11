@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:badges/badges.dart'  as badge;
+import 'package:badges/badges.dart' as badge;
 import 'package:camera/camera.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/post/post_model.dart';
@@ -93,18 +93,10 @@ class _EditUserScreenState extends State<EditUserScreen> {
               'Save'.toText().px(14).center.onTap(() async {
                 tempName = null;
                 tempBio == null;
+
                 var updatedUser =
                     currUser.copyWith(name: nameController.text, bio: bioController.text);
-                context.uniProvider.currUserUpdate(updatedUser);
-
-                Database.updateFirestore(
-                    collection: 'users',
-                    docName: '${updatedUser.email}',
-                    toJson: updatedUser.toJson());
-
-                //~ The NEW method
-                var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
-                context.uniProvider.fetchedUsersUpdate([updatedUser, ...alreadyFetchedUsers]);
+                updateUserDetails(context, updatedUser);
 
                 //! Expensive Way! REPLACED by getUserByEmailIfNeeded() method
                 // var snap = await FsAdvanced.db
@@ -293,4 +285,15 @@ class _EditUserScreenState extends State<EditUserScreen> {
         // .centerLeft
         .center;
   }
+}
+
+void updateUserDetails(BuildContext context, UserModel updatedUser) async {
+  context.uniProvider.currUserUpdate(updatedUser);
+
+  Database.updateFirestore(
+      collection: 'users', docName: '${updatedUser.email}', toJson: updatedUser.toJson());
+
+  //~ The NEW method
+  var alreadyFetchedUsers = context.uniProvider.fetchedUsers;
+  context.uniProvider.fetchedUsersUpdate([updatedUser, ...alreadyFetchedUsers]);
 }

@@ -44,6 +44,10 @@ class $AssetsImagesGen {
   AssetGenImage get circleCover =>
       const AssetGenImage('assets/images/CircleCover.png');
 
+  /// File path: assets/images/CircleCoverOriginal.png
+  AssetGenImage get circleCoverOriginal =>
+      const AssetGenImage('assets/images/CircleCoverOriginal.png');
+
   /// File path: assets/images/Filter-Preview-Full-1.png
   AssetGenImage get filterPreviewFull1 =>
       const AssetGenImage('assets/images/Filter-Preview-Full-1.png');
@@ -121,6 +125,7 @@ class $AssetsImagesGen {
         adPrt1,
         adPrt2,
         circleCover,
+        circleCoverOriginal,
         filterPreviewFull1,
         filterPreviewFull2,
         filterPreviewFull3,
@@ -595,6 +600,14 @@ class $AssetsSvgIconsGen {
   /// File path: assets/svg/icons/trash-03.svg
   SvgGenImage get trash03 => const SvgGenImage('assets/svg/icons/trash-03.svg');
 
+  /// File path: assets/svg/icons/user-circle-outline.svg
+  SvgGenImage get userCircleOutline =>
+      const SvgGenImage('assets/svg/icons/user-circle-outline.svg');
+
+  /// File path: assets/svg/icons/user-circle-solid.svg
+  SvgGenImage get userCircleSolid =>
+      const SvgGenImage('assets/svg/icons/user-circle-solid.svg');
+
   /// File path: assets/svg/icons/wisdom__multi_light_star.svg
   SvgGenImage get wisdomMultiLightStar =>
       const SvgGenImage('assets/svg/icons/wisdom__multi_light_star.svg');
@@ -664,6 +677,8 @@ class $AssetsSvgIconsGen {
         sortByTopicSolid,
         sortByTopic,
         trash03,
+        userCircleOutline,
+        userCircleSolid,
         wisdomMultiLightStar,
         wisdomLightStar
       ];

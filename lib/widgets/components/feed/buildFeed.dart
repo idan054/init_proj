@@ -46,8 +46,8 @@ Widget buildFeed(
                           height: 80,
                           width: 80,
                           padding: 5.all,
-                          child:
-                              RiveAnimation.asset('assets/riv/rilmanblackwhitefaster.riv').offset(0, 5))
+                          child: RiveAnimation.asset('assets/riv/rilmanblackwhitefaster.riv')
+                              .offset(0, 5))
                       .roundedFull,
                   Assets.images.circleCover.image(fit: BoxFit.fill).sizedBox(80, 80),
                 ],
@@ -100,6 +100,7 @@ Widget buildFeed(
                   buildFeedSort(
                     context,
                     feedType,
+                    onTopicChanged: onRefreshIndicator,
                     onFeedSort: () async {
                       bool? shouldRefresh = await showModalBottomSheet(
                         backgroundColor: AppColors.transparent,

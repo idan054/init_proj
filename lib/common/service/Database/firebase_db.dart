@@ -33,6 +33,7 @@ enum FilterTypes {
 
   /// Main Feed
   sortFeedByDefault,
+  sortFeedByIsOnline,
   sortFeedByLocation,
   sortFeedByTopics,
   sortFeedByAge,

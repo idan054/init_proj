@@ -15,13 +15,15 @@ import '../../widgets/components/feed/feedTitle.dart';
 import '../../widgets/my_dialog.dart';
 import '../../widgets/my_widgets.dart';
 import '../feed_ui/main_feed_screen.dart';
+import '../user_ui/edit_user_screen.dart';
 import '../user_ui/user_screen.dart';
 import 'a_onboarding_screen.dart';
 
 class TagsViewScreen extends StatefulWidget {
   final UserModel? user;
+  final bool fromFeed;
 
-  const TagsViewScreen({this.user, Key? key}) : super(key: key);
+  const TagsViewScreen({this.user, this.fromFeed = false, Key? key}) : super(key: key);
 
   @override
   State<TagsViewScreen> createState() => _TagsViewScreenState();
@@ -43,8 +45,12 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
     return isEditMode
         ? WillPopScope(
             onWillPop: () async {
-              _discardPopup(widget.user!);
-              return false;
+              if (widget.fromFeed) {
+                return true;
+              } else {
+                _discardPopup(widget.user!);
+                return false;
+              }
             },
             child: Scaffold(
               appBar: darkAppBar(
@@ -55,8 +61,17 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
                 backAction: () => _discardPopup(widget.user!),
                 actions: [
                   'Save'.toText().px(14).center.onTap(() {
+                    //
                     context.uniProvider.currUserUpdate(widget.user!.copyWith(tags: selectedTags));
-                    context.router.replace(EditUserRoute(user: widget.user!));
+                    final updateUser = context.uniProvider.currUser;
+                    //
+                    if (widget.fromFeed) {
+                      updateUserDetails(context, updateUser);
+                      context.router.pop(true);
+                    } else {
+                      // context.router.replace(EditUserRoute(user: widget.user!));
+                      context.router.replace(EditUserRoute(user: updateUser));
+                    }
                   }, radius: 10).pOnly(right: 5)
                 ],
               ),
@@ -74,7 +89,12 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
         barrierDismissible: true,
         secondaryBtn: TextButton(
             onPressed: () {
-              context.router.replace(EditUserRoute(user: user));
+              if (widget.fromFeed) {
+                Navigator.pop(context); // Dialog
+                context.router.pop();
+              } else {
+                context.router.replace(EditUserRoute(user: user));
+              }
             },
             child: 'Discard'.toText(color: AppColors.primaryLight)));
   }
@@ -84,7 +104,7 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          widget.user == null ? 190.verticalSpace :  130.verticalSpace,
+          widget.user == null ? 190.verticalSpace : 130.verticalSpace,
           Builder(builder: (context) {
             var isTagsErr =
                 context.listenUniProvider.signupErrFound; // This will auto rebuild if err found.

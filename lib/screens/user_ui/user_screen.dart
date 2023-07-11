@@ -583,7 +583,7 @@ Widget buildTagsRow(UserModel user,
             buildRilChip('$addonName',
                     bgColor: chipColor,
                     icon:
-                        addonName != 'Edit' ? null : Icons.edit_rounded.icon(color: Colors.white70))
+                        addonName != 'Edit' ? null : Icons.edit_rounded.icon(color: AppColors.greyLight))
                 // .pad(7)
                 .onTap(onAddonTap, radius: 12),
           // 4.horizontalSpace,

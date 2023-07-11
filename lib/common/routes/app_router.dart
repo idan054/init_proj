@@ -56,7 +56,7 @@ export 'package:auto_route/auto_route.dart';
     //~ User Screens:
     CustomRoute(page: UserScreen),
     CustomRoute(page: EditUserScreen),
-    CustomRoute(page: TagsViewScreen),
+    CustomRoute<bool>(page: TagsViewScreen),
 
 
   ],

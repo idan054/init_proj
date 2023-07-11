@@ -1,7 +1,10 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, sort_child_properties_last
 
+import 'dart:math';
+
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
@@ -32,6 +35,7 @@ import 'dart:io';
 import '../clean_snackbar.dart';
 import '../my_dialog.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:badges/badges.dart' as badge;
 
 // Also look for 'customRowPadding' With CTRL + SHIFT + F
 
@@ -79,7 +83,7 @@ class _PostBlockState extends State<PostBlock> {
                     //                 Scaffold(body: CommentsChatScreen(post, isFullScreen: isUserPage))),
                     //       ) :
 
-                    setState(() {});
+                    setState(() {}); // Needed ??
                     notificationCounter = 0;
                     FeedService.resetPostUnread(context, widget.post.id);
                     handleShowBottomPost(context, widget.post);
@@ -165,23 +169,61 @@ class _PostBlockState extends State<PostBlock> {
 
   Row buildProfileRow(String postAgo, bool isAdmin, bool isCurrUser, bool isUserPage) {
     final creatorUser = widget.post.creatorUser;
-    final nameTitle = context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByAge
-        ? ('${creatorUser?.age} y.o · ' '${creatorUser?.name}')
-        : creatorUser?.name;
+    final currUser = context.uniProvider.currUser;
+    final feedSortBy = context.uniProvider.sortFeedBy.type;
+    String title = '';
+    String sortFeed = '';
+    List<String>? commonTags = [];
+
+    // if (feedSortBy == FilterTypes.sortFeedByAge) sortFeed += '${creatorUser?.age}y.o';
+    if (feedSortBy == FilterTypes.sortFeedByTopics) {
+      // Get 1st - always same (when user refresh indicator)
+      final commonTag = creatorUser?.tags.firstWhereOrNull((tag) => currUser.tags.contains(tag));
+      // Get randomly
+      // commonTags = creatorUser?.tags.where((tag) => currUser.tags.contains(tag)).toList();
+      // final commonTag = commonTags?[Random().nextInt(commonTags.length)];
+      sortFeed += '$commonTag';
+    }
+
+    if (sortFeed.isNotEmpty) title += ' · ';
+    title +=
+        // '${(creatorUser?.name?.length ?? 0) < 20 ? creatorUser?.name?.trim() : '${creatorUser?.name?.trim().substring(0, 20)}...'}';
+        '${creatorUser?.name?.trim()}';
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // badge.Badge(
+        //   showBadge:
+        //   commonCounter != null && commonCounter.isNotEmpty && commonCounter.length != 1,
+        //   badgeContent: '+${commonCounter!.length - 1}'
+        //       .toText(fontSize: 7, color: Colors.white, medium: true),
+        //   padding: const EdgeInsets.all(3),
+        //   elevation: 0,
+        //   position: const badge.BadgePosition(start: -10,bottom: 5),
+        //   badgeColor: AppColors.greyLight.withOpacity(0.85),
+        // child:
         SizedBox(
             // width: postAgo.length > 5 ? 150 : 190,
-            width: 185,
-            child: '$nameTitle'.toText(
-                maxLines: 1,
-                fontSize: 13.0,
-                medium: true,
-                color: AppColors.white,
-                textAlign: TextAlign.left)),
+            width: 165,
+            child: RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: sortFeed,
+                    style:
+                        AppStyles.text12PxMedium.copyWith(fontSize: 13, color: AppColors.greyLight),
+                  ),
+                  TextSpan(
+                    text: title,
+                    style: AppStyles.text12PxMedium.copyWith(fontSize: 13, color: AppColors.white),
+                  ),
+                ],
+              ),
+            )),
+        // ),
         const Spacer(),
-        postAgo.toText(color: AppColors.greyUnavailable, fontSize: 14),
+        postAgo.toText(color: AppColors.greyUnavailable, fontSize: 13),
         buildMoreMenu(isAdmin, isCurrUser)
       ],
     );
@@ -540,17 +582,17 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
 
 String postTime(DateTime time) {
   var postDiff = DateTime.now().difference(time);
+  String postAgo = 'X';
 
-  var postAgo = postDiff.inSeconds < 60 ? '${postDiff.inSeconds}s' : '${postDiff.inMinutes}m';
-  if (1 < postDiff.inMinutes && postDiff.inMinutes < 60) '${postDiff.inMinutes}m';
-  if (postDiff.inSeconds == 0) postAgo = 'Just now';
-  if (1 <= postDiff.inHours && postDiff.inHours < 24) {
-    postAgo = '${postDiff.inHours}h';
-  } else if (postDiff.inHours > 24) {
+  if (postDiff.inHours >= 24) {
     // postAgo = intl.DateFormat('yMMMMEEEEd').format(post.timestamp!);
     // postAgo = intl.DateFormat('MMMM d, y').format(time);
     postAgo = intl.DateFormat('MMM d').format(time);
   }
+  if (postDiff.inHours <= 24) postAgo = '${postDiff.inHours}h';
+  if (postDiff.inMinutes <= 60) postAgo = '${postDiff.inMinutes}m';
+  if (postDiff.inSeconds <= 60) postAgo = '${postDiff.inSeconds}s';
+  if (postDiff.inSeconds <= 5) postAgo = 'Just now';
 
   return postAgo;
 }

@@ -4,6 +4,7 @@ import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/delete_me.dart';
 import 'package:example/screens/main_ui/splash_screen.dart' as click;
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -14,6 +15,7 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'common/models/universalModel.dart';
+import 'common/routes/app_router.dart';
 import 'common/service/Database/firebase_db.dart';
 import 'common/service/Database/firebase_options.dart';
 import 'common/service/life_cycle.dart';
@@ -32,7 +34,6 @@ void main() async {
   PushNotificationService.setupNotifications(_handleNotificationReceived);
   FirebaseMessaging.onBackgroundMessage(_handleNotificationReceived);
 
-
   final dbDir = await getApplicationDocumentsDirectory();
   Hive.init(dbDir.path);
 
@@ -47,7 +48,7 @@ void main() async {
         // builder:(context, child) =>
 
         child: const App()),
-        // child: const MaterialApp(home: ImgbbConverterScreen())),
+    // child: const MaterialApp(home: ImgbbConverterScreen())),
   );
 }
 
@@ -59,8 +60,9 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-
   final _router = AppRouter(); // Add screens AT app_router.dart
+  FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +82,7 @@ class _AppState extends State<App> {
             designSize: const Size(390, 844),
             minTextAdapt: true,
             builder: (_, __) => MaterialApp.router(
-              routerDelegate: _router.delegate(),
+              routerDelegate: _router.delegate(navigatorObservers: () => [observer]),
               routeInformationParser: _router.defaultRouteParser(),
               title: 'RilTopia',
               debugShowCheckedModeBanner: false,

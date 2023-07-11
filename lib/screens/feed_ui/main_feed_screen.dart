@@ -534,7 +534,7 @@ Widget buildChoiceChip(BuildContext context,
           selected: selected,
           materialTapTargetSize: (padding != null) ? MaterialTapTargetSize.shrinkWrap : null,
           padding: (padding != null) ? 0.all : null,
-          backgroundColor: AppColors.darkBg,
+          backgroundColor: AppColors.darkGrey,
           selectedColor: selectedColor ?? AppColors.transparent,
           side: borderColor == null ? null : BorderSide(width: 1.5, color: borderColor),
 

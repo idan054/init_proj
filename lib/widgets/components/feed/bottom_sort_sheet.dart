@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../common/models/feedFilterModel/sort_feed_model.dart';
 import '../../../common/service/mixins/assets.gen.dart';
+import '../postBlock_stf.dart';
 
 final sortByDefault = SortFeedModel(
   title: 'Default',
@@ -17,6 +18,13 @@ final sortByDefault = SortFeedModel(
   svg: Assets.svg.icons.sortByDefault,
   solidSvg: Assets.svg.icons.sortByDefaultSolid,
   type: FilterTypes.sortFeedByDefault,
+);
+final sortByIsOnline = SortFeedModel(
+  title: 'Online members',
+  desc: 'Latest Rils by online members',
+  svg: Assets.svg.icons.userCircleOutline,
+  solidSvg: Assets.svg.icons.userCircleSolid,
+  type: FilterTypes.sortFeedByIsOnline,
 );
 final sortByLocation = SortFeedModel(
   title: 'Your location',
@@ -79,9 +87,10 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
             10.verticalSpace,
             buildRadioItem(sortByDefault),
             buildRadioItem(sortByLocation, isActive: false),
-            buildRadioItem(sortByTopic, isActive: false),
+            buildRadioItem(sortByTopic),
             buildRadioItem(sortByAge),
-            20.verticalSpace,
+            buildRadioItem(sortByIsOnline, isActive: false),
+            10.verticalSpace,
           ],
         ).px(20),
       ),
@@ -110,12 +119,23 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
             ? AppColors.white
             : AppColors.darkOutline50,
       ),
-      leading: filter.svg.svg(
-        color: isActive
-            // ? (selectedFeedSort == filter ? AppColors.primaryOriginal : AppColors.white)
-            ? AppColors.white
-            : AppColors.darkOutline50,
-        height: 22,
+      subtitle: isActive
+          ? null
+          : 'coming soon!'.toText(
+              fontSize: 13,
+              color: AppColors.darkOutline50,
+            ),
+      leading: Stack(
+        children: [
+          filter.svg.svg(
+            color: isActive
+                // ? (selectedFeedSort == filter ? AppColors.primaryOriginal : AppColors.white)
+                ? AppColors.white
+                : AppColors.darkOutline50,
+            height: 22,
+          ),
+          if (filter.type == FilterTypes.sortFeedByIsOnline) _buildIconOnlineBadge(isActive),
+        ],
       ),
       trailing: Radio(
         activeColor: AppColors.primaryOriginal,
@@ -125,5 +145,16 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
         onChanged: isActive ? (value) => updateValue() : null,
       ).scale(scale: 1.15),
     );
+  }
+
+  Positioned _buildIconOnlineBadge(bool isActive) {
+    return Positioned(
+        top: -2,
+        right: -2,
+        child: CircleAvatar(
+            radius: 6,
+            backgroundColor: AppColors.darkBg,
+            child: Opacity(
+                opacity: isActive ? 1.0 : 0.35, child: const BlinkingOnlineBadge(ratio: 1))));
   }
 }

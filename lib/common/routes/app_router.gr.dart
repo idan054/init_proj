@@ -193,10 +193,11 @@ class AppRouter extends _i17.RootStackRouter {
     TagsViewRoute.name: (routeData) {
       final args = routeData.argsAs<TagsViewRouteArgs>(
           orElse: () => const TagsViewRouteArgs());
-      return _i17.CustomPage<dynamic>(
+      return _i17.CustomPage<bool>(
         routeData: routeData,
         child: _i16.TagsViewScreen(
           user: args.user,
+          fromFeed: args.fromFeed,
           key: args.key,
         ),
         opaque: true,
@@ -621,12 +622,14 @@ class EditUserRouteArgs {
 class TagsViewRoute extends _i17.PageRouteInfo<TagsViewRouteArgs> {
   TagsViewRoute({
     _i19.UserModel? user,
+    bool fromFeed = false,
     _i18.Key? key,
   }) : super(
           TagsViewRoute.name,
           path: '/tags-view-screen',
           args: TagsViewRouteArgs(
             user: user,
+            fromFeed: fromFeed,
             key: key,
           ),
         );
@@ -637,15 +640,18 @@ class TagsViewRoute extends _i17.PageRouteInfo<TagsViewRouteArgs> {
 class TagsViewRouteArgs {
   const TagsViewRouteArgs({
     this.user,
+    this.fromFeed = false,
     this.key,
   });
 
   final _i19.UserModel? user;
 
+  final bool fromFeed;
+
   final _i18.Key? key;
 
   @override
   String toString() {
-    return 'TagsViewRouteArgs{user: $user, key: $key}';
+    return 'TagsViewRouteArgs{user: $user, fromFeed: $fromFeed, key: $key}';
   }
 }
