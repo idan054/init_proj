@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
+import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import '../Database/db_advanced.dart';
 import '../Database/firebase_db.dart' as click;
 import '../Database/firebase_db.dart';
@@ -152,13 +156,30 @@ class FeedService {
   }
 
   static void uploadPost(BuildContext context, PostModel post) {
-    print('START: uploadPost()');
+    printWhite('START: uploadPost() post.id ${post.id}');
+
     // var timeStamp = DateTime.now();
     // String createdAtStr = DateFormat('dd.MM.yy kk:mm:ss').format(timeStamp);
+
+    final currUser = context.uniProvider.currUser;
+    final postLocation = GeoFlutterFire().point(
+      latitude: currUser.position!.geopoint!.latitude,
+      longitude: currUser.position!.geopoint!.longitude,
+    );
+    Map<String, dynamic> jsonPost = post.toJson();
+    jsonPost['position'] = postLocation.data;
+    // log('jsonPost $jsonPost');
+    // {
+    // creatorUser{...},
+    // textContent...,
+    // position{...}
+    // }
+
     Database.updateFirestore(
       collection: 'posts',
       docName: post.id,
-      toJson: post.toJson(),
+      // toJson: post.toJson(),
+      toJson: jsonPost,
     );
   }
 }

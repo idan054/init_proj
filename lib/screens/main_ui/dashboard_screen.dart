@@ -74,7 +74,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     PushNotificationService.requestPermission();
-    updateUserLocation(context);
+    updateUserLocationIfNeeded(context);
     DynamicLinkService.initDynamicLinks(context);
 
     var localConfig = context.uniProvider.localConfig;

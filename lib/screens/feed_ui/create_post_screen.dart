@@ -2,11 +2,14 @@
 
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/positionModel/position_model.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../common/models/post/post_model.dart';
@@ -147,11 +150,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       (postController.text.replaceAll(' ', '').isNotEmpty),
                   withBg: true,
                   onTap: () async {
+                    await updateUserLocationIfNeeded(context);
                     final currUser = context.uniProvider.currUser;
-                    await updateUserLocation(context);
+                    if (currUser.position == null) return; // Validator
 
-                    return;
-                    // UserModel currUser = context.uniProvider.currUser;
                     var post = PostModel(
                       textContent: postController.text,
                       id: '${currUser.email}${UniqueKey()}',
@@ -164,6 +166,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       commentedUsersEmails: isComments ? [currUser.email.toString()] : [],
                     );
                     context.uniProvider.postUploadedUpdate(true);
+
                     FeedService.uploadPost(context, post);
                     context.router.pop();
                   },
@@ -208,21 +211,22 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 // }
 }
 
-Future updateUserLocation(BuildContext context, {bool force = false}) async {
-  print('START: updateUserLocation()');
+Future updateUserLocationIfNeeded(BuildContext context, {bool force = false}) async {
+  // print('START: updateUserLocation()');
   final currUser = context.uniProvider.currUser;
 
   void _updateCurrentPosition() async {
     final locationData = await Geolocator.getCurrentPosition();
-    print('latitude ${locationData.latitude}');
-    print('longitude ${locationData.longitude}');
-    final updatedUser = currUser.copyWith(lat: locationData.latitude, long: locationData.longitude);
+    final geoFirePoint = GeoFirePoint(locationData.latitude, locationData.longitude);
+    final position = PositionModel(geohash: geoFirePoint.hash, geopoint: geoFirePoint.geoPoint);
+
+    final updatedUser = currUser.copyWith(position: position);
     context.uniProvider.currUserUpdate(updatedUser);
     Database.updateFirestore(
         collection: 'users', docName: '${updatedUser.email}', toJson: updatedUser.toJson());
   }
 
-  if (currUser.lat == null || currUser.long == null || force) {
+  if (currUser.position == null || force) {
     final isGranted = await Permission.locationWhenInUse.isGranted;
     if (isGranted) {
       _updateCurrentPosition();

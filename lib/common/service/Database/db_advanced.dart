@@ -13,6 +13,7 @@ import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/dump/hive_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import 'firebase_db.dart';
 
 import 'dart:developer';
@@ -100,7 +101,7 @@ class FsAdvanced {
         : 'timestamp: $timestamp');
 
     var currUser = context.uniProvider.currUser;
-    QuerySnapshot<Map<String, dynamic>>? docs;
+    QuerySnapshot<Map<String, dynamic>>? snap;
     var limit = modelType == ModelTypes.messages ? 24 : 16; // Original: 24 : 8
     var reqBase = db.collection(collectionRef).limit(limit);
 
@@ -146,7 +147,24 @@ class FsAdvanced {
           if (sortFeedBy == FilterTypes.sortFeedByDefault) {
             // Nothing needed
           }
-          // if (sortFeedBy == FilterTypes.sortFeedByLocation) {}
+          if (sortFeedBy == FilterTypes.sortFeedByLocation) {
+            print('START: sortFeedByLocation()');
+            double radius = 50; // KM
+            // The (!) Might cuz issues
+            final centerGeo = currUser.position!.geopoint!;
+            final center = GeoFirePoint(centerGeo.latitude, centerGeo.latitude);
+            // Stream<List<DocumentSnapshot>> stream
+            //! NOT WORKING! SHOULD BE FIXED!
+            final stream = GeoFlutterFire().collection(collectionRef: reqBase).within(
+                  center: center,
+                  radius: radius,
+                  // field: 'position', // TEST DOC ALSO AVAILABLE
+                  field: 'creatorUser.position',
+                );
+            stream.listen((List<DocumentSnapshot> documentList) {
+              print('documentList $documentList');
+            });
+          }
           if (sortFeedBy == FilterTypes.sortFeedByTopics) {
             reqBase = reqBase.where('creatorUser.tags', arrayContainsAny: currUser.tags);
             // arrayContains = if "X" in Firestore array ["X", "Y"]
@@ -167,9 +185,20 @@ class FsAdvanced {
         reqBase = reqBase.where('usersIds', arrayContains: currUser.uid);
         break;
     }
-    docs = await reqBase.get();
-    print('DONE: getDocsBasedModel() - ${modelType.name} [${docs.size} docs]');
-    return docs;
+    snap = await reqBase.get();
+
+    //~ Debug Code: PLEASE REMOVE ME!!
+    // if (modelType == ModelTypes.posts) {
+    //   for (var d in snap.docs) {
+    //     if (d.id == 'idanbit80@gmail.com[#4e0a4]') {
+    //       printWhite(d.id);
+    //       log('${d.data()['position']}');
+    //     }
+    //   }
+    // }
+
+    print('DONE: getDocsBasedModel() - ${modelType.name} [${snap.size} docs]');
+    return snap;
   }
 
   // 2/2

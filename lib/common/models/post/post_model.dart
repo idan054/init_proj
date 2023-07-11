@@ -5,14 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import '../convertors.dart';
 import '../user/user_model.dart';
+
 part 'post_model.freezed.dart';
+
 part 'post_model.g.dart';
 
 //> PostModel use for: Ril, Conversion Ril, Comment & Notification
-enum PostType{dmRil, conversationRil, comment}
+enum PostType { dmRil, conversationRil, comment }
 
 // flutter pub run build_runner build --delete-conflicting-outputs
-@freezed
+@Freezed(toJson: true)
 class PostModel with _$PostModel {
   @JsonSerializable(explicitToJson: true) // This needed for sub classes only
   const factory PostModel({
@@ -35,8 +37,5 @@ class PostModel with _$PostModel {
     @Default(0) int notificationsCounter,
   }) = _PostModel;
 
-  factory PostModel.fromJson(Map<String, dynamic> json) =>
-      _$PostModelFromJson(json);
+  factory PostModel.fromJson(Map<String, dynamic> json) => _$PostModelFromJson(json);
 }
-
-

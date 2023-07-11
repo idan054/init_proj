@@ -4,6 +4,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+//~ GeoPoint Convert:
+//~ ================
+class GeoPointConverter implements JsonConverter<GeoPoint, GeoPoint> {
+  const GeoPointConverter();
+
+// I know its stupid, but its needed...
+  @override
+  GeoPoint fromJson(GeoPoint geoPoint) => geoPoint;
+
+  @override
+  GeoPoint toJson(GeoPoint geoPoint) => geoPoint;
+}
+
 //~ DateTime Convert:
 //~ ================
 class DateTimeStampConv implements JsonConverter<DateTime?, Timestamp?> {

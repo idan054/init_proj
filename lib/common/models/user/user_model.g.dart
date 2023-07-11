@@ -14,8 +14,6 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
       fcm: json['fcm'] as String?,
       age: json['age'] as int?,
       photoUrl: json['photoUrl'] as String?,
-      lat: (json['lat'] as num?)?.toDouble(),
-      long: (json['long'] as num?)?.toDouble(),
       unreadCounter: json['unreadCounter'] as int? ?? 0,
       unreadNotificationCounter: json['unreadNotificationCounter'] as int? ?? 0,
       gender: $enumDecodeNullable(_$GenderTypesEnumMap, json['gender']),
@@ -30,6 +28,9 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
           const [],
       birthday:
           const DateTimeStampConv().fromJson(json['birthday'] as Timestamp?),
+      position: json['position'] == null
+          ? null
+          : PositionModel.fromJson(json['position'] as Map<String, dynamic>),
       isOnline: json['isOnline'] as bool? ?? false,
     );
 
@@ -42,8 +43,6 @@ Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
       'fcm': instance.fcm,
       'age': instance.age,
       'photoUrl': instance.photoUrl,
-      'lat': instance.lat,
-      'long': instance.long,
       'unreadCounter': instance.unreadCounter,
       'unreadNotificationCounter': instance.unreadNotificationCounter,
       'gender': _$GenderTypesEnumMap[instance.gender],
@@ -51,6 +50,7 @@ Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
       'tags': instance.tags,
       'blockedUsers': instance.blockedUsers,
       'birthday': const DateTimeStampConv().toJson(instance.birthday),
+      'position': instance.position?.toJson(),
       'isOnline': instance.isOnline,
     };
 

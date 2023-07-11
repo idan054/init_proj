@@ -77,12 +77,17 @@ mixin SplashScreenStateMixin<T extends StatefulWidget> on State<T> implements Ti
                       color: AppColors.primaryOriginal,
                       // child: const RiveAnimation.asset('assets/riv/rilManBlackWhite.riv')
                       child: const RiveAnimation.asset('assets/riv/rilmanblackwhitefaster.riv')
-                          .sizedBox(null, 150 * ratio).bottom
-                          // .offset(0, 10)
-              )
+                          .sizedBox(null, 150 * ratio)
+                          .bottom
+                      // .offset(0, 10)
+                      )
                   .rounded(radius: radius),
               20.verticalSpace,
-              if(showText)'Riltopia'.toText(fontSize: 33, bold: true)
+              if (showText) ...[
+                'Riltopia'.toText(fontSize: 33, bold: true),
+                2.verticalSpace,
+                'Social Chat'.toText(fontSize: 18, medium: true)
+              ],
             ],
           ).center,
           AnimatedBuilder(
