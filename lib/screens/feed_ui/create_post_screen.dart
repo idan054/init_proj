@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
+
 import 'dart:ui';
 
 import 'package:example/common/extensions/extensions.dart';
@@ -5,11 +7,15 @@ import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../common/models/post/post_model.dart';
 import '../../common/models/user/user_model.dart';
+import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/Feed/feed_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/themes/app_styles.dart';
+import '../../widgets/clean_snackbar.dart';
 import '../../widgets/my_widgets.dart';
 import 'main_feed_screen.dart';
 
@@ -49,14 +55,17 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       decoration: BoxDecoration(
         // color: AppColors.darkOutline,
         color: AppColors.darkBg,
-        borderRadius: BorderRadius.only(topLeft: 15.circular, topRight: 15.circular),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.99),
-            offset: const Offset(0.0, 1.5), //(x,y)
-            blurRadius: 4.0,
-          ),
-        ],
+        borderRadius: BorderRadius.only(
+          topLeft: 10.circular,
+          topRight: 10.circular,
+        ),
+        // boxShadow: [
+        //   BoxShadow(
+        //     color: Colors.black.withOpacity(0.99),
+        //     offset: const Offset(0.0, 1.5), //(x,y)
+        //     blurRadius: 4.0,
+        //   ),
+        // ],
       ),
       margin: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Column(
@@ -100,8 +109,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               buildChoiceChip(context,
-                      selectedColor: AppColors.transparent,
-                      borderColor: AppColors.primaryLight2,
+                      selectedColor: AppColors.darkGrey,
+                      // borderColor: AppColors.primaryLight2,
+                      borderColor: AppColors.transparent,
                       customIcon: isComments
                           ? Assets.svg.icons.messageSmile
                               .svg(height: 20, color: AppColors.primaryLight2)
@@ -136,8 +146,12 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   isActive: postController.text.isNotEmpty &&
                       (postController.text.replaceAll(' ', '').isNotEmpty),
                   withBg: true,
-                  onTap: () {
-                    UserModel currUser = context.uniProvider.currUser;
+                  onTap: () async {
+                    final currUser = context.uniProvider.currUser;
+                    await updateUserLocation(context);
+
+                    return;
+                    // UserModel currUser = context.uniProvider.currUser;
                     var post = PostModel(
                       textContent: postController.text,
                       id: '${currUser.email}${UniqueKey()}',
@@ -194,31 +208,58 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
 // }
 }
 
+Future updateUserLocation(BuildContext context, {bool force = false}) async {
+  print('START: updateUserLocation()');
+  final currUser = context.uniProvider.currUser;
+
+  void _updateCurrentPosition() async {
+    final locationData = await Geolocator.getCurrentPosition();
+    print('latitude ${locationData.latitude}');
+    print('longitude ${locationData.longitude}');
+    final updatedUser = currUser.copyWith(lat: locationData.latitude, long: locationData.longitude);
+    context.uniProvider.currUserUpdate(updatedUser);
+    Database.updateFirestore(
+        collection: 'users', docName: '${updatedUser.email}', toJson: updatedUser.toJson());
+  }
+
+  if (currUser.lat == null || currUser.long == null || force) {
+    final isGranted = await Permission.locationWhenInUse.isGranted;
+    if (isGranted) {
+      _updateCurrentPosition();
+    } else {
+      final status = await Permission.locationWhenInUse.request();
+      if (status == PermissionStatus.granted) {
+        _updateCurrentPosition();
+      } else {
+        rilFlushBar(context, 'Allow location on settings...');
+        await Future.delayed(2.seconds);
+        await openAppSettings();
+      }
+    }
+  }
+  return;
+}
+
 Widget buildSendButton(
     {GestureTapCallback? onTap,
-      Color? color,
+    Color? color,
     bool isActive = true,
     bool isConversationSend = false,
     bool withBg = false}) {
   return Opacity(
-    opacity: isActive ? 1.0 : 0.3,
+    opacity: isActive ? 1.0 : .3,
     child: Container(
-      height: 37,
-      width: 37,
+      height: 34,
+      width: 34,
       color: withBg ? AppColors.primaryOriginal : AppColors.transparent,
       // color: AppColors.primaryOriginal,
       // color: ,
       child: (isConversationSend
               // ? Assets.svg.icons.messageChatCircleAdd.svg(color: color?? Colors.white)
               ? Assets.images.messageSmileIconPng.image()
-              : Assets.svg.icons.iconSendButton.svg(color: color ??Colors.white))
+              : Assets.svg.icons.iconSendButton.svg(color: color ?? Colors.white).offset(1, 0))
           .pad(isConversationSend ? 8 : 9),
-    )
-        .roundedFull
-        .px(10)
-        .pOnly(top: 5, bottom: 5)
-        .onTap(isActive ? onTap : null, radius: 10)
-        .pOnly(right: 5),
+    ).roundedFull.py(5).px(5).onTap(isActive ? onTap : null, radius: 99).px(5).pOnly(right: 5),
   );
 }
 

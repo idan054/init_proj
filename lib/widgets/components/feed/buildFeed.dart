@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/widgets/components/postBlock_stf.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import '../../../common/models/report/report_model.dart';
 import '../../../common/service/Database/firebase_db.dart';
 import '../../../common/service/mixins/assets.gen.dart';
 import '../../../common/themes/app_colors_inverted.dart';
+import '../../../screens/feed_ui/create_post_screen.dart';
 import '../../../screens/feed_ui/main_feed_screen.dart';
 import '../../../screens/main_ui/admin_screen.dart';
 import '../../../screens/main_ui/notification_screen.dart';
@@ -103,10 +106,14 @@ Widget buildFeed(
                     onTopicChanged: onRefreshIndicator,
                     onFeedSort: () async {
                       bool? shouldRefresh = await showModalBottomSheet(
+                        barrierColor: Colors.black26,
                         backgroundColor: AppColors.transparent,
                         context: context,
                         builder: (BuildContext context) => const BottomSortSheet(),
                       );
+                      if (context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByLocation) {
+                        await updateUserLocation(context, force: true);
+                      }
                       if (shouldRefresh ?? false) onRefreshIndicator();
                     },
                   ),

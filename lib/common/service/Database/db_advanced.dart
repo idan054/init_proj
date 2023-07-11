@@ -143,17 +143,21 @@ class FsAdvanced {
 
           //~ NEW SortFeedBy:
           final sortFeedBy = context.uniProvider.sortFeedBy.type;
-          if (sortFeedBy == FilterTypes.sortFeedByDefault) {}
+          if (sortFeedBy == FilterTypes.sortFeedByDefault) {
+            // Nothing needed
+          }
+          // if (sortFeedBy == FilterTypes.sortFeedByLocation) {}
           if (sortFeedBy == FilterTypes.sortFeedByTopics) {
+            reqBase = reqBase.where('creatorUser.tags', arrayContainsAny: currUser.tags);
             // arrayContains = if "X" in Firestore array ["X", "Y"]
             // arrayContainsAny = if any item from ["X", "Y"] in Firestore array ["X", "Y"]
-            reqBase = reqBase.where('creatorUser.tags', arrayContainsAny: currUser.tags);
           }
-          if (sortFeedBy == FilterTypes.sortFeedByLocation) {}
           if (sortFeedBy == FilterTypes.sortFeedByAge) {
             reqBase = reqBase.where('creatorUser.age', whereIn: ageRangeList(currUser));
           }
+          if (sortFeedBy == FilterTypes.sortFeedByIsOnline) {}
         }
+
         if (filter == FilterTypes.notificationsPostByUser) {
           reqBase =
               reqBase.where('metadata.usersWithUnreadNotification', arrayContains: currUser.email!);

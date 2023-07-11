@@ -27,6 +27,8 @@ mixin _$UserModel {
   String? get fcm => throw _privateConstructorUsedError;
   int? get age => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
+  double? get lat => throw _privateConstructorUsedError; // lastSeen Latitude
+  double? get long => throw _privateConstructorUsedError; // lastSeen Longitude
   int get unreadCounter => throw _privateConstructorUsedError;
   int get unreadNotificationCounter =>
       throw _privateConstructorUsedError; // int? userScore, // Example: 0 = Block Forever.
@@ -59,6 +61,8 @@ abstract class $UserModelCopyWith<$Res> {
       String? fcm,
       int? age,
       String? photoUrl,
+      double? lat,
+      double? long,
       int unreadCounter,
       int unreadNotificationCounter,
       GenderTypes? gender,
@@ -89,6 +93,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? fcm = freezed,
     Object? age = freezed,
     Object? photoUrl = freezed,
+    Object? lat = freezed,
+    Object? long = freezed,
     Object? unreadCounter = null,
     Object? unreadNotificationCounter = null,
     Object? gender = freezed,
@@ -127,6 +133,14 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      lat: freezed == lat
+          ? _value.lat
+          : lat // ignore: cast_nullable_to_non_nullable
+              as double?,
+      long: freezed == long
+          ? _value.long
+          : long // ignore: cast_nullable_to_non_nullable
+              as double?,
       unreadCounter: null == unreadCounter
           ? _value.unreadCounter
           : unreadCounter // ignore: cast_nullable_to_non_nullable
@@ -178,6 +192,8 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       String? fcm,
       int? age,
       String? photoUrl,
+      double? lat,
+      double? long,
       int unreadCounter,
       int unreadNotificationCounter,
       GenderTypes? gender,
@@ -206,6 +222,8 @@ class __$$_UserModelCopyWithImpl<$Res>
     Object? fcm = freezed,
     Object? age = freezed,
     Object? photoUrl = freezed,
+    Object? lat = freezed,
+    Object? long = freezed,
     Object? unreadCounter = null,
     Object? unreadNotificationCounter = null,
     Object? gender = freezed,
@@ -244,6 +262,14 @@ class __$$_UserModelCopyWithImpl<$Res>
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      lat: freezed == lat
+          ? _value.lat
+          : lat // ignore: cast_nullable_to_non_nullable
+              as double?,
+      long: freezed == long
+          ? _value.long
+          : long // ignore: cast_nullable_to_non_nullable
+              as double?,
       unreadCounter: null == unreadCounter
           ? _value.unreadCounter
           : unreadCounter // ignore: cast_nullable_to_non_nullable
@@ -292,6 +318,8 @@ class _$_UserModel implements _UserModel {
       this.fcm,
       this.age,
       this.photoUrl,
+      this.lat,
+      this.long,
       this.unreadCounter = 0,
       this.unreadNotificationCounter = 0,
       this.gender,
@@ -320,6 +348,12 @@ class _$_UserModel implements _UserModel {
   final int? age;
   @override
   final String? photoUrl;
+  @override
+  final double? lat;
+// lastSeen Latitude
+  @override
+  final double? long;
+// lastSeen Longitude
   @override
   @JsonKey()
   final int unreadCounter;
@@ -361,7 +395,7 @@ class _$_UserModel implements _UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, name: $name, email: $email, bio: $bio, fcm: $fcm, age: $age, photoUrl: $photoUrl, unreadCounter: $unreadCounter, unreadNotificationCounter: $unreadNotificationCounter, gender: $gender, userType: $userType, tags: $tags, blockedUsers: $blockedUsers, birthday: $birthday, isOnline: $isOnline)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, bio: $bio, fcm: $fcm, age: $age, photoUrl: $photoUrl, lat: $lat, long: $long, unreadCounter: $unreadCounter, unreadNotificationCounter: $unreadNotificationCounter, gender: $gender, userType: $userType, tags: $tags, blockedUsers: $blockedUsers, birthday: $birthday, isOnline: $isOnline)';
   }
 
   @override
@@ -377,6 +411,8 @@ class _$_UserModel implements _UserModel {
             (identical(other.age, age) || other.age == age) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
+            (identical(other.lat, lat) || other.lat == lat) &&
+            (identical(other.long, long) || other.long == long) &&
             (identical(other.unreadCounter, unreadCounter) ||
                 other.unreadCounter == unreadCounter) &&
             (identical(other.unreadNotificationCounter,
@@ -405,6 +441,8 @@ class _$_UserModel implements _UserModel {
       fcm,
       age,
       photoUrl,
+      lat,
+      long,
       unreadCounter,
       unreadNotificationCounter,
       gender,
@@ -437,6 +475,8 @@ abstract class _UserModel implements UserModel {
       final String? fcm,
       final int? age,
       final String? photoUrl,
+      final double? lat,
+      final double? long,
       final int unreadCounter,
       final int unreadNotificationCounter,
       final GenderTypes? gender,
@@ -464,6 +504,10 @@ abstract class _UserModel implements UserModel {
   @override
   String? get photoUrl;
   @override
+  double? get lat;
+  @override // lastSeen Latitude
+  double? get long;
+  @override // lastSeen Longitude
   int get unreadCounter;
   @override
   int get unreadNotificationCounter;

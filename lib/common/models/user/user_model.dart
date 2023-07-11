@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_annotation_target, constant_identifier_names
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:geoflutterfire2/geoflutterfire2.dart';
 import '../convertors.dart';
 part 'user_model.freezed.dart';
 part 'user_model.g.dart';
@@ -21,6 +22,8 @@ class UserModel with _$UserModel {
     String? fcm,
     int? age,
     String? photoUrl,
+    double? lat, // lastSeen Latitude
+    double? long, // lastSeen Longitude
     @Default(0) int unreadCounter,
     @Default(0) int unreadNotificationCounter,
     // int? userScore, // Example: 0 = Block Forever.
@@ -36,3 +39,4 @@ class UserModel with _$UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
 }
+

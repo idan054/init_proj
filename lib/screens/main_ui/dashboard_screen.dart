@@ -74,6 +74,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     PushNotificationService.requestPermission();
+    updateUserLocation(context);
     DynamicLinkService.initDynamicLinks(context);
 
     var localConfig = context.uniProvider.localConfig;
@@ -283,12 +284,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                   onPress: () {
                     showModalBottomSheet(
                         backgroundColor: Colors.transparent,
-                        barrierColor: Colors.black38,
+                        barrierColor: Colors.black26,
                         // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
                         // barrierColor: Colors.black.withOpacity(0.00),
                         // AKA 2%
                         isScrollControlled: true,
                         context: context,
+                        elevation: 0,
                         builder: (context) {
                           // print('replyStyle ${replyStyle}');
                           return CreatePostScreen(
