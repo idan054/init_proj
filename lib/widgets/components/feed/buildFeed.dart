@@ -111,7 +111,7 @@ Widget buildFeed(
                         context: context,
                         builder: (BuildContext context) => const BottomSortSheet(),
                       );
-                      if (context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByLocation) {
+                      if ((shouldRefresh ?? false) && context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByLocation) {
                         await updateUserLocation(context, force: true);
                       }
                       if (shouldRefresh ?? false) onRefreshIndicator();
