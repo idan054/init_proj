@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:http/http.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:widgets_to_image/widgets_to_image.dart';
 import '../../common/models/post/post_model.dart';
@@ -171,24 +172,21 @@ class _PostBlockState extends State<PostBlock> {
     final creatorUser = widget.post.creatorUser;
     final currUser = context.uniProvider.currUser;
     final feedSortBy = context.uniProvider.sortFeedBy.type;
+    final currFilter = context.uniProvider.currFilter;
     String title = '';
     String sortFeed = '';
     List<String>? commonTags = [];
 
     // if (feedSortBy == FilterTypes.sortFeedByAge) sortFeed += '${creatorUser?.age}y.o';
-    if (feedSortBy == FilterTypes.sortFeedByTopics) {
+    if (feedSortBy == FilterTypes.sortFeedByTopics &&
+        currFilter == FilterTypes.postWithoutComments) {
       // Get 1st - always same (when user refresh indicator)
-      final commonTag = creatorUser?.tags.firstWhereOrNull((tag) => currUser.tags.contains(tag));
-      // Get randomly
-      // commonTags = creatorUser?.tags.where((tag) => currUser.tags.contains(tag)).toList();
-      // final commonTag = commonTags?[Random().nextInt(commonTags.length)];
-      sortFeed += '$commonTag';
+      // final commonTag = creatorUser?.tags.firstWhereOrNull((tag) => currUser.tags.contains(tag));
+      sortFeed += '${widget.post.tag}';
     }
 
     if (sortFeed.isNotEmpty) title += ' · ';
-    title +=
-        // '${(creatorUser?.name?.length ?? 0) < 20 ? creatorUser?.name?.trim() : '${creatorUser?.name?.trim().substring(0, 20)}...'}';
-        '${creatorUser?.name?.trim()}';
+    title += '${creatorUser?.name?.trim()}';
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,

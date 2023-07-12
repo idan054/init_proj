@@ -121,7 +121,7 @@ class _NotificationScreenState extends State<NotificationScreen>
             printGreen('START: onEndOfPage()');
             await _loadMore();
           },
-        );
+        ).center;
       }),
     );
   }

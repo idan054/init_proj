@@ -14,8 +14,8 @@ import 'package:flutter/material.dart';
 import 'db_advanced.dart';
 
 enum FeedTypes {
-  members,
-  conversations,
+  rils,
+  talks,
   reports,
   notifications,
 }

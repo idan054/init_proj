@@ -110,19 +110,19 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
 
       if (i == 0) {
         activeFilter = FilterTypes.postWithoutComments;
-        context.uniProvider.feedTypeUpdate(FeedTypes.members);
+        context.uniProvider.feedTypeUpdate(FeedTypes.rils);
       }
       if (i == 1) {
         activeFilter = FilterTypes.postWithComments;
-        context.uniProvider.feedTypeUpdate(FeedTypes.conversations);
+        context.uniProvider.feedTypeUpdate(FeedTypes.talks);
       }
-      context.uniProvider.currFilterUpdate(activeFilter);
       await _loadMore(refresh: true);
     }
   }
 
   Future _loadMore({bool refresh = false}) async {
     printYellow('START: FEED _loadMore()');
+    context.uniProvider.currFilterUpdate(activeFilter, notify: false);
 
     //~ Only at refresh
     if (refresh) {
@@ -161,7 +161,8 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
       length: 2,
       initialIndex: 0,
       child: Scaffold(
-        backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.darkGrey,
+        backgroundColor: AppColors.darkGrey,
+        // backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.darkGrey,
         // backgroundColor: postList.isEmpty ? AppColors.primaryDark : AppColors.grey50,
         appBar: buildRiltopiaAppBar(
           context,
@@ -200,7 +201,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
               context,
               postList,
               splashLoader,
-              feedType: FeedTypes.members,
+              feedType: FeedTypes.rils,
               onRefreshIndicator: () async {
                 printGreen('START: onRefresh()');
                 await _loadMore(refresh: true);
@@ -215,7 +216,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
               context,
               postList,
               splashLoader,
-              feedType: FeedTypes.conversations,
+              feedType: FeedTypes.talks,
               onRefreshIndicator: () async {
                 printGreen('START: onRefresh()');
                 await _loadMore(refresh: true);
@@ -496,7 +497,9 @@ Widget profileCircle(BuildContext context) {
             }, radius: 5),
           ),
           Builder(builder: (context) {
-            var patchVer = context.uniProvider.localConfig.currentPatchNumber.toString().replaceAll(' ', '') ?? '(Debug)';
+            var patchVer =
+                context.uniProvider.localConfig.currentPatchNumber.toString().replaceAll(' ', '') ??
+                    '(Debug)';
             if (patchVer != '(Debug)') patchVer = '+$patchVer';
             return 'Version: ${context.uniProvider.localConfig.publicVersionAndroid}'
                     '$patchVer'
@@ -518,13 +521,14 @@ Widget buildChoiceChip(BuildContext context,
     Widget? customIcon,
     Color? selectedColor,
     Color? borderColor,
-    double? padding,
+    EdgeInsetsGeometry? padding,
+    EdgeInsetsGeometry? labelPadding,
     double rounded = 99,
     required bool selected,
     ValueChanged<bool>? onSelect,
     required Widget label}) {
   return Padding(
-    padding: (padding ?? 6).horizontal,
+    padding: padding ?? 0.all,
     child: Theme(
       data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
       child: ChoiceChip(
@@ -533,11 +537,10 @@ Widget buildChoiceChip(BuildContext context,
           shape: rounded.roundedShape,
           selected: selected,
           materialTapTargetSize: (padding != null) ? MaterialTapTargetSize.shrinkWrap : null,
-          padding: (padding != null) ? 0.all : null,
+          labelPadding: labelPadding ?? const EdgeInsets.only(left: 2, right: 6),
           backgroundColor: AppColors.darkGrey,
           selectedColor: selectedColor ?? AppColors.transparent,
           side: borderColor == null ? null : BorderSide(width: 1.5, color: borderColor),
-
           // color: !selected ? AppColors.grey50 : selectedColor ?? AppColors.white),
           // side: BorderSide.none,
           labelStyle: AppStyles.text14PxRegular.copyWith(

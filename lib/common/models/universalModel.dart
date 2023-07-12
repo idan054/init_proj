@@ -30,10 +30,11 @@ class UniProvider with ChangeNotifier {
   UserModel currUser = const UserModel();
   bool showFab = true;
 
+  //! currFilter & sortFeedBy.type usage could make issues
   FilterTypes currFilter = FilterTypes.postWithoutComments;
   SortFeedModel sortFeedBy = sortByDefault;
 
-  FeedTypes feedType = FeedTypes.members;
+  FeedTypes feedType = FeedTypes.rils;
   bool isLoading = false;
   bool signupErrFound = false;
   bool postUploaded = false; // To auto refresh when user post.

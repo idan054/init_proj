@@ -23,6 +23,7 @@ import '../../common/models/chat/chat_model.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/Chat/chat_services.dart';
 import '../../widgets/app_bar.dart';
+import '../../widgets/components/feed/feedTitle.dart';
 
 class ChatsListScreen extends StatefulWidget {
   const ChatsListScreen({Key? key}) : super(key: key);
@@ -65,7 +66,10 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
     // await Future.delayed(100.milliseconds);
     splashLoader = true;
     if (mounted) setState(() {});
-    if (refresh) chatList = [];
+    if (refresh) {
+      chatList = [];
+      context.uniProvider.fetchedUsers = [];
+    }
     var updatedList = <ChatModel>[
       ...await Database.advanced.handleGetModel(context, ModelTypes.chats, chatList)
     ];
@@ -104,8 +108,8 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
         body: Builder(builder: (context) {
           if (splashLoader && chatList.isEmpty) {
             // First time only
-            return const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3)
-                .center;
+            // return const CircularProgressIndicator(color: AppColors.primaryLight, strokeWidth: 3)
+            return basicLoaderRiltopia().center;
           }
 
           if (chatList.isEmpty) {
@@ -122,37 +126,45 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                 await _loadMore();
                 // context.uniProvider.updateIsLoading(false);
               },
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: chatList.length,
-                itemBuilder: (context, i) {
-                  if (chatList.isEmpty) {
-                    return 'Your Talks \nwill be show here'.toText().center;
-                  }
-
-                  // var chatList = context.listenchatListModelList;
-                  // WidgetsBinding.instance.addPostFrameCallback(
-                  //         (_) => context.uniProvider.updateChatList(chatList));
-
-                  ChatModel chat = chatList[i];
-                  var otherUser = chat.users!.firstWhere((user) => user.uid != currUser.uid);
-
-                  return StatefulBuilder(builder: (_context, stfSetState) {
-                    return ChatBlockSts(chat, otherUser, onTap: () async {
-                      if (!mounted) return;
-                      chatList[i] = chat;
-                      // var chatId = ChatService.openChat(context, otherUser: otherUser);
-                      await context.router
-                          .push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));
-                      if (_context.uniProvider.activeChat != null) {
-                        print('START: stfSetState()');
-                        chat = _context.uniProvider.activeChat!;
-                        stfSetState(() {});
-                      }
-                    });
-                  });
+              child: RefreshIndicator(
+                backgroundColor: AppColors.primaryOriginal,
+                color: AppColors.darkBg,
+                strokeWidth: 2,
+                onRefresh: () async {
+                  _loadMore(refresh: true);
                 },
-              ).pOnly(top: 10),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: chatList.length,
+                  itemBuilder: (context, i) {
+                    if (chatList.isEmpty) {
+                      return 'Your Talks \nwill be show here'.toText().center;
+                    }
+
+                    // var chatList = context.listenchatListModelList;
+                    // WidgetsBinding.instance.addPostFrameCallback(
+                    //         (_) => context.uniProvider.updateChatList(chatList));
+
+                    ChatModel chat = chatList[i];
+                    var otherUser = chat.users!.firstWhere((user) => user.uid != currUser.uid);
+
+                    return StatefulBuilder(builder: (_context, stfSetState) {
+                      return ChatBlockSts(chat, otherUser, onTap: () async {
+                        if (!mounted) return;
+                        chatList[i] = chat;
+                        // var chatId = ChatService.openChat(context, otherUser: otherUser);
+                        await context.router
+                            .push(ChatRoute(otherUser: otherUser, chatId: chat.id!, chat: chat));
+                        if (_context.uniProvider.activeChat != null) {
+                          print('START: stfSetState()');
+                          chat = _context.uniProvider.activeChat!;
+                          stfSetState(() {});
+                        }
+                      });
+                    });
+                  },
+                ).pOnly(top: 10),
+              ),
             ),
           ).pOnly(top: 2);
         }));

@@ -69,6 +69,7 @@ class _UserScreenState extends State<UserScreen> {
   // User posts
   Future _loadMore({bool refresh = false}) async {
     print('START: USER _loadMore()');
+    context.uniProvider.currFilterUpdate(activeFilter, notify: false);
 
     if (refresh) {
       postList = [];

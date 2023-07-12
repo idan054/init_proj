@@ -19,6 +19,7 @@ import '../../common/service/Feed/feed_services.dart';
 import '../../common/service/mixins/assets.gen.dart';
 import '../../common/themes/app_styles.dart';
 import '../../widgets/clean_snackbar.dart';
+import '../../widgets/components/feed/feedTitle.dart';
 import '../../widgets/my_widgets.dart';
 import 'main_feed_screen.dart';
 
@@ -36,8 +37,10 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
   var postController = TextEditingController();
   bool isComments = false;
 
-  // bool isTagScreen = false;
-  int? tagIndex;
+  bool showTags = false; // Main Buttons Vs. Tags Row
+  bool showAllTags = false; // Tags Wrap() Vs. Tags Row()
+  // bool isTagAdded = false;
+  String sTag = '';
 
   @override
   void initState() {
@@ -111,40 +114,39 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              buildChoiceChip(context,
-                      selectedColor: AppColors.darkGrey,
-                      // borderColor: AppColors.primaryLight2,
-                      borderColor: AppColors.transparent,
-                      customIcon: isComments
-                          ? Assets.svg.icons.messageSmile
-                              .svg(height: 20, color: AppColors.primaryLight2)
-                          : Assets.svg.icons.dmPlaneUntitledIcon
-                              .svg(height: 15, color: AppColors.primaryLight2),
-                      // label: (isComments ? 'With comments' : 'Reply only') // Reply only
-                      label: (isComments ? 'With comments' : 'Chat only') // Reply only
-                          .toText(color: AppColors.primaryLight2),
-                      //
-                      onSelect: (bool newSelection) {
-                isComments = !isComments;
-                widget.onChange(isComments);
-                setState(() {});
-              }, selected: isComments)
-                  .centerLeft
-                  .pOnly(left: 5),
+              if (showTags) ...[
+                _tagsChoiceList(context).expanded(),
+              ] else ...[
+                buildChoiceChip(context,
+                        selectedColor: AppColors.darkGrey,
+                        customIcon: isComments
+                            ? Assets.svg.icons.messageSmile
+                                .svg(height: 20, color: AppColors.primaryLight2)
+                            : Assets.svg.icons.dmPlaneUntitledIcon
+                                .svg(height: 15, color: AppColors.primaryLight2),
+                        label: (isComments ? 'With comments' : 'Chat only') // Reply only
+                            .toText(color: AppColors.primaryLight2),
+                        //
+                        onSelect: (bool newSelection) {
+                  isComments = !isComments;
+                  widget.onChange(isComments);
+                  setState(() {});
+                }, selected: isComments)
+                    .px(10),
 
-              // Expanded(
-              //   child: isTagAdded
-              //       ? _tagsChoiceList(context)
-              //       : buildChoiceChip(context, label: const Text('Add tag'),
-              //               onSelect: (bool newSelection) {
-              //           isTagAdded = !isTagAdded;
-              //           setState(() {});
-              //         }, selected: isTagAdded)
-              //           .centerLeft
-              //           .pOnly(left: 5),
-              // ),
-
-              const Spacer(),
+                if(!isComments)
+                buildChoiceChip(
+                  context,
+                  customIcon: (sTag.isEmpty ? Icons.add : Icons.tag).icon(color: AppColors.primaryLight2),
+                  label: (sTag.isEmpty ? 'Add tag' : sTag).toText(color: AppColors.primaryLight2),
+                  selected: false,
+                  onSelect: (bool newSelection) {
+                    showTags = true;
+                    setState(() {});
+                  },
+                ),
+                const Spacer(),
+              ],
               buildSendButton(
                   isActive: postController.text.isNotEmpty &&
                       (postController.text.replaceAll(' ', '').isNotEmpty),
@@ -157,6 +159,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                     var post = PostModel(
                       textContent: postController.text,
                       id: '${currUser.email}${UniqueKey()}',
+                      tag: sTag,
                       //  TODO ADD ON POST MVP ONLY: Use UID instead creatorUser so
                       // details will be update if user edit his info
                       creatorUser: currUser,
@@ -178,37 +181,71 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
     );
   }
 
-// SizedBox _tagsChoiceList(BuildContext context) {
-//   return SizedBox(
-//     height: 50.0,
-//     child: ListView(
-//       scrollDirection: Axis.horizontal,
-//       children: List<Widget>.generate(
-//         tags.length,
-//         (int i) {
-//           var isChipSelected = tagIndex == i;
-//
-//           return buildChoiceChip(
-//             context,
-//             label: Text(tags[i]),
-//             showCloseIcon: true,
-//             selected: isChipSelected,
-//             onSelect: (bool newSelection) {
-//               if (newSelection) {
-//                 tagIndex = i;
-//               } else {
-//                 tagIndex = null; // To do not remember selection.
-//
-//                 isTagAdded = false;
-//               }
-//               setState(() {});
-//             },
-//           );
-//         },
-//       ).toList(),
-//     ),
-//   );
-// }
+  List<Widget> _buildListFrom(List<String> list) {
+    return List<Widget>.generate(
+      list.length,
+      (int i) {
+        // var isChipSelected = tagIndex == i;
+        var isChipSelected = sTag == list[i];
+
+        return buildChoiceChip(
+          context,
+          selectedColor: AppColors.greyLight,
+          labelPadding: 4.horizontal,
+          padding: showAllTags ? 3.all : 3.horizontal,
+          label: Text(list[i]),
+          // showCloseIcon: true,
+          selected: isChipSelected,
+          onSelect: (bool newSelection) {
+            if (showAllTags) showAllTags = false;
+            if (newSelection) {
+              sTag = list[i];
+              showTags = false;
+            } else {
+              sTag = '';
+            }
+            setState(() {});
+          },
+        );
+      },
+    ).toList();
+  }
+
+  Widget _showHideAllTags() {
+    return buildChoiceChip(
+      selectedColor: AppColors.darkGrey,
+      context,
+      labelPadding: 4.horizontal,
+      padding: 3.horizontal,
+      label: Text(showAllTags ? '< Less tags' : 'More tags >'),
+      // showCloseIcon: true,
+      selected: false,
+      onSelect: (bool newSelection) {
+        print('newSelection ${newSelection}');
+        print('showAllTags ${showAllTags}');
+        showAllTags = !showAllTags;
+        setState(() {});
+      },
+    );
+  }
+
+  Widget _tagsChoiceList(BuildContext context) {
+    return showAllTags
+        ? Wrap(children: [
+            _showHideAllTags(),
+            ..._buildListFrom(tags),
+          ])
+        : SizedBox(
+            height: 50.0,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: [
+                ..._buildListFrom(context.uniProvider.currUser.tags),
+                _showHideAllTags(),
+              ],
+            ).pOnly(left: 5),
+          );
+  }
 }
 
 Future updateUserLocationIfNeeded(BuildContext context, {bool force = false}) async {

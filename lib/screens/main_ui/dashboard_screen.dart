@@ -101,7 +101,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   void _handleIndexChanged(int i, bool navBar) {
     sItem = TabItems.values[i];
     if (sItem == TabItems.home) {
-      context.uniProvider.feedTypeUpdate(FeedTypes.members);
+      context.uniProvider.feedTypeUpdate(FeedTypes.rils);
       context.uniProvider.currFilterUpdate(FilterTypes.postWithoutComments);
     }
 
@@ -235,7 +235,7 @@ class _DashboardScreenState extends State<DashboardScreen>
   Builder buildFab() {
     return Builder(builder: (context) {
       var showFab = context.uniProvider.showFab;
-      var replyStyle = context.listenUniProvider.feedType == FeedTypes.members;
+      var replyStyle = context.listenUniProvider.feedType == FeedTypes.rils;
 
       // SpeedDialChild fabChild(String title, Widget icon, {required bool replyStyle}) {
       //   return SpeedDialChild(
@@ -298,7 +298,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                             onChange: (bool isComments) {
                               print('isComments $isComments');
                               var feedType =
-                                  isComments ? FeedTypes.conversations : FeedTypes.members;
+                                  isComments ? FeedTypes.talks : FeedTypes.rils;
                               var activeFilter = isComments
                                   ? FilterTypes.postWithComments
                                   : FilterTypes.postWithoutComments;

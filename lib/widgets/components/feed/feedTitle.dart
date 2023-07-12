@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/extensions.dart';
+import 'package:rive/rive.dart';
 import '../../../common/models/report/report_model.dart';
 import '../../../common/routes/app_router.gr.dart';
 import '../../../common/service/Database/db_advanced.dart';
@@ -13,6 +14,33 @@ import 'package:flutter/material.dart';
 
 import 'bottom_sort_sheet.dart';
 
+
+
+Widget basicLoaderRiltopia() =>
+    Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        TweenAnimationBuilder(
+            duration: 1.seconds,
+            tween: Tween<double>(begin: 0, end: 1),
+            builder: (BuildContext context, double value, Widget? child) {
+              return Stack(
+                children: [
+                  Container(
+                      color: AppColors.primaryOriginal.withOpacity(value),
+                      height: 80,
+                      width: 80,
+                      padding: 5.all,
+                      child: RiveAnimation.asset('assets/riv/rilmanblackwhitefaster.riv')
+                          .offset(0, 5))
+                      .roundedFull,
+                  Assets.images.circleCover.image(fit: BoxFit.fill).sizedBox(80, 80),
+                ],
+              );
+            }),
+      ],
+    );
+
 Widget basicLoader() =>
     const CircularProgressIndicator(color: AppColors.primaryOriginal, strokeWidth: 6).center;
 
@@ -22,8 +50,8 @@ Widget buildFeedSort(
   required GestureTapCallback onFeedSort,
   required GestureTapCallback onTopicChanged,
 }) {
-  bool isConversationTab = feedType == FeedTypes.conversations;
-  bool isNewRilsTab = feedType == FeedTypes.members;
+  bool isConversationTab = feedType == FeedTypes.talks;
+  bool isNewRilsTab = feedType == FeedTypes.rils;
   final currfilter = context.uniProvider.sortFeedBy;
   final currUser = context.uniProvider.currUser;
   final ageRange = ageRangeList(currUser);
@@ -32,6 +60,7 @@ Widget buildFeedSort(
   return ListTile(
           // minVerticalPadding: 15,
           tileColor: AppColors.primaryDark,
+          onTap: onFeedSort,
           // horizontalTitleGap: 0,
           // leading: Assets.svg.icons.shieldTickUntitledIcon.svg(),
           title: Row(
@@ -79,8 +108,8 @@ Widget buildFeedSort(
 }
 
 Widget buildFeedTitle(FeedTypes feedType, String? desc, String? title) {
-  bool isConversationTab = feedType == FeedTypes.conversations;
-  bool isNewRilsTab = feedType == FeedTypes.members;
+  bool isConversationTab = feedType == FeedTypes.talks;
+  bool isNewRilsTab = feedType == FeedTypes.rils;
 
   return ListTile(
     // minVerticalPadding: 15,

@@ -56,6 +56,7 @@ class FsAdvanced {
     String? collectionReference,
     FilterTypes? filter,
   }) async {
+
     var collectionRef = collectionReference ?? modelType.name;
     print('START: handleGetModel() [$collectionRef]');
     var modelList = currList ?? [];
@@ -166,7 +167,11 @@ class FsAdvanced {
             });
           }
           if (sortFeedBy == FilterTypes.sortFeedByTopics) {
-            reqBase = reqBase.where('creatorUser.tags', arrayContainsAny: currUser.tags);
+            // post.tag = POSTS From topics user like
+            reqBase = reqBase.where('tag', whereIn: currUser.tags);
+            // post.creatorUser.tag = POSTS From user with same interests
+            // reqBase = reqBase.where('creatorUser.tags', arrayContainsAny: currUser.tags);
+
             // arrayContains = if "X" in Firestore array ["X", "Y"]
             // arrayContainsAny = if any item from ["X", "Y"] in Firestore array ["X", "Y"]
           }
