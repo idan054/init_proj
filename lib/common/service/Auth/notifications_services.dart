@@ -4,6 +4,7 @@ import 'package:example/common/extensions/context_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import '../Database/firebase_db.dart';
+import 'package:app_settings/app_settings.dart';
 
 // Based firebase_messaging ONLY.
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,7 +28,7 @@ class PushNotificationService {
     print('requestPermission() token $token');
     var status = settings.authorizationStatus;
     if (status == AuthorizationStatus.denied) {
-      AppSettings.openNotificationSettings();
+      AppSettings.openAppSettings(type: AppSettingsType.location);
     }
     return settings.authorizationStatus == AuthorizationStatus.authorized;
   }

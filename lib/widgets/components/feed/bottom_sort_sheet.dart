@@ -86,9 +86,9 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
             selectedFeedSort.desc.toText(fontSize: 14, color: AppColors.greyLight),
             10.verticalSpace,
             buildRadioItem(sortByDefault),
-            buildRadioItem(sortByLocation),
             buildRadioItem(sortByTopic),
             buildRadioItem(sortByAge),
+            buildRadioItem(sortByLocation, isActive: false),
             buildRadioItem(sortByIsOnline, isActive: false),
             10.verticalSpace,
           ],
@@ -100,9 +100,9 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
   Widget buildRadioItem(SortFeedModel filter, {bool isActive = true}) {
     void updateValue() {
       selectedFeedSort = filter;
-      context.uniProvider.sortFeedByUpdate(filter);
+      context.uniProvider.sortFeedByUpdate(filter, notify: false);
       setState(() {});
-      Navigator.pop(context, true);
+      // Navigator.pop(context, true);
     }
 
     return ListTile(

@@ -85,11 +85,13 @@ Widget buildFeed(
                         context: context,
                         builder: (BuildContext context) => const BottomSortSheet(),
                       );
-                      if ((shouldRefresh ?? false) &&
+                      if (
+                      // (shouldRefresh ?? false) &&
                           context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByLocation) {
                         await updateUserLocationIfNeeded(context, force: true);
                       }
-                      if (shouldRefresh ?? false) onRefreshIndicator();
+                      // if (shouldRefresh ?? false)
+                        onRefreshIndicator();
                     },
                   ),
                 1.verticalSpace,

@@ -74,7 +74,7 @@ dependencies:
       ref: 9e46048ad2e1f085c1e8f6c77391fa52025e681f
 
   permission_handler: ^10.2.0
-  video_player: ^2.4.10
+#  video_player: ^2.4.10
   another_flushbar: ^1.12.29
   shimmer: ^2.0.0
   collection: ^1.16.0
@@ -84,7 +84,8 @@ dependencies:
 #  apple_sign_in: ^0.1.0
   sign_in_with_apple: ^4.3.0
 #  notification_permissions: ^0.6.1
-  app_settings: ^4.2.0
+#  app_settings: ^4.2.0
+  app_settings: ^5.0.0
   transparent_image: ^2.0.0
   flutter_speed_dial: ^6.2.0
   auto_direction: ^0.0.6
