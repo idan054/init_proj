@@ -75,8 +75,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     print('START: initState()');
     _tabController = TabController(vsync: this, length: 2);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => context.uniProvider.addListener(() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => context.uniProvider.addListener(() async {
           if (mounted && initTabHandle) {
+            await showSortByIfNeeded();
             initTabHandle = false;
             _handleIndexChanged(context.uniProvider.feedType.index,
                 fromTabBar: false, fromListener: true);
@@ -155,6 +156,17 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     // Future.delayed(350.milliseconds).then((_) => setState(() {}));
     // Future.delayed(350.milliseconds).then((_) => setState(() {}));
     // }
+  }
+
+  Future showSortByIfNeeded() async {
+    print('START: showSortByIfNeeded()');
+    final onBoarding = HiveServices.uniBox.get('onBoarding');
+    print('onBoarding ${onBoarding}');
+    if (onBoarding == null || onBoarding == true) {
+      HiveServices.uniBox.put('onBoarding', false);
+      await showBottomSortBySheet(context);
+      _loadMore(refresh: true);
+    }
   }
 
   @override

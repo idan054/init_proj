@@ -61,16 +61,16 @@ class _FilterPreviewScreenState extends State<FilterPreviewScreen> {
           Column(
             children: [
               15.verticalSpace,
-              'Age, Distance & More filters will be available soon!'
+              'RilTopia better with friends!'
                   .toText(fontSize: 18, medium: true, textAlign: TextAlign.center)
                   .px(15),
-              10.verticalSpace,
-              2.verticalSpace,
-              'Share & Rate us now to support (:'
+              // 10.verticalSpace,
+              5.verticalSpace,
+              '& Also support the community'
                   .toText(fontSize: 13, color: AppColors.grey50, textAlign: TextAlign.center),
             ],
           ).appearAll,
-          60.verticalSpace,
+          40.verticalSpace,
           rilClassicButton(
             context,
             radius: 99,

@@ -20,6 +20,18 @@ import '../../../screens/main_ui/notification_screen.dart';
 import 'bottom_sort_sheet.dart';
 import 'feedTitle.dart';
 
+Future showBottomSortBySheet(BuildContext context) async {
+  await showModalBottomSheet(
+    barrierColor: Colors.black26,
+    backgroundColor: AppColors.transparent,
+    context: context,
+    builder: (BuildContext context) => const BottomSortSheet(),
+  );
+  if (context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByLocation) {
+    await updateUserLocationIfNeeded(context, force: true);
+  }
+}
+
 Widget buildFeed(
   BuildContext context,
   List<PostModel> postList,
@@ -71,18 +83,7 @@ Widget buildFeed(
                     feedType,
                     onTopicChanged: onRefreshIndicator,
                     onFeedSort: () async {
-                      bool? shouldRefresh = await showModalBottomSheet(
-                        barrierColor: Colors.black26,
-                        backgroundColor: AppColors.transparent,
-                        context: context,
-                        builder: (BuildContext context) => const BottomSortSheet(),
-                      );
-                      if (
-                          // (shouldRefresh ?? false) &&
-                          context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByLocation) {
-                        await updateUserLocationIfNeeded(context, force: true);
-                      }
-                      // if (shouldRefresh ?? false)
+                      await showBottomSortBySheet(context);
                       onRefreshIndicator();
                     },
                   ),
