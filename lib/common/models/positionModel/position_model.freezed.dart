@@ -166,11 +166,10 @@ class _$_PositionModel implements _PositionModel {
 
 abstract class _PositionModel implements PositionModel {
   const factory _PositionModel(
-      {@JsonKey(name: 'geohash')
-          final String? geohash,
+      {@JsonKey(name: 'geohash') final String? geohash,
       @JsonKey(name: 'geopoint')
       @GeoPointConverter()
-          final GeoPoint? geopoint}) = _$_PositionModel;
+      final GeoPoint? geopoint}) = _$_PositionModel;
 
   factory _PositionModel.fromJson(Map<String, dynamic> json) =
       _$_PositionModel.fromJson;

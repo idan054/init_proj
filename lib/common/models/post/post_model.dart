@@ -20,6 +20,7 @@ class PostModel with _$PostModel {
   const factory PostModel({
     String? tag,
     UserModel? creatorUser,
+    int? distance, // Between creatorUser & currUser
     @Default('') String textContent,
     @Default('') String id,
     @Default([]) List<String> likeByIds,

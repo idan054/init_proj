@@ -14,6 +14,7 @@ import 'package:example/common/dump/hive_services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geoflutterfire2/geoflutterfire2.dart';
+import 'package:haversine_distance/haversine_distance.dart';
 import 'firebase_db.dart';
 
 import 'dart:developer';
@@ -56,7 +57,6 @@ class FsAdvanced {
     String? collectionReference,
     FilterTypes? filter,
   }) async {
-
     var collectionRef = collectionReference ?? modelType.name;
     print('START: handleGetModel() [$collectionRef]');
     var modelList = currList ?? [];
@@ -68,7 +68,7 @@ class FsAdvanced {
     }
 
     // 1/2) Set modelList from Database snap:
-    print('Start fetch From: ${timeStamp == null ? 'Most recent' : 'timeStamp'}');
+    printWhite('Start fetch From: ${timeStamp == null ? 'Most recent' : 'timeStamp'}');
     var snap =
         await getDocsBasedModel(context, timeStamp, modelType, collectionRef, filter, otherUser);
 
@@ -80,7 +80,7 @@ class FsAdvanced {
       print('✴️ SUMMARY: ${modelList.length} ${collectionRef.toUpperCase()}');
       return modelList;
     } else {
-      print('✴️ SUMMARY: No new ${modelType.name} Found.');
+      print(' SUMMARY: No new ${modelType.name} Found.');
       // throw Exception('No More $collectionRef Found!!!');
       return [];
     }
@@ -99,7 +99,7 @@ class FsAdvanced {
 
     print(timestamp == null
         ? 'timestamp not found! - Get most recent instead.'
-        : 'timestamp: $timestamp');
+        : 'timestamp: ${timestamp.toDate()}');
 
     var currUser = context.uniProvider.currUser;
     QuerySnapshot<Map<String, dynamic>>? snap;
@@ -150,21 +150,23 @@ class FsAdvanced {
           }
           if (sortFeedBy == FilterTypes.sortFeedByLocation) {
             print('START: sortFeedByLocation()');
-            double radius = 50; // KM
-            // The (!) Might cuz issues
-            final centerGeo = currUser.position!.geopoint!;
-            final center = GeoFirePoint(centerGeo.latitude, centerGeo.latitude);
-            // Stream<List<DocumentSnapshot>> stream
-            //! NOT WORKING! SHOULD BE FIXED!
-            final stream = GeoFlutterFire().collection(collectionRef: reqBase).within(
-                  center: center,
-                  radius: radius,
-                  // field: 'position', // TEST DOC ALSO AVAILABLE
-                  field: 'creatorUser.position',
-                );
-            stream.listen((List<DocumentSnapshot> documentList) {
-              print('documentList $documentList');
-            });
+
+            //! NOT WORKING! And Not in use because limitation: https://pub.dev/packages/geoflutterfire2
+            //> Do client filter instead
+
+            // double radius = 50; // KM
+            // final centerGeo = currUser.position!.geopoint!;
+            // final center = GeoFirePoint(centerGeo.latitude, centerGeo.latitude);
+            // // Stream<List<DocumentSnapshot>> stream
+            // final stream = GeoFlutterFire().collection(collectionRef: reqBase).within(
+            //       center: center,
+            //       radius: radius,
+            //       // field: 'position', // TEST DOC ALSO AVAILABLE
+            //       field: 'creatorUser.position',
+            //     );
+            // stream.listen((List<DocumentSnapshot> documentList) {
+            //   print('documentList $documentList');
+            // });
           }
           if (sortFeedBy == FilterTypes.sortFeedByTopics) {
             // post.tag = POSTS From topics user like
@@ -191,17 +193,6 @@ class FsAdvanced {
         break;
     }
     snap = await reqBase.get();
-
-    //~ Debug Code: PLEASE REMOVE ME!!
-    // if (modelType == ModelTypes.posts) {
-    //   for (var d in snap.docs) {
-    //     if (d.id == 'idanbit80@gmail.com[#4e0a4]') {
-    //       printWhite(d.id);
-    //       log('${d.data()['position']}');
-    //     }
-    //   }
-    // }
-
     print('DONE: getDocsBasedModel() - ${modelType.name} [${snap.size} docs]');
     return snap;
   }
@@ -210,11 +201,18 @@ class FsAdvanced {
   Future<List> _docsToModelList(
       BuildContext context, QuerySnapshot<Map<String, dynamic>> snap, ModelTypes modelType) async {
     print('START: docsToModelList() - ${modelType.name}');
-    var currUser = context.uniProvider.currUser;
+    final currUser = context.uniProvider.currUser;
+    final sortFeedBy = context.uniProvider.sortFeedBy.type;
+    final currFilter = context.uniProvider.currFilter;
+
     List listModel;
     switch (modelType) {
       case ModelTypes.posts:
         listModel = snap.docs.map((doc) => PostModel.fromJson(doc.data())).toList();
+        if (sortFeedBy == FilterTypes.sortFeedByLocation &&
+            currFilter == FilterTypes.postWithoutComments) {
+          listModel = _byRangePosts(context, listModel);
+        }
         listModel = _removeBlockedUsers(context, listModel);
 
         for (var post in [...listModel]) {
@@ -257,6 +255,31 @@ class FsAdvanced {
     }
 
     return listModel;
+  }
+
+  List _byRangePosts(BuildContext context, List listModel) {
+    print('START: _inRangePosts()');
+    const range = 175; // KM
+    final inRangePosts = <PostModel>[];
+    for (PostModel post in [...listModel]) {
+      final postLatitude = post.creatorUser?.position?.geopoint?.latitude;
+      final postLongitude = post.creatorUser?.position?.geopoint?.longitude;
+      final currUserLatitude = context.uniProvider.currUser.position?.geopoint?.latitude;
+      final currUserLongitude = context.uniProvider.currUser.position?.geopoint?.longitude;
+
+      if (postLatitude == null || currUserLatitude == null) {
+      } else {
+        final haversineDistance = HaversineDistance();
+        final startCoordinate = Location(postLatitude, postLongitude!);
+        final endCoordinate = Location(currUserLatitude, currUserLongitude!);
+        var distance = haversineDistance.haversine(startCoordinate, endCoordinate, Unit.KM).floor();
+        print('${post.textContent} - distance $distance');
+
+        final postInRange = post.copyWith(distance: distance.toInt());
+        if (distance <= range) inRangePosts.add(postInRange);
+      }
+    }
+    return inRangePosts;
   }
 
   List _removeBlockedUsers(BuildContext context, List listModel) {

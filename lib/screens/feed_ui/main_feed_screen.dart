@@ -60,6 +60,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
   // int tagIndex = 0;
   var splashLoader = true;
   List<PostModel> postList = [];
+  List<PostModel> postListByDistance = [];
   var activeFilter = FilterTypes.postWithoutComments;
   TabController? _tabController;
   final _pageController = PageController(initialPage: 0);
@@ -129,6 +130,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
       context.uniProvider.fetchedUsers = [];
       splashLoader = true;
       postList = [];
+      postListByDistance = [];
       // if (mounted)
       setState(() {});
     }
@@ -136,6 +138,15 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     List newPosts = await Database.advanced
         .handleGetModel(context, ModelTypes.posts, postList, filter: activeFilter);
     if (newPosts.isNotEmpty) postList = [...newPosts];
+
+    if (context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByLocation &&
+        activeFilter == FilterTypes.postWithoutComments) {
+      print('START: postListByDistance()');
+      // ? This sort is on buildFeed() to keep onEndOfPage() works based timestamp!
+      postListByDistance = [...newPosts];
+      postListByDistance.sort((a, b) => a.distance!.compareTo(b.distance!));
+    }
+
     splashLoader = false;
 
     // Temp fix
@@ -199,7 +210,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
               desc: 'EXPLORE MEMBERS',
               title: 'NEW RILS',
               context,
-              postList,
+              postListByDistance.isNotEmpty ? postListByDistance : postList,
               splashLoader,
               feedType: FeedTypes.rils,
               onRefreshIndicator: () async {

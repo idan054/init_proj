@@ -9,33 +9,36 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../common/models/feedFilterModel/sort_feed_model.dart';
+import '../../../common/service/Database/db_advanced.dart';
 import '../../../common/service/mixins/assets.gen.dart';
 import '../postBlock_stf.dart';
 
 final sortByDefault = SortFeedModel(
   title: 'Default',
-  desc: 'Latest Rils by timeline',
+  desc: 'Rils from members by timeline',
   svg: Assets.svg.icons.sortByDefault,
   solidSvg: Assets.svg.icons.sortByDefaultSolid,
   type: FilterTypes.sortFeedByDefault,
 );
 final sortByIsOnline = SortFeedModel(
   title: 'Online members',
-  desc: 'Latest Rils by online members',
+  desc: 'Rils from online members',
   svg: Assets.svg.icons.userCircleOutline,
   solidSvg: Assets.svg.icons.userCircleSolid,
   type: FilterTypes.sortFeedByIsOnline,
 );
 final sortByLocation = SortFeedModel(
   title: 'Your location',
-  desc: 'Latest Rils by members around you',
+  // desc: 'Latest Rils by members around you',
+  desc: 'Rils from members around you',
   svg: Assets.svg.icons.sortByLocation,
   solidSvg: Assets.svg.icons.sortByLocationSolid,
   type: FilterTypes.sortFeedByLocation,
 );
 final sortByTopic = SortFeedModel(
   title: 'Your topics',
-  desc: 'Latest Rils by members like you',
+  // desc: 'Latest Rils by members like you',
+  desc: 'Rils from members like you',
   // svg: Assets.svg.icons.wisdomMultiLightStar,
   svg: Assets.svg.icons.sortByTopic,
   solidSvg: Assets.svg.icons.sortByTopicSolid,
@@ -43,7 +46,8 @@ final sortByTopic = SortFeedModel(
 );
 final sortByAge = SortFeedModel(
   title: 'Your age',
-  desc: 'Latest Rils by members in your age',
+  // desc: 'Latest Rils by members in your age',
+  desc: 'Rils from members in your age',
   svg: Assets.svg.icons.sortByAge,
   solidSvg: Assets.svg.icons.sortByAgeSolid,
   type: FilterTypes.sortFeedByAge,
@@ -68,6 +72,15 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final currUser = context.uniProvider.currUser;
+    final ageRange = ageRangeList(currUser);
+    final ageRangeStr = ' (${ageRange.first} - ${ageRange.last})';
+    String desc = selectedFeedSort.desc;
+
+    if (selectedFeedSort.type == FilterTypes.sortFeedByAge) {
+      desc += ageRangeStr;
+    }
+
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.darkBg,
@@ -77,37 +90,49 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
         ),
       ),
       child: Material(
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            25.verticalSpace,
-            'Sort by'.toText(bold: true, fontSize: 20),
-            10.verticalSpace,
-            selectedFeedSort.desc.toText(fontSize: 14, color: AppColors.greyLight),
-            10.verticalSpace,
-            buildRadioItem(sortByDefault),
-            buildRadioItem(sortByTopic),
-            buildRadioItem(sortByAge),
-            buildRadioItem(sortByLocation, isActive: false),
-            buildRadioItem(sortByIsOnline, isActive: false),
-            10.verticalSpace,
+        child: Stack(
+          children: [
+            ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                25.verticalSpace,
+                'Sort by'.toText(bold: true, fontSize: 20),
+                10.verticalSpace,
+                desc.toText(fontSize: 14, color: AppColors.greyLight),
+                10.verticalSpace,
+                buildRadioItem(sortByDefault),
+                buildRadioItem(sortByLocation),
+                buildRadioItem(sortByTopic),
+                buildRadioItem(sortByAge),
+                buildRadioItem(sortByIsOnline, isActive: false),
+                10.verticalSpace,
+              ],
+            ).px(20),
+            Positioned(
+                top: 0,
+                right: 0,
+                child: Icons.close_rounded
+                    .icon(color: AppColors.greyUnavailable, size: 22)
+                    .px(12)
+                    .py(12)
+                    .onTap(() => updateValue(selectedFeedSort, alsoClose: true), radius: 10))
           ],
-        ).px(20),
+        ),
       ),
     );
   }
 
-  Widget buildRadioItem(SortFeedModel filter, {bool isActive = true}) {
-    void updateValue() {
-      selectedFeedSort = filter;
-      context.uniProvider.sortFeedByUpdate(filter, notify: false);
-      setState(() {});
-      // Navigator.pop(context, true);
-    }
+  void updateValue(SortFeedModel filter, {bool alsoClose = false}) {
+    selectedFeedSort = filter;
+    context.uniProvider.sortFeedByUpdate(filter, notify: false);
+    setState(() {});
+    if (alsoClose) Navigator.pop(context);
+  }
 
+  Widget buildRadioItem(SortFeedModel filter, {bool isActive = true}) {
     return ListTile(
       shape: 10.roundedShape,
-      onTap: isActive ? updateValue : null,
+      onTap: isActive ? () => updateValue(filter) : null,
       horizontalTitleGap: 10,
       minLeadingWidth: 0,
       contentPadding: EdgeInsets.zero,
@@ -142,7 +167,7 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
         fillColor: isActive ? null : MaterialStateProperty.all(AppColors.darkOutline50),
         value: filter,
         groupValue: selectedFeedSort,
-        onChanged: isActive ? (value) => updateValue() : null,
+        onChanged: isActive ? (val) => updateValue(filter) : null,
       ).scale(scale: 1.15),
     );
   }

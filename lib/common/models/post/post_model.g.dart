@@ -11,6 +11,7 @@ _$_PostModel _$$_PostModelFromJson(Map<String, dynamic> json) => _$_PostModel(
       creatorUser: json['creatorUser'] == null
           ? null
           : UserModel.fromJson(json['creatorUser'] as Map<String, dynamic>),
+      distance: json['distance'] as int?,
       textContent: json['textContent'] as String? ?? '',
       id: json['id'] as String? ?? '',
       likeByIds: (json['likeByIds'] as List<dynamic>?)
@@ -39,6 +40,7 @@ Map<String, dynamic> _$$_PostModelToJson(_$_PostModel instance) =>
     <String, dynamic>{
       'tag': instance.tag,
       'creatorUser': instance.creatorUser?.toJson(),
+      'distance': instance.distance,
       'textContent': instance.textContent,
       'id': instance.id,
       'likeByIds': instance.likeByIds,

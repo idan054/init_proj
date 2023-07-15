@@ -22,6 +22,8 @@ PostModel _$PostModelFromJson(Map<String, dynamic> json) {
 mixin _$PostModel {
   String? get tag => throw _privateConstructorUsedError;
   UserModel? get creatorUser => throw _privateConstructorUsedError;
+  int? get distance =>
+      throw _privateConstructorUsedError; // Between creatorUser & currUser
   String get textContent => throw _privateConstructorUsedError;
   String get id => throw _privateConstructorUsedError;
   List<String> get likeByIds => throw _privateConstructorUsedError;
@@ -52,6 +54,7 @@ abstract class $PostModelCopyWith<$Res> {
   $Res call(
       {String? tag,
       UserModel? creatorUser,
+      int? distance,
       String textContent,
       String id,
       List<String> likeByIds,
@@ -82,6 +85,7 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
   $Res call({
     Object? tag = freezed,
     Object? creatorUser = freezed,
+    Object? distance = freezed,
     Object? textContent = null,
     Object? id = null,
     Object? likeByIds = null,
@@ -103,6 +107,10 @@ class _$PostModelCopyWithImpl<$Res, $Val extends PostModel>
           ? _value.creatorUser
           : creatorUser // ignore: cast_nullable_to_non_nullable
               as UserModel?,
+      distance: freezed == distance
+          ? _value.distance
+          : distance // ignore: cast_nullable_to_non_nullable
+              as int?,
       textContent: null == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
@@ -173,6 +181,7 @@ abstract class _$$_PostModelCopyWith<$Res> implements $PostModelCopyWith<$Res> {
   $Res call(
       {String? tag,
       UserModel? creatorUser,
+      int? distance,
       String textContent,
       String id,
       List<String> likeByIds,
@@ -202,6 +211,7 @@ class __$$_PostModelCopyWithImpl<$Res>
   $Res call({
     Object? tag = freezed,
     Object? creatorUser = freezed,
+    Object? distance = freezed,
     Object? textContent = null,
     Object? id = null,
     Object? likeByIds = null,
@@ -223,6 +233,10 @@ class __$$_PostModelCopyWithImpl<$Res>
           ? _value.creatorUser
           : creatorUser // ignore: cast_nullable_to_non_nullable
               as UserModel?,
+      distance: freezed == distance
+          ? _value.distance
+          : distance // ignore: cast_nullable_to_non_nullable
+              as int?,
       textContent: null == textContent
           ? _value.textContent
           : textContent // ignore: cast_nullable_to_non_nullable
@@ -278,6 +292,7 @@ class _$_PostModel implements _PostModel {
   const _$_PostModel(
       {this.tag,
       this.creatorUser,
+      this.distance,
       this.textContent = '',
       this.id = '',
       final List<String> likeByIds = const [],
@@ -300,6 +315,9 @@ class _$_PostModel implements _PostModel {
   final String? tag;
   @override
   final UserModel? creatorUser;
+  @override
+  final int? distance;
+// Between creatorUser & currUser
   @override
   @JsonKey()
   final String textContent;
@@ -360,7 +378,7 @@ class _$_PostModel implements _PostModel {
 
   @override
   String toString() {
-    return 'PostModel(tag: $tag, creatorUser: $creatorUser, textContent: $textContent, id: $id, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, originalPostId: $originalPostId, commentsLength: $commentsLength, commentedUsersEmails: $commentedUsersEmails, comments: $comments, postType: $postType, notificationsCounter: $notificationsCounter)';
+    return 'PostModel(tag: $tag, creatorUser: $creatorUser, distance: $distance, textContent: $textContent, id: $id, likeByIds: $likeByIds, timestamp: $timestamp, enableComments: $enableComments, originalPostId: $originalPostId, commentsLength: $commentsLength, commentedUsersEmails: $commentedUsersEmails, comments: $comments, postType: $postType, notificationsCounter: $notificationsCounter)';
   }
 
   @override
@@ -371,6 +389,8 @@ class _$_PostModel implements _PostModel {
             (identical(other.tag, tag) || other.tag == tag) &&
             (identical(other.creatorUser, creatorUser) ||
                 other.creatorUser == creatorUser) &&
+            (identical(other.distance, distance) ||
+                other.distance == distance) &&
             (identical(other.textContent, textContent) ||
                 other.textContent == textContent) &&
             (identical(other.id, id) || other.id == id) &&
@@ -399,6 +419,7 @@ class _$_PostModel implements _PostModel {
       runtimeType,
       tag,
       creatorUser,
+      distance,
       textContent,
       id,
       const DeepCollectionEquality().hash(_likeByIds),
@@ -429,6 +450,7 @@ abstract class _PostModel implements PostModel {
   const factory _PostModel(
       {final String? tag,
       final UserModel? creatorUser,
+      final int? distance,
       final String textContent,
       final String id,
       final List<String> likeByIds,
@@ -449,6 +471,8 @@ abstract class _PostModel implements PostModel {
   @override
   UserModel? get creatorUser;
   @override
+  int? get distance;
+  @override // Between creatorUser & currUser
   String get textContent;
   @override
   String get id;

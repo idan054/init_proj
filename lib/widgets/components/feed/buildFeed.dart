@@ -31,20 +31,12 @@ Widget buildFeed(
   required EndOfPageListenerCallback onEndOfPage,
   required FeedTypes feedType,
 }) {
-  // print('START: buildFeed() - ${feedType.name}');
+  print('START: buildFeed() - ${feedType.name}');
 
   // if (splashLoader) return basicLoader();
   if (splashLoader) {
     return basicLoaderRiltopia();
   }
-
-  // if (splashLoader || postList.isEmpty) {
-  //   return Shimmer.fromColors(
-  //       baseColor: AppColors.white,
-  //       highlightColor: AppColors.greyLight,
-  //       child: buildTagTitle(activeFilter, customTitle),
-  //       );
-  // }
 
   return LazyLoadScrollView(
       scrollOffset: 1500,
@@ -86,12 +78,12 @@ Widget buildFeed(
                         builder: (BuildContext context) => const BottomSortSheet(),
                       );
                       if (
-                      // (shouldRefresh ?? false) &&
+                          // (shouldRefresh ?? false) &&
                           context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByLocation) {
                         await updateUserLocationIfNeeded(context, force: true);
                       }
                       // if (shouldRefresh ?? false)
-                        onRefreshIndicator();
+                      onRefreshIndicator();
                     },
                   ),
                 1.verticalSpace,

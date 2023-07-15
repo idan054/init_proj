@@ -185,6 +185,12 @@ class _PostBlockState extends State<PostBlock> {
       sortFeed += '${widget.post.tag}';
     }
 
+    if (feedSortBy == FilterTypes.sortFeedByLocation &&
+        currFilter == FilterTypes.postWithoutComments) {
+      final distance = widget.post.distance;
+      if(distance != 0) sortFeed += '${distance}Km';
+    }
+
     if (sortFeed.isNotEmpty) title += ' · ';
     title += '${creatorUser?.name?.trim()}';
 
