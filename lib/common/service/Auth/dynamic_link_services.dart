@@ -82,17 +82,17 @@ class DynamicLinkService {
     required PostModel post,
   }) async {
     var images = [
-      // 'https://i.ibb.co/17gtzMP/A-Purple-People-Like-You.png',
-      // 'https://i.ibb.co/7rbVQTT/C-Blue-Whats-Around.png',
-      // 'https://i.ibb.co/3BBqJCN/B-Orange-Great-Converstions.png',
-      // 'https://i.ibb.co/PZkFYs2/D-Yellow-Response-Now.png',
-      // 'https://i.ibb.co/vPtjSMp/Filter-Preview-Full-4.png'
+      // Dark version
+      // 'https://i.ibb.co/b3yL41g/A-Purple-People-Like-You-Ril.png',
+      // 'https://i.ibb.co/JrgsT2D/B-Orange-Great-Converstions-Ril.png',
+      // 'https://i.ibb.co/TRFsh8s/D-Yellow-Response-Now-Ril.png',
+      // 'https://i.ibb.co/4Yf64Ff/C-Blue-Whats-Around-Ril.png',
 
-      // Same, But with RilTopia logo
-      'https://i.ibb.co/b3yL41g/A-Purple-People-Like-You-Ril.png',
-      'https://i.ibb.co/JrgsT2D/B-Orange-Great-Converstions-Ril.png',
-      'https://i.ibb.co/TRFsh8s/D-Yellow-Response-Now-Ril.png',
-      'https://i.ibb.co/4Yf64Ff/C-Blue-Whats-Around-Ril.png',
+      // Light version
+      'https://i.ibb.co/QCjnq51/Light-A-Purple-People-Like-You.png',
+      'https://i.ibb.co/6Bb4SLN/Light-B-Orange-Great-Converstions.png',
+      'https://i.ibb.co/nP4nHTw/Light-C-Blue-Whats-Around.png',
+      'https://i.ibb.co/dB5Cqrz/Light-D-Yellow-Response-Now.png',
     ];
 
     var productParams = postParams(
