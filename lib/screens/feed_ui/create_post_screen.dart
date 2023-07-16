@@ -265,10 +265,12 @@ Future updateUserLocationIfNeeded(BuildContext context, {bool force = false}) as
 
   if (currUser.position == null || force) {
     final isGranted = await Permission.locationWhenInUse.isGranted;
+    print('isGranted $isGranted');
     if (isGranted) {
       _updateCurrentPosition();
     } else {
       final status = await Permission.locationWhenInUse.request();
+      print('status $status');
       if (status == PermissionStatus.granted) {
         _updateCurrentPosition();
       } else {

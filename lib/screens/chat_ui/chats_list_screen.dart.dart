@@ -1,6 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
@@ -146,7 +147,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                     //         (_) => context.uniProvider.updateChatList(chatList));
 
                     ChatModel chat = chatList[i];
-                    var otherUser = chat.users!.firstWhere((user) => user.uid != currUser.uid);
+
+                    var otherUser = chat.users!.firstWhereOrNull((user) => user.uid != currUser.uid);
+                    if(otherUser == null) return const Offstage();
 
                     return StatefulBuilder(builder: (_context, stfSetState) {
                       return ChatBlockSts(chat, otherUser, onTap: () async {
