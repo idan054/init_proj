@@ -42,19 +42,24 @@ class _LoginScreenState extends State<LoginScreen> {
           // Assets.images.adPrt1.image().px(15),
           // 4.verticalSpace,
           // Assets.images.adPrt2.image().px(15),
-          Assets.images.onboardingNewBanner.image(),
+
+          LayoutBuilder(
+              builder: (_, c) => (c.maxWidth > 600)
+                  ? Assets.images.onboardingNewBanner
+                      .image(fit: BoxFit.cover)
+                      .sizedBox(context.width, 850)
+                  : Assets.images.onboardingNewBanner.image()),
+
           // googleLoginButton(),
           const Spacer(flex: 7),
 
           rilClassicButton(context,
                   radius: 99,
                   isWide: true,
-                  title: isLoading
-                      ? 'Loading...'
-                      : '${Platform.isIOS ? 'Sign in' : 'Continue'} with Google',
+                  title: isLoading ? 'Loading...' : 'Continue with Google',
                   icon: Assets.svg.gLogoIcon.svg(height: 29),
-                  bgColor: isLoading ? AppColors.darkOutline50: AppColors.darkGrey,
-                  textColor: isLoading ? AppColors.primaryDark: AppColors.greyLight,
+                  bgColor: isLoading ? AppColors.darkOutline50 : AppColors.darkGrey,
+                  textColor: isLoading ? AppColors.primaryDark : AppColors.greyLight,
                   onPressed: isLoading
                       ? null
                       : () async {
@@ -72,8 +77,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     isWide: true,
                     icon: Assets.svg.apple.svg(height: 23).pOnly(right: 6),
                     title: isLoading ? 'Loading...' : 'Continue with Apple',
-                    bgColor: isLoading ? AppColors.primaryDark : AppColors.darkGrey,
-                    textColor: isLoading ? AppColors.darkGrey : AppColors.greyLight,
+                    bgColor: isLoading ? AppColors.darkOutline50 : AppColors.darkGrey,
+                    textColor: isLoading ? AppColors.primaryDark : AppColors.greyLight,
                     onPressed: isLoading
                         ? null
                         : () async {
@@ -97,8 +102,8 @@ class _LoginScreenState extends State<LoginScreen> {
               children: <TextSpan>[
                 TextSpan(
                     text: Platform.isAndroid
-                        ? "By Join with Google, you agree to our "
-                        : "By 'Join with Google' or 'Join with Apple', you agree to our ",
+                        ? "By 'Continue with Google', you agree to our "
+                        : "By 'Continue with Google' or 'Continue with Apple', you agree to our ",
                     style: AppStyles.text14PxRegular.greyLight),
                 TextSpan(text: '\nTerms & Conditions', style: AppStyles.text14PxBold.greyLight
                     // .copyWith(decoration: TextDecoration.underline)

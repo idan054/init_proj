@@ -173,6 +173,7 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
   Widget build(BuildContext context) {
     print('START: MainFeedScreen() ${context.routeData.path}');
     var postUploaded = context.listenUniProvider.postUploaded;
+
     if (postUploaded) {
       _loadMore(refresh: true);
       context.uniProvider.postUploaded = false; // Will NOT rebuild
@@ -407,7 +408,8 @@ Widget profileCircle(BuildContext context) {
     radius: 18,
     child: CircleAvatar(
       radius: 16,
-      backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl!),
+      backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl ??
+          'https://www.bescouts.org.uk/wp-content/uploads/2022/10/person-placeholder.png'),
       backgroundColor: AppColors.lightOutline50,
     ),
   ).pOnly(right: 10, left: 5).py(5).onTap(() {

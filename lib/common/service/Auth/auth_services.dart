@@ -48,7 +48,8 @@ class AuthService {
     }
 
     var userData = await Database.docData('users/${authUser!.email}');
-    if (userData == null || userData['tags'] == null) {
+    final List<dynamic> userTags = userData?['tags'] ?? [];
+    if (userData == null || userTags.isEmpty) {
       printYellow('START: handleNewUser');
       _handleNewUser(context);
     } else {
@@ -72,6 +73,7 @@ class AuthService {
   static void _handleNewUser(BuildContext context) async {
     String? fcm = await FirebaseMessaging.instance.getToken();
     var user = context.uniProvider.currUser.copyWith(
+      name: Platform.isIOS ? authUser?.displayName : null,
       uid: authUser!.uid,
       email: authUser!.email,
       fcm: fcm,
@@ -103,8 +105,8 @@ class AuthService {
   static Future<User?> _appleAuthPopup() async {
     print('START: _appleAuthPopup()');
 
-    final appleProvider = await SignInWithApple.getAppleIDCredential(
-        scopes: [AppleIDAuthorizationScopes.email, AppleIDAuthorizationScopes.fullName]);
+    final appleProvider =
+        await SignInWithApple.getAppleIDCredential(scopes: [AppleIDAuthorizationScopes.email]);
 
     final credential = OAuthProvider('apple.com').credential(
         idToken: appleProvider.identityToken, accessToken: appleProvider.authorizationCode);
@@ -114,6 +116,7 @@ class AuthService {
     if (authUser != null && authUser!.email == null) {
       var mail = '${authUser!.uid.substring(0, 10)}@apple.com';
       authUser!.updateEmail(mail);
+      // if(authUser?.displayName == null) authUser!.updateDisplayName(displayName);
     }
     return authUser;
   }

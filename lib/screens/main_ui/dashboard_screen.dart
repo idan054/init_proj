@@ -80,7 +80,6 @@ class _DashboardScreenState extends State<DashboardScreen>
     var localConfig = context.uniProvider.localConfig;
     var serverConfig = context.uniProvider.serverConfig;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
       // BETA TEST:
       FirebaseAnalytics.instance.setCurrentScreen(
         screenName: 'Dashboard',
@@ -125,6 +124,11 @@ class _DashboardScreenState extends State<DashboardScreen>
 
     if (currUser.userType == UserTypes.blocked) {
       return buildUserBlockedScaffold(context);
+    }
+
+    if (currUser.age == null) {
+      context.router.push(const LoginRoute());
+      return const Offstage();
     }
 
     return Scaffold(
@@ -297,8 +301,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                             replyStyle,
                             onChange: (bool isComments) {
                               print('isComments $isComments');
-                              var feedType =
-                                  isComments ? FeedTypes.talks : FeedTypes.rils;
+                              var feedType = isComments ? FeedTypes.talks : FeedTypes.rils;
                               var activeFilter = isComments
                                   ? FilterTypes.postWithComments
                                   : FilterTypes.postWithoutComments;
