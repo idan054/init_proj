@@ -13,7 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:provider/provider.dart';
-
+import 'package:easy_localization/easy_localization.dart' as ez;
 import '../../common/models/message/message_model.dart';
 import '../../common/models/user/user_model.dart';
 import '../../common/service/Database/firebase_db.dart';
@@ -240,6 +240,11 @@ class _ChatScreenState extends State<ChatScreen> {
     bool currUser = message.fromId == context.uniProvider.currUser.uid;
     bool isHebrew = message.textContent!.isHebrew;
 
+    Radius topRight = 15.circular;
+    if (message.postReply != null || currUser) topRight = 3.circular;
+    Radius topLeft = 15.circular;
+    if (message.postReply != null || !currUser) topLeft = 3.circular;
+
     return Row(
       mainAxisAlignment: currUser ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: <Widget>[
@@ -258,19 +263,10 @@ class _ChatScreenState extends State<ChatScreen> {
                             color: currUser ? currUserBubble : otherUserBubble,
                             borderRadius: BorderRadius.only(
                               bottomRight: 15.circular,
-                              topRight: message.postReply != null
-                                  ? 3.circular
-                                  : (currUser ? 3 : 15).circular,
-                              topLeft: message.postReply != null
-                                  ? 3.circular
-                                  : (currUser ? 15 : 3).circular,
                               bottomLeft: 15.circular,
+                              topRight: context.hebLocale ? topLeft : topRight,
+                              topLeft: context.hebLocale ? topRight : topLeft,
                             )),
-                        // padding: const BubbleEdges.all(8.0),
-                        // nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,
-                        // nipRadius: 0,
-                        // showNip: false,
-
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -306,6 +302,11 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   ConstrainedBox buildReplyBubble(BuildContext context, bool currUser, MessageModel message) {
+    Radius topRight = 15.circular;
+    if (currUser) topRight = 3.circular;
+    Radius topLeft = 15.circular;
+    if (!currUser) topLeft = 3.circular;
+
     return ConstrainedBox(
         constraints: BoxConstraints(maxWidth: context.width * 0.8),
         // child: Bubble(
@@ -317,14 +318,12 @@ class _ChatScreenState extends State<ChatScreen> {
                 color: currUser ? currUserBubble : otherUserBubble,
                 borderRadius: BorderRadius.only(
                   bottomRight: 3.circular,
-                  topRight: (currUser ? 3 : 10).circular,
-                  topLeft: (currUser ? 10 : 3).circular,
+                  // topRight: (currUser ? 3 : 10).circular,
+                  // topLeft: (currUser ? 10 : 3).circular,
+                  topRight: context.hebLocale ? topLeft : topRight,
+                  topLeft: context.hebLocale ? topRight : topLeft,
                   bottomLeft: 3.circular,
                 )),
-            // padding: const BubbleEdges.all(8.0),
-            // nip: currUser ? BubbleNip.rightTop : BubbleNip.leftTop,
-            // nipRadius: 0,
-            // showNip: false,
             child: buildReplyProfile(
               context,
               currUser,
@@ -369,6 +368,11 @@ Widget buildTextField(
 }) {
   bool includeHeb = controller.text.isHebrew;
 
+  final sendButton = buildSendButton(
+      color: AppColors.greyLight,
+      isActive: controller.text.isNotEmpty && (controller.text.replaceAll(' ', '').isNotEmpty),
+      onTap: onTap);
+
   return Column(
     mainAxisSize: MainAxisSize.min,
     children: [
@@ -383,7 +387,9 @@ Widget buildTextField(
         minLines: 1,
         maxLines: 5,
         textDirection: includeHeb ? TextDirection.rtl : TextDirection.ltr,
-        textAlign: includeHeb ? TextAlign.right : TextAlign.left,
+        textAlign: includeHeb || (controller.text.isEmpty && context.hebLocale)
+            ? TextAlign.right
+            : TextAlign.left,
         cursorColor: AppColors.white,
         onChanged: (val) => stfSetState(() {}),
         decoration: InputDecoration(
@@ -394,13 +400,9 @@ Widget buildTextField(
             hintStyle: AppStyles.text14PxRegular.greyLight,
             focusedBorder: InputBorder.none,
             border: InputBorder.none,
-            hintText: hintText,
-            suffixIcon: buildSendButton(
-              color: AppColors.greyLight,
-              isActive:
-                  controller.text.isNotEmpty && (controller.text.replaceAll(' ', '').isNotEmpty),
-              onTap: onTap,
-            )),
+            hintText: hintText?.tr(),
+            prefixIcon: context.hebLocale ? sendButton : null,
+            suffixIcon: context.hebLocale ? null : sendButton),
       )
           .roundedOnly(
             bottomLeft: 12,
@@ -416,46 +418,50 @@ Widget buildTextField(
 Column buildReplyProfile(BuildContext context, bool currUser, PostModel post,
     {Widget? actionButton}) {
   var name = '${post.creatorUser?.name}';
-  var shortName = name.length > 13 ? name.substring(0, 13) + '...'.toString() : name;
-  var postAgo = postTime(post.timestamp!);
+  var shortName = name.length > 15 ? name.substring(0, 15) + '...'.toString() : name;
+  var postAgo = postTime(post.timestamp!, context);
   return Column(
     children: [
       5.verticalSpace,
-      Row(
-        // mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            children: [
-              CircleAvatar(
-                radius: 20,
-                backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
-                backgroundColor: AppColors.darkOutline,
-              ),
-              // buildOnlineBadge(),
-            ],
-          ),
-          10.horizontalSpace,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              shortName.toText(
-                  fontSize: 14,
-                  bold: true,
-                  color: currUser ? AppColors.darkGrey : AppColors.greyLight,
-                  softWrap: false),
-              postAgo
-                  .toText(color: currUser ? AppColors.darkGrey : AppColors.greyLight, fontSize: 11)
-                  .pOnly(right: 10, top: 0, bottom: 0),
-            ],
-          ),
-          // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
-          const Spacer(),
-          // .onTap(() {}, radius: 10), // TODO Add move to Tag
-          // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
-          actionButton ?? const Offstage()
-          // 10.horizontalSpace,
-        ],
+      Directionality(
+        textDirection: currUser ? TextDirection.ltr : TextDirection.rtl,
+        child: Row(
+          // mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundImage: NetworkImage('${post.creatorUser!.photoUrl}'),
+                  backgroundColor: AppColors.darkOutline,
+                ),
+                // buildOnlineBadge(),
+              ],
+            ),
+            10.horizontalSpace,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                shortName.toText(
+                    fontSize: 14,
+                    bold: true,
+                    color: currUser ? AppColors.darkGrey : AppColors.greyLight,
+                    softWrap: false),
+                postAgo
+                    .toText(
+                        color: currUser ? AppColors.darkGrey : AppColors.greyLight, fontSize: 11)
+                    .pOnly(right: 10, top: 0, bottom: 0),
+              ],
+            ),
+            // TODO ADD ON POST MVP ONLY (ago · Tag (Add Tags))
+            const Spacer(),
+            // .onTap(() {}, radius: 10), // TODO Add move to Tag
+            // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
+            actionButton ?? const Offstage()
+            // 10.horizontalSpace,
+          ],
+        ),
       ),
       4.verticalSpace,
       buildExpandableText(
@@ -468,7 +474,9 @@ Column buildReplyProfile(BuildContext context, bool currUser, PostModel post,
           color: currUser ? AppColors.darkBg : AppColors.white,
         ),
         linkColor: AppColors.white,
-      ).advancedSizedBox(context, maxWidth: true).pOnly(left: 50, bottom: 5, right: 45)
+      )
+          .advancedSizedBox(context, maxWidth: true)
+          .pOnly(left: context.hebLocale ? 10 : 50, bottom: 5, right: 45)
     ],
   );
 }

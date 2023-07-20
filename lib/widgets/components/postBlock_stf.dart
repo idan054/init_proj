@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
@@ -70,7 +71,8 @@ class _PostBlockState extends State<PostBlock> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
       margin: const EdgeInsets.symmetric(vertical: 6.5),
       color: AppColors.primaryDark,
-      child: buildPostBody(context, widget.isUserPage).pOnly(left: 15),
+      child: buildPostBody(context, widget.isUserPage)
+          .pOnly(left: context.hebLocale ? 0 : 15, right: context.hebLocale ? 15 : 0),
     ).onTap(
         // AKA comment
         (widget.report != null && widget.post.originalPostId != null) || widget.isCommentsPage
@@ -100,7 +102,7 @@ class _PostBlockState extends State<PostBlock> {
     var currUser = context.uniProvider.currUser;
     var isCurrUser = currUser.uid == widget.post.creatorUser!.uid;
     var isAdmin = currUser.userType == UserTypes.admin;
-    var postAgo = postTime(widget.post.timestamp!);
+    var postAgo = postTime(widget.post.timestamp!, context);
 
     final isConversation = widget.post.enableComments && widget.post.originalPostId == null;
     const paddingFromImage = 10.0;
@@ -121,51 +123,22 @@ class _PostBlockState extends State<PostBlock> {
                     textDirection:
                         widget.post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
                     style: AppStyles.text14PxRegular.copyWith(color: AppColors.white))
-                .pOnly(right: 50, bottom: pyBody, top: 5),
+                .pOnly(
+                    right: context.hebLocale ? 0 : 50,
+                    left: context.hebLocale ? 50 : 0,
+                    top: 5,
+                    bottom: pyBody),
+
             //~ Reply Button
             buildActionRow(context)
           ],
-        ).pOnly(left: paddingFromImage).expanded(),
+        )
+            .pOnly(
+                left: context.hebLocale ? 0 : paddingFromImage,
+                right: context.hebLocale ? paddingFromImage : 0)
+            .expanded(),
       ],
     ).py(pyBody).pOnly(top: isConversation ? 11 : 0);
-
-    // return SizedBox(
-    //     // height: 55,
-    //     // height: 72, // 72: original size 60: min size
-    //     child: ListTile(
-    //   dense: true,
-    //   contentPadding: EdgeInsets.zero,
-    //   horizontalTitleGap: 0,
-    //   minVerticalPadding: 0,
-    //
-    //   // title: '${post.creatorUser?.name}'.toText(fontSize: 14, bold: true, color: AppColors.grey50),
-    //   title: Row(
-    //     children: [
-    //       SizedBox(
-    //           width: postAgo.length > 5 ? 150 : 190,
-    //           child: '${widget.post.creatorUser?.name}'.toText(
-    //               fontSize: 13.5,
-    //               medium: false,
-    //               color: AppColors.white,
-    //               textAlign: TextAlign.left)),
-    //       const Spacer(),
-    //       postAgo.toText(color: AppColors.greyUnavailable, fontSize: 14)
-    //     ],
-    //   ).top.pOnly(left: 10, top: 5),
-    //   subtitle: buildExpandableText(widget.post.textContent,
-    //           maxLines: 4,
-    //           textAlign: widget.post.textContent.isHebrew ? TextAlign.right : TextAlign.left,
-    //           textDirection:
-    //               widget.post.textContent.isHebrew ? TextDirection.rtl : TextDirection.ltr,
-    //           style: AppStyles.text16PxRegular.copyWith(color: AppColors.white))
-    //       .pOnly(left: 10),
-    //   leading: buildProfilePic(context, isUserPage),
-    //   // trailing: (isCurrUser ? Assets.svg.icons.trash03 : Assets.svg.moreVert)
-    //
-    //   trailing: SizedBox(
-    //     child: buildMoreMenu(isAdmin, isCurrUser),
-    //   ).offset(0, -10),
-    // )).pOnly(top: 5).testContainer;
   }
 
   Row buildProfileRow(String postAgo, bool isAdmin, bool isCurrUser, bool isUserPage) {
@@ -182,13 +155,13 @@ class _PostBlockState extends State<PostBlock> {
         currFilter == FilterTypes.postWithoutComments) {
       // Get 1st - always same (when user refresh indicator)
       // final commonTag = creatorUser?.tags.firstWhereOrNull((tag) => currUser.tags.contains(tag));
-      sortFeed += '${widget.post.tag}';
+      sortFeed += widget.post.tag.toString().tr();
     }
 
     if (feedSortBy == FilterTypes.sortFeedByLocation &&
         currFilter == FilterTypes.postWithoutComments) {
       final distance = widget.post.distance;
-      if(distance != 0) sortFeed += '${distance}Km';
+      if (distance != 0) sortFeed += '${distance}' '${context.hebLocale ? ' ' : ''}' "${'Km'.tr()}";
     }
 
     if (sortFeed.isNotEmpty) title += ' · ';
@@ -308,7 +281,7 @@ class _PostBlockState extends State<PostBlock> {
     var buttonColor = AppColors.greyLight;
     // var buttonColor = AppColors.darkOutline50;
     var commentEmpty = widget.post.commentsLength == 0;
-    var title = commentEmpty ? 'New' : '${widget.post.commentsLength} comments';
+    var title = commentEmpty ? 'New' : '${widget.post.commentsLength}' " " "${'comments'.tr()}";
     var isConversation = widget.post.enableComments && widget.post.originalPostId == null;
     var isComment = widget.post.originalPostId != null;
 
@@ -347,12 +320,25 @@ class _PostBlockState extends State<PostBlock> {
               //~ Reply button
               : Row(
                   children: [
-                    Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: buttonColor),
+                    // if (context.hebLocale) ...[
+                    RotatedBox(
+                        quarterTurns: context.hebLocale ? 3 : 4,
+                        child: Assets.svg.icons.dmPlaneUntitledIcon
+                            .svg(height: 17, color: buttonColor)),
                     7.horizontalSpace,
+                    // ],
+
                     // 'Reply'.toText(fontSize: 12, color: iconColor),
                     'Chat'.toText(fontSize: 12, color: buttonColor, medium: true),
+                    // if (!context.hebLocale) ...[
+                    //   7.horizontalSpace,
+                    //   RotatedBox(
+                    //       quarterTurns: 4,
+                    //       child: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: buttonColor)),
+                    // ],
                   ],
-                ).pOnly(right: 15).onTap(() {
+                ).pOnly(left: context.hebLocale ? 15 : 0, right: context.hebLocale ? 0 : 15).onTap(
+                  () {
                   ChatService.openChat(context,
                       otherUser: widget.post.creatorUser!, postReply: widget.post);
                 }, radius: 10),
@@ -366,9 +352,9 @@ class _PostBlockState extends State<PostBlock> {
   Widget buildOriginalPostButton(Color iconColor) {
     var isLoading = false;
     return StatefulBuilder(builder: (context, buttonState) {
-      return (isLoading ? 'Loading...' : 'Original Ril')
+      return (isLoading ? 'Loading...' : 'Original Ril'.tr())
           .toText(fontSize: 12, color: iconColor, underline: true)
-          .pOnly(right: 20, left: 12)
+          .pOnly(left: context.hebLocale ? 20 : 12, right: context.hebLocale ? 12 : 20)
           .customRowPadding
           .onTap(() async {
         isLoading = true;
@@ -436,7 +422,8 @@ void reportRilOrCommentPopup(BuildContext context, PostModel post, {ReportModel?
 
   Future.delayed(150.milliseconds).then((_) {
     showRilDialog(context,
-        title: isReported ? 'Cancel this $type Report?' : 'Report this $type?',
+        title:
+            isReported ? 'Cancel this Report?'.tr() : "${'Report this'.tr()}" "${'$type'.tr()}" '?',
         desc: '"${post.textContent}"'.toText(fontSize: 13),
         barrierDismissible: true,
         // showCancelBtn: !isReported,
@@ -470,13 +457,13 @@ void reportRilOrCommentPopup(BuildContext context, PostModel post, {ReportModel?
 
               Navigator.of(context).pop();
               if (isReported) {
-                rilFlushBar(context, 'Thanks, $type handled successfully');
+                rilFlushBar(context, 'Thanks, this handled successfully'.tr());
               } else {
-                rilFlushBar(context, 'Thanks, We\'ll handle it asap');
+                rilFlushBar(context, 'Thanks, We\'ll handle it asap'.tr());
               }
             },
-            child:
-                (isReported ? 'Cancel Report' : 'Report').toText(color: AppColors.primaryLight)));
+            child: (isReported ? 'Cancel Report'.tr() : 'Report'.tr())
+                .toText(color: AppColors.primaryLight)));
   });
 }
 
@@ -488,12 +475,18 @@ void deleteRilOrCommentPopup(
 }) {
   var myPost = post.creatorUser?.uid == context.uniProvider.currUser.uid;
   var isCommentPost = post.originalPostId != null;
-  var type = isCommentPost ? 'Comment' : 'Ril';
+  var type = isCommentPost ? 'Comment'.tr() : 'Ril';
 
   Future.delayed(150.milliseconds).then((_) {
     showRilDialog(context,
         // title: 'Delete your Ril?',
-        title: 'Delete ${myPost ? 'Your' : post.creatorUser?.email} $type?',
+        title: context.hebLocale
+            ? ("${'Delete'.tr()}" ' את ה' "${type.tr()}" ' ' "${'Your'.tr()}" '?')
+            : ("${'Delete'.tr()}"
+                " "
+                '${myPost ? "${'Your'.tr()} " : post.creatorUser?.email}'
+                "${type.tr()}"
+                '?'),
         desc: '"${post.textContent}"'.toText(fontSize: 13),
         barrierDismissible: true,
         secondaryBtn: TextButton(
@@ -584,14 +577,16 @@ class _BlinkingOnlineBadgeState extends State<BlinkingOnlineBadge>
   }
 }
 
-String postTime(DateTime time) {
+String postTime(DateTime time, BuildContext context) {
   var postDiff = DateTime.now().difference(time);
   String postAgo = 'X';
 
   if (postDiff.inHours >= 24) {
     // postAgo = intl.DateFormat('yMMMMEEEEd').format(post.timestamp!);
     // postAgo = intl.DateFormat('MMMM d, y').format(time);
-    postAgo = intl.DateFormat('MMM d').format(time);
+    postAgo = context.hebLocale
+        ? intl.DateFormat('d MMM', context.locale.languageCode).format(time)
+        : intl.DateFormat('MMM d', context.locale.languageCode).format(time);
   }
   if (postDiff.inHours <= 24) postAgo = '${postDiff.inHours}h';
   if (postDiff.inMinutes <= 60) postAgo = '${postDiff.inMinutes}m';

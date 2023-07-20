@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.dart';
@@ -57,7 +58,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
 
   @override
   void dispose() {
-    context.uniProvider.removeListener(listenLoadMore);
+    if (!mounted) { //? CAN BE?
+      context.uniProvider.removeListener(listenLoadMore);
+    }
     super.dispose();
   }
 
@@ -90,21 +93,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
         backgroundColor: AppColors.darkGrey,
         appBar: darkAppBar(
           centerTitle: true,
-          context, title: 'Messages',
+          context,
+          title: 'Messages',
           hideBackButton: true,
-          //     backAction: () async {
-          //   await FirebaseAuth.instance.signOut();
-          //   await GoogleSignIn().signOut();
-          //   context.router.replace(const LoginRoute());
-          // },
-          // actions: [
-          //   IconButton(
-          //       icon: Icon(
-          //         Icons.people,
-          //         color: AppColors.testGreen,
-          //       ),
-          //       onPressed: () => context.router.push(const MembersRoute()))
-          // ]
         ),
         body: Builder(builder: (context) {
           if (splashLoader && chatList.isEmpty) {
@@ -139,7 +130,11 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
                   itemCount: chatList.length,
                   itemBuilder: (context, i) {
                     if (chatList.isEmpty) {
-                      return 'Your Talks \nwill be show here'.toText().center;
+                      return "${'Your Messages'.tr()}"
+                              ' \n'
+                              'will appear here'
+                          .toText()
+                          .center;
                     }
 
                     // var chatList = context.listenchatListModelList;
@@ -148,8 +143,9 @@ class _ChatsListScreenState extends State<ChatsListScreen> {
 
                     ChatModel chat = chatList[i];
 
-                    var otherUser = chat.users!.firstWhereOrNull((user) => user.uid != currUser.uid);
-                    if(otherUser == null) return const Offstage();
+                    var otherUser =
+                        chat.users!.firstWhereOrNull((user) => user.uid != currUser.uid);
+                    if (otherUser == null) return const Offstage();
 
                     return StatefulBuilder(builder: (_context, stfSetState) {
                       return ChatBlockSts(chat, otherUser, onTap: () async {
@@ -235,11 +231,11 @@ class ChatBlockSts extends StatelessWidget {
           subtitle: Text(
             chat.lastMessage?.textContent ?? '',
             // textAlign: (chat.lastMessage?.textContent?.isHebrew ?? false) ? TextAlign.right : TextAlign.left,
-            textAlign: TextAlign.left,
+            // textAlign: TextAlign.left,
             maxLines: 2,
             style: AppStyles.text14PxRegular.copyWith(color: AppColors.greyLight),
           ),
-        ).ltr.appearOpacity,
+        ).appearOpacity,
         const Divider(thickness: 2, color: AppColors.darkOutline),
       ],
     );

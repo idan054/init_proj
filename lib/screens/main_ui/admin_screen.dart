@@ -1,4 +1,5 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
+import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/report/report_model.dart';
 import 'package:example/common/models/user/user_model.dart';
@@ -30,6 +31,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
   var activeFilter = FilterTypes.reportedRils;
 
   FeedTypes? comeFromFeed;
+
   @override
   void initState() {
     super.initState();
@@ -115,9 +117,9 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
             labelColor: AppColors.white,
             unselectedLabelColor: AppColors.greyLight,
             indicatorColor: AppColors.primaryOriginal,
-            tabs: const [
-              Tab(text: 'Rils & Comments'),
-              Tab(text: 'Users'),
+            tabs: [
+              Tab(text: 'Rils & Comments'.tr()),
+              Tab(text: 'Users'.tr()),
             ],
             onTap: (i) async => _handleIndexChanged(i, fromTabBar: true),
           ),
@@ -138,7 +140,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
                 printWhite('reportList.length: ${reportList.length}');
 
                 return buildFeed(
-                  desc: 'NEW REPORTED RILS & COMMENTS',
+                  desc: 'NEW REPORTED RILS & COMMENTS'.tr(),
                   context,
                   postList,
                   splashLoader,
@@ -164,7 +166,7 @@ class _AdminScreenState extends State<AdminScreen> with SingleTickerProviderStat
                 printWhite('reportList.length: ${reportList.length}');
 
                 return buildFeed(
-                  desc: 'NEW USERS REPORTS',
+                  desc: 'NEW USERS REPORTS'.tr(),
                   context,
                   postList,
                   splashLoader,
@@ -210,11 +212,12 @@ Widget buildReportBlock(ReportModel report, bool isComment) {
             : PostBlock(report.reportedPost!, report: report),
 
         reportByTitle
-            .toText(color: AppColors.white, fontSize: 12, underline:  true)
+            .toText(color: AppColors.white, fontSize: 12, underline: true)
             .centerLeft
             .pOnly(top: 0, left: 15)
             .pad(3)
-            .onTap(() {}, radius: 5).offset(0, -5),
+            .onTap(() {}, radius: 5)
+            .offset(0, -5),
       ],
     ),
   ).py(7);

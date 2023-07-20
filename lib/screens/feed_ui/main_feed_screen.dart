@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/appConfig/app_config_model.dart';
 import 'package:example/common/models/report/report_model.dart';
@@ -76,9 +77,11 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
     _tabController = TabController(vsync: this, length: 2);
 
     WidgetsBinding.instance.addPostFrameCallback((_) => context.uniProvider.addListener(() async {
-          if (mounted && initTabHandle) {
-            await showSortByIfNeeded();
-            initTabHandle = false;
+          if (mounted) {
+            if (initTabHandle) {
+              await showSortByIfNeeded();
+              initTabHandle = false;
+            }
             _handleIndexChanged(context.uniProvider.feedType.index,
                 fromTabBar: false, fromListener: true);
           }
@@ -200,11 +203,9 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
             labelColor: AppColors.white,
             unselectedLabelColor: AppColors.greyLight,
             indicatorColor: AppColors.primaryOriginal,
-            tabs: const [
-              Tab(text: 'Rils'),
-              Tab(text: 'Talks'),
-              // Tab(text: 'Latest'),
-              // Tab(text: 'Questions'),
+            tabs: [
+              Tab(text: 'Rils'.tr()),
+              Tab(text: 'Talks'.tr()),
             ],
             onTap: (i) async {
               _handleIndexChanged(i, fromTabBar: true);
@@ -212,46 +213,46 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
           ),
         ),
         body: PageView(
-          controller: _pageController,
-          physics: const ScrollPhysics(),
-          // physics: const NeverScrollableScrollPhysics(), // disable swipe
-          onPageChanged: (i) {
-            _handleIndexChanged(i, fromTabBar: false);
-          },
-          children: [
-            buildFeed(
-              desc: 'EXPLORE MEMBERS',
-              title: 'NEW RILS',
-              context,
-              postListByDistance.isNotEmpty ? postListByDistance : postList,
-              splashLoader,
-              feedType: FeedTypes.rils,
-              onRefreshIndicator: () async {
-                printGreen('START: onRefresh()');
-                await _loadMore(refresh: true);
-              },
-              onEndOfPage: () async {
-                printGreen('START: onEndOfPage()');
-                await _loadMore();
-              },
-            ),
-            buildFeed(
-              desc: 'JOIN PUBLIC TALK',
-              context,
-              postList,
-              splashLoader,
-              feedType: FeedTypes.talks,
-              onRefreshIndicator: () async {
-                printGreen('START: onRefresh()');
-                await _loadMore(refresh: true);
-              },
-              onEndOfPage: () async {
-                printGreen('START: onEndOfPage()');
-                await _loadMore();
-              },
-            )
-          ],
-        ),
+            controller: _pageController,
+            physics: const ScrollPhysics(),
+            // physics: const NeverScrollableScrollPhysics(), // disable swipe
+            onPageChanged: (i) {
+              _handleIndexChanged(i, fromTabBar: false);
+            },
+            // children: context.hebLocale ? feeds.reversed.toList() : feeds),
+            children: [
+              buildFeed(
+                desc: 'EXPLORE MEMBERS',
+                title: 'NEW RILS',
+                context,
+                postListByDistance.isNotEmpty ? postListByDistance : postList,
+                splashLoader,
+                feedType: FeedTypes.rils,
+                onRefreshIndicator: () async {
+                  printGreen('START: onRefresh()');
+                  await _loadMore(refresh: true);
+                },
+                onEndOfPage: () async {
+                  printGreen('START: onEndOfPage()');
+                  await _loadMore();
+                },
+              ),
+              buildFeed(
+                desc: 'JOIN PUBLIC TALK',
+                context,
+                postList,
+                splashLoader,
+                feedType: FeedTypes.talks,
+                onRefreshIndicator: () async {
+                  printGreen('START: onRefresh()');
+                  await _loadMore(refresh: true);
+                },
+                onEndOfPage: () async {
+                  printGreen('START: onEndOfPage()');
+                  await _loadMore();
+                },
+              )
+            ]),
       ),
     );
   }
@@ -341,8 +342,8 @@ AppBar buildRiltopiaAppBar(
     leading: isHomePage ? null : backButton(() async => await context.router.pop()),
     // backgroundColor: AppColors.darkBg,
     title: riltopiaHorizontalLogo(context, ratio: 1.15, isHomePage: isHomePage)
-        .pOnly(bottom: 5, right: 5, left: 5, top: 5)
-        .centerLeft,
+        .pOnly(bottom: 5, right: 5, left: 5, top: 5),
+    // leadingWidth: 0,
     // .onTap(() {}, radius: 8),
     actions: [
       //~ Report Screen
@@ -382,6 +383,7 @@ AppBar buildRiltopiaAppBar(
 
       // child: Icons.flag.icon(color: AppColors.white,)),
       if (isHomePage) profileCircle(context),
+      10.horizontalSpace,
     ],
 
     // TODO ADD ON POST MVP ONLY (Notification page)
@@ -405,9 +407,9 @@ Widget profileCircle(BuildContext context) {
 
   return CircleAvatar(
     backgroundColor: AppColors.transparent,
-    radius: 18,
+    radius: 16,
     child: CircleAvatar(
-      radius: 16,
+      radius: 14,
       backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl ??
           'https://www.bescouts.org.uk/wp-content/uploads/2022/10/person-placeholder.png'),
       backgroundColor: AppColors.lightOutline50,
@@ -522,15 +524,20 @@ Widget profileCircle(BuildContext context) {
             }, radius: 5),
           ),
           Builder(builder: (context) {
-            var patchVer =
-                context.uniProvider.localConfig.currentPatchNumber.toString().replaceAll(' ', '') ??
-                    '(Debug)';
+            var patchVer = context.uniProvider.localConfig.currentPatchNumber
+                    .toString()
+                    .replaceAll(' ', '')
+                    .replaceAll('null', '0') ??
+                '(Debug)';
             if (patchVer != '(Debug)') patchVer = '+$patchVer';
-            return 'Version: ${context.uniProvider.localConfig.publicVersionAndroid}'
-                    '$patchVer'
-                .toText(fontSize: 12, color: AppColors.grey50)
-                .pOnly(top: 10)
-                .centerLeft;
+            return Align(
+              alignment: context.hebLocale ? Alignment.centerRight : Alignment.centerLeft,
+              child: "${'Version:'.tr()}"
+                      ' ${context.uniProvider.localConfig.publicVersionAndroid}'
+                      '$patchVer'
+                  .toText(fontSize: 12, color: AppColors.grey50)
+                  .pOnly(top: 10),
+            );
           })
         ],
       ),
@@ -556,30 +563,36 @@ Widget buildChoiceChip(BuildContext context,
     padding: padding ?? 0.all,
     child: Theme(
       data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-      child: ChoiceChip(
-          elevation: 0,
-          shadowColor: Colors.transparent,
-          shape: rounded.roundedShape,
-          selected: selected,
-          materialTapTargetSize: (padding != null) ? MaterialTapTargetSize.shrinkWrap : null,
-          labelPadding: labelPadding ?? const EdgeInsets.only(left: 2, right: 6),
-          backgroundColor: AppColors.darkGrey,
-          selectedColor: selectedColor ?? AppColors.transparent,
-          side: borderColor == null ? null : BorderSide(width: 1.5, color: borderColor),
-          // color: !selected ? AppColors.grey50 : selectedColor ?? AppColors.white),
-          // side: BorderSide.none,
-          labelStyle: AppStyles.text14PxRegular.copyWith(
-              color: selected ? AppColors.primaryDark : AppColors.white,
-              fontWeight: selected ? FontWeight.bold : FontWeight.normal,
-              // fontWeight: FontWeight.bold,
-              fontSize: 12),
-          label: label,
-          // disabledColor: selected ? AppColors.primaryDark : AppColors.primaryDark,
-          avatar: customIcon ??
-              (showCloseIcon && selected
-                  ? Assets.svg.icons.iconClose.svg(color: AppColors.primaryDark)
-                  : null),
-          onSelected: onSelect),
+      child: Directionality(
+        textDirection: context.easyTextDirection,
+        child: ChoiceChip(
+            elevation: 0,
+            shadowColor: Colors.transparent,
+            shape: rounded.roundedShape,
+            selected: selected,
+            materialTapTargetSize: (padding != null) ? MaterialTapTargetSize.shrinkWrap : null,
+            labelPadding: labelPadding ??
+                (context.hebLocale
+                    ? const EdgeInsets.only(left: 6, right: 2)
+                    : const EdgeInsets.only(left: 2, right: 6)),
+            backgroundColor: AppColors.darkGrey,
+            selectedColor: selectedColor ?? AppColors.transparent,
+            side: borderColor == null ? null : BorderSide(width: 1.5, color: borderColor),
+            // color: !selected ? AppColors.grey50 : selectedColor ?? AppColors.white),
+            // side: BorderSide.none,
+            labelStyle: AppStyles.text14PxRegular.copyWith(
+                color: selected ? AppColors.primaryDark : AppColors.white,
+                fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+                // fontWeight: FontWeight.bold,
+                fontSize: 12),
+            label: label,
+            // disabledColor: selected ? AppColors.primaryDark : AppColors.primaryDark,
+            avatar: customIcon ??
+                (showCloseIcon && selected
+                    ? Assets.svg.icons.iconClose.svg(color: AppColors.primaryDark)
+                    : null),
+            onSelected: onSelect),
+      ),
     ),
   );
 }

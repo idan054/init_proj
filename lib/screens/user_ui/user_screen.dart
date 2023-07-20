@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:badges/badges.dart' as badge;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/screens/auth_ui/a_onboarding_screen.dart';
@@ -176,7 +177,12 @@ class _UserScreenState extends State<UserScreen> {
         child: Builder(builder: (context) {
           // var rilTitle = isCurrUserProfile ? 'Your Rils' : "Rils";
           var rilTitle = "Rils";
-          var convTitle = isCurrUserProfile ? 'My Talks' : "${user.name}'s Talks";
+          var convTitle = isCurrUserProfile
+              ? 'Talks'.tr()
+              : (context.hebLocale
+                  ? ("השיחות של "
+                      "${user.name}")
+                  : "${user.name}'s Talks");
 
           // return title.toText(fontSize: 18, medium: true).centerLeft.py(12).px(25);
           return TabBar(
@@ -224,17 +230,20 @@ class _UserScreenState extends State<UserScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CircleAvatar(
-                radius: 15,
-                backgroundColor: Colors.black45,
-                // backgroundColor: AppColors.darkOutline50,
-                // child: Icons.arrow_back_rounded.icon(size: 18, color: AppColors.white),
-                child: Assets.svg.icons.arrowBackLeft.svg(height: 14, color: AppColors.darkBg),
-              ).onTap(() {
-                widget.fromEditScreen
-                    ? context.router.replaceAll([DashboardRoute()])
-                    : Navigator.pop(context);
-              }),
+              RotatedBox(
+                quarterTurns: context.hebLocale ? 2 : 4,
+                child: CircleAvatar(
+                  radius: 15,
+                  backgroundColor: Colors.black45,
+                  // backgroundColor: AppColors.darkOutline50,
+                  // child: Icons.arrow_back_rounded.icon(size: 18, color: AppColors.white),
+                  child: Assets.svg.icons.arrowBackLeft.svg(height: 14, color: AppColors.darkBg),
+                ).onTap(() {
+                  widget.fromEditScreen
+                      ? context.router.replaceAll([DashboardRoute()])
+                      : Navigator.pop(context);
+                }),
+              ),
               // Email also show to admins on 'Admin delete Ril'
               // if (currUser.userType == UserTypes.admin)
               //   widget.user.email.toString().toText(color: AppColors.grey50).pOnly(bottom: 20),
@@ -583,8 +592,9 @@ Widget buildTagsRow(UserModel user,
           if (onAddonTap != null)
             buildRilChip('$addonName',
                     bgColor: chipColor,
-                    icon:
-                        addonName != 'Edit' ? null : Icons.edit_rounded.icon(color: AppColors.greyLight))
+                    icon: addonName != 'Edit'
+                        ? null
+                        : Icons.edit_rounded.icon(color: AppColors.greyLight))
                 // .pad(7)
                 .onTap(onAddonTap, radius: 12),
           // 4.horizontalSpace,

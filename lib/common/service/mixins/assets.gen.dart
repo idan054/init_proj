@@ -365,6 +365,19 @@ class $AssetsSvgGen {
       ];
 }
 
+class $AssetsTranslationsGen {
+  const $AssetsTranslationsGen();
+
+  /// File path: assets/translations/en.json
+  String get en => 'assets/translations/en.json';
+
+  /// File path: assets/translations/he.json
+  String get he => 'assets/translations/he.json';
+
+  /// List of all assets
+  List<String> get values => [en, he];
+}
+
 class $AssetsSvgIconsGen {
   const $AssetsSvgIconsGen();
 
@@ -517,6 +530,10 @@ class $AssetsSvgIconsGen {
   SvgGenImage get messageSmile =>
       const SvgGenImage('assets/svg/icons/message-smile.svg');
 
+  /// File path: assets/svg/icons/message-text-circle-02-original-solid.svg
+  SvgGenImage get messageTextCircle02OriginalSolid => const SvgGenImage(
+      'assets/svg/icons/message-text-circle-02-original-solid.svg');
+
   /// File path: assets/svg/icons/message-text-circle-02-original.svg
   SvgGenImage get messageTextCircle02Original =>
       const SvgGenImage('assets/svg/icons/message-text-circle-02-original.svg');
@@ -656,6 +673,7 @@ class $AssetsSvgIconsGen {
         messageCommentsLines,
         messageSmilePlus,
         messageSmile,
+        messageTextCircle02OriginalSolid,
         messageTextCircle02Original,
         messageTextCircle02,
         plusAddUntitledIcon,
@@ -695,6 +713,7 @@ class Assets {
       AssetGenImage('assets/messages_icon.png');
   static const $AssetsRivGen riv = $AssetsRivGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
+  static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();
 
   /// List of all assets
   List<AssetGenImage> get values => [defaultIcon, messagesIcon];

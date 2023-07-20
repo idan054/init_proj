@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/models/user/user_model.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:flutter/material.dart';
@@ -109,8 +110,8 @@ class _TagsViewScreenState extends State<TagsViewScreen> {
             var isTagsErr =
                 context.listenUniProvider.signupErrFound; // This will auto rebuild if err found.
             return (isTagsErr
-                    ? 'Choose at least one interest'
-                    : 'Choose interests, so\nothers will know you better')
+                    ? 'Choose at least one interest'.tr()
+                    : "${'Choose interests, so'.tr()}" '\n' "${'others will know you better'.tr()}")
                 .toText(
                     textAlign: TextAlign.center,
                     fontSize: 18,

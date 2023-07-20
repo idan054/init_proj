@@ -20,6 +20,7 @@ import 'b_name_profile_view.dart';
 import 'c_gender_age_view.dart';
 import 'd_verify_view.dart';
 import 'e_tags_view_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -80,19 +81,22 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             10.horizontalSpace,
-            IconButton(
-                icon: Assets.svg.icons.arrowNarrowLeft.svg(color: AppColors.darkOutline50),
-                onPressed: () {
-                  if (_tabController!.index == 0) {
-                    context.router.replaceAll([const LoginRoute()]);
-                  } else {
-                    _tabController!.animateTo(_tabController!.index - 1);
-                  }
-                }),
+            RotatedBox(
+              quarterTurns: context.hebLocale ? 2 : 4,
+              child: IconButton(
+                  icon: Assets.svg.icons.arrowNarrowLeft.svg(color: AppColors.darkOutline50),
+                  onPressed: () {
+                    if (_tabController!.index == 0) {
+                      context.router.replaceAll([const LoginRoute()]);
+                    } else {
+                      _tabController!.animateTo(_tabController!.index - 1);
+                    }
+                  }),
+            ),
             const Spacer(),
             riltopiaHorizontalLogo(context, ratio: 1.2),
             const Spacer(),
-            // PlaceHolder:
+            //> PlaceHolder ONLY:
             Opacity(
                 opacity: 0.0,
                 child: IconButton(
@@ -136,7 +140,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                 radius: 99,
                 isWide: true,
                 // title: isLoading ? 'Loading... ' : tags_e_View ? "Let's Start!" : 'Next ',
-                title: tags_e_View ? "Let's Start!" : 'Next ',
+                title: tags_e_View ? "Let's Start!" : 'Next',
                 bgColor: AppColors.white,
                 textColor: AppColors.darkBg, onPressed: () {
               context.uniProvider.errFoundUpdate(false);
@@ -156,8 +160,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
 
               if (genderAge_c_View) {
                 var user = context.uniProvider.currUser;
-                var gender = user.gender == GenderTypes.other ? '🏳️‍🌈 Other' : user.gender?.name;
-                var title = "You're ${user.age} y.o $gender";
+                var gender =
+                    user.gender == GenderTypes.other ? '🏳️‍🌈 Other'.tr() : user.gender?.name.tr();
+                // את אישה בת 21
+                // אתה גבר 21
+                // אתה להטב 21
+                print('user.gender ${user.gender}');
+                var title = context.hebLocale
+                    ? (user.gender == GenderTypes.female
+                        ? 'את $gender בת ' '${user.age}'
+                        : 'אתה $gender בן ' '${user.age}')
+                    : '${"You're".tr()}' "${user.age}" "${'y.o'.tr()}" "$gender";
                 showRilDialog(context,
                     title: title,
                     desc: "For a safe community, You CAN'T change your age & gender later"
@@ -246,8 +259,8 @@ Widget rilTextField(
           decoration: InputDecoration(
               floatingLabelBehavior: FloatingLabelBehavior.always,
               counterText: '',
-              labelText: label,
-              hintText: hint,
+              labelText: label.tr(),
+              hintText: hint?.tr(),
               // labelStyle: AppStyles.text16PxMedium.copyWith(color: errorText != null ? AppColors.errRed : AppColors.darkOutline50),
               labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.greyUnavailable),
               hintStyle: AppStyles.text14PxMedium.copyWith(color: AppColors.white),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
+import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/appConfig/app_config_model.dart';
 import 'package:example/common/models/report/report_model.dart';
@@ -132,8 +133,8 @@ Builder buildNotification(PostModel notification) {
     var user = notification.creatorUser;
     var userName = user!.name ?? '';
     var shortName = userName.length > 19 ? userName.substring(0, 19) + '...'.toString() : userName;
-    var postAgo = postTime(notification.timestamp!);
-    var notifyText = 'You have new comment on:';
+    var postAgo = postTime(notification.timestamp!, context);
+    var notifyText = "${'You have new comment on'.tr()}" ':';
 
     return Column(
       children: [
@@ -185,7 +186,7 @@ Builder buildNotification(PostModel notification) {
                   7.verticalSpace,
                   Container(
                     decoration: BoxDecoration(
-                    color: AppColors.darkBg,
+                      color: AppColors.darkBg,
                       borderRadius: BorderRadius.all(12.circular),
                       border: Border.all(color: AppColors.darkGrey, width: 2),
                     ),

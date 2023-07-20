@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
@@ -38,7 +39,8 @@ final sortByLocation = SortFeedModel(
 final sortByTopic = SortFeedModel(
   title: 'Your topics',
   // desc: 'Latest Rils by members like you',
-  desc: 'Rils from members like you',
+  // desc: 'Rils from members like you',
+  desc: 'Rils from your topics',
   // svg: Assets.svg.icons.wisdomMultiLightStar,
   svg: Assets.svg.icons.sortByTopic,
   solidSvg: Assets.svg.icons.sortByTopicSolid,
@@ -75,7 +77,7 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
     final currUser = context.uniProvider.currUser;
     final ageRange = ageRangeList(currUser);
     final ageRangeStr = ' (${ageRange.first} - ${ageRange.last})';
-    String desc = selectedFeedSort.desc;
+    String desc = selectedFeedSort.desc.tr();
 
     if (selectedFeedSort.type == FilterTypes.sortFeedByAge) {
       desc += ageRangeStr;
@@ -110,7 +112,8 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
             ).px(20),
             Positioned(
                 top: 0,
-                right: 0,
+                right: context.hebLocale ? null : 0,
+                left: context.hebLocale ? 0 : null,
                 child: Icons.close_rounded
                     .icon(color: AppColors.greyUnavailable, size: 22)
                     .px(12)

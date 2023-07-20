@@ -3,6 +3,7 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/positionModel/position_model.dart';
 import 'package:example/common/routes/app_router.dart';
@@ -105,7 +106,9 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
             cursorColor: AppColors.yellowAlert,
             decoration: InputDecoration(
               filled: true,
-              hintText: isComments ? 'Start a Talk about...' : 'Share your Ril thoughts...',
+              hintText: isComments
+                  ? 'Ask or Start a Talk about...'.tr()
+                  : 'Share your Ril thoughts...'.tr(),
               hintStyle: AppStyles.text16PxRegular.copyWith(color: AppColors.greyUnavailable),
               fillColor: Colors.transparent,
               border: InputBorder.none,
@@ -129,22 +132,23 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                         //
                         onSelect: (bool newSelection) {
                   isComments = !isComments;
-                  widget.onChange(isComments);
                   setState(() {});
+                  widget.onChange(isComments);
                 }, selected: isComments)
                     .px(10),
-
-                if(!isComments)
-                buildChoiceChip(
-                  context,
-                  customIcon: (sTag.isEmpty ? Icons.add : Icons.tag).icon(color: AppColors.primaryLight2),
-                  label: (sTag.isEmpty ? 'Add tag' : sTag).toText(color: AppColors.primaryLight2),
-                  selected: false,
-                  onSelect: (bool newSelection) {
-                    showTags = true;
-                    setState(() {});
-                  },
-                ),
+                if (!isComments)
+                  buildChoiceChip(
+                    context,
+                    customIcon:
+                        (sTag.isEmpty ? Icons.add : Icons.tag).icon(color: AppColors.primaryLight2),
+                    label: (sTag.isEmpty ? 'Add tag'.tr() : sTag.tr())
+                        .toText(color: AppColors.primaryLight2),
+                    selected: false,
+                    onSelect: (bool newSelection) {
+                      showTags = true;
+                      setState(() {});
+                    },
+                  ),
                 const Spacer(),
               ],
               buildSendButton(
@@ -175,7 +179,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                   },
                   isConversationSend: isComments)
             ],
-          ).pOnly(bottom: 5),
+          ).pOnly(bottom: 5).ltr,
         ],
       ),
     );
@@ -193,7 +197,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
           selectedColor: AppColors.greyLight,
           labelPadding: 4.horizontal,
           padding: showAllTags ? 3.all : 3.horizontal,
-          label: Text(list[i]),
+          label: Text(list[i].tr()),
           // showCloseIcon: true,
           selected: isChipSelected,
           onSelect: (bool newSelection) {
@@ -217,7 +221,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
       context,
       labelPadding: 4.horizontal,
       padding: 3.horizontal,
-      label: Text(showAllTags ? '< Less tags' : 'More tags >'),
+      label: Text(showAllTags ? '< Less tags' : 'More tags >').tr(),
       // showCloseIcon: true,
       selected: false,
       onSelect: (bool newSelection) {

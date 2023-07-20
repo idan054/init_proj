@@ -127,7 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     }
 
     if (currUser.age == null) {
-      context.router.push(const LoginRoute());
+      context.router.push(const OnBoardingRoute());
       return const Offstage();
     }
 
@@ -178,28 +178,38 @@ class _DashboardScreenState extends State<DashboardScreen>
                       // HOME
                       BottomNavigationBarItem(
                           label: '',
-                          icon: Assets.svg.icons.homeUntitledIcon.svg(color: AppColors.greyLight),
+                          icon: Assets.svg.icons.homeUntitledIcon
+                              .svg(color: AppColors.greyLight)
+                              .appearOpacity,
                           activeIcon: Assets.svg.icons.homeSolidUntitledIcon
-                              .svg(color: AppColors.greyLight)),
+                              .svg(color: AppColors.greyLight)
+                              .appearOpacity),
 
                       // NOTIFICATIONS SCREEN
                       BottomNavigationBarItem(
                           label: '',
                           icon: notificationBadge(
-                              child: Assets.svg.icons.bell.svg(color: AppColors.greyLight)),
+                              child: Assets.svg.icons.bell
+                                  .svg(color: AppColors.greyLight)
+                                  .appearOpacity),
                           activeIcon: notificationBadge(
                               child: Assets.svg.icons.bellSolid
-                                  .svg(height: 23, color: AppColors.greyLight))),
+                                  .svg(height: 23, color: AppColors.greyLight)
+                                  .appearOpacity)),
 
                       // DM SCREEN
                       BottomNavigationBarItem(
                           label: '',
                           icon: unreadChatBadge(
-                              child: Assets.svg.icons.groupMultiPeople
-                                  .svg(color: AppColors.greyLight)),
+                              // child: Assets.svg.icons.groupMultiPeople
+                              child: Assets.svg.icons.messageTextCircle02Original
+                                  .svg(color: AppColors.greyLight)
+                                  .appearOpacity),
                           activeIcon: unreadChatBadge(
-                              child: Assets.svg.icons.groupMultiPeopleSolid
-                                  .svg(color: AppColors.greyLight, height: 19))),
+                              // child: Assets.svg.icons.groupMultiPeopleSolid
+                              child: Assets.svg.icons.messageTextCircle02OriginalSolid
+                                  .svg(color: AppColors.greyLight, height: 19)
+                                  .appearOpacity)),
                     ],
                   ),
                 ),
@@ -260,75 +270,78 @@ class _DashboardScreenState extends State<DashboardScreen>
           showFab,
           duration: 350.milliseconds,
           secondChild: const SizedBox(width: 56, height: 56),
-          firstChild: Container(
-            height: 56,
-            width: 56,
-            color: AppColors.primaryOriginal,
-            child: Stack(
-              children: [
-                SizedBox(
-                    height: 56,
-                    width: 56,
-                    child: Assets.images.circleCover.image(fit: BoxFit.fill)),
-                SpeedDial(
-                  child: replyStyle
-                      ? Assets.svg.icons.dmPlaneUntitledIconOutlined
-                          .svg(color: AppColors.darkBg, height: 25)
-                      // ? Assets.svg.icons.dmPlaneUntitledIconOrginal.svg(color: AppColors.darkBg, height: 25)
-                      // : Assets.svg.icons.messageChatCircleAdd.svg(color: AppColors.darkBg),
-                      : Assets.images.messageSmileIconPng.image(height: 24),
+          firstChild: RotatedBox(
+            quarterTurns: context.hebLocale && replyStyle ? 3 : 4,
+            child: Container(
+              height: 56,
+              width: 56,
+              color: AppColors.primaryOriginal,
+              child: Stack(
+                children: [
+                  SizedBox(
+                      height: 56,
+                      width: 56,
+                      child: Assets.images.circleCover.image(fit: BoxFit.fill)),
+                  SpeedDial(
+                    child: replyStyle
+                        ? Assets.svg.icons.dmPlaneUntitledIconOutlined
+                            .svg(color: AppColors.darkBg, height: 25)
+                        // ? Assets.svg.icons.dmPlaneUntitledIconOrginal.svg(color: AppColors.darkBg, height: 25)
+                        // : Assets.svg.icons.messageChatCircleAdd.svg(color: AppColors.darkBg),
+                        : Assets.images.messageSmileIconPng.image(height: 24),
 
-                  childrenButtonSize: const Size(50, 50),
-                  backgroundColor: AppColors.transparent,
-                  overlayColor: AppColors.darkBg,
-                  overlayOpacity: 0.6,
-                  elevation: 0,
-                  animationDuration: 250.milliseconds,
-                  spacing: 10,
-                  onPress: () {
-                    showModalBottomSheet(
-                        backgroundColor: Colors.transparent,
-                        barrierColor: Colors.black26,
-                        // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
-                        // barrierColor: Colors.black.withOpacity(0.00),
-                        // AKA 2%
-                        isScrollControlled: true,
-                        context: context,
-                        elevation: 0,
-                        builder: (context) {
-                          // print('replyStyle ${replyStyle}');
-                          return CreatePostScreen(
-                            replyStyle,
-                            onChange: (bool isComments) {
-                              print('isComments $isComments');
-                              var feedType = isComments ? FeedTypes.talks : FeedTypes.rils;
-                              var activeFilter = isComments
-                                  ? FilterTypes.postWithComments
-                                  : FilterTypes.postWithoutComments;
+                    childrenButtonSize: const Size(50, 50),
+                    backgroundColor: AppColors.transparent,
+                    overlayColor: AppColors.darkBg,
+                    overlayOpacity: 0.6,
+                    elevation: 0,
+                    animationDuration: 250.milliseconds,
+                    spacing: 10,
+                    onPress: () {
+                      showModalBottomSheet(
+                          backgroundColor: Colors.transparent,
+                          barrierColor: Colors.black26,
+                          // barrierColor: Colors.black.withOpacity(0.20), // AKA 20%
+                          // barrierColor: Colors.black.withOpacity(0.00),
+                          // AKA 2%
+                          isScrollControlled: true,
+                          context: context,
+                          elevation: 0,
+                          builder: (context) {
+                            // print('replyStyle ${replyStyle}');
+                            return CreatePostScreen(
+                              replyStyle,
+                              onChange: (bool isComments) {
+                                print('isComments $isComments');
+                                var feedType = isComments ? FeedTypes.talks : FeedTypes.rils;
+                                var activeFilter = isComments
+                                    ? FilterTypes.postWithComments
+                                    : FilterTypes.postWithoutComments;
 
-                              context.uniProvider.currFilterUpdate(activeFilter, notify: false);
-                              context.uniProvider.feedTypeUpdate(feedType); // rebuilt listeners
-                            },
-                          );
-                        });
-                  },
-                  //> TO USE MENU MODE:
-                  // children: [
-                  //   fabChild(
-                  //     replyStyle: true,
-                  //     'Ril',
-                  //     Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.primaryOriginal),
-                  //   ),
-                  //   fabChild(
-                  //     replyStyle: false,
-                  //     'Conversation',
-                  //     Assets.svg.icons.messageChatCircleAdd.svg(color: AppColors.primaryOriginal),
-                  //   ),
-                  // ]
-                ),
-              ],
-            ),
-          ).roundedFull,
+                                context.uniProvider.currFilterUpdate(activeFilter, notify: false);
+                                context.uniProvider.feedTypeUpdate(feedType); // rebuilt listeners
+                              },
+                            );
+                          });
+                    },
+                    //> TO USE MENU MODE:
+                    // children: [
+                    //   fabChild(
+                    //     replyStyle: true,
+                    //     'Ril',
+                    //     Assets.svg.icons.dmPlaneUntitledIcon.svg(color: AppColors.primaryOriginal),
+                    //   ),
+                    //   fabChild(
+                    //     replyStyle: false,
+                    //     'Conversation',
+                    //     Assets.svg.icons.messageChatCircleAdd.svg(color: AppColors.primaryOriginal),
+                    //   ),
+                    // ]
+                  ),
+                ],
+              ),
+            ).roundedFull,
+          ),
         ),
       );
     });

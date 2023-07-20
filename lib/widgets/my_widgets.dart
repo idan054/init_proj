@@ -88,14 +88,18 @@ Widget rilClassicButton(BuildContext context,
 }
 
 // New logo
-Row riltopiaHorizontalLogo(BuildContext context,
+Widget riltopiaHorizontalLogo(BuildContext context,
     {double ratio = 1.0, bool showSubText = false, bool isHomePage = true}) {
   var isAdmin = context.uniProvider.currUser.userType == UserTypes.admin;
   return Row(
     mainAxisSize: MainAxisSize.min,
     children: [
-      Assets.images.logoCircularRilTopiaLogo.image(height: 24 * ratio),
-      10.horizontalSpace,
+      // if (context.hebLocale) ...[
+      //   Assets.images.logoCircularRilTopiaLogo.image(height: 24 * ratio),
+      //   10.horizontalSpace,
+      // ] else ...[
+      //   const Spacer(),
+      // ],
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -110,7 +114,13 @@ Row riltopiaHorizontalLogo(BuildContext context,
                     AppStyles.text14PxMedium.copyWith(fontSize: 7 * ratio, color: AppColors.white)),
           ]
         ],
-      )
+      ),
+      // if (!context.hebLocale) ...[
+        10.horizontalSpace,
+        Assets.images.logoCircularRilTopiaLogo.image(height: 24 * ratio),
+      // ] else ...[
+        const Spacer(),
+      // ]
     ],
   );
 }

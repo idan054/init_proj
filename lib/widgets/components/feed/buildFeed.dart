@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/widgets/components/postBlock_stf.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +91,9 @@ Widget buildFeed(
                 1.verticalSpace,
 
                 postList.isEmpty
-                    ? 'New ${feedType.name.toCapitalized()} will appear here'
+                    ? "${'New ${feedType.name.toCapitalized()}'.tr()}"
+                            ' '
+                            "${'will appear here'.tr()}"
                         .toText(color: AppColors.grey50)
                         .pOnly(top: context.height * 0.25)
                         .center

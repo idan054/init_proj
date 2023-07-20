@@ -71,7 +71,9 @@ class _VerifyViewState extends State<VerifyView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           190.verticalSpace,
-          'Quick verify, so\neveryone will trust you'
+          'Quick verify, so'
+                  '\n'
+                  'everyone will trust you'
               .toText(fontSize: 18, medium: true, textAlign: TextAlign.center),
           10.verticalSpace,
           // "This what makes us a reliable & safe place".toText(color: AppColors.grey50, fontSize: 11),

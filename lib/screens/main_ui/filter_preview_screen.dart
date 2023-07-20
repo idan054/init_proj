@@ -1,6 +1,7 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/report/report_model.dart';
 import 'package:example/common/models/user/user_model.dart';
@@ -61,7 +62,7 @@ class _FilterPreviewScreenState extends State<FilterPreviewScreen> {
           Column(
             children: [
               15.verticalSpace,
-              'RilTopia better with friends!'
+              'RilTopia is better with friends!'
                   .toText(fontSize: 18, medium: true, textAlign: TextAlign.center)
                   .px(15),
               // 10.verticalSpace,
@@ -77,7 +78,7 @@ class _FilterPreviewScreenState extends State<FilterPreviewScreen> {
             padding: 35,
             isWide: true,
             icon: Assets.images.logoCircularRilTopiaLogo.image(height: 25),
-            title: 'Share RilTopia',
+            title: '${'Share'.tr()}' ' ' 'RilTopia',
             bgColor: AppColors.white,
             textColor: AppColors.darkBg,
             onPressed: () => Share.share('https://rebrand.ly/RiTopia-7d448'),
@@ -103,7 +104,7 @@ class _FilterPreviewScreenState extends State<FilterPreviewScreen> {
               inAppReview.openStoreListing();
             },
           ),
-          20.verticalSpace,
+          920.verticalSpace,
           'Go back, I don\'t want to support'
               .toText(
                   fontSize: 11,

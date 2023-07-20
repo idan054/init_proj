@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:auto_route/auto_route.dart';
 import 'package:bubble/bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/post/post_model.dart';
@@ -159,7 +160,8 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                         Builder(builder: (context) {
                           if (snapshot.data != null &&
                               snapshot.data!.isNotEmpty &&
-                              comments.isEmpty && mounted) {
+                              comments.isEmpty &&
+                              mounted) {
                             return buildStfCommentsTextLoader(); // Loading...
                           }
                           return ListView.builder(
@@ -204,8 +206,10 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
                   // '${(post.comments?.isEmpty ?? true) ? '' : post.comments?.length} members'
                   commentsCount.toText(color: AppColors.grey50),
                   20.horizontalSpace,
-                  Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50, height: 14),
-                  ' $memberCount members'.toText(color: AppColors.grey50),
+
+                  // Assets.svg.icons.groupMultiPeople.svg(color: AppColors.grey50, height: 14),
+                  // ' $memberCount members'.toText(color: AppColors.grey50),
+
                   // if (isTagScreen)
                   //   '#$selectedTag'.toText(color: AppColors.darkOutline50).pOnly(left: 10, top: 10).centerLeft,
                   const Spacer(),
@@ -224,7 +228,8 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
               padding: EdgeInsets.only(top: 5, bottom: Platform.isIOS ? 15 : 5),
               child: buildTextField(context,
                   // controller: sendController, hintText: 'Join ${post.creatorUser?.name}\'s Talk',
-                  controller: sendController, hintText: 'Write a comment...',
+                  controller: sendController,
+                  hintText: 'Write a comment...',
                   // post: post,
                   onChanged: (value) {
                 bodyStfState(() {});
@@ -270,7 +275,9 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
         }
         if (mounted) textState(() {});
       });
-      return 'Loading comments$dots\n meanwhile, write your comment!'
+      return "${'Loading comments'.tr()}"
+              '$dots\n'
+              "${' meanwhile, write your comment!'.tr()}"
           .toText(
             color: AppColors.grey50,
             textAlign: TextAlign.center,
@@ -304,7 +311,7 @@ class _CommentsChatScreenState extends State<CommentsChatScreen> {
       var userName = comment.creatorUser?.name ?? '';
       var shortName =
           userName.length > 19 ? userName.substring(0, 19) + '...'.toString() : userName;
-      var postAgo = postTime(comment.timestamp!);
+      var postAgo = postTime(comment.timestamp!, context);
       var isCreatorComment = comment.creatorUser?.uid == widget.post.creatorUser?.uid;
       var isCurrUserComment = comment.creatorUser?.uid == context.uniProvider.currUser.uid;
       var isCurrUserAdmin = context.uniProvider.currUser.userType == UserTypes.admin;

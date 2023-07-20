@@ -23,10 +23,11 @@ Future<void> showRilDialog(
     // barrierColor: Colors.transparent,
     barrierColor: Colors.black.withOpacity(0.15),
     builder: (BuildContext context) {
-        // BackdropFilter()
-        // filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
+      // BackdropFilter()
+      // filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
       return AlertDialog(
-        insetPadding: EdgeInsets.symmetric(horizontal: horizontalMargin ?? 40.0, vertical: verticalMargin ?? 24.0),
+        insetPadding: EdgeInsets.symmetric(
+            horizontal: horizontalMargin ?? 40.0, vertical: verticalMargin ?? 24.0),
         backgroundColor: AppColors.primaryDark,
         shape: 15.roundedShape,
         content: Column(

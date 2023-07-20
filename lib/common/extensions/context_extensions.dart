@@ -1,9 +1,11 @@
+import 'package:easy_localization/easy_localization.dart';
+import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:ui' as ui;
 import '../models/universalModel.dart';
 import '../models/user/user_model.dart';
 
@@ -16,9 +18,13 @@ extension ContextX on BuildContext {
 
   // Use Hot restart while switch between those!
   UniProvider get uniProvider => Provider.of<UniProvider>(this, listen: false);
+
   UniProvider get listenUniProvider => Provider.of<UniProvider>(this);
 
+  bool get hebLocale => locale.languageCode == 'he';
 
+  ui.TextDirection get easyTextDirection =>
+      hebLocale ? ui.TextDirection.rtl : ui.TextDirection.ltr;
 
   // A Section:
   // context.uniProvider.postUploaded; // current value.
@@ -30,17 +36,14 @@ extension ContextX on BuildContext {
   // context.uniProvider.updatePostUploaded(true); // notify listener
 
 //
-  List<UserModel> get userModelList =>
-      Provider.of<List<UserModel>>(this, listen: false);
+  List<UserModel> get userModelList => Provider.of<List<UserModel>>(this, listen: false);
 
   List<UserModel> get listenUserModelList => Provider.of<List<UserModel>>(this);
 
 //
-  List<MessageModel> get messagesModelList =>
-      Provider.of<List<MessageModel>>(this, listen: false);
+  List<MessageModel> get messagesModelList => Provider.of<List<MessageModel>>(this, listen: false);
 
-  List<MessageModel> get listenMessagesModelList =>
-      Provider.of<List<MessageModel>>(this);
+  List<MessageModel> get listenMessagesModelList => Provider.of<List<MessageModel>>(this);
 
 //
   List<ChatModel> get chatsModelList => Provider.of<List<ChatModel>>(this, listen: false);
@@ -48,6 +51,7 @@ extension ContextX on BuildContext {
   List<ChatModel> get listenChatsModelList => Provider.of<List<ChatModel>>(this);
 
   List<PostModel> get commentPostModelList => Provider.of<List<PostModel>>(this, listen: false);
+
   List<PostModel> get listenCommentPostModelList => Provider.of<List<PostModel>>(this);
 
   //width & height

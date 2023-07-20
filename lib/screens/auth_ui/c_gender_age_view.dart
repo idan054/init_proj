@@ -5,6 +5,7 @@ import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../common/models/user/user_model.dart';
 import '../../common/service/mixins/assets.gen.dart';
@@ -100,17 +101,24 @@ class _GenderAgeViewState extends State<GenderAgeView> {
           75.verticalSpace,
           // 'Who are you'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
           // 'When were you born?'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
-          rilDropdownField(label: 'Gender', hintText: 'What is your gender', genderItems,
-              onChanged: (String? newValue) {
-            selectedGender = newValue!;
-            var index = genderItems.indexWhere((item) => item == newValue);
-            var gender = GenderTypes.values[index];
-            context.uniProvider.currUserUpdate(currUser.copyWith(gender: gender));
-            // stfSetState(() {});
-          }),
+          rilDropdownField(
+            label: 'Gender',
+            hintText: 'What is your gender?',
+            genderItems,
+            onChanged: (String? newValue) {
+              selectedGender = newValue!;
+              var index = genderItems.indexWhere((item) => item == newValue);
+              var gender = GenderTypes.values[index];
+              context.uniProvider.currUserUpdate(currUser.copyWith(gender: gender));
+              // stfSetState(() {});
+            },
+          ),
           // rilTextField(label: 'Gender', hint: 'Choose your gender...'),
           55.verticalSpace,
-          'When is your birthday?'.toText(fontSize: 13, medium: true).centerLeft.pOnly(left: 30),
+          Align(
+                  alignment: context.hebLocale ? Alignment.centerRight : Alignment.centerLeft,
+                  child: 'When is your birthday?'.toText(fontSize: 13, medium: true))
+              .px(30),
           18.verticalSpace,
           Row(
             children: [
@@ -155,7 +163,7 @@ class _GenderAgeViewState extends State<GenderAgeView> {
 
                   var age = context.uniProvider.currUser.age ?? -404;
                   var validAge = age > 10 && age < 100;
-                  if (!validAge) return "Age can't be $age";
+                  if (!validAge) return '${"Age can't be".tr()}' "$age";
 
                   return null;
                 },
@@ -231,8 +239,8 @@ class _GenderAgeViewState extends State<GenderAgeView> {
             enabledBorder: fieldBorderDeco,
             errorBorder: fieldErrBorderDeco,
             floatingLabelBehavior: FloatingLabelBehavior.always,
-            labelText: label,
-            hintText: hintText,
+            labelText: label.tr(),
+            hintText: hintText?.tr(),
             labelStyle: AppStyles.text16PxMedium.copyWith(color: AppColors.greyUnavailable),
             hintStyle: AppStyles.text14PxMedium.copyWith(color: AppColors.white),
           ),

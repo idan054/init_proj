@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
@@ -12,6 +13,7 @@ import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/mixins/fonts.gen.dart';
 import '../../widgets/my_widgets.dart';
 import 'dart:io' show Platform;
+import 'dart:ui' as ui;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -102,10 +104,12 @@ class _LoginScreenState extends State<LoginScreen> {
               children: <TextSpan>[
                 TextSpan(
                     text: Platform.isAndroid
-                        ? "By 'Continue with Google', you agree to our "
-                        : "By 'Continue with Google' or 'Continue with Apple', you agree to our ",
+                        ? "By 'Continue with Google', you agree to our ".tr()
+                        : "By 'Continue with Google' or 'Continue with Apple', you agree to our "
+                            .tr(),
                     style: AppStyles.text14PxRegular.greyLight),
-                TextSpan(text: '\nTerms & Conditions', style: AppStyles.text14PxBold.greyLight
+                TextSpan(
+                    text: '\n' 'Terms & Conditions'.tr(), style: AppStyles.text14PxBold.greyLight
                     // .copyWith(decoration: TextDecoration.underline)
                     ),
               ],

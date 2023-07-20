@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:expandable_text/expandable_text.dart';
@@ -49,37 +50,40 @@ extension StringX on String {
           {Color color = AppColors.white,
           double? fontSize,
           TextAlign? textAlign,
+          TextStyle? style,
           bool medium = false,
           int maxLines = 2,
           bool bold = false,
           bool underline = false,
           bool softWrap = false}) =>
-      Text(this,
+      // Text(this,
+      Text(tr(),
           softWrap: softWrap,
           maxLines: maxLines,
-          textAlign: textAlign ?? (isHebrew ? TextAlign.right : TextAlign.left),
-          textDirection: isHebrew ? TextDirection.rtl : TextDirection.ltr,
+          textAlign: textAlign ?? (tr().isHebrew ? TextAlign.right : TextAlign.left),
+          textDirection: tr().isHebrew ? TextDirection.rtl : TextDirection.ltr,
           overflow: TextOverflow.ellipsis,
-          style: bold
-              ? AppStyles.text14PxBold.copyWith(
-                  color: color,
-                  fontSize: fontSize ?? 14.sp,
-                  decoration: underline ? TextDecoration.underline : null
-                  // height: 1
-                  ) // line spacing
-              : medium
-                  ? AppStyles.text14PxMedium.copyWith(
+          style: style ??
+              (bold || (medium && tr().isHebrew)
+                  ? AppStyles.text14PxBold.copyWith(
                       color: color,
                       fontSize: fontSize ?? 14.sp,
                       decoration: underline ? TextDecoration.underline : null
                       // height: 1
-                      )
-                  : AppStyles.text14PxRegular.copyWith(
-                      color: color,
-                      fontSize: fontSize ?? 14.sp,
-                      decoration: underline ? TextDecoration.underline : null
-                      // height: 1
-                      )); // line spacing
+                      ) // line spacing
+                  : medium
+                      ? AppStyles.text14PxMedium.copyWith(
+                          color: color,
+                          fontSize: fontSize ?? 14.sp,
+                          decoration: underline ? TextDecoration.underline : null
+                          // height: 1
+                          )
+                      : AppStyles.text14PxRegular.copyWith(
+                          color: color,
+                          fontSize: fontSize ?? 14.sp,
+                          decoration: underline ? TextDecoration.underline : null
+                          // height: 1
+                          ))); // line spacing
 
   ExpandableText toTextExpanded( // String text,
           {

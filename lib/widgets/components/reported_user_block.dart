@@ -11,14 +11,14 @@ import '../../common/models/post/post_model.dart';
 import '../../common/models/report/report_model.dart';
 import '../../common/service/Database/firebase_db.dart';
 import '../../common/service/mixins/assets.gen.dart';
-import '../../common/service/mixins/fonts.gen.dart';
 import '../../common/themes/app_colors_inverted.dart';
 import '../../common/themes/app_styles.dart';
+import '../../common/service/mixins/fonts.gen.dart';
 import '../../screens/feed_ui/comments_chat_screen.dart';
+import 'package:intl/intl.dart' as intl;
 import '../../screens/user_ui/user_screen.dart';
 import '../clean_snackbar.dart';
 import '../my_dialog.dart';
-import 'package:intl/intl.dart' as intl;
 
 class ReportedUserBlock extends StatelessWidget {
   final ReportModel report;
@@ -43,7 +43,8 @@ class ReportedUserBlock extends StatelessWidget {
               buildExpandableText(reasonWhy,
                       maxLines: 4,
                       textAlign: reasonWhy.isHebrew ? TextAlign.right : TextAlign.left,
-                      textDirection: reasonWhy.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+                      textDirection:
+                          reasonWhy.isHebrew ? TextDirection.rtl : TextDirection.ltr,
                       style: AppStyles.text16PxRegular.copyWith(color: AppColors.white))
                   .pOnly(right: 20, bottom: 10)
                   .advancedSizedBox(context, maxWidth: true),

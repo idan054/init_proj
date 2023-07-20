@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
@@ -21,6 +22,7 @@ import 'common/service/Database/firebase_options.dart';
 import 'common/service/life_cycle.dart';
 import 'common/service/Auth/notifications_services.dart';
 import 'common/themes/app_colors_inverted.dart';
+import 'dart:ui' as ui;
 
 Future<void> _handleNotificationReceived(RemoteMessage message) async {
   print("Handling a background message: ${message.toMap()}");
@@ -30,6 +32,7 @@ Future<void> _handleNotificationReceived(RemoteMessage message) async {
 void main() async {
   printWhite('START main()!');
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   PushNotificationService.setupNotifications(_handleNotificationReceived);
   FirebaseMessaging.onBackgroundMessage(_handleNotificationReceived);
@@ -37,8 +40,10 @@ void main() async {
   final dbDir = await getApplicationDocumentsDirectory();
   Hive.init(dbDir.path);
 
-  runApp(
-    MultiProvider(
+  runApp(EasyLocalization(
+    supportedLocales: const [Locale('en', ''), Locale('he', '')],
+    path: 'assets/translations',
+    child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => UniProvider()),
           // Provider.value(value: StreamModel().serverClient),
@@ -48,8 +53,9 @@ void main() async {
         // builder:(context, child) =>
 
         child: const App()),
-    // child: const MaterialApp(home: ImgbbConverterScreen())),
-  );
+  )
+      // child: const MaterialApp(home: ImgbbConverterScreen())),
+      );
 }
 
 class App extends StatefulWidget {
@@ -63,6 +69,16 @@ class _AppState extends State<App> {
   final _router = AppRouter(); // Add screens AT app_router.dart
   FirebaseAnalyticsObserver observer =
       FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // context.setLocale(const Locale('en', ''));
+      context.setLocale(const Locale('he', ''));
+      print('context.locale.toString() ${context.locale.toString()}');
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,17 +98,19 @@ class _AppState extends State<App> {
             designSize: const Size(390, 844),
             minTextAdapt: true,
             builder: (_, __) => MaterialApp.router(
-              routerDelegate: _router.delegate(navigatorObservers: () => [observer]),
-              routeInformationParser: _router.defaultRouteParser(),
               title: 'RilTopia',
               debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                colorSchemeSeed: AppColors.darkOutline,
-                // scaffoldBackgroundColor: AppColors.primaryOriginalColor,
-              ),
+              theme: ThemeData(colorSchemeSeed: AppColors.darkOutline),
+              // Translation
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              // Routing
+              routerDelegate: _router.delegate(navigatorObservers: () => [observer]),
+              routeInformationParser: _router.defaultRouteParser(),
               builder: (context, child) {
                 return Directionality(
-                  textDirection: TextDirection.ltr,
+                  textDirection: context.easyTextDirection,
                   child: Builder(
                     builder: (context) => child!,
                   ),

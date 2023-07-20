@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:example/common/extensions/extensions.dart';
 import 'package:flutter/material.dart';
 
 import '../common/service/mixins/assets.gen.dart';
@@ -12,10 +13,13 @@ AppBar darkAppBar(BuildContext context,
     bool hideBackButton = false,
     bool centerTitle = false,
     List<Widget> actions = const []}) {
-  Widget backButton(VoidCallback onPressed) => IconButton(
-        onPressed: onPressed,
-        icon: Assets.svg.icons.arrowNarrowLeft.svg(color: AppColors.white),
-      );
+  Widget backButton(VoidCallback onPressed) => RotatedBox(
+    quarterTurns: context.hebLocale ? 2 : 4,
+    child: IconButton(
+          onPressed: onPressed,
+          icon: Assets.svg.icons.arrowNarrowLeft.svg(color: AppColors.white),
+        ),
+  );
   return AppBar(
     // elevation: 3,
     elevation: 0,
@@ -23,8 +27,7 @@ AppBar darkAppBar(BuildContext context,
     backgroundColor: AppColors.primaryDark,
     centerTitle: centerTitle,
     title: titleWidget ??
-        Text(
-          title!,
+        title!.toText(
           style: AppStyles.text18PxRegular.white,
         ),
     leading: hideBackButton

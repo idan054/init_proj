@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:rive/rive.dart';
 import '../../../common/models/report/report_model.dart';
@@ -14,10 +15,7 @@ import 'package:flutter/material.dart';
 
 import 'bottom_sort_sheet.dart';
 
-
-
-Widget basicLoaderRiltopia() =>
-    Column(
+Widget basicLoaderRiltopia() => Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         TweenAnimationBuilder(
@@ -27,12 +25,12 @@ Widget basicLoaderRiltopia() =>
               return Stack(
                 children: [
                   Container(
-                      color: AppColors.primaryOriginal.withOpacity(value),
-                      height: 80,
-                      width: 80,
-                      padding: 5.all,
-                      child: RiveAnimation.asset('assets/riv/rilmanblackwhitefaster.riv')
-                          .offset(0, 5))
+                          color: AppColors.primaryOriginal.withOpacity(value),
+                          height: 80,
+                          width: 80,
+                          padding: 5.all,
+                          child: RiveAnimation.asset('assets/riv/rilmanblackwhitefaster.riv')
+                              .offset(0, 5))
                       .roundedFull,
                   Assets.images.circleCover.image(fit: BoxFit.fill).sizedBox(80, 80),
                 ],
@@ -56,6 +54,9 @@ Widget buildFeedSort(
   final currUser = context.uniProvider.currUser;
   final ageRange = ageRangeList(currUser);
   final ageRangeStr = ' (${ageRange.first} - ${ageRange.last})';
+  final title =
+      '${currfilter.title.replaceAll('sortFeedBy', '').replaceAll('sortFeedBy', '').tr().replaceAll('רילס ', '').replaceAll('משתמשים ', '')}'
+      '${context.hebLocale ? ' ' : ''}';
 
   return ListTile(
           // minVerticalPadding: 15,
@@ -68,13 +69,15 @@ Widget buildFeedSort(
               Stack(
                 children: [
                   currfilter.solidSvg.svg(color: AppColors.yellowAlert, height: 20),
-                  if(currfilter.type == FilterTypes.sortFeedByIsOnline) buildUserCircleOnline(true),
+                  if (currfilter.type == FilterTypes.sortFeedByIsOnline)
+                    buildUserCircleOnline(true),
                 ],
               ),
               const SizedBox(width: 7),
-              'Sort Rils by '.toText(fontSize: 13, color: AppColors.greyLight).pOnly(top: 3),
-              currfilter.title
-                  .replaceAll('sortFeedBy', '')
+              '${'Sort Rils by'.tr()}'
+                  .toText(fontSize: 13, color: AppColors.greyLight)
+                  .pOnly(top: 3),
+              title
                   // .replaceAll('Your topics', 'Your ${currUser.tags.length} topics')
                   .toText(
                       bold: true,
