@@ -183,6 +183,23 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 ],
               ),
             ),
+            rilClassicButton(context,
+                    radius: 10,
+                    isWide: true,
+                    borderColor: AppColors.greyLight.withOpacity(0.25),
+                    icon: Icons.public.icon(color: AppColors.greyLight),
+                    title: 'Hebrew language'.tr(),
+                    bgColor: AppColors.transparent,
+                    textColor: AppColors.greyLight, onPressed: () async {
+              if (context.hebLocale) {
+                context.setLocale(const Locale('en', ''));
+              } else {
+                context.setLocale(const Locale('he', ''));
+              }
+            })
+                .scale(scale: 0.7)
+                .bottom
+                .pOnly(bottom: ((Platform.isIOS && !context.hebLocale) || kDebugMode) ? 75 : 25),
             // Will not be shown in israel
             if ((Platform.isIOS && !context.hebLocale) || kDebugMode)
               rilClassicButton(context,

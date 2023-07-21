@@ -1,5 +1,7 @@
 import 'package:camera/camera.dart';
+import 'package:collection/collection.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:example/common/dump/hive_services.dart';
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/routes/app_router.gr.dart';
@@ -23,6 +25,7 @@ import 'common/service/life_cycle.dart';
 import 'common/service/Auth/notifications_services.dart';
 import 'common/themes/app_colors_inverted.dart';
 import 'dart:ui' as ui;
+import 'dart:io' show Platform;
 
 Future<void> _handleNotificationReceived(RemoteMessage message) async {
   print("Handling a background message: ${message.toMap()}");
@@ -72,12 +75,29 @@ class _AppState extends State<App> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // context.setLocale(const Locale('en', ''));
-      context.setLocale(const Locale('he', ''));
-      print('context.locale.toString() ${context.locale.toString()}');
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final box = await HiveServices.openBoxes();
+      final appLang = box.get('App_lang');
+      if (appLang == null) setDefaultLocale(box);
     });
     super.initState();
+  }
+
+  void setDefaultLocale(Box box){
+    final List<Locale> systemLocales = WidgetsBinding.instance.window.locales;
+    final hebLocale = systemLocales.firstWhereOrNull((l) =>
+    l.languageCode.toUpperCase() == 'HE' ||
+        l.languageCode.toUpperCase() == 'IL' ||
+        (l.countryCode ?? '').toUpperCase() == 'HE' ||
+        (l.countryCode ?? '').toUpperCase() == 'IL');
+    print('hebLocale $hebLocale');
+    if (hebLocale != null) {
+      context.setLocale(const Locale('he', ''));
+    } else {
+      context.setLocale(const Locale('en', ''));
+    }
+    box.put('App_lang', hebLocale ?? systemLocales.first);
+    print('context.locale.toString() ${context.locale.toString()}');
   }
 
   @override

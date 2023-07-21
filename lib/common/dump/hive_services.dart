@@ -10,8 +10,9 @@ class HiveServices {
 
   /// Box values:
 
-  static Future openBoxes() async {
-    await Hive.openBox('uniBox');
+  static Future<Box> openBoxes() async {
+    final box = await Hive.openBox('uniBox');
+    return box;
     // await Hive.openBox<List<PostModel>>('postsBox');
   }
 
