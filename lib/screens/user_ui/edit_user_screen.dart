@@ -5,6 +5,7 @@ import 'dart:developer';
 
 import 'package:badges/badges.dart' as badge;
 import 'package:camera/camera.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:example/common/models/user/user_model.dart';
@@ -90,7 +91,7 @@ class _EditUserScreenState extends State<EditUserScreen> {
           backAction: () => _discardPopup(currUser),
           actions: [
             if (!isLoading)
-              'Save'.toText().px(14).center.onTap(() async {
+              'Save'.toText(medium: true).px(14).center.onTap(() async {
                 tempName = null;
                 tempBio == null;
 
@@ -182,13 +183,15 @@ class _EditUserScreenState extends State<EditUserScreen> {
                 ],
               ),
             ),
-            if (Platform.isIOS || kDebugMode)
+            // Will not be shown in israel
+            if ((Platform.isIOS && !context.hebLocale) || kDebugMode)
               rilClassicButton(context,
                   radius: 10,
-                  isWide: true,
-                  title: 'Delete my account',
-                  bgColor: AppColors.errRed,
-                  textColor: AppColors.darkBg, onPressed: () async {
+                  isWide: false,
+                  borderColor: AppColors.errRed.withOpacity(0.25),
+                  title: '  Delete account',
+                  bgColor: AppColors.transparent,
+                  textColor: AppColors.errRed, onPressed: () async {
                 _deleteUserPopup(context);
               }).scale(scale: 0.7).bottom.pOnly(bottom: 25)
           ],

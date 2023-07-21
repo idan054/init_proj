@@ -198,13 +198,14 @@ class _MainFeedScreenState extends State<MainFeedScreen> with SingleTickerProvid
             indicator: UnderlineTabIndicator(
                 borderSide: const BorderSide(width: 2.5, color: AppColors.primaryOriginal),
                 insets: 30.horizontal),
-            labelStyle: AppStyles.text14PxMedium,
+            labelStyle:
+                _tabController?.index == 1 ? AppStyles.text14PxBold : AppStyles.text14PxMedium,
             unselectedLabelStyle: AppStyles.text14PxRegular,
             labelColor: AppColors.white,
             unselectedLabelColor: AppColors.greyLight,
             indicatorColor: AppColors.primaryOriginal,
             tabs: [
-              Tab(text: 'Rils'.tr()),
+              const Tab(text: 'Rils'),
               Tab(text: 'Talks'.tr()),
             ],
             onTap: (i) async {

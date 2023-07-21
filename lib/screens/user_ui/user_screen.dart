@@ -137,8 +137,8 @@ class _UserScreenState extends State<UserScreen> {
                           if (isLoading) return basicLoader().pOnly(top: 100);
 
                           var text = activeFilter == FilterTypes.postsByUser
-                              ? "${isCurrUserProfile ? 'Your' : "${user.name}'s"} Rils will appear here"
-                              : 'Talks ${isCurrUserProfile ? 'you' : "${user.name}"} joined will appear here';
+                              ? "${isCurrUserProfile ? 'Your'.tr() : "${user.name}'s"} Rils" "${'will appear here'.tr()}"
+                              : '${isCurrUserProfile ? '' : "${user.name}"}' "${'Talks'.tr()}" "${'will appear here'.tr()}";
 
                           if (postList.isEmpty || isBlocked) {
                             return text.toText(color: AppColors.grey50).pOnly(top: 100);
@@ -177,12 +177,8 @@ class _UserScreenState extends State<UserScreen> {
         child: Builder(builder: (context) {
           // var rilTitle = isCurrUserProfile ? 'Your Rils' : "Rils";
           var rilTitle = "Rils";
-          var convTitle = isCurrUserProfile
-              ? 'Talks'.tr()
-              : (context.hebLocale
-                  ? ("השיחות של "
-                      "${user.name}")
-                  : "${user.name}'s Talks");
+          var convTitle = 'Talks'.tr();
+          // var convTitle = isCurrUserProfile ? 'Talks'.tr() : (context.hebLocale ? ("השיחות של " "${user.name}") : "${user.name}'s Talks");
 
           // return title.toText(fontSize: 18, medium: true).centerLeft.py(12).px(25);
           return TabBar(
@@ -293,7 +289,7 @@ class _UserScreenState extends State<UserScreen> {
     Future.delayed(150.milliseconds).then((_) {
       String userName = '${user.name}';
       showRilDialog(context,
-          title: 'Report "$userName"',
+          title: "${'Report'.tr()}" " " "$userName",
           desc: Form(
             key: reportFormKey,
             child: rilTextField(
@@ -344,10 +340,12 @@ class _UserScreenState extends State<UserScreen> {
     Future.delayed(150.milliseconds).then((_) {
       String userName = '${user.name}';
       showRilDialog(context,
-          title: isBlocked ? 'Unblock?' : 'Are you sure?',
+          title: isBlocked ? "${'Unblock'.tr()}" '?' : 'Are you sure?'.tr(),
           desc: (isBlocked
-                  ? 'You will see content from \n$userName \n'
-                  : 'You will not see content from \n$userName \n')
+                  ? "${'You will see content from '.tr()}"
+              '\n$userName \n'
+                  : "${'You will not see content from '.tr()}"
+              '\n$userName \n')
               // 'You can\'t Undo it. Are you sure?'
               .toText(maxLines: 10),
           barrierDismissible: true,
@@ -367,7 +365,7 @@ class _UserScreenState extends State<UserScreen> {
                   );
 
                   Navigator.of(context).pop();
-                  rilFlushBar(context, '$userName unblocked.');
+                  rilFlushBar(context, '$userName' "${'unblocked'.tr()}" '.');
                   isBlocked = false;
                   setState(() {});
                 } else {
@@ -384,7 +382,9 @@ class _UserScreenState extends State<UserScreen> {
                   );
 
                   Navigator.of(context).pop();
-                  rilFlushBar(context, '$userName blocked.');
+                  rilFlushBar(context, '$userName '
+                      "${'blocked'.tr()}"
+                      '.');
                   isBlocked = true;
                   setState(() {});
                 }
@@ -433,26 +433,15 @@ class _UserScreenState extends State<UserScreen> {
                         buildRilChip('Admin',
                             icon: Assets.svg.icons.riltopiaIcon
                                 .svg(color: AppColors.greyLight, height: 16)),
+                        12.horizontalSpace,
                       ],
-                      user.tags.isEmpty
-                          ? const Offstage()
-                          : user.tags.length == 1
-                              ? buildRilChip(user.tags.first)
-                              : badge.Badge(
-                                      badgeContent: '+${user.tags.length - 1}'
-                                          .toText(fontSize: 10, color: Colors.white, medium: true),
-                                      padding: const EdgeInsets.all(5),
-                                      elevation: 0,
-                                      badgeColor: AppColors.primaryOriginal,
-                                      // stackFit: StackFit.loose,
-                                      // shape:
-                                      child: buildRilChip(user.tags.first))
-                                  .pad(7)
-                                  .onTap(() {
-                                  showTagsRow = !showTagsRow;
-                                  stfSetState(() {});
-                                }, radius: 12),
-                      12.horizontalSpace,
+                      if (!context.hebLocale) ...[
+                        buildTagsChip(user, onTap: () {
+                          showTagsRow = !showTagsRow;
+                          stfSetState(() {});
+                        }),
+                        12.horizontalSpace,
+                      ],
                       Builder(builder: (context) {
                         var isOther = user.gender == GenderTypes.other;
                         // 🚹 🚺 👩👨 💁‍♀️💁‍♂️
@@ -463,8 +452,15 @@ class _UserScreenState extends State<UserScreen> {
                                 : Assets.svg.icons.manProfile.svg(color: AppColors.greyLight));
                       }),
                       12.horizontalSpace,
-                      buildRilChip('${user.age} y.o',
+                      buildRilChip(context.hebLocale ? 'גיל ${user.age}' : '${user.age} y.o',
                           icon: Assets.svg.icons.dateTimeCalender.svg(color: AppColors.greyLight)),
+                      if (context.hebLocale) ...[
+                        // 12.horizontalSpace,
+                        buildTagsChip(user, onTap: () {
+                          showTagsRow = !showTagsRow;
+                          stfSetState(() {});
+                        }),
+                      ],
                     ],
                   ),
                 );
@@ -538,7 +534,9 @@ class _UserScreenState extends State<UserScreen> {
                       ),
                       icon: isBlocked
                           ? const Offstage()
-                          : Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: bgColor),
+                          : RotatedBox(
+                          quarterTurns: context.hebLocale ? 3 : 4,
+                          child: Assets.svg.icons.dmPlaneUntitledIcon.svg(height: 17, color: bgColor)),
                       // label: (isBlocked ? 'Blocked' : 'Send DM')
                       label: (isBlocked ? 'Blocked' : 'Start Chat')
                           .toText(fontSize: 13, color: bgColor, bold: true),
@@ -560,8 +558,11 @@ class _UserScreenState extends State<UserScreen> {
                           children: [
                             Assets.svg.icons.groupMultiPeople
                                 .svg(width: 17, color: AppColors.grey50)
-                                .pOnly(right: 10),
-                            "You both interested in $commonTag... that's cool!"
+                                .px(7),
+                            '${"You both interested in ".tr()}'
+                                '${commonTag.tr()}'
+                                "... "
+                                '${"that's cool!".tr()}'
                                 .toText(color: AppColors.grey50, fontSize: 12)
                             // .expanded(),
                           ],
@@ -575,6 +576,24 @@ class _UserScreenState extends State<UserScreen> {
       ],
     ).px(25);
   }
+}
+
+Widget buildTagsChip(UserModel user, {GestureTapCallback? onTap}) {
+  return user.tags.isEmpty
+      ? const Offstage()
+      : user.tags.length == 1
+          ? buildRilChip(user.tags.first)
+          : badge.Badge(
+                  badgeContent: '+${user.tags.length - 1}'
+                      .toText(fontSize: 10, color: Colors.white, medium: true),
+                  padding: const EdgeInsets.all(5),
+                  elevation: 0,
+                  badgeColor: AppColors.primaryOriginal,
+                  // stackFit: StackFit.loose,
+                  // shape:
+                  child: buildRilChip(user.tags.first))
+              .pad(7)
+              .onTap(onTap, radius: 12);
 }
 
 Widget buildTagsRow(UserModel user,
@@ -640,8 +659,8 @@ ExpandableText buildExpandableText(
       maxLines: maxLines ?? 5,
       textAlign: textAlign ?? TextAlign.center,
       onExpandedChanged: onChanged,
-      expandText: 'Expand',
-      collapseText: 'Collapse',
+      expandText: 'Expand'.tr(),
+      collapseText: 'Collapse'.tr(),
       expanded: autoExpanded,
       linkColor: linkColor ?? AppColors.primaryLight,
       animation: true,
