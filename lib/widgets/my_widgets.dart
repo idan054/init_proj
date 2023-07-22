@@ -119,7 +119,7 @@ Widget riltopiaHorizontalLogo(BuildContext context,
         10.horizontalSpace,
         Assets.images.logoCircularRilTopiaLogo.image(height: 24 * ratio),
       // ] else ...[
-        const Spacer(),
+      if(isHomePage) const Spacer(),
       // ]
     ],
   );

@@ -83,10 +83,10 @@ class _AppState extends State<App> {
     super.initState();
   }
 
-  void setDefaultLocale(Box box){
+  void setDefaultLocale(Box box) {
     final List<Locale> systemLocales = WidgetsBinding.instance.window.locales;
     final hebLocale = systemLocales.firstWhereOrNull((l) =>
-    l.languageCode.toUpperCase() == 'HE' ||
+        l.languageCode.toUpperCase() == 'HE' ||
         l.languageCode.toUpperCase() == 'IL' ||
         (l.countryCode ?? '').toUpperCase() == 'HE' ||
         (l.countryCode ?? '').toUpperCase() == 'IL');
@@ -96,7 +96,7 @@ class _AppState extends State<App> {
     } else {
       context.setLocale(const Locale('en', ''));
     }
-    box.put('App_lang', hebLocale ?? systemLocales.first);
+    box.put('App_lang', hebLocale?.languageCode ?? systemLocales.first.languageCode);
     print('context.locale.toString() ${context.locale.toString()}');
   }
 

@@ -127,7 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     }
 
     if (currUser.age == null) {
-      context.router.push(const OnBoardingRoute());
+      context.router.push(const LoginRoute());
       return const Offstage();
     }
 

@@ -94,7 +94,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                   }),
             ),
             const Spacer(),
-            riltopiaHorizontalLogo(context, ratio: 1.2),
+            riltopiaHorizontalLogo(context, ratio: 1.2, isHomePage: false),
             const Spacer(),
             //> PlaceHolder ONLY:
             Opacity(
@@ -107,7 +107,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
         ),
         50.verticalSpace,
       ],
-    ).center;
+    )
+        .center
+    ;
   }
 
   Widget buildPageIndicator() {
