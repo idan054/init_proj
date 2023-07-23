@@ -28,7 +28,6 @@ class UniProvider with ChangeNotifier {
 
   AppConfigModel? serverConfig;
   UserModel currUser = const UserModel();
-  bool showFab = true;
 
   //! currFilter & sortFeedBy.type usage could make issues
   FilterTypes currFilter = FilterTypes.postWithoutComments;
@@ -62,11 +61,6 @@ class UniProvider with ChangeNotifier {
 
   void serverConfigUpdate(AppConfigModel? data) {
     serverConfig = data;
-    notifyListeners();
-  }
-
-  void showFabUpdate(bool data) {
-    showFab = data;
     notifyListeners();
   }
 

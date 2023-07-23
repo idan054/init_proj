@@ -248,7 +248,7 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   Builder buildFab() {
     return Builder(builder: (context) {
-      var showFab = context.uniProvider.showFab;
+      var showFab = context.listenFabProvider.showFab;
       var replyStyle = context.listenUniProvider.feedType == FeedTypes.rils;
 
       // SpeedDialChild fabChild(String title, Widget icon, {required bool replyStyle}) {

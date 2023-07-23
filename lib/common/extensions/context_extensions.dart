@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
+import 'package:example/common/models/fabModel.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,10 @@ extension ContextX on BuildContext {
   UniProvider get uniProvider => Provider.of<UniProvider>(this, listen: false);
 
   UniProvider get listenUniProvider => Provider.of<UniProvider>(this);
+
+  FabProvider get fabProvider => Provider.of<FabProvider>(this, listen: false);
+
+  FabProvider get listenFabProvider => Provider.of<FabProvider>(this);
 
   bool get hebLocale => locale.languageCode == 'he';
 

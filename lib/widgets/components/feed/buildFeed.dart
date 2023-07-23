@@ -63,9 +63,9 @@ Widget buildFeed(
             onNotification: (notification) {
               final ScrollDirection direction = notification.direction;
               if (direction == ScrollDirection.reverse) {
-                context.uniProvider.showFabUpdate(false);
+                context.fabProvider.showFabUpdate(false);
               } else if (direction == ScrollDirection.forward) {
-                context.uniProvider.showFabUpdate(true);
+                context.fabProvider.showFabUpdate(true);
               }
               // setState(() {});
               return true;

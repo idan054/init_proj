@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/dump/hive_services.dart';
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/fabModel.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/delete_me.dart';
 import 'package:example/screens/main_ui/splash_screen.dart' as click;
@@ -49,6 +50,7 @@ void main() async {
     child: MultiProvider(
         providers: [
           ChangeNotifierProvider(create: (_) => UniProvider()),
+          ChangeNotifierProvider(create: (_) => FabProvider()),
           // Provider.value(value: StreamModel().serverClient),
           // FutureProvider<List<Activity>?>.value(
           //     value: StreamModel().getFeedActivities(), initialData: const []),
