@@ -34,6 +34,13 @@ class _NameProfileViewState extends State<NameProfileView> {
   var nameController = TextEditingController();
 
   @override
+  void initState() {
+    var currUser = context.uniProvider.currUser;
+    if(Platform.isIOS) nameController.text = currUser.name ?? '';
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var isImageErr =
         context.listenUniProvider.signupErrFound; // This will auto rebuild if err found.

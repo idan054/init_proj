@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:app_settings/app_settings.dart';
+// import 'package:app_settings/app_settings.dart';
 import 'package:example/common/extensions/context_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;

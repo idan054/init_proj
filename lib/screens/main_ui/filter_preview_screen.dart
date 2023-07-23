@@ -104,7 +104,7 @@ class _FilterPreviewScreenState extends State<FilterPreviewScreen> {
               inAppReview.openStoreListing();
             },
           ),
-          920.verticalSpace,
+          20.verticalSpace,
           'Go back, I don\'t want to support'
               .toText(
                   fontSize: 11,

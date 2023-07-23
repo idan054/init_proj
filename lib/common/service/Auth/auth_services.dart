@@ -47,6 +47,7 @@ class AuthService {
       if (authUser?.email == null) return; // When popup canceled
     }
 
+    print('authUser!.email ${authUser!.email}');
     var userData = await Database.docData('users/${authUser!.email}');
     final List<dynamic> userTags = userData?['tags'] ?? [];
     if (userData == null || userTags.isEmpty) {
@@ -73,7 +74,7 @@ class AuthService {
   static void _handleNewUser(BuildContext context) async {
     String? fcm = await FirebaseMessaging.instance.getToken();
     var user = context.uniProvider.currUser.copyWith(
-      name: Platform.isIOS ? authUser?.displayName : null,
+      name: authUser?.displayName,
       uid: authUser!.uid,
       email: authUser!.email,
       fcm: fcm,
@@ -105,8 +106,15 @@ class AuthService {
   static Future<User?> _appleAuthPopup() async {
     print('START: _appleAuthPopup()');
 
-    final appleProvider =
-        await SignInWithApple.getAppleIDCredential(scopes: [AppleIDAuthorizationScopes.email]);
+    final appleProvider = await SignInWithApple.getAppleIDCredential(scopes: [
+      AppleIDAuthorizationScopes.email,
+      AppleIDAuthorizationScopes.fullName,
+    ]);
+
+    print('appleProvider ${appleProvider.email}');
+    print('appleProvider ${appleProvider.familyName}');
+    print('appleProvider ${appleProvider.givenName}');
+    print('appleProvider ${appleProvider.userIdentifier}');
 
     final credential = OAuthProvider('apple.com').credential(
         idToken: appleProvider.identityToken, accessToken: appleProvider.authorizationCode);
@@ -114,10 +122,12 @@ class AuthService {
 
     authUser = auth.currentUser;
     if (authUser != null && authUser!.email == null) {
-      var mail = '${authUser!.uid.substring(0, 10)}@apple.com';
+      var mail = appleProvider.email ?? '${authUser!.uid.substring(0, 10)}@apple.com';
+      var name = appleProvider.givenName ?? appleProvider.familyName;
       authUser!.updateEmail(mail);
-      // if(authUser?.displayName == null) authUser!.updateDisplayName(displayName);
+      if(authUser?.displayName == null) authUser!.updateDisplayName(name);
     }
+
     return authUser;
   }
 }

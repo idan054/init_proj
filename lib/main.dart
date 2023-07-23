@@ -36,7 +36,10 @@ Future<void> _handleNotificationReceived(RemoteMessage message) async {
 void main() async {
   printWhite('START main()!');
   WidgetsFlutterBinding.ensureInitialized();
+
   await EasyLocalization.ensureInitialized();
+  EasyLocalization.logger.enableBuildModes = [];
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   PushNotificationService.setupNotifications(_handleNotificationReceived);
   FirebaseMessaging.onBackgroundMessage(_handleNotificationReceived);
