@@ -31,7 +31,7 @@ class UserModel with _$UserModel {
     GenderTypes? gender,
     @Default(UserTypes.normal) UserTypes? userType,
     @Default([]) List<String> tags,
-    @Default([]) List<String> blockedUsers, // Hide content from (server based)
+    @Default([]) List<String> blockedUsers, // Hide content from (servfer based)
     @DateTimeStampConv() DateTime? birthday,
     PositionModel? position,
     // double? lat, // lastSeen Latitude
