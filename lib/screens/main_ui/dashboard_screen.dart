@@ -83,7 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen>
       // BETA TEST:
       FirebaseAnalytics.instance.setCurrentScreen(
         screenName: 'Dashboard',
-        screenClassOverride: 'DashboardScreen()',
+        screenClassOverride: 'DashboardScreen()'
       );
 
       checkForUpdate(context, localConfig, serverConfig!);

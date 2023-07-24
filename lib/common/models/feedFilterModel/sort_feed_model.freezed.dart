@@ -22,8 +22,8 @@ SortFeedModel _$SortFeedModelFromJson(Map<String, dynamic> json) {
 mixin _$SortFeedModel {
   String get title => throw _privateConstructorUsedError;
   String get desc => throw _privateConstructorUsedError;
-  SvgGenImage get svg => throw _privateConstructorUsedError;
-  SvgGenImage get solidSvg => throw _privateConstructorUsedError;
+  String get svg => throw _privateConstructorUsedError;
+  String get solidSvg => throw _privateConstructorUsedError;
   FilterTypes get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,8 +41,8 @@ abstract class $SortFeedModelCopyWith<$Res> {
   $Res call(
       {String title,
       String desc,
-      SvgGenImage svg,
-      SvgGenImage solidSvg,
+      String svg,
+      String solidSvg,
       FilterTypes type});
 }
 
@@ -61,8 +61,8 @@ class _$SortFeedModelCopyWithImpl<$Res, $Val extends SortFeedModel>
   $Res call({
     Object? title = null,
     Object? desc = null,
-    Object? svg = freezed,
-    Object? solidSvg = freezed,
+    Object? svg = null,
+    Object? solidSvg = null,
     Object? type = null,
   }) {
     return _then(_value.copyWith(
@@ -74,14 +74,14 @@ class _$SortFeedModelCopyWithImpl<$Res, $Val extends SortFeedModel>
           ? _value.desc
           : desc // ignore: cast_nullable_to_non_nullable
               as String,
-      svg: freezed == svg
+      svg: null == svg
           ? _value.svg
           : svg // ignore: cast_nullable_to_non_nullable
-              as SvgGenImage,
-      solidSvg: freezed == solidSvg
+              as String,
+      solidSvg: null == solidSvg
           ? _value.solidSvg
           : solidSvg // ignore: cast_nullable_to_non_nullable
-              as SvgGenImage,
+              as String,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -101,8 +101,8 @@ abstract class _$$_SortFeedModelCopyWith<$Res>
   $Res call(
       {String title,
       String desc,
-      SvgGenImage svg,
-      SvgGenImage solidSvg,
+      String svg,
+      String solidSvg,
       FilterTypes type});
 }
 
@@ -119,8 +119,8 @@ class __$$_SortFeedModelCopyWithImpl<$Res>
   $Res call({
     Object? title = null,
     Object? desc = null,
-    Object? svg = freezed,
-    Object? solidSvg = freezed,
+    Object? svg = null,
+    Object? solidSvg = null,
     Object? type = null,
   }) {
     return _then(_$_SortFeedModel(
@@ -132,14 +132,14 @@ class __$$_SortFeedModelCopyWithImpl<$Res>
           ? _value.desc
           : desc // ignore: cast_nullable_to_non_nullable
               as String,
-      svg: freezed == svg
+      svg: null == svg
           ? _value.svg
           : svg // ignore: cast_nullable_to_non_nullable
-              as SvgGenImage,
-      solidSvg: freezed == solidSvg
+              as String,
+      solidSvg: null == solidSvg
           ? _value.solidSvg
           : solidSvg // ignore: cast_nullable_to_non_nullable
-              as SvgGenImage,
+              as String,
       type: null == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -167,9 +167,9 @@ class _$_SortFeedModel implements _SortFeedModel {
   @override
   final String desc;
   @override
-  final SvgGenImage svg;
+  final String svg;
   @override
-  final SvgGenImage solidSvg;
+  final String solidSvg;
   @override
   final FilterTypes type;
 
@@ -185,20 +185,16 @@ class _$_SortFeedModel implements _SortFeedModel {
             other is _$_SortFeedModel &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.desc, desc) || other.desc == desc) &&
-            const DeepCollectionEquality().equals(other.svg, svg) &&
-            const DeepCollectionEquality().equals(other.solidSvg, solidSvg) &&
+            (identical(other.svg, svg) || other.svg == svg) &&
+            (identical(other.solidSvg, solidSvg) ||
+                other.solidSvg == solidSvg) &&
             (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      title,
-      desc,
-      const DeepCollectionEquality().hash(svg),
-      const DeepCollectionEquality().hash(solidSvg),
-      type);
+  int get hashCode =>
+      Object.hash(runtimeType, title, desc, svg, solidSvg, type);
 
   @JsonKey(ignore: true)
   @override
@@ -218,8 +214,8 @@ abstract class _SortFeedModel implements SortFeedModel {
   const factory _SortFeedModel(
       {required final String title,
       required final String desc,
-      required final SvgGenImage svg,
-      required final SvgGenImage solidSvg,
+      required final String svg,
+      required final String solidSvg,
       required final FilterTypes type}) = _$_SortFeedModel;
 
   factory _SortFeedModel.fromJson(Map<String, dynamic> json) =
@@ -230,9 +226,9 @@ abstract class _SortFeedModel implements SortFeedModel {
   @override
   String get desc;
   @override
-  SvgGenImage get svg;
+  String get svg;
   @override
-  SvgGenImage get solidSvg;
+  String get solidSvg;
   @override
   FilterTypes get type;
   @override

@@ -24,6 +24,7 @@ class AppConfigModel with _$AppConfigModel {
     String? whatsNew,
     UpdateTypes? updateType,
     bool? isUpdateAvailable,
+    bool? testersMode, //  For google play / app store
     String? updateIosLink,
     String? updateAndroidLink,
     int? currentPatchNumber

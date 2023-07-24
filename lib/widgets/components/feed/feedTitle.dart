@@ -68,7 +68,7 @@ Widget buildFeedSort(
             children: [
               Stack(
                 children: [
-                  currfilter.solidSvg.svg(color: AppColors.yellowAlert, height: 20),
+                  SvgGenImage(currfilter.solidSvg).svg(color: AppColors.yellowAlert, height: 20),
                   if (currfilter.type == FilterTypes.sortFeedByIsOnline)
                     buildUserCircleOnline(true),
                 ],

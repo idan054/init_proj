@@ -17,23 +17,23 @@ import '../postBlock_stf.dart';
 final sortByDefault = SortFeedModel(
   title: 'Default',
   desc: 'Rils from members by timeline',
-  svg: Assets.svg.icons.sortByDefault,
-  solidSvg: Assets.svg.icons.sortByDefaultSolid,
+  svg: 'assets/svg/icons/sort-by-default.svg',
+  solidSvg: 'assets/svg/icons/sort-by-default-solid.svg',
   type: FilterTypes.sortFeedByDefault,
 );
 final sortByIsOnline = SortFeedModel(
   title: 'Online members',
   desc: 'Rils from online members',
-  svg: Assets.svg.icons.userCircleOutline,
-  solidSvg: Assets.svg.icons.userCircleSolid,
+  svg: 'assets/svg/icons/user-circle-outline.svg',
+  solidSvg: 'assets/svg/icons/user-circle-solid.svg',
   type: FilterTypes.sortFeedByIsOnline,
 );
 final sortByLocation = SortFeedModel(
   title: 'Your location',
   // desc: 'Latest Rils by members around you',
   desc: 'Rils from members around you',
-  svg: Assets.svg.icons.sortByLocation,
-  solidSvg: Assets.svg.icons.sortByLocationSolid,
+  svg: 'assets/svg/icons/sort-by-location.svg',
+  solidSvg: 'assets/svg/icons/sort-by-location-solid.svg',
   type: FilterTypes.sortFeedByLocation,
 );
 final sortByTopic = SortFeedModel(
@@ -42,16 +42,16 @@ final sortByTopic = SortFeedModel(
   // desc: 'Rils from members like you',
   desc: 'Rils from your topics',
   // svg: Assets.svg.icons.wisdomMultiLightStar,
-  svg: Assets.svg.icons.sortByTopic,
-  solidSvg: Assets.svg.icons.sortByTopicSolid,
+  svg: 'assets/svg/icons/sort-by-topic.svg',
+  solidSvg: 'assets/svg/icons/sort-by-topic-solid.svg',
   type: FilterTypes.sortFeedByTopics,
 );
 final sortByAge = SortFeedModel(
   title: 'Your age',
   // desc: 'Latest Rils by members in your age',
   desc: 'Rils from members in your age',
-  svg: Assets.svg.icons.sortByAge,
-  solidSvg: Assets.svg.icons.sortByAgeSolid,
+  svg: 'assets/svg/icons/sort-by-age.svg',
+  solidSvg: 'assets/svg/icons/sort-by-age-solid.svg',
   type: FilterTypes.sortFeedByAge,
 );
 
@@ -155,7 +155,7 @@ class _BottomSortSheetState extends State<BottomSortSheet> {
             ),
       leading: Stack(
         children: [
-          filter.svg.svg(
+          SvgGenImage(filter.svg).svg(
             color: isActive
                 // ? (selectedFeedSort == filter ? AppColors.primaryOriginal : AppColors.white)
                 ? AppColors.white

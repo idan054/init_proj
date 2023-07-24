@@ -107,9 +107,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
         ),
         50.verticalSpace,
       ],
-    )
-        .center
-    ;
+    ).center;
   }
 
   Widget buildPageIndicator() {
@@ -147,10 +145,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                 textColor: AppColors.darkBg, onPressed: () {
               context.uniProvider.errFoundUpdate(false);
 
-              // Image validation
+              // Apple / Google play
+              bool testersMode = context.uniProvider.serverConfig?.testersMode ?? false;
               var currUser = context.uniProvider.currUser;
-              var imageErr =
-                  nameProfile_b_View && (currUser.photoUrl == null || currUser.photoUrl!.isEmpty);
+              bool imageErr = !testersMode &&
+                  (nameProfile_b_View && (currUser.photoUrl == null || currUser.photoUrl!.isEmpty));
               var tagsErr = tags_e_View && (currUser.tags.isEmpty);
               if (imageErr || tagsErr) context.uniProvider.errFoundUpdate(true);
 

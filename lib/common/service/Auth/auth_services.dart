@@ -16,6 +16,7 @@ import '../Database/firebase_db.dart' as click;
 import '../Database/firebase_db.dart';
 
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart' as apple;
 
 import 'notifications_services.dart';
 // import 'package:apple_sign_in/apple_sign_in.dart' as apl;
@@ -116,7 +117,7 @@ class AuthService {
     print('appleProvider ${appleProvider.givenName}');
     print('appleProvider ${appleProvider.userIdentifier}');
 
-    final credential = OAuthProvider('apple.com').credential(
+    final credential = OAuthProvider('apple.com').setScopes(['email', 'fullName']).credential(
         idToken: appleProvider.identityToken, accessToken: appleProvider.authorizationCode);
     await auth.signInWithCredential(credential);
 
@@ -125,7 +126,7 @@ class AuthService {
       var mail = appleProvider.email ?? '${authUser!.uid.substring(0, 10)}@apple.com';
       var name = appleProvider.givenName ?? appleProvider.familyName;
       authUser!.updateEmail(mail);
-      if(authUser?.displayName == null) authUser!.updateDisplayName(name);
+      if (authUser?.displayName == null) authUser!.updateDisplayName(name);
     }
 
     return authUser;

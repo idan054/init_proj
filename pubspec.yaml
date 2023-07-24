@@ -5,7 +5,7 @@ description: A new Flutter project.
 # check for update based + build version
 # This also update the server if needed!
 
-version: 3.2.0+320
+version: 3.2.1+321
 environment:
   sdk: ">=2.17.6 <3.0.0"
 
@@ -28,7 +28,8 @@ dependencies:
 
   #data class
   freezed_annotation: ^2.1.0
-  json_annotation: ^4.6.0
+#  json_annotation: ^4.6.0
+  json_annotation: ^4.8.1
   equatable: ^2.0.3
   firebase_storage: ^11.0.6
   provider: ^6.0.3

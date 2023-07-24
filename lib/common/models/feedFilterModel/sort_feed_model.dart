@@ -15,8 +15,8 @@ class SortFeedModel with _$SortFeedModel {
   const factory SortFeedModel({
     required String title,
     required String desc,
-    required SvgGenImage svg,
-    required SvgGenImage solidSvg,
+    required String svg,
+    required String solidSvg,
     required FilterTypes type,
   }) = _SortFeedModel;
 

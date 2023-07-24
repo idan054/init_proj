@@ -29,6 +29,8 @@ mixin _$AppConfigModel {
   String? get whatsNew => throw _privateConstructorUsedError;
   UpdateTypes? get updateType => throw _privateConstructorUsedError;
   bool? get isUpdateAvailable => throw _privateConstructorUsedError;
+  bool? get testersMode =>
+      throw _privateConstructorUsedError; //  For google play / app store
   String? get updateIosLink => throw _privateConstructorUsedError;
   String? get updateAndroidLink => throw _privateConstructorUsedError;
   int? get currentPatchNumber => throw _privateConstructorUsedError;
@@ -55,6 +57,7 @@ abstract class $AppConfigModelCopyWith<$Res> {
       String? whatsNew,
       UpdateTypes? updateType,
       bool? isUpdateAvailable,
+      bool? testersMode,
       String? updateIosLink,
       String? updateAndroidLink,
       int? currentPatchNumber});
@@ -82,6 +85,7 @@ class _$AppConfigModelCopyWithImpl<$Res, $Val extends AppConfigModel>
     Object? whatsNew = freezed,
     Object? updateType = freezed,
     Object? isUpdateAvailable = freezed,
+    Object? testersMode = freezed,
     Object? updateIosLink = freezed,
     Object? updateAndroidLink = freezed,
     Object? currentPatchNumber = freezed,
@@ -123,6 +127,10 @@ class _$AppConfigModelCopyWithImpl<$Res, $Val extends AppConfigModel>
           ? _value.isUpdateAvailable
           : isUpdateAvailable // ignore: cast_nullable_to_non_nullable
               as bool?,
+      testersMode: freezed == testersMode
+          ? _value.testersMode
+          : testersMode // ignore: cast_nullable_to_non_nullable
+              as bool?,
       updateIosLink: freezed == updateIosLink
           ? _value.updateIosLink
           : updateIosLink // ignore: cast_nullable_to_non_nullable
@@ -157,6 +165,7 @@ abstract class _$$_AppConfigModelCopyWith<$Res>
       String? whatsNew,
       UpdateTypes? updateType,
       bool? isUpdateAvailable,
+      bool? testersMode,
       String? updateIosLink,
       String? updateAndroidLink,
       int? currentPatchNumber});
@@ -182,6 +191,7 @@ class __$$_AppConfigModelCopyWithImpl<$Res>
     Object? whatsNew = freezed,
     Object? updateType = freezed,
     Object? isUpdateAvailable = freezed,
+    Object? testersMode = freezed,
     Object? updateIosLink = freezed,
     Object? updateAndroidLink = freezed,
     Object? currentPatchNumber = freezed,
@@ -223,6 +233,10 @@ class __$$_AppConfigModelCopyWithImpl<$Res>
           ? _value.isUpdateAvailable
           : isUpdateAvailable // ignore: cast_nullable_to_non_nullable
               as bool?,
+      testersMode: freezed == testersMode
+          ? _value.testersMode
+          : testersMode // ignore: cast_nullable_to_non_nullable
+              as bool?,
       updateIosLink: freezed == updateIosLink
           ? _value.updateIosLink
           : updateIosLink // ignore: cast_nullable_to_non_nullable
@@ -253,6 +267,7 @@ class _$_AppConfigModel implements _AppConfigModel {
       this.whatsNew,
       this.updateType,
       this.isUpdateAvailable,
+      this.testersMode,
       this.updateIosLink,
       this.updateAndroidLink,
       this.currentPatchNumber});
@@ -279,6 +294,9 @@ class _$_AppConfigModel implements _AppConfigModel {
   @override
   final bool? isUpdateAvailable;
   @override
+  final bool? testersMode;
+//  For google play / app store
+  @override
   final String? updateIosLink;
   @override
   final String? updateAndroidLink;
@@ -287,7 +305,7 @@ class _$_AppConfigModel implements _AppConfigModel {
 
   @override
   String toString() {
-    return 'AppConfigModel(status: $status, adStatus: $adStatus, statusCode: $statusCode, osType: $osType, publicVersionAndroid: $publicVersionAndroid, publicVersionIos: $publicVersionIos, whatsNew: $whatsNew, updateType: $updateType, isUpdateAvailable: $isUpdateAvailable, updateIosLink: $updateIosLink, updateAndroidLink: $updateAndroidLink, currentPatchNumber: $currentPatchNumber)';
+    return 'AppConfigModel(status: $status, adStatus: $adStatus, statusCode: $statusCode, osType: $osType, publicVersionAndroid: $publicVersionAndroid, publicVersionIos: $publicVersionIos, whatsNew: $whatsNew, updateType: $updateType, isUpdateAvailable: $isUpdateAvailable, testersMode: $testersMode, updateIosLink: $updateIosLink, updateAndroidLink: $updateAndroidLink, currentPatchNumber: $currentPatchNumber)';
   }
 
   @override
@@ -311,6 +329,8 @@ class _$_AppConfigModel implements _AppConfigModel {
                 other.updateType == updateType) &&
             (identical(other.isUpdateAvailable, isUpdateAvailable) ||
                 other.isUpdateAvailable == isUpdateAvailable) &&
+            (identical(other.testersMode, testersMode) ||
+                other.testersMode == testersMode) &&
             (identical(other.updateIosLink, updateIosLink) ||
                 other.updateIosLink == updateIosLink) &&
             (identical(other.updateAndroidLink, updateAndroidLink) ||
@@ -332,6 +352,7 @@ class _$_AppConfigModel implements _AppConfigModel {
       whatsNew,
       updateType,
       isUpdateAvailable,
+      testersMode,
       updateIosLink,
       updateAndroidLink,
       currentPatchNumber);
@@ -361,6 +382,7 @@ abstract class _AppConfigModel implements AppConfigModel {
       final String? whatsNew,
       final UpdateTypes? updateType,
       final bool? isUpdateAvailable,
+      final bool? testersMode,
       final String? updateIosLink,
       final String? updateAndroidLink,
       final int? currentPatchNumber}) = _$_AppConfigModel;
@@ -387,6 +409,8 @@ abstract class _AppConfigModel implements AppConfigModel {
   @override
   bool? get isUpdateAvailable;
   @override
+  bool? get testersMode;
+  @override //  For google play / app store
   String? get updateIosLink;
   @override
   String? get updateAndroidLink;

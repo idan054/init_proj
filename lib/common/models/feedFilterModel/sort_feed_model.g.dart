@@ -10,8 +10,8 @@ _$_SortFeedModel _$$_SortFeedModelFromJson(Map<String, dynamic> json) =>
     _$_SortFeedModel(
       title: json['title'] as String,
       desc: json['desc'] as String,
-      svg: json['svg'],
-      solidSvg: json['solidSvg'],
+      svg: json['svg'] as String,
+      solidSvg: json['solidSvg'] as String,
       type: $enumDecode(_$FilterTypesEnumMap, json['type']),
     );
 
