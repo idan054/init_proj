@@ -25,7 +25,7 @@ class UserModel with _$UserModel {
     String? bio,
     String? fcm,
     int? age,
-    String? photoUrl,
+    @Default('https://www.bescouts.org.uk/wp-content/uploads/2022/10/person-placeholder.png') String photoUrl,
     @Default(0) int unreadCounter,
     @Default(0) int unreadNotificationCounter,
     GenderTypes? gender,
