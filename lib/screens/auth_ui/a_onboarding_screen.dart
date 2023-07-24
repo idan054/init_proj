@@ -144,16 +144,32 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> with TickerProvider
                 bgColor: AppColors.white,
                 textColor: AppColors.darkBg, onPressed: () {
               context.uniProvider.errFoundUpdate(false);
+              final currUser = context.uniProvider.currUser;
 
               // Apple / Google play
-              bool testersMode = context.uniProvider.serverConfig?.testersMode ?? false;
-              var currUser = context.uniProvider.currUser;
-              bool imageErr = !testersMode &&
+              bool imageErr =
                   (nameProfile_b_View && (currUser.photoUrl == null || currUser.photoUrl!.isEmpty));
+
+
+              bool testersMode = context.uniProvider.serverConfig?.testersMode ?? false;
+              if (testersMode && imageErr) {
+                var updateUser = currUser;
+                if (imageErr) {
+                  imageErr = false;
+                  updateUser = updateUser.copyWith(
+                      photoUrl:
+                          'https://www.bescouts.org.uk/wp-content/uploads/2022/10/person-placeholder.png');
+                }
+                if (currUser.name == null) {
+                  updateUser = updateUser.copyWith(name: currUser.email ?? '${UniqueKey()}');
+                }
+                context.uniProvider.currUserUpdate(updateUser);
+              }
+
               var tagsErr = tags_e_View && (currUser.tags.isEmpty);
               if (imageErr || tagsErr) context.uniProvider.errFoundUpdate(true);
 
-              // formKey - Name, Age, Gender validation
+              //~ formKey - Name, Age, Gender validation
               var validState = registerFormKey.currentState!.validate();
               if (!validState || imageErr || tagsErr) {
                 return; // AKA ERR;

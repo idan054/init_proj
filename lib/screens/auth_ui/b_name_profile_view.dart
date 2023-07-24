@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 
-import 'package:badges/badges.dart'  as badge;
+import 'package:badges/badges.dart' as badge;
 import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
@@ -36,7 +36,7 @@ class _NameProfileViewState extends State<NameProfileView> {
   @override
   void initState() {
     var currUser = context.uniProvider.currUser;
-    if(Platform.isIOS) nameController.text = currUser.name ?? '';
+    if (Platform.isIOS) nameController.text = currUser.name ?? '';
     super.initState();
   }
 
@@ -45,6 +45,7 @@ class _NameProfileViewState extends State<NameProfileView> {
     var isImageErr =
         context.listenUniProvider.signupErrFound; // This will auto rebuild if err found.
     var currUser = context.uniProvider.currUser;
+    bool testersMode = context.uniProvider.serverConfig?.testersMode ?? false;
 
     // bool nameErr = false;
     // bool imageErr = false;
@@ -58,70 +59,80 @@ class _NameProfileViewState extends State<NameProfileView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           200.verticalSpace,
-          'Let’s set up your profile!'.toText(fontSize: 18, medium: true),
+          'Let’s set up your profile!'.toText(fontSize: testersMode ? 33 : 18, medium: true),
           50.verticalSpace,
-          badge.Badge(
-            position:  badge.BadgePosition.bottomEnd(bottom: 0, end: 0),
-            badgeColor: isImageErr ? AppColors.errRed : AppColors.primaryOriginal,
-            padding: 10.all,
-            badgeContent: isLoading
-                ? const CircularProgressIndicator(
-                    color: Colors.white,
-                    strokeWidth: 2,
-                  ).sizedBox(20, 20)
-                : Assets.svg.icons.plusAddUntitledIcon.svg(height: 20, color: AppColors.darkBg),
-            child: CircleAvatar(
-              radius: 60,
-              backgroundColor: isImageErr ? AppColors.errRed : AppColors.darkOutline50,
+          if (!testersMode) ...[
+            badge.Badge(
+              position: badge.BadgePosition.bottomEnd(bottom: 0, end: 0),
+              badgeColor: isImageErr ? AppColors.errRed : AppColors.primaryOriginal,
+              padding: 10.all,
+              badgeContent: isLoading
+                  ? const CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ).sizedBox(20, 20)
+                  : Assets.svg.icons.plusAddUntitledIcon.svg(height: 20, color: AppColors.darkBg),
               child: CircleAvatar(
-                backgroundColor: AppColors.darkBg,
-                backgroundImage: image == null ? null : FileImage(File(image!.path)),
-                radius: 57,
-                child: image != null ? null : Assets.svg.icons.manProfileOutline.svg(height: 55, color: AppColors.darkOutline50),
+                radius: 60,
+                backgroundColor: isImageErr ? AppColors.errRed : AppColors.darkOutline50,
+                child: CircleAvatar(
+                  backgroundColor: AppColors.darkBg,
+                  backgroundImage: image == null ? null : FileImage(File(image!.path)),
+                  radius: 57,
+                  child: image != null
+                      ? null
+                      : Assets.svg.icons.manProfileOutline
+                          .svg(height: 55, color: AppColors.darkOutline50),
+                ),
               ),
-            ),
-          ).onTap(() async {
-            final ImagePicker picker = ImagePicker();
-            image = await picker.pickImage(
-              source: ImageSource.gallery,
-              maxHeight: 200,
-              maxWidth: 200,
-            );
-            isLoading = true;
-            setState(() {});
+            ).onTap(() async {
+              final ImagePicker picker = ImagePicker();
+              image = await picker.pickImage(
+                source: ImageSource.gallery,
+                maxHeight: 200,
+                maxWidth: 200,
+              );
+              isLoading = true;
+              setState(() {});
 
-            if (image == null) return;
-            var bytes = await image!.readAsBytes();
-            String base64Image = base64Encode(bytes);
+              if (image == null) return;
+              var bytes = await image!.readAsBytes();
+              String base64Image = base64Encode(bytes);
 
-            var imageUrl = await UploadServices.imgbbUploadPhoto(base64Image);
-            if (imageUrl == null) {
-              image = null;
-            } else {
-              context.uniProvider.currUserUpdate(currUser.copyWith(photoUrl: imageUrl));
-            }
+              var imageUrl = await UploadServices.imgbbUploadPhoto(base64Image);
+              if (imageUrl == null) {
+                image = null;
+              } else {
+                context.uniProvider.currUserUpdate(currUser.copyWith(photoUrl: imageUrl));
+              }
 
-            isLoading = false;
-            setState(() {});
-          }),
-          20.verticalSpace,
-          'Add a profile picture'.toText(fontSize: 13, medium: true),
-          50.verticalSpace,
-          rilTextField(
-            // label: 'Nickname',
-            label: 'Name',
-            hint: 'What is your name?',
-            maxLines: 1,
-            maxLength: 25,
-            controller: nameController,
-            validator: (value) {
-              if (nameController.text.replaceAll(' ', '').isEmpty) return '';
-              if (nameController.text.isEmpty) return '';
-              return null;
-            },
-            // errorText: nameErr ? '' : null,
-            onChanged: (val) => context.uniProvider.currUserUpdate(currUser.copyWith(name: val)),
-          )
+              isLoading = false;
+              setState(() {});
+            }),
+            20.verticalSpace,
+            'Add a profile picture'.toText(fontSize: 13, medium: true),
+            50.verticalSpace,
+            rilTextField(
+              // label: 'Nickname',
+              label: 'Name',
+              hint: 'What is your name?',
+              maxLines: 1,
+              maxLength: 25,
+              controller: nameController,
+              validator: (value) {
+                // Apple / Google play
+                if (testersMode) {
+                  return null;
+                } else {
+                  if (nameController.text.replaceAll(' ', '').isEmpty) return '';
+                  if (nameController.text.isEmpty) return '';
+                  return null;
+                }
+              },
+              // errorText: nameErr ? '' : null,
+              onChanged: (val) => context.uniProvider.currUserUpdate(currUser.copyWith(name: val)),
+            )
+          ],
         ],
       ),
     );

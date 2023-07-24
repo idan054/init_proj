@@ -26,7 +26,7 @@ mixin _$UserModel {
   String? get bio => throw _privateConstructorUsedError;
   String? get fcm => throw _privateConstructorUsedError;
   int? get age => throw _privateConstructorUsedError;
-  String get photoUrl => throw _privateConstructorUsedError;
+  String? get photoUrl => throw _privateConstructorUsedError;
   int get unreadCounter => throw _privateConstructorUsedError;
   int get unreadNotificationCounter => throw _privateConstructorUsedError;
   GenderTypes? get gender => throw _privateConstructorUsedError;
@@ -61,7 +61,7 @@ abstract class $UserModelCopyWith<$Res> {
       String? bio,
       String? fcm,
       int? age,
-      String photoUrl,
+      String? photoUrl,
       int unreadCounter,
       int unreadNotificationCounter,
       GenderTypes? gender,
@@ -94,7 +94,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? bio = freezed,
     Object? fcm = freezed,
     Object? age = freezed,
-    Object? photoUrl = null,
+    Object? photoUrl = freezed,
     Object? unreadCounter = null,
     Object? unreadNotificationCounter = null,
     Object? gender = freezed,
@@ -130,10 +130,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
               as int?,
-      photoUrl: null == photoUrl
+      photoUrl: freezed == photoUrl
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       unreadCounter: null == unreadCounter
           ? _value.unreadCounter
           : unreadCounter // ignore: cast_nullable_to_non_nullable
@@ -200,7 +200,7 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
       String? bio,
       String? fcm,
       int? age,
-      String photoUrl,
+      String? photoUrl,
       int unreadCounter,
       int unreadNotificationCounter,
       GenderTypes? gender,
@@ -232,7 +232,7 @@ class __$$_UserModelCopyWithImpl<$Res>
     Object? bio = freezed,
     Object? fcm = freezed,
     Object? age = freezed,
-    Object? photoUrl = null,
+    Object? photoUrl = freezed,
     Object? unreadCounter = null,
     Object? unreadNotificationCounter = null,
     Object? gender = freezed,
@@ -268,10 +268,10 @@ class __$$_UserModelCopyWithImpl<$Res>
           ? _value.age
           : age // ignore: cast_nullable_to_non_nullable
               as int?,
-      photoUrl: null == photoUrl
+      photoUrl: freezed == photoUrl
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       unreadCounter: null == unreadCounter
           ? _value.unreadCounter
           : unreadCounter // ignore: cast_nullable_to_non_nullable
@@ -323,8 +323,7 @@ class _$_UserModel implements _UserModel {
       this.bio,
       this.fcm,
       this.age,
-      this.photoUrl =
-          'https://www.bescouts.org.uk/wp-content/uploads/2022/10/person-placeholder.png',
+      this.photoUrl,
       this.unreadCounter = 0,
       this.unreadNotificationCounter = 0,
       this.gender,
@@ -353,8 +352,7 @@ class _$_UserModel implements _UserModel {
   @override
   final int? age;
   @override
-  @JsonKey()
-  final String photoUrl;
+  final String? photoUrl;
   @override
   @JsonKey()
   final int unreadCounter;
@@ -478,7 +476,7 @@ abstract class _UserModel implements UserModel {
       final String? bio,
       final String? fcm,
       final int? age,
-      final String photoUrl,
+      final String? photoUrl,
       final int unreadCounter,
       final int unreadNotificationCounter,
       final GenderTypes? gender,
@@ -505,7 +503,7 @@ abstract class _UserModel implements UserModel {
   @override
   int? get age;
   @override
-  String get photoUrl;
+  String? get photoUrl;
   @override
   int get unreadCounter;
   @override

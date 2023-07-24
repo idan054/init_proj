@@ -13,8 +13,7 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
       bio: json['bio'] as String?,
       fcm: json['fcm'] as String?,
       age: json['age'] as int?,
-      photoUrl: json['photoUrl'] as String? ??
-          'https://www.bescouts.org.uk/wp-content/uploads/2022/10/person-placeholder.png',
+      photoUrl: json['photoUrl'] as String?,
       unreadCounter: json['unreadCounter'] as int? ?? 0,
       unreadNotificationCounter: json['unreadNotificationCounter'] as int? ?? 0,
       gender: $enumDecodeNullable(_$GenderTypesEnumMap, json['gender']),

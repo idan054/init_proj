@@ -411,7 +411,8 @@ Widget profileCircle(BuildContext context) {
     radius: 16,
     child: CircleAvatar(
       radius: 14,
-      backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl),
+      backgroundImage: NetworkImage(context.uniProvider.currUser.photoUrl ??
+          'https://www.bescouts.org.uk/wp-content/uploads/2022/10/person-placeholder.png'),
       backgroundColor: AppColors.lightOutline50,
     ),
   ).pOnly(right: 10, left: 5).py(5).onTap(() {
