@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously, no_leading_underscores_for_local_identifiers
 
+import 'dart:io';
 import 'dart:ui';
 
+import 'package:app_settings/app_settings.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart' as ez;
 import 'package:example/common/extensions/extensions.dart';
@@ -156,7 +158,7 @@ class _CreatePostScreenState extends State<CreatePostScreen> {
                       (postController.text.replaceAll(' ', '').isNotEmpty),
                   withBg: true,
                   onTap: () async {
-                    await updateUserLocationIfNeeded(context);
+                    await updateUserLocationIfNeeded(context, force: true);
                     final currUser = context.uniProvider.currUser;
                     if (currUser.position == null) return; // Validator
 
@@ -257,7 +259,9 @@ Future updateUserLocationIfNeeded(BuildContext context, {bool force = false}) as
   final currUser = context.uniProvider.currUser;
 
   void _updateCurrentPosition() async {
-    final locationData = await Geolocator.getCurrentPosition();
+    final locationData = await Geolocator.getCurrentPosition().catchError((e) {
+      rilFlushBar(context, 'Location services is needed...');
+    });
     final geoFirePoint = GeoFirePoint(locationData.latitude, locationData.longitude);
     final position = PositionModel(geohash: geoFirePoint.hash, geopoint: geoFirePoint.geoPoint);
 
@@ -267,7 +271,7 @@ Future updateUserLocationIfNeeded(BuildContext context, {bool force = false}) as
         collection: 'users', docName: '${updatedUser.email}', toJson: updatedUser.toJson());
   }
 
-  if (currUser.position == null || force) {
+  if (currUser.position == null) {
     final isGranted = await Permission.locationWhenInUse.isGranted;
     print('isGranted $isGranted');
     if (isGranted) {
@@ -278,9 +282,13 @@ Future updateUserLocationIfNeeded(BuildContext context, {bool force = false}) as
       if (status == PermissionStatus.granted) {
         _updateCurrentPosition();
       } else {
-        rilFlushBar(context, 'Allow location on settings...');
-        await Future.delayed(2.seconds);
-        await openAppSettings();
+        if (force || Platform.isAndroid) {
+          rilFlushBar(context, 'Location services is needed...');
+          await Future.delayed(2.seconds);
+          // await openAppSettings();
+          await AppSettings.openAppSettings(type: AppSettingsType.location);
+          _updateCurrentPosition();
+        }
       }
     }
   }

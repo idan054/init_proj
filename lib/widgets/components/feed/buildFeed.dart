@@ -29,7 +29,7 @@ Future showBottomSortBySheet(BuildContext context) async {
     builder: (BuildContext context) => const BottomSortSheet(),
   );
   if (context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByLocation) {
-    await updateUserLocationIfNeeded(context, force: true);
+    await updateUserLocationIfNeeded(context);
   }
 }
 
@@ -74,10 +74,8 @@ Widget buildFeed(
               children: [
                 if (feedType == FeedTypes.notifications)
                   const Divider(thickness: 2, color: AppColors.darkGrey),
-
                 if (feedType == FeedTypes.reports && (desc != null || title != null))
                   buildFeedTitle(feedType, desc, title),
-
                 if (feedType == FeedTypes.rils)
                   buildFeedSort(
                     context,
@@ -89,46 +87,57 @@ Widget buildFeed(
                     },
                   ),
                 1.verticalSpace,
+                if ((context.uniProvider.sortFeedBy.type == FilterTypes.sortFeedByLocation &&
+                    (context.uniProvider.currUser.position == null ||
+                        context.uniProvider.currUser.position?.geopoint?.longitude == null))) ...[
+                  Column(
+                    children: [
+                      'Turn on Location services'.toText(underline: true).py(10).px(25).onTap(() {
+                        updateUserLocationIfNeeded(context, force: true);
+                      }, radius: 5),
+                      'to show Rils around you'.toText(),
+                    ],
+                  ).pOnly(top: context.height * 0.25).center
+                ] else ...[
+                  postList.isEmpty
+                      ? "${'New ${feedType.name.toCapitalized()}'.tr()}"
+                              ' '
+                              "${'will appear here'.tr()}"
+                          .toText(color: AppColors.grey50)
+                          .pOnly(top: context.height * 0.25)
+                          .center
+                      //
+                      : ListView.builder(
+                          physics: const ScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: postList.length,
+                          itemBuilder: (BuildContext context, int i) {
+                            bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
 
-                postList.isEmpty
-                    ? "${'New ${feedType.name.toCapitalized()}'.tr()}"
-                            ' '
-                            "${'will appear here'.tr()}"
-                        .toText(color: AppColors.grey50)
-                        .pOnly(top: context.height * 0.25)
-                        .center
-                    //
-                    : ListView.builder(
-                        physics: const ScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: postList.length,
-                        itemBuilder: (BuildContext context, int i) {
-                          bool isShowAd = i != 0 && (i ~/ 7) == (i / 7); // AKA Every 10 posts.
+                            // PostView(postList[i])
+                            String reportByTitle = '';
+                            bool isComment = postList[i].originalPostId != null;
+                            if (reportList != null) {
+                              reportByTitle += '(${reportList[i].reportStatus?.name}) ';
+                              reportByTitle += reportList[i].reportedUser != null
+                                  ? 'User '
+                                  : (isComment ? 'Comment ' : 'Ril ');
+                              reportByTitle += 'Reported by ${reportList[i].reportedBy} :';
+                            }
 
-                          // PostView(postList[i])
-                          String reportByTitle = '';
-                          bool isComment = postList[i].originalPostId != null;
-                          if (reportList != null) {
-                            reportByTitle += '(${reportList[i].reportStatus?.name}) ';
-                            reportByTitle += reportList[i].reportedUser != null
-                                ? 'User '
-                                : (isComment ? 'Comment ' : 'Ril ');
-                            reportByTitle += 'Reported by ${reportList[i].reportedBy} :';
-                          }
+                            return Column(children: [
+                              //> if (isShowAd) getAd(context),
 
-                          return Column(children: [
-                            //> if (isShowAd) getAd(context),
-
-                            if (feedType == FeedTypes.notifications) ...[
-                              buildNotification(postList[i])
-                            ] else if (feedType == FeedTypes.reports && reportList != null) ...[
-                              buildReportBlock(reportList[i], isComment)
-                            ] else ...[
-                              PostBlock(postList[i], report: reportList?.first),
-                            ],
-                          ]);
-                        }).appearOpacity,
-                //     )
+                              if (feedType == FeedTypes.notifications) ...[
+                                buildNotification(postList[i])
+                              ] else if (feedType == FeedTypes.reports && reportList != null) ...[
+                                buildReportBlock(reportList[i], isComment)
+                              ] else ...[
+                                PostBlock(postList[i], report: reportList?.first),
+                              ],
+                            ]);
+                          }).appearOpacity,
+                ]
               ],
             ),
           )));

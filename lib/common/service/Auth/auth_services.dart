@@ -48,7 +48,7 @@ class AuthService {
       if (authUser?.email == null) return; // When popup canceled
     }
 
-    print('authUser!.email ${authUser!.email}');
+    printWhite('authUser!.email ${authUser!.email}');
     var userData = await Database.docData('users/${authUser!.email}');
     final List<dynamic> userTags = userData?['tags'] ?? [];
     if (userData == null || userTags.isEmpty) {

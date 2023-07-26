@@ -28,7 +28,7 @@ class PushNotificationService {
     print('requestPermission() token $token');
     var status = settings.authorizationStatus;
     if (status == AuthorizationStatus.denied) {
-      AppSettings.openAppSettings(type: AppSettingsType.location);
+      AppSettings.openAppSettings(type: AppSettingsType.notification);
     }
     return settings.authorizationStatus == AuthorizationStatus.authorized;
   }

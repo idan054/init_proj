@@ -5,7 +5,7 @@
 	<key>NSLocationUsageDescription</key>
 	<string>Upload &amp; Show posts around you</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>Location services allow us to show you Rils around you</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
