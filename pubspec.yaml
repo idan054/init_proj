@@ -100,6 +100,7 @@ dependencies:
   haversine_distance: ^1.2.1
   easy_localization: ^3.0.2
   camera_platform_interface: ^2.5.1
+  health: ^4.6.0
 
 #  apple_sign_in: ^0.1.0
 #  google_mobile_ads: ^2.3.0

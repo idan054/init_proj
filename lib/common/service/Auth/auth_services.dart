@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:io' show Platform;
+
 import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/extensions/extensions.dart';
@@ -7,17 +9,13 @@ import 'package:example/common/routes/app_router.gr.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'dart:io' show Platform;
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
 import '../../models/user/user_model.dart';
 import '../../providers/firebase_options.dart';
 import '../Database/firebase_db.dart' as click;
 import '../Database/firebase_db.dart';
-
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart' as apple;
-
 import 'notifications_services.dart';
 // import 'package:apple_sign_in/apple_sign_in.dart' as apl;
 
@@ -98,6 +96,8 @@ class AuthService {
     final googleAuth = await googleProvider.authentication;
     await auth.signInWithCredential(GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
+
+    print('googleProvider.authHeaders ${await googleProvider.authHeaders}');
 
     authUser = auth.currentUser;
     return authUser;
