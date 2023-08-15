@@ -98,7 +98,6 @@ dependencies:
   geoflutterfire2: ^2.3.15
   geolocator: ^9.0.2
   haversine_distance: ^1.2.1
-  easy_localization: ^3.0.2
   camera_platform_interface: ^2.5.1
   health: ^4.6.0
 

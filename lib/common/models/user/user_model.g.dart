@@ -26,11 +26,6 @@ _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
               ?.map((e) => e as String)
               .toList() ??
           const [],
-      birthday:
-          const DateTimeStampConv().fromJson(json['birthday'] as Timestamp?),
-      position: json['position'] == null
-          ? null
-          : PositionModel.fromJson(json['position'] as Map<String, dynamic>),
       isOnline: json['isOnline'] as bool? ?? false,
     );
 
@@ -49,8 +44,6 @@ Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
       'userType': _$UserTypesEnumMap[instance.userType],
       'tags': instance.tags,
       'blockedUsers': instance.blockedUsers,
-      'birthday': const DateTimeStampConv().toJson(instance.birthday),
-      'position': instance.position?.toJson(),
       'isOnline': instance.isOnline,
     };
 

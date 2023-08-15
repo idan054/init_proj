@@ -1,9 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/service/online_service.dart';
 import 'package:flutter/material.dart';
-
-import 'Database/firebase_db.dart';
 
 var appState = AppLifecycleState.resumed;
 
@@ -22,7 +17,8 @@ class LifeCycleManager extends StatefulWidget {
   _LifeCycleManagerState createState() => _LifeCycleManagerState();
 }
 
-class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBindingObserver {
+class _LifeCycleManagerState extends State<LifeCycleManager>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
@@ -42,14 +38,12 @@ class _LifeCycleManagerState extends State<LifeCycleManager> with WidgetsBinding
 
     if (appState == AppLifecycleState.resumed) {
       print('START: onAppResumed()');
-      OnlineService.setUserOnlineStatus(context, isOnline: true);
     }
     if (
         //  appState == AppLifecycleState.inactive ||
         //  appState == AppLifecycleState.detached ||
         appState == AppLifecycleState.paused) {
       print('START: onAppPaused()');
-      OnlineService.setUserOnlineStatus(context, isOnline: false);
     }
   }
 

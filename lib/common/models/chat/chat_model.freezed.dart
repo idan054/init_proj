@@ -22,14 +22,10 @@ ChatModel _$ChatModelFromJson(Map<String, dynamic> json) {
 mixin _$ChatModel {
   String? get id => throw _privateConstructorUsedError; // chat id
   MessageModel? get lastMessage => throw _privateConstructorUsedError;
-  int? get unreadCounter =>
-      throw _privateConstructorUsedError; // eachTime only 1 user have unreadCounter, checked by lastMessage
+  int? get unreadCounter => throw _privateConstructorUsedError;
   List<String>? get usersIds => throw _privateConstructorUsedError;
   List<UserModel>? get users => throw _privateConstructorUsedError;
-  List<MessageModel>? get messages =>
-      throw _privateConstructorUsedError; // @DateTimeStampConv() DateTime? updatedAt,
-  @DateTimeStampConv()
-  DateTime? get timestamp => throw _privateConstructorUsedError;
+  List<MessageModel>? get messages => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,8 +44,7 @@ abstract class $ChatModelCopyWith<$Res> {
       int? unreadCounter,
       List<String>? usersIds,
       List<UserModel>? users,
-      List<MessageModel>? messages,
-      @DateTimeStampConv() DateTime? timestamp});
+      List<MessageModel>? messages});
 
   $MessageModelCopyWith<$Res>? get lastMessage;
 }
@@ -73,7 +68,6 @@ class _$ChatModelCopyWithImpl<$Res, $Val extends ChatModel>
     Object? usersIds = freezed,
     Object? users = freezed,
     Object? messages = freezed,
-    Object? timestamp = freezed,
   }) {
     return _then(_value.copyWith(
       id: freezed == id
@@ -100,10 +94,6 @@ class _$ChatModelCopyWithImpl<$Res, $Val extends ChatModel>
           ? _value.messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<MessageModel>?,
-      timestamp: freezed == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
     ) as $Val);
   }
 
@@ -133,8 +123,7 @@ abstract class _$$_ChatModelCopyWith<$Res> implements $ChatModelCopyWith<$Res> {
       int? unreadCounter,
       List<String>? usersIds,
       List<UserModel>? users,
-      List<MessageModel>? messages,
-      @DateTimeStampConv() DateTime? timestamp});
+      List<MessageModel>? messages});
 
   @override
   $MessageModelCopyWith<$Res>? get lastMessage;
@@ -157,7 +146,6 @@ class __$$_ChatModelCopyWithImpl<$Res>
     Object? usersIds = freezed,
     Object? users = freezed,
     Object? messages = freezed,
-    Object? timestamp = freezed,
   }) {
     return _then(_$_ChatModel(
       id: freezed == id
@@ -184,10 +172,6 @@ class __$$_ChatModelCopyWithImpl<$Res>
           ? _value._messages
           : messages // ignore: cast_nullable_to_non_nullable
               as List<MessageModel>?,
-      timestamp: freezed == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
     ));
   }
 }
@@ -202,8 +186,7 @@ class _$_ChatModel implements _ChatModel {
       this.unreadCounter,
       final List<String>? usersIds,
       final List<UserModel>? users,
-      final List<MessageModel>? messages,
-      @DateTimeStampConv() this.timestamp})
+      final List<MessageModel>? messages})
       : _usersIds = usersIds,
         _users = users,
         _messages = messages;
@@ -218,9 +201,7 @@ class _$_ChatModel implements _ChatModel {
   final MessageModel? lastMessage;
   @override
   final int? unreadCounter;
-// eachTime only 1 user have unreadCounter, checked by lastMessage
   final List<String>? _usersIds;
-// eachTime only 1 user have unreadCounter, checked by lastMessage
   @override
   List<String>? get usersIds {
     final value = _usersIds;
@@ -250,14 +231,9 @@ class _$_ChatModel implements _ChatModel {
     return EqualUnmodifiableListView(value);
   }
 
-// @DateTimeStampConv() DateTime? updatedAt,
-  @override
-  @DateTimeStampConv()
-  final DateTime? timestamp;
-
   @override
   String toString() {
-    return 'ChatModel(id: $id, lastMessage: $lastMessage, unreadCounter: $unreadCounter, usersIds: $usersIds, users: $users, messages: $messages, timestamp: $timestamp)';
+    return 'ChatModel(id: $id, lastMessage: $lastMessage, unreadCounter: $unreadCounter, usersIds: $usersIds, users: $users, messages: $messages)';
   }
 
   @override
@@ -272,9 +248,7 @@ class _$_ChatModel implements _ChatModel {
                 other.unreadCounter == unreadCounter) &&
             const DeepCollectionEquality().equals(other._usersIds, _usersIds) &&
             const DeepCollectionEquality().equals(other._users, _users) &&
-            const DeepCollectionEquality().equals(other._messages, _messages) &&
-            (identical(other.timestamp, timestamp) ||
-                other.timestamp == timestamp));
+            const DeepCollectionEquality().equals(other._messages, _messages));
   }
 
   @JsonKey(ignore: true)
@@ -286,8 +260,7 @@ class _$_ChatModel implements _ChatModel {
       unreadCounter,
       const DeepCollectionEquality().hash(_usersIds),
       const DeepCollectionEquality().hash(_users),
-      const DeepCollectionEquality().hash(_messages),
-      timestamp);
+      const DeepCollectionEquality().hash(_messages));
 
   @JsonKey(ignore: true)
   @override
@@ -310,8 +283,7 @@ abstract class _ChatModel implements ChatModel {
       final int? unreadCounter,
       final List<String>? usersIds,
       final List<UserModel>? users,
-      final List<MessageModel>? messages,
-      @DateTimeStampConv() final DateTime? timestamp}) = _$_ChatModel;
+      final List<MessageModel>? messages}) = _$_ChatModel;
 
   factory _ChatModel.fromJson(Map<String, dynamic> json) =
       _$_ChatModel.fromJson;
@@ -322,15 +294,12 @@ abstract class _ChatModel implements ChatModel {
   MessageModel? get lastMessage;
   @override
   int? get unreadCounter;
-  @override // eachTime only 1 user have unreadCounter, checked by lastMessage
+  @override
   List<String>? get usersIds;
   @override
   List<UserModel>? get users;
   @override
   List<MessageModel>? get messages;
-  @override // @DateTimeStampConv() DateTime? updatedAt,
-  @DateTimeStampConv()
-  DateTime? get timestamp;
   @override
   @JsonKey(ignore: true)
   _$$_ChatModelCopyWith<_$_ChatModel> get copyWith =>

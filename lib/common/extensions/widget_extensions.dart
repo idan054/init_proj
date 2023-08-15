@@ -1,21 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:entry/entry.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
-import '../themes/app_colors_inverted.dart';
 
 var appearDuration = 650;
 // var appearDuration = 1550;
 
 extension IconDataX on IconData {
-  Icon icon({Color color = AppColors.white, double size = 20}) => Icon(
+  Icon icon({Color color = Colors.white, double size = 20}) => Icon(
         this,
         color: color,
         size: size,
       );
 
-  FaIcon iconAwesome({Color color = AppColors.white, double size = 20}) => FaIcon(
+  FaIcon iconAwesome({Color color = Colors.white, double size = 20}) => FaIcon(
         this,
         color: color,
         size: size,
@@ -31,7 +29,8 @@ extension WidgetX on Widget {
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-              overlayColor: tapColor != null ? MaterialStateProperty.all(tapColor) : null,
+              overlayColor:
+                  tapColor != null ? MaterialStateProperty.all(tapColor) : null,
               //   splashColor: Colors.yellow,
               //   focusColor: Colors.yellow,
               //   highlightColor: Colors.yellow,
@@ -43,19 +42,20 @@ extension WidgetX on Widget {
         ),
       );
 
-  Container get testContainer => Container(color: AppColors.testGreen, child: this);
+  Container get testContainer => Container(color: Colors.white, child: this);
 
   Directionality isHebrewDirectionality(String text) => Directionality(
-      textDirection: text.isHebrew ? TextDirection.rtl : TextDirection.ltr, child: this);
+      textDirection: text.isHebrew ? TextDirection.rtl : TextDirection.ltr,
+      child: this);
 
-  Directionality get rtl => Directionality(textDirection: TextDirection.rtl, child: this);
+  Directionality get rtl =>
+      Directionality(textDirection: TextDirection.rtl, child: this);
 
-  Directionality get ltr => Directionality(textDirection: TextDirection.ltr, child: this);
+  Directionality get ltr =>
+      Directionality(textDirection: TextDirection.ltr, child: this);
 
-  Directionality autoDirectionality(BuildContext context) =>
-      Directionality(textDirection: context.autoTextDirection, child: this);
-
-  ClipRRect get roundedFull => ClipRRect(borderRadius: BorderRadius.circular(999), child: this);
+  ClipRRect get roundedFull =>
+      ClipRRect(borderRadius: BorderRadius.circular(999), child: this);
 
   ClipRRect roundedOnly({
     required double bottomLeft,
@@ -107,7 +107,12 @@ extension WidgetX on Widget {
         child: this,
       );
 
-  Padding pOnly({double top = 0, double right = 0, double bottom = 0, double left = 0, Key? key}) =>
+  Padding pOnly(
+          {double top = 0,
+          double right = 0,
+          double bottom = 0,
+          double left = 0,
+          Key? key}) =>
       Padding(
         padding: EdgeInsets.only(
           top: top,

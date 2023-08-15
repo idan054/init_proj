@@ -1,33 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
-
 import '../service/mixins/fonts.gen.dart';
-
-
-
 
 class AppStyles {
   const AppStyles._();
-  // static TextStyle get heeboFont => GoogleFonts.palanquin();
-  // static TextStyle get nunitoFont => GoogleFonts.nunitoSans();
-  // static TextStyle get lexendFont => GoogleFonts.lexend();
-  static TextStyle get lexendFont => const TextStyle(
-    fontFamily: FontFamily.lexendRegular
-  );
 
-  static TextStyle get lexendFontMedium => const TextStyle(
-      fontFamily: FontFamily.lexendMedium
-  );
+  static TextStyle get lexendFont =>
+      const TextStyle(fontFamily: FontFamily.lexendRegular);
 
-  static TextStyle get lexendFontBold => const TextStyle(
-      fontFamily: FontFamily.lexendBold
-  );
+  static TextStyle get lexendFontMedium =>
+      const TextStyle(fontFamily: FontFamily.lexendMedium);
 
-  // static TextStyle get text8PxRegular => lexendFont.copyWith(
-  //       fontSize: 8.sp,
-  //       fontWeight: FontWeight.w400,
-  //     );
+  static TextStyle get lexendFontBold =>
+      const TextStyle(fontFamily: FontFamily.lexendBold);
 
   //light
   static TextStyle get text30PxLight => lexendFont.copyWith(
@@ -95,6 +80,7 @@ class AppStyles {
         fontSize: 23.sp,
         fontWeight: FontWeight.w500,
       );
+
   static TextStyle get text23PxSemiBlod => lexendFont.copyWith(
         fontSize: 23.sp,
         fontWeight: FontWeight.w600,
@@ -279,6 +265,7 @@ class AppStyles {
         fontSize: 10.sp,
         fontWeight: FontWeight.bold,
       );
+
   static TextStyle get text8pxBold => lexendFontBold.copyWith(
         fontSize: 8.sp,
         fontWeight: FontWeight.bold,

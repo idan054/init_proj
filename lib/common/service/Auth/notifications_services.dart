@@ -1,12 +1,7 @@
 import 'dart:convert';
-// import 'package:app_settings/app_settings.dart';
-import 'package:example/common/extensions/context_extensions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import '../Database/firebase_db.dart';
 import 'package:app_settings/app_settings.dart';
-
-// Based firebase_messaging ONLY.
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class PushNotificationService {
@@ -49,19 +44,23 @@ class PushNotificationService {
     // FirebaseMessaging.onBackgroundMessage((RemoteMessage message) => onReceived(message));
 
     //Handle foreground notifications
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) => onReceived(message));
+    FirebaseMessaging.onMessageOpenedApp
+        .listen((RemoteMessage message) => onReceived(message));
 
     //Handle notifications when the app is opened
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) => onReceived(message));
+    FirebaseMessaging.onMessage
+        .listen((RemoteMessage message) => onReceived(message));
   }
 
   static void updateFcmToken(BuildContext context, String? fcm) async {
     print('START: updateFcmToken()');
-    var currUser = context.uniProvider.currUser;
-    await Database.updateFirestore(
-        collection: 'users', docName: currUser.email.toString(), toJson: {'fcm': fcm});
-    currUser = currUser.copyWith(fcm: fcm);
-    context.uniProvider.currUserUpdate(currUser);
+    // var currUser = context.uniProvider.currUser;
+    // await Database.updateFirestore(
+    //     collection: 'users',
+    //     docName: currUser.email.toString(),
+    //     toJson: {'fcm': fcm});
+    // currUser = currUser.copyWith(fcm: fcm);
+    // context.uniProvider.currUserUpdate(currUser);
   }
 
   //> Actually should be on SERVER!

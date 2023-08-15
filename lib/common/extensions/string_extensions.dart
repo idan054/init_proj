@@ -1,11 +1,6 @@
-import 'package:easy_localization/easy_localization.dart' as ez;
-import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
-import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../screens/user_ui/user_screen.dart';
 
 extension StringNullX on String? {
   bool get isNullOrEmpty => this == null || this!.isEmpty;
@@ -23,9 +18,9 @@ extension StringX on String {
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
       .hasMatch(this);
 
-  bool get isPassword =>
-      RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$')
-          .hasMatch(this);
+  bool get isPassword => RegExp(
+          r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$')
+      .hasMatch(this);
 
   String get firstWordUpper {
     final words = split(' ');
@@ -41,13 +36,14 @@ extension StringX on String {
     return buffer.toString();
   }
 
-  String toCapitalized() => length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
+  String toCapitalized() =>
+      length > 0 ? '${this[0].toUpperCase()}${substring(1)}' : '';
 
   DateTime get toDate => DateTime.parse(this).toLocal();
 
   // My:
   Text toText(
-          {Color color = AppColors.white,
+          {Color color = Colors.white,
           double? fontSize,
           TextAlign? textAlign,
           TextStyle? style,
@@ -57,14 +53,14 @@ extension StringX on String {
           bool underline = false,
           bool softWrap = false}) =>
       // Text(this,
-      Text(tr(),
+      Text(this,
           softWrap: softWrap,
           maxLines: maxLines,
-          textAlign: textAlign ?? (tr().isHebrew ? TextAlign.right : TextAlign.left),
-          textDirection: tr().isHebrew ? TextDirection.rtl : TextDirection.ltr,
+          textAlign: textAlign ?? (isHebrew ? TextAlign.right : TextAlign.left),
+          textDirection: isHebrew ? TextDirection.rtl : TextDirection.ltr,
           overflow: TextOverflow.ellipsis,
           style: style ??
-              (bold || (medium && tr().isHebrew)
+              (bold || (medium && isHebrew)
                   ? AppStyles.text14PxBold.copyWith(
                       color: color,
                       fontSize: fontSize ?? 14.sp,
@@ -75,41 +71,17 @@ extension StringX on String {
                       ? AppStyles.text14PxMedium.copyWith(
                           color: color,
                           fontSize: fontSize ?? 14.sp,
-                          decoration: underline ? TextDecoration.underline : null
+                          decoration:
+                              underline ? TextDecoration.underline : null
                           // height: 1
                           )
                       : AppStyles.text14PxRegular.copyWith(
                           color: color,
                           fontSize: fontSize ?? 14.sp,
-                          decoration: underline ? TextDecoration.underline : null
+                          decoration:
+                              underline ? TextDecoration.underline : null
                           // height: 1
                           ))); // line spacing
-
-  ExpandableText toTextExpanded( // String text,
-          {
-    TextStyle? style,
-    TextAlign? textAlign,
-    TextDirection? textDirection,
-    int? maxLines,
-    Color? linkColor,
-    ValueChanged<bool>? onChanged,
-    bool autoExpanded = false,
-  }) =>
-      buildExpandableText(
-        this,
-        style: style,
-        linkColor: linkColor ?? AppColors.greyLight,
-        textAlign: textAlign,
-        autoExpanded: autoExpanded,
-        textDirection: textDirection,
-        maxLines: maxLines,
-        onChanged: onChanged,
-      ); // line spacing
-
-  Text get testText => Text(
-        this,
-        style: AppStyles.text18PxSemiBold.white,
-      );
 
   bool get isHebrew {
     var heb = [

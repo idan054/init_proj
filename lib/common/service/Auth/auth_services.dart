@@ -1,23 +1,16 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:io' show Platform;
-
-import 'package:auto_route/auto_route.dart';
 import 'package:example/common/extensions/color_printer.dart';
-import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/common/service/Database/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
-
-import '../../models/user/user_model.dart';
-import '../../providers/firebase_options.dart';
 import '../Database/firebase_db.dart' as click;
 import '../Database/firebase_db.dart';
 import 'notifications_services.dart';
-// import 'package:apple_sign_in/apple_sign_in.dart' as apl;
 
 class AuthService {
   /// streamUsers() Available At [click.Database] // <<---
@@ -32,7 +25,7 @@ class AuthService {
     // Go to LoginRoute() When Err in autoSignIn
     if (autoSignIn && authUser?.email == null) {
       await FirebaseAuth.instance.signOut();
-      context.router.replace(const LoginRoute());
+      // context.router.replace(const LoginRoute());
       return;
     }
 
@@ -42,7 +35,9 @@ class AuthService {
       await FirebaseAuth.instance.signOut();
       if (!applePopup) await GoogleSignIn().signOut();
 
-      await (applePopup ? _appleAuthPopup() : _googleAuthPopup()); // set authUser
+      await (applePopup
+          ? _appleAuthPopup()
+          : _googleAuthPopup()); // set authUser
       if (authUser?.email == null) return; // When popup canceled
     }
 
@@ -58,28 +53,29 @@ class AuthService {
     }
   }
 
-  static void _handleExistUser(BuildContext context, Map<String, dynamic> userData) async {
-    var currUser = UserModel.fromJson(userData);
-    context.uniProvider.currUserUpdate(currUser);
+  static void _handleExistUser(
+      BuildContext context, Map<String, dynamic> userData) async {
+    // var currUser = UserModel.fromJson(userData);
+    // context.uniProvider.currUserUpdate(currUser);
 
     String? fcm = await FirebaseMessaging.instance.getToken();
     if (userData['fcm'] != fcm) {
       PushNotificationService.updateFcmToken(context, fcm);
     }
 
-    context.router.replace(DashboardRoute());
+    // context.router.replace(DashboardRoute());
   }
 
   static void _handleNewUser(BuildContext context) async {
-    String? fcm = await FirebaseMessaging.instance.getToken();
-    var user = context.uniProvider.currUser.copyWith(
-      name: authUser?.displayName,
-      uid: authUser!.uid,
-      email: authUser!.email,
-      fcm: fcm,
-    );
-    context.uniProvider.currUserUpdate(user);
-    context.router.replace(const OnBoardingRoute());
+    // String? fcm = await FirebaseMessaging.instance.getToken();
+    // var user = context.uniProvider.currUser.copyWith(
+    //   name: authUser?.displayName,
+    //   uid: authUser!.uid,
+    //   email: authUser!.email,
+    //   fcm: fcm,
+    // );
+    // context.uniProvider.currUserUpdate(user);
+    // context.router.replace(const OnBoardingRoute());
     // Data will upload to server when sign up Done,
   }
 
@@ -117,13 +113,16 @@ class AuthService {
     print('appleProvider ${appleProvider.givenName}');
     print('appleProvider ${appleProvider.userIdentifier}');
 
-    final credential = OAuthProvider('apple.com').setScopes(['email', 'fullName']).credential(
-        idToken: appleProvider.identityToken, accessToken: appleProvider.authorizationCode);
+    final credential = OAuthProvider('apple.com')
+        .setScopes(['email', 'fullName']).credential(
+            idToken: appleProvider.identityToken,
+            accessToken: appleProvider.authorizationCode);
     await auth.signInWithCredential(credential);
 
     authUser = auth.currentUser;
     if (authUser != null && authUser!.email == null) {
-      var mail = appleProvider.email ?? '${authUser!.uid.substring(0, 10)}@apple.com';
+      var mail =
+          appleProvider.email ?? '${authUser!.uid.substring(0, 10)}@apple.com';
       var name = appleProvider.givenName ?? appleProvider.familyName;
       authUser!.updateEmail(mail);
       if (authUser?.displayName == null) authUser!.updateDisplayName(name);

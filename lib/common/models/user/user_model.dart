@@ -1,9 +1,6 @@
-// ignore_for_file: invalid_annotation_target, constant_identifier_names
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: invalid_annotation_target
+
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../convertors.dart';
-import '../positionModel/position_model.dart';
 
 part 'user_model.freezed.dart';
 
@@ -31,15 +28,10 @@ class UserModel with _$UserModel {
     GenderTypes? gender,
     @Default(UserTypes.normal) UserTypes? userType,
     @Default([]) List<String> tags,
-    @Default([]) List<String> blockedUsers, // Hide content from (servfer based)
-    @DateTimeStampConv() DateTime? birthday,
-    PositionModel? position,
-    // double? lat, // lastSeen Latitude
-    // double? long, // lastSeen Longitude
-    // @JsonKey(name: 'geopoint') @GeoPointConverter() GeoFirePoint? location,
-    // @DateTimeStampConv() DateTime? lastActivity,
+    @Default([]) List<String> blockedUsers,
     @Default(false) bool isOnline,
   }) = _UserModel;
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);
+  factory UserModel.fromJson(Map<String, dynamic> json) =>
+      _$UserModelFromJson(json);
 }

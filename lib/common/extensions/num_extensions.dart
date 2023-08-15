@@ -1,6 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 extension NumX on num {
   double get toRadian => (toDouble() * (pi / 180)).toDouble();
