@@ -1,54 +1,27 @@
-import 'dart:io';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/models/appConfig/app_config_model.dart';
-import 'package:example/common/models/report/report_model.dart';
 import 'package:example/common/routes/app_router.dart';
 import 'package:example/common/routes/app_router.gr.dart';
 import 'package:example/common/service/Database/firebase_db.dart';
-import 'package:example/common/service/Database/firebase_db.dart';
-import 'package:example/common/service/Database/firebase_db.dart';
-import 'package:example/common/service/Feed/feed_services.dart';
 import 'package:example/common/themes/app_colors_inverted.dart';
 import 'package:example/common/themes/app_styles.dart';
-import 'package:example/main.dart';
-import 'dart:io' show Platform;
-
-// import 'package:example/common/service/Auth/firebase_db.dart';
-import 'package:example/common/dump/postViewOld_sts.dart';
-import 'package:example/screens/main_ui/admin_screen.dart';
-import 'package:example/screens/main_ui/notification_screen.dart';
 import 'package:example/widgets/my_dialog.dart';
 import 'package:example/widgets/my_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-// import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
-import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:shorebird_code_push/shorebird_code_push.dart';
 import '../../common/dump/hive_services.dart';
 import '../../common/extensions/color_printer.dart';
 import '../../common/models/post/post_model.dart';
-import '../../common/models/universalModel.dart';
 import '../../common/models/user/user_model.dart';
 import '../../common/service/Auth/auth_services.dart';
-import '../../common/service/Chat/chat_services.dart';
-import '../../common/service/init/check_app_update.dart';
-import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/Auth/notifications_services.dart';
+import '../../common/service/Chat/chat_services.dart';
+import '../../common/service/mixins/assets.gen.dart';
 import '../../common/service/online_service.dart';
 import '../../widgets/components/feed/buildFeed.dart';
-import '../../widgets/components/postBlock_stf.dart';
-import '../../widgets/components/reported_user_block.dart';
-import 'comments_chat_screen.dart';
 
 class MainFeedScreen extends StatefulWidget {
   const MainFeedScreen({Key? key}) : super(key: key);
@@ -565,7 +538,7 @@ Widget buildChoiceChip(BuildContext context,
     child: Theme(
       data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
       child: Directionality(
-        textDirection: context.easyTextDirection,
+        textDirection: context.autoTextDirection,
         child: ChoiceChip(
             elevation: 0,
             shadowColor: Colors.transparent,

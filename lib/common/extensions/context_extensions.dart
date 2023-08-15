@@ -1,12 +1,13 @@
+import 'dart:ui' as ui;
+
 import 'package:easy_localization/easy_localization.dart';
-import 'package:example/common/extensions/extensions.dart';
 import 'package:example/common/models/chat/chat_model.dart';
 import 'package:example/common/models/fabModel.dart';
 import 'package:example/common/models/message/message_model.dart';
 import 'package:example/common/models/post/post_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui' as ui;
+
 import '../models/universalModel.dart';
 import '../models/user/user_model.dart';
 
@@ -28,8 +29,7 @@ extension ContextX on BuildContext {
 
   bool get hebLocale => locale.languageCode == 'he';
 
-  ui.TextDirection get easyTextDirection =>
-      hebLocale ? ui.TextDirection.rtl : ui.TextDirection.ltr;
+  ui.TextDirection get autoTextDirection => hebLocale ? ui.TextDirection.rtl : ui.TextDirection.ltr;
 
   // A Section:
   // context.uniProvider.postUploaded; // current value.

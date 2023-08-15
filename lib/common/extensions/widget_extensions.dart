@@ -1,6 +1,5 @@
 import 'package:entry/entry.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -25,7 +24,9 @@ extension IconDataX on IconData {
 
 extension WidgetX on Widget {
   // My extension:
-  Widget onTap(GestureTapCallback? onTap, {double radius = 99, bool onLongPress = false, Color? tapColor}) => Theme(
+  Widget onTap(GestureTapCallback? onTap,
+          {double radius = 99, bool onLongPress = false, Color? tapColor}) =>
+      Theme(
         data: ThemeData(canvasColor: Colors.transparent),
         child: Material(
           color: Colors.transparent,
@@ -42,14 +43,17 @@ extension WidgetX on Widget {
         ),
       );
 
+  Container get testContainer => Container(color: AppColors.testGreen, child: this);
+
   Directionality isHebrewDirectionality(String text) => Directionality(
       textDirection: text.isHebrew ? TextDirection.rtl : TextDirection.ltr, child: this);
-
-  Container get testContainer => Container(color: AppColors.testGreen, child: this);
 
   Directionality get rtl => Directionality(textDirection: TextDirection.rtl, child: this);
 
   Directionality get ltr => Directionality(textDirection: TextDirection.ltr, child: this);
+
+  Directionality autoDirectionality(BuildContext context) =>
+      Directionality(textDirection: context.autoTextDirection, child: this);
 
   ClipRRect get roundedFull => ClipRRect(borderRadius: BorderRadius.circular(999), child: this);
 

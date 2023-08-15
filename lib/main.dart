@@ -1,429 +1,104 @@
-import 'dart:async';
-
+import 'package:easy_localization/easy_localization.dart';
+import 'package:example/common/extensions/color_printer.dart';
+import 'package:example/common/extensions/extensions.dart';
+import 'package:example/common/models/fabModel.dart';
+import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/screens/main_ui/splash_screen.dart' as click;
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:health/health.dart';
-// import 'package:health_example/util.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(HealthApp());
+import 'common/models/universalModel.dart';
+import 'common/service/Auth/notifications_services.dart';
+import 'common/service/Database/firebase_options.dart';
+import 'common/service/life_cycle.dart';
+import 'common/themes/app_colors_inverted.dart';
 
-class HealthApp extends StatefulWidget {
+/// Add More Pre-Actions At [click.SplashScreen]
+void main() async {
+  printWhite('START main()!');
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  EasyLocalization.logger.enableBuildModes = [];
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  PushNotificationService.setupNotifications(_handleNotificationReceived);
+  FirebaseMessaging.onBackgroundMessage(_handleNotificationReceived);
+
+  final dbDir = await getApplicationDocumentsDirectory();
+  Hive.init(dbDir.path);
+
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => UniProvider()),
+    ChangeNotifierProvider(create: (_) => FabProvider()),
+    // Provider.value(value: StreamModel().serverClient),
+    // FutureProvider<List<Activity>?>.value(
+    //     value: StreamModel().getFeedActivities(), initialData: const []),
+  ], child: const App()));
+}
+
+class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
-  _HealthAppState createState() => _HealthAppState();
+  State<StatefulWidget> createState() => _AppState();
 }
 
-enum AppState {
-  DATA_NOT_FETCHED,
-  FETCHING_DATA,
-  DATA_READY,
-  NO_DATA,
-  AUTHORIZED,
-  AUTH_NOT_GRANTED,
-  DATA_ADDED,
-  DATA_DELETED,
-  DATA_NOT_ADDED,
-  DATA_NOT_DELETED,
-  STEPS_READY,
-}
+class _AppState extends State<App> {
+  final _router = AppRouter(); // Add screens AT app_router.dart
+  FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
 
-class _HealthAppState extends State<HealthApp> {
-  List<HealthDataPoint> _healthDataList = [];
-  AppState _state = AppState.DATA_NOT_FETCHED;
-  int _nofSteps = 0;
-
-  // Define the types to get.
-  // NOTE: These are only the ones supported on Androids new API Health Connect.
-  // Both Android's Google Fit and iOS' HealthKit have more types that we support in the enum list [HealthDataType]
-  // Add more - like AUDIOGRAM, HEADACHE_SEVERE etc. to try them.
-  // static final types = dataTypesAndroid;
-  static final types = <HealthDataType>[
-    HealthDataType.ACTIVE_ENERGY_BURNED,
-    HealthDataType.AUDIOGRAM,
-    HealthDataType.BASAL_ENERGY_BURNED,
-    HealthDataType.BLOOD_GLUCOSE,
-    HealthDataType.BLOOD_OXYGEN,
-    HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-    HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-    HealthDataType.BODY_FAT_PERCENTAGE,
-    HealthDataType.BODY_MASS_INDEX,
-    HealthDataType.BODY_TEMPERATURE,
-    HealthDataType.DIETARY_CARBS_CONSUMED,
-    HealthDataType.DIETARY_ENERGY_CONSUMED,
-    HealthDataType.DIETARY_FATS_CONSUMED,
-    HealthDataType.DIETARY_PROTEIN_CONSUMED,
-    HealthDataType.FORCED_EXPIRATORY_VOLUME,
-    HealthDataType.HEART_RATE,
-    HealthDataType.HEART_RATE_VARIABILITY_SDNN,
-    HealthDataType.HEIGHT,
-    HealthDataType.RESTING_HEART_RATE,
-    HealthDataType.STEPS,
-    HealthDataType.WAIST_CIRCUMFERENCE,
-    HealthDataType.WALKING_HEART_RATE,
-    HealthDataType.WEIGHT,
-    HealthDataType.DISTANCE_WALKING_RUNNING,
-    HealthDataType.FLIGHTS_CLIMBED,
-    HealthDataType.MOVE_MINUTES,
-    HealthDataType.DISTANCE_DELTA,
-    HealthDataType.MINDFULNESS,
-    HealthDataType.WATER,
-    HealthDataType.SLEEP_IN_BED,
-    HealthDataType.SLEEP_ASLEEP,
-    HealthDataType.SLEEP_AWAKE,
-    HealthDataType.EXERCISE_TIME,
-    HealthDataType.WORKOUT,
-    HealthDataType.HEADACHE_NOT_PRESENT,
-    HealthDataType.HEADACHE_MILD,
-    HealthDataType.HEADACHE_MODERATE,
-    HealthDataType.HEADACHE_SEVERE,
-    HealthDataType.HEADACHE_UNSPECIFIED,
-    HealthDataType.HIGH_HEART_RATE_EVENT,
-    HealthDataType.LOW_HEART_RATE_EVENT,
-    HealthDataType.IRREGULAR_HEART_RATE_EVENT,
-    HealthDataType.ELECTRODERMAL_ACTIVITY,
-    HealthDataType.ELECTROCARDIOGRAM,
-  ];
-
-  // Or selected types
-  // static final types = [
-  //   HealthDataType.WEIGHT,
-  //   HealthDataType.STEPS,
-  //   HealthDataType.HEIGHT,
-  //   HealthDataType.BLOOD_GLUCOSE,
-  //   HealthDataType.WORKOUT,
-  //   HealthDataType.BLOOD_PRESSURE_DIASTOLIC,
-  //   HealthDataType.BLOOD_PRESSURE_SYSTOLIC,
-  //   // Uncomment these lines on iOS - only available on iOS
-  //   // HealthDataType.AUDIOGRAM
-  // ];
-
-  // with coresponsing permissions
-  // READ only
-  // final permissions = types.map((e) => HealthDataAccess.READ).toList();
-  // Or READ and WRITE
-  final permissions = types.map((e) => HealthDataAccess.READ_WRITE).toList();
-
-  // create a HealthFactory for use in the app
-  HealthFactory health = HealthFactory();
-
-  Future authorize() async {
-    // If we are trying to read Step Count, Workout, Sleep or other data that requires
-    // the ACTIVITY_RECOGNITION permission, we need to request the permission first.
-    // This requires a special request authorization call.
-    //
-    // The location permission is requested for Workouts using the Distance information.
-    await Permission.activityRecognition.request();
-    await Permission.location.request();
-
-    // Check if we have permission
-    bool? hasPermissions = await HealthFactory.hasPermissions(types, permissions: permissions);
-
-    // hasPermissions = false because the hasPermission cannot disclose if WRITE access exists.
-    // Hence, we have to request with WRITE as well.
-    hasPermissions ??= false;
-
-    bool authorized = false;
-    if (!hasPermissions) {
-      // requesting access to the data types before reading them
-      try {
-        authorized = await health.requestAuthorization(types, permissions: permissions);
-      } catch (error) {
-        print("Exception in authorize: $error");
-      }
-    }
-
-    setState(() => _state = (authorized) ? AppState.AUTHORIZED : AppState.AUTH_NOT_GRANTED);
-  }
-
-  /// Fetch data points from the health plugin and show them in the app.
-  Future fetchData() async {
-    setState(() => _state = AppState.FETCHING_DATA);
-
-    // get data within the last 24 hours
-    final now = DateTime.now();
-    final yesterday = now.subtract(Duration(hours: 24));
-
-    // Clear old data points
-    _healthDataList.clear();
-
-    try {
-      // fetch health data
-      List<HealthDataPoint> healthData = await health.getHealthDataFromTypes(yesterday, now, types);
-      // save all the new data points (only the first 100)
-      _healthDataList.addAll((healthData.length < 100) ? healthData : healthData.sublist(0, 100));
-    } catch (error) {
-      print("Exception in getHealthDataFromTypes: $error");
-    }
-
-    // filter out duplicates
-    _healthDataList = HealthFactory.removeDuplicates(_healthDataList);
-
-    // print the results
-    _healthDataList.forEach((x) => print(x));
-
-    // update the UI to display the results
-    setState(() {
-      _state = _healthDataList.isEmpty ? AppState.NO_DATA : AppState.DATA_READY;
-    });
-  }
-
-  /// Add some random health data.
-  Future addData() async {
-    final now = DateTime.now();
-    final earlier = now.subtract(Duration(minutes: 20));
-
-    // Add data for supported types
-    // NOTE: These are only the ones supported on Androids new API Health Connect.
-    // Both Android's Google Fit and iOS' HealthKit have more types that we support in the enum list [HealthDataType]
-    // Add more - like AUDIOGRAM, HEADACHE_SEVERE etc. to try them.
-    bool success = true;
-    success &= await health.writeHealthData(1.925, HealthDataType.HEIGHT, earlier, now);
-    success &= await health.writeHealthData(90, HealthDataType.WEIGHT, earlier, now);
-    success &= await health.writeHealthData(90, HealthDataType.HEART_RATE, earlier, now);
-    success &= await health.writeHealthData(90, HealthDataType.STEPS, earlier, now);
-    success &= await health.writeHealthData(200, HealthDataType.ACTIVE_ENERGY_BURNED, earlier, now);
-    success &= await health.writeHealthData(70, HealthDataType.HEART_RATE, earlier, now);
-    success &= await health.writeHealthData(37, HealthDataType.BODY_TEMPERATURE, earlier, now);
-    success &= await health.writeHealthData(105, HealthDataType.BLOOD_GLUCOSE, earlier, now);
-    success &= await health.writeHealthData(1.8, HealthDataType.WATER, earlier, now);
-    success &= await health.writeWorkoutData(
-        HealthWorkoutActivityType.AMERICAN_FOOTBALL, now.subtract(Duration(minutes: 15)), now,
-        totalDistance: 2430, totalEnergyBurned: 400);
-    success &= await health.writeBloodPressure(90, 80, earlier, now);
-    success &= await health.writeHealthData(0.0, HealthDataType.SLEEP_ASLEEP, earlier, now);
-    success &= await health.writeHealthData(0.0, HealthDataType.SLEEP_AWAKE, earlier, now);
-
-    // Store an Audiogram
-    // Uncomment these on iOS - only available on iOS
-    // const frequencies = [125.0, 500.0, 1000.0, 2000.0, 4000.0, 8000.0];
-    // const leftEarSensitivities = [49.0, 54.0, 89.0, 52.0, 77.0, 35.0];
-    // const rightEarSensitivities = [76.0, 66.0, 90.0, 22.0, 85.0, 44.5];
-
-    // success &= await health.writeAudiogram(
-    //   frequencies,
-    //   leftEarSensitivities,
-    //   rightEarSensitivities,
-    //   now,
-    //   now,
-    //   metadata: {
-    //     "HKExternalUUID": "uniqueID",
-    //     "HKDeviceName": "bluetooth headphone",
-    //   },
-    // );
-
-    setState(() {
-      _state = success ? AppState.DATA_ADDED : AppState.DATA_NOT_ADDED;
-    });
-  }
-
-  /// Delete some random health data.
-  Future deleteData() async {
-    final now = DateTime.now();
-    final earlier = now.subtract(Duration(hours: 24));
-
-    bool success = true;
-    for (HealthDataType type in types) {
-      success &= await health.delete(type, earlier, now);
-    }
-
-    setState(() {
-      _state = success ? AppState.DATA_DELETED : AppState.DATA_NOT_DELETED;
-    });
-  }
-
-  /// Fetch steps from the health plugin and show them in the app.
-  Future fetchStepData() async {
-    int? steps;
-
-    // get steps for today (i.e., since midnight)
-    final now = DateTime.now();
-    final midnight = DateTime(now.year, now.month, now.day);
-
-    bool requested = await health.requestAuthorization([HealthDataType.STEPS]);
-
-    if (requested) {
-      try {
-        steps = await health.getTotalStepsInInterval(midnight, now);
-      } catch (error) {
-        print("Caught exception in getTotalStepsInInterval: $error");
-      }
-
-      print('Total number of steps: $steps');
-
-      setState(() {
-        _nofSteps = (steps == null) ? 0 : steps;
-        _state = (steps == null) ? AppState.NO_DATA : AppState.STEPS_READY;
-      });
-    } else {
-      print("Authorization not granted - error in authorization");
-      setState(() => _state = AppState.DATA_NOT_FETCHED);
-    }
-  }
-
-  Future revokeAccess() async {
-    try {
-      await health.revokePermissions();
-    } catch (error) {
-      print("Caught exception in revokeAccess: $error");
-    }
-  }
-
-  Widget _contentFetchingData() {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-            padding: EdgeInsets.all(20),
-            child: CircularProgressIndicator(
-              strokeWidth: 10,
-            )),
-        Text('Fetching data...')
-      ],
-    );
-  }
-
-  Widget _contentDataReady() {
-    return ListView.builder(
-        itemCount: _healthDataList.length,
-        itemBuilder: (_, index) {
-          HealthDataPoint p = _healthDataList[index];
-          if (p.value is AudiogramHealthValue) {
-            return ListTile(
-              title: Text("${p.typeString}: ${p.value}"),
-              trailing: Text('${p.unitString}'),
-              subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
-            );
-          }
-          if (p.value is WorkoutHealthValue) {
-            return ListTile(
-              title: Text(
-                  "${p.typeString}: ${(p.value as WorkoutHealthValue).totalEnergyBurned} ${(p.value as WorkoutHealthValue).totalEnergyBurnedUnit?.name}"),
-              trailing: Text('${(p.value as WorkoutHealthValue).workoutActivityType.name}'),
-              subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
-            );
-          }
-          return ListTile(
-            title: Text("${p.typeString}: ${p.value}"),
-            trailing: Text('${p.unitString}'),
-            subtitle: Text('${p.dateFrom} - ${p.dateTo}'),
-          );
-        });
-  }
-
-  Widget _contentNoData() {
-    return Text('No Data to show');
-  }
-
-  Widget _contentNotFetched() {
-    return Column(
-      children: [
-        Text('Press the download button to fetch data.'),
-        Text('Press the plus button to insert some random data.'),
-        Text('Press the walking button to get total step count.'),
-      ],
-      mainAxisAlignment: MainAxisAlignment.center,
-    );
-  }
-
-  Widget _authorized() {
-    return Text('Authorization granted!');
-  }
-
-  Widget _authorizationNotGranted() {
-    return Text('Authorization not given. '
-        'For Android please check your OAUTH2 client ID is correct in Google Developer Console. '
-        'For iOS check your permissions in Apple Health.');
-  }
-
-  Widget _dataAdded() {
-    return Text('Data points inserted successfully!');
-  }
-
-  Widget _dataDeleted() {
-    return Text('Data points deleted successfully!');
-  }
-
-  Widget _stepsFetched() {
-    return Text('Total number of steps: $_nofSteps');
-  }
-
-  Widget _dataNotAdded() {
-    return Text('Failed to add data');
-  }
-
-  Widget _dataNotDeleted() {
-    return Text('Failed to delete data');
-  }
-
-  Widget _content() {
-    if (_state == AppState.DATA_READY)
-      return _contentDataReady();
-    else if (_state == AppState.NO_DATA)
-      return _contentNoData();
-    else if (_state == AppState.FETCHING_DATA)
-      return _contentFetchingData();
-    else if (_state == AppState.AUTHORIZED)
-      return _authorized();
-    else if (_state == AppState.AUTH_NOT_GRANTED)
-      return _authorizationNotGranted();
-    else if (_state == AppState.DATA_ADDED)
-      return _dataAdded();
-    else if (_state == AppState.DATA_DELETED)
-      return _dataDeleted();
-    else if (_state == AppState.STEPS_READY)
-      return _stepsFetched();
-    else if (_state == AppState.DATA_NOT_ADDED)
-      return _dataNotAdded();
-    else if (_state == AppState.DATA_NOT_DELETED)
-      return _dataNotDeleted();
-    else
-      return _contentNotFetched();
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Health Example'),
-        ),
-        body: Container(
-          child: Column(
-            children: [
-              Wrap(
-                spacing: 10,
-                children: [
-                  TextButton(
-                      onPressed: authorize,
-                      child: Text("Auth", style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.blue))),
-                  TextButton(
-                      onPressed: fetchData,
-                      child: Text("Fetch Data", style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.blue))),
-                  TextButton(
-                      onPressed: addData,
-                      child: Text("Add Data", style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.blue))),
-                  TextButton(
-                      onPressed: deleteData,
-                      child: Text("Delete Data", style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.blue))),
-                  TextButton(
-                      onPressed: fetchStepData,
-                      child: Text("Fetch Step Data", style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.blue))),
-                  TextButton(
-                      onPressed: revokeAccess,
-                      child: Text("Revoke Access", style: TextStyle(color: Colors.white)),
-                      style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Colors.blue))),
-                ],
-              ),
-              Divider(thickness: 3),
-              Expanded(child: Center(child: _content()))
-            ],
+    print('BUILD: App.dart');
+
+    try {
+      return LifeCycleManager(
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.dark.copyWith(
+            systemNavigationBarColor: AppColors.primaryDark,
+            systemNavigationBarIconBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarColor: Colors.transparent,
+          ),
+          child: ScreenUtilInit(
+            designSize: const Size(390, 844),
+            minTextAdapt: true,
+            builder: (_, __) => MaterialApp.router(
+                title: 'RilTopia',
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(colorSchemeSeed: AppColors.darkOutline),
+                localizationsDelegates: context.localizationDelegates,
+                supportedLocales: context.supportedLocales,
+                locale: context.locale,
+                routerDelegate: _router.delegate(navigatorObservers: () => [observer]),
+                routeInformationParser: _router.defaultRouteParser(),
+                builder: (context, child) => Directionality(
+                      textDirection: context.autoTextDirection,
+                      child: Builder(
+                        builder: (context) => child!,
+                      ),
+                    )),
           ),
         ),
-      ),
-    );
+      );
+    } on Exception catch (e, s) {
+      print(s);
+      return Center(child: Text('Something went wrong $e'));
+    }
   }
 }
+
+Future<void> _handleNotificationReceived(RemoteMessage message) async =>
+    print("Handling a background message: ${message.toMap()}");
