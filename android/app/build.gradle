@@ -73,12 +73,12 @@ android {
     }
 
     signingConfigs {
-        debug {
-            storeFile file('debug.jks')
-            keyAlias 'key'
-            storePassword '123456'
-            keyPassword '123456'
-        }
+//        debug {
+//            storeFile file('debug.jks')
+//            keyAlias 'key'
+//            storePassword '123456'
+//            keyPassword '123456'
+//        }
         release {
             storeFile keystoreProperties['storeFile'] ? file('MomsPassKey.jks') : null
             keyAlias 'upload'

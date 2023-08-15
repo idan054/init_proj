@@ -5,25 +5,166 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import
+// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/services.dart';
 
+class $AssetsFontsGen {
+  const $AssetsFontsGen();
+
+  /// File path: assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF
+  String get bahnschriftRiltopia => 'assets/fonts/BAHNSCHRIFT_RILTOPIA.TTF';
+
+  /// File path: assets/fonts/Lexend-Bold.ttf
+  String get lexendBold => 'assets/fonts/Lexend-Bold.ttf';
+
+  /// File path: assets/fonts/Lexend-Medium.ttf
+  String get lexendMedium => 'assets/fonts/Lexend-Medium.ttf';
+
+  /// File path: assets/fonts/Lexend-Regular.ttf
+  String get lexendRegular => 'assets/fonts/Lexend-Regular.ttf';
+
+  /// List of all assets
+  List<String> get values =>
+      [bahnschriftRiltopia, lexendBold, lexendMedium, lexendRegular];
+}
+
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
-  /// File path: assets/images/logo.png
-  AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
+  /// File path: assets/images/AdPrt1.png
+  AssetGenImage get adPrt1 => const AssetGenImage('assets/images/AdPrt1.png');
+
+  /// File path: assets/images/AdPrt2.png
+  AssetGenImage get adPrt2 => const AssetGenImage('assets/images/AdPrt2.png');
+
+  /// File path: assets/images/CircleCover.png
+  AssetGenImage get circleCover =>
+      const AssetGenImage('assets/images/CircleCover.png');
+
+  /// File path: assets/images/CircleCoverOriginal.png
+  AssetGenImage get circleCoverOriginal =>
+      const AssetGenImage('assets/images/CircleCoverOriginal.png');
+
+  /// File path: assets/images/Filter-Preview-Full-1.png
+  AssetGenImage get filterPreviewFull1 =>
+      const AssetGenImage('assets/images/Filter-Preview-Full-1.png');
+
+  /// File path: assets/images/Filter-Preview-Full-2.png
+  AssetGenImage get filterPreviewFull2 =>
+      const AssetGenImage('assets/images/Filter-Preview-Full-2.png');
+
+  /// File path: assets/images/Filter-Preview-Full-3.png
+  AssetGenImage get filterPreviewFull3 =>
+      const AssetGenImage('assets/images/Filter-Preview-Full-3.png');
+
+  /// File path: assets/images/Filter-Preview-Full-4.png
+  AssetGenImage get filterPreviewFull4 =>
+      const AssetGenImage('assets/images/Filter-Preview-Full-4.png');
+
+  /// File path: assets/images/LogoCircularRilTopiaLogo.png
+  AssetGenImage get logoCircularRilTopiaLogo =>
+      const AssetGenImage('assets/images/LogoCircularRilTopiaLogo.png');
+
+  /// File path: assets/images/Riltopia-as-icon-PNG.png
+  AssetGenImage get riltopiaAsIconPNG =>
+      const AssetGenImage('assets/images/Riltopia-as-icon-PNG.png');
+
+  /// File path: assets/images/app_icon.png
+  AssetGenImage get appIcon =>
+      const AssetGenImage('assets/images/app_icon.png');
+
+  /// File path: assets/images/chatBubblesSolid.png
+  AssetGenImage get chatBubblesSolid =>
+      const AssetGenImage('assets/images/chatBubblesSolid.png');
+
+  /// File path: assets/images/check-verified-image.png
+  AssetGenImage get checkVerifiedImage =>
+      const AssetGenImage('assets/images/check-verified-image.png');
+
+  /// File path: assets/images/comments-off-PNG.png
+  AssetGenImage get commentsOffPNG =>
+      const AssetGenImage('assets/images/comments-off-PNG.png');
+
+  /// File path: assets/images/elonMuskAd.png
+  AssetGenImage get elonMuskAd =>
+      const AssetGenImage('assets/images/elonMuskAd.png');
 
   /// File path: assets/images/map_placeholder.png
   AssetGenImage get mapPlaceholder =>
       const AssetGenImage('assets/images/map_placeholder.png');
 
-  /// File path: assets/images/minecloudLogo.png
-  AssetGenImage get minecloudLogo =>
-      const AssetGenImage('assets/images/minecloudLogo.png');
+  /// File path: assets/images/message-smile-icon-png.png
+  AssetGenImage get messageSmileIconPng =>
+      const AssetGenImage('assets/images/message-smile-icon-png.png');
+
+  /// File path: assets/images/onboarding-new-banner.png
+  AssetGenImage get onboardingNewBanner =>
+      const AssetGenImage('assets/images/onboarding-new-banner.png');
+
+  /// File path: assets/images/ril-clean-icon.png
+  AssetGenImage get rilCleanIcon =>
+      const AssetGenImage('assets/images/ril-clean-icon.png');
+
+  /// File path: assets/images/squresBg-original.png
+  AssetGenImage get squresBgOriginal =>
+      const AssetGenImage('assets/images/squresBg-original.png');
+
+  /// File path: assets/images/squresBg.png
+  AssetGenImage get squresBg =>
+      const AssetGenImage('assets/images/squresBg.png');
+
+  /// File path: assets/images/white-logo.png
+  AssetGenImage get whiteLogo =>
+      const AssetGenImage('assets/images/white-logo.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [
+        adPrt1,
+        adPrt2,
+        circleCover,
+        circleCoverOriginal,
+        filterPreviewFull1,
+        filterPreviewFull2,
+        filterPreviewFull3,
+        filterPreviewFull4,
+        logoCircularRilTopiaLogo,
+        riltopiaAsIconPNG,
+        appIcon,
+        chatBubblesSolid,
+        checkVerifiedImage,
+        commentsOffPNG,
+        elonMuskAd,
+        mapPlaceholder,
+        messageSmileIconPng,
+        onboardingNewBanner,
+        rilCleanIcon,
+        squresBgOriginal,
+        squresBg,
+        whiteLogo
+      ];
+}
+
+class $AssetsRivGen {
+  const $AssetsRivGen();
+
+  /// File path: assets/riv/rilMan.riv
+  String get rilMan => 'assets/riv/rilMan.riv';
+
+  /// File path: assets/riv/rilManBlackWhite.riv
+  String get rilManBlackWhite => 'assets/riv/rilManBlackWhite.riv';
+
+  /// File path: assets/riv/rilWhiteman.riv
+  String get rilWhiteman => 'assets/riv/rilWhiteman.riv';
+
+  /// File path: assets/riv/rilmanblackwhitefaster.riv
+  String get rilmanblackwhitefaster => 'assets/riv/rilmanblackwhitefaster.riv';
+
+  /// List of all assets
+  List<String> get values =>
+      [rilMan, rilManBlackWhite, rilWhiteman, rilmanblackwhitefaster];
 }
 
 class $AssetsSvgGen {
@@ -43,6 +184,9 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/bag.svg
   SvgGenImage get bag => const SvgGenImage('assets/svg/bag.svg');
+
+  /// File path: assets/svg/bagSquare.svg
+  SvgGenImage get bagSquare => const SvgGenImage('assets/svg/bagSquare.svg');
 
   /// File path: assets/svg/ballon.svg
   SvgGenImage get ballon => const SvgGenImage('assets/svg/ballon.svg');
@@ -125,6 +269,10 @@ class $AssetsSvgGen {
   /// File path: assets/svg/menu_dot.svg
   SvgGenImage get menuDot => const SvgGenImage('assets/svg/menu_dot.svg');
 
+  /// File path: assets/svg/microsoftExcel.svg
+  SvgGenImage get microsoftExcel =>
+      const SvgGenImage('assets/svg/microsoftExcel.svg');
+
   /// File path: assets/svg/more_vert.svg
   SvgGenImage get moreVert => const SvgGenImage('assets/svg/more_vert.svg');
 
@@ -152,6 +300,9 @@ class $AssetsSvgGen {
   /// File path: assets/svg/search_icon.svg
   SvgGenImage get searchIcon => const SvgGenImage('assets/svg/search_icon.svg');
 
+  /// File path: assets/svg/smsBubble.svg
+  SvgGenImage get smsBubble => const SvgGenImage('assets/svg/smsBubble.svg');
+
   /// File path: assets/svg/speed_meter.svg
   SvgGenImage get speedMeter => const SvgGenImage('assets/svg/speed_meter.svg');
 
@@ -163,29 +314,409 @@ class $AssetsSvgGen {
 
   /// File path: assets/svg/weight.svg
   SvgGenImage get weight => const SvgGenImage('assets/svg/weight.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+        gLogoIcon,
+        add,
+        appLogo,
+        apple,
+        bag,
+        bagSquare,
+        ballon,
+        ballonIndex,
+        bike,
+        call,
+        chat,
+        clock,
+        close,
+        delete,
+        delivery,
+        driverIcon,
+        dropDown,
+        dropDownSelected,
+        email,
+        eventIcon,
+        excel,
+        forward,
+        google,
+        home,
+        iosDown,
+        iosDownward,
+        live,
+        logo,
+        logoIcon,
+        mapPlaceholder,
+        menuDot,
+        microsoftExcel,
+        moreVert,
+        pallet,
+        placeHolder2,
+        placeHolder3,
+        plannedPath,
+        pogoLogo,
+        save,
+        searchIcon,
+        smsBubble,
+        speedMeter,
+        tick,
+        user,
+        weight
+      ];
+}
+
+class $AssetsTranslationsGen {
+  const $AssetsTranslationsGen();
+
+  /// File path: assets/translations/en.json
+  String get en => 'assets/translations/en.json';
+
+  /// File path: assets/translations/he.json
+  String get he => 'assets/translations/he.json';
+
+  /// List of all assets
+  List<String> get values => [en, he];
 }
 
 class $AssetsSvgIconsGen {
   const $AssetsSvgIconsGen();
 
-  /// File path: assets/svg/icons/bagSquare.svg
-  SvgGenImage get bagSquare =>
-      const SvgGenImage('assets/svg/icons/bagSquare.svg');
+  /// File path: assets/svg/icons/Icon-close.svg
+  SvgGenImage get iconClose =>
+      const SvgGenImage('assets/svg/icons/Icon-close.svg');
 
-  /// File path: assets/svg/icons/microsoftExcel.svg
-  SvgGenImage get microsoftExcel =>
-      const SvgGenImage('assets/svg/icons/microsoftExcel.svg');
+  /// File path: assets/svg/icons/Icon-send-Button-original.svg
+  SvgGenImage get iconSendButtonOriginal =>
+      const SvgGenImage('assets/svg/icons/Icon-send-Button-original.svg');
 
-  /// File path: assets/svg/icons/smsBubble.svg
-  SvgGenImage get smsBubble =>
-      const SvgGenImage('assets/svg/icons/smsBubble.svg');
+  /// File path: assets/svg/icons/Icon-send-Button.svg
+  SvgGenImage get iconSendButton =>
+      const SvgGenImage('assets/svg/icons/Icon-send-Button.svg');
+
+  /// File path: assets/svg/icons/Riltopia-icon.svg
+  SvgGenImage get riltopiaIcon =>
+      const SvgGenImage('assets/svg/icons/Riltopia-icon.svg');
+
+  /// File path: assets/svg/icons/apple-logo-svgrepo-com.svg
+  SvgGenImage get appleLogoSvgrepoCom =>
+      const SvgGenImage('assets/svg/icons/apple-logo-svgrepo-com.svg');
+
+  /// File path: assets/svg/icons/arrow-narrow-left.svg
+  SvgGenImage get arrowNarrowLeft =>
+      const SvgGenImage('assets/svg/icons/arrow-narrow-left.svg');
+
+  /// File path: assets/svg/icons/arrow_back_left.svg
+  SvgGenImage get arrowBackLeft =>
+      const SvgGenImage('assets/svg/icons/arrow_back_left.svg');
+
+  /// File path: assets/svg/icons/bell-solid.svg
+  SvgGenImage get bellSolid =>
+      const SvgGenImage('assets/svg/icons/bell-solid.svg');
+
+  /// File path: assets/svg/icons/bell-untitled-icon.svg
+  SvgGenImage get bellUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/bell-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/bell.svg
+  SvgGenImage get bell => const SvgGenImage('assets/svg/icons/bell.svg');
+
+  /// File path: assets/svg/icons/camera.svg
+  SvgGenImage get camera => const SvgGenImage('assets/svg/icons/camera.svg');
+
+  /// File path: assets/svg/icons/change-sort-arrows.svg
+  SvgGenImage get changeSortArrows =>
+      const SvgGenImage('assets/svg/icons/change-sort-arrows.svg');
+
+  /// File path: assets/svg/icons/chatBubbles-solid-icon.svg
+  SvgGenImage get chatBubblesSolidIcon =>
+      const SvgGenImage('assets/svg/icons/chatBubbles-solid-icon.svg');
+
+  /// File path: assets/svg/icons/chatBubbles-untitled-icon.svg
+  SvgGenImage get chatBubblesUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/chatBubbles-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/check-verified-outline.svg
+  SvgGenImage get checkVerifiedOutline =>
+      const SvgGenImage('assets/svg/icons/check-verified-outline.svg');
+
+  /// File path: assets/svg/icons/check_verified_solid.svg
+  SvgGenImage get checkVerifiedSolid =>
+      const SvgGenImage('assets/svg/icons/check_verified_solid.svg');
+
+  /// File path: assets/svg/icons/comment-untitled-icon.svg
+  SvgGenImage get commentUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/comment-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/comments-Off.svg
+  SvgGenImage get commentsOff =>
+      const SvgGenImage('assets/svg/icons/comments-Off.svg');
+
+  /// File path: assets/svg/icons/date_time_calender.svg
+  SvgGenImage get dateTimeCalender =>
+      const SvgGenImage('assets/svg/icons/date_time_calender.svg');
+
+  /// File path: assets/svg/icons/dmPlane-untitled-icon-orginal.svg
+  SvgGenImage get dmPlaneUntitledIconOrginal =>
+      const SvgGenImage('assets/svg/icons/dmPlane-untitled-icon-orginal.svg');
+
+  /// File path: assets/svg/icons/dmPlane-untitled-icon-outlined.svg
+  SvgGenImage get dmPlaneUntitledIconOutlined =>
+      const SvgGenImage('assets/svg/icons/dmPlane-untitled-icon-outlined.svg');
+
+  /// File path: assets/svg/icons/dmPlane-untitled-icon.svg
+  SvgGenImage get dmPlaneUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/dmPlane-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/flag-03.svg
+  SvgGenImage get flag03 => const SvgGenImage('assets/svg/icons/flag-03.svg');
+
+  /// File path: assets/svg/icons/group_multi_people.svg
+  SvgGenImage get groupMultiPeople =>
+      const SvgGenImage('assets/svg/icons/group_multi_people.svg');
+
+  /// File path: assets/svg/icons/group_multi_people_solid.svg
+  SvgGenImage get groupMultiPeopleSolid =>
+      const SvgGenImage('assets/svg/icons/group_multi_people_solid.svg');
+
+  /// File path: assets/svg/icons/heart-untitled-icon.svg
+  SvgGenImage get heartUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/heart-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/home-untitled-icon.svg
+  SvgGenImage get homeUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/home-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/homeSolid-untitled-icon.svg
+  SvgGenImage get homeSolidUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/homeSolid-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/log-out-01.svg
+  SvgGenImage get logOut01 =>
+      const SvgGenImage('assets/svg/icons/log-out-01.svg');
+
+  /// File path: assets/svg/icons/man_profile.svg
+  SvgGenImage get manProfile =>
+      const SvgGenImage('assets/svg/icons/man_profile.svg');
+
+  /// File path: assets/svg/icons/man_profile_outline.svg
+  SvgGenImage get manProfileOutline =>
+      const SvgGenImage('assets/svg/icons/man_profile_outline.svg');
+
+  /// File path: assets/svg/icons/message-chat-circle-add.svg
+  SvgGenImage get messageChatCircleAdd =>
+      const SvgGenImage('assets/svg/icons/message-chat-circle-add.svg');
+
+  /// File path: assets/svg/icons/message-chat-circle-solid.svg
+  SvgGenImage get messageChatCircleSolid =>
+      const SvgGenImage('assets/svg/icons/message-chat-circle-solid.svg');
+
+  /// File path: assets/svg/icons/message-chat-circle.svg
+  SvgGenImage get messageChatCircle =>
+      const SvgGenImage('assets/svg/icons/message-chat-circle.svg');
+
+  /// File path: assets/svg/icons/message-circle-02.svg
+  SvgGenImage get messageCircle02 =>
+      const SvgGenImage('assets/svg/icons/message-circle-02.svg');
+
+  /// File path: assets/svg/icons/message-comments-Lines.svg
+  SvgGenImage get messageCommentsLines =>
+      const SvgGenImage('assets/svg/icons/message-comments-Lines.svg');
+
+  /// File path: assets/svg/icons/message-smile-plus.svg
+  SvgGenImage get messageSmilePlus =>
+      const SvgGenImage('assets/svg/icons/message-smile-plus.svg');
+
+  /// File path: assets/svg/icons/message-smile.svg
+  SvgGenImage get messageSmile =>
+      const SvgGenImage('assets/svg/icons/message-smile.svg');
+
+  /// File path: assets/svg/icons/message-text-circle-02-original-solid.svg
+  SvgGenImage get messageTextCircle02OriginalSolid => const SvgGenImage(
+      'assets/svg/icons/message-text-circle-02-original-solid.svg');
+
+  /// File path: assets/svg/icons/message-text-circle-02-original.svg
+  SvgGenImage get messageTextCircle02Original =>
+      const SvgGenImage('assets/svg/icons/message-text-circle-02-original.svg');
+
+  /// File path: assets/svg/icons/message-text-circle-02.svg
+  SvgGenImage get messageTextCircle02 =>
+      const SvgGenImage('assets/svg/icons/message-text-circle-02.svg');
+
+  /// File path: assets/svg/icons/plusAdd-untitled-icon.svg
+  SvgGenImage get plusAddUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/plusAdd-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/refresh-arrows.svg
+  SvgGenImage get refreshArrows =>
+      const SvgGenImage('assets/svg/icons/refresh-arrows.svg');
+
+  /// File path: assets/svg/icons/riltopia-admin-logo.svg
+  SvgGenImage get riltopiaAdminLogo =>
+      const SvgGenImage('assets/svg/icons/riltopia-admin-logo.svg');
+
+  /// File path: assets/svg/icons/settings-01.svg
+  SvgGenImage get settings01 =>
+      const SvgGenImage('assets/svg/icons/settings-01.svg');
+
+  /// File path: assets/svg/icons/share-arrow-wide-outline.svg
+  SvgGenImage get shareArrowWideOutline =>
+      const SvgGenImage('assets/svg/icons/share-arrow-wide-outline.svg');
+
+  /// File path: assets/svg/icons/share-arrow-wide.svg
+  SvgGenImage get shareArrowWide =>
+      const SvgGenImage('assets/svg/icons/share-arrow-wide.svg');
+
+  /// File path: assets/svg/icons/shareClassic-untitled-icon.svg
+  SvgGenImage get shareClassicUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/shareClassic-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/shieldTick-untitled-icon.svg
+  SvgGenImage get shieldTickUntitledIcon =>
+      const SvgGenImage('assets/svg/icons/shieldTick-untitled-icon.svg');
+
+  /// File path: assets/svg/icons/sort-by-age-solid.svg
+  SvgGenImage get sortByAgeSolid =>
+      const SvgGenImage('assets/svg/icons/sort-by-age-solid.svg');
+
+  /// File path: assets/svg/icons/sort-by-age.svg
+  SvgGenImage get sortByAge =>
+      const SvgGenImage('assets/svg/icons/sort-by-age.svg');
+
+  /// File path: assets/svg/icons/sort-by-default-clock-solid.svg
+  SvgGenImage get sortByDefaultClockSolid =>
+      const SvgGenImage('assets/svg/icons/sort-by-default-clock-solid.svg');
+
+  /// File path: assets/svg/icons/sort-by-default-clock.svg
+  SvgGenImage get sortByDefaultClock =>
+      const SvgGenImage('assets/svg/icons/sort-by-default-clock.svg');
+
+  /// File path: assets/svg/icons/sort-by-default-solid.svg
+  SvgGenImage get sortByDefaultSolid =>
+      const SvgGenImage('assets/svg/icons/sort-by-default-solid.svg');
+
+  /// File path: assets/svg/icons/sort-by-default.svg
+  SvgGenImage get sortByDefault =>
+      const SvgGenImage('assets/svg/icons/sort-by-default.svg');
+
+  /// File path: assets/svg/icons/sort-by-location-solid.svg
+  SvgGenImage get sortByLocationSolid =>
+      const SvgGenImage('assets/svg/icons/sort-by-location-solid.svg');
+
+  /// File path: assets/svg/icons/sort-by-location.svg
+  SvgGenImage get sortByLocation =>
+      const SvgGenImage('assets/svg/icons/sort-by-location.svg');
+
+  /// File path: assets/svg/icons/sort-by-topic-solid.svg
+  SvgGenImage get sortByTopicSolid =>
+      const SvgGenImage('assets/svg/icons/sort-by-topic-solid.svg');
+
+  /// File path: assets/svg/icons/sort-by-topic.svg
+  SvgGenImage get sortByTopic =>
+      const SvgGenImage('assets/svg/icons/sort-by-topic.svg');
+
+  /// File path: assets/svg/icons/trash-03.svg
+  SvgGenImage get trash03 => const SvgGenImage('assets/svg/icons/trash-03.svg');
+
+  /// File path: assets/svg/icons/user-circle-outline.svg
+  SvgGenImage get userCircleOutline =>
+      const SvgGenImage('assets/svg/icons/user-circle-outline.svg');
+
+  /// File path: assets/svg/icons/user-circle-solid.svg
+  SvgGenImage get userCircleSolid =>
+      const SvgGenImage('assets/svg/icons/user-circle-solid.svg');
+
+  /// File path: assets/svg/icons/wisdom__multi_light_star.svg
+  SvgGenImage get wisdomMultiLightStar =>
+      const SvgGenImage('assets/svg/icons/wisdom__multi_light_star.svg');
+
+  /// File path: assets/svg/icons/wisdom_light_star.svg
+  SvgGenImage get wisdomLightStar =>
+      const SvgGenImage('assets/svg/icons/wisdom_light_star.svg');
+
+  /// List of all assets
+  List<SvgGenImage> get values => [
+        iconClose,
+        iconSendButtonOriginal,
+        iconSendButton,
+        riltopiaIcon,
+        appleLogoSvgrepoCom,
+        arrowNarrowLeft,
+        arrowBackLeft,
+        bellSolid,
+        bellUntitledIcon,
+        bell,
+        camera,
+        changeSortArrows,
+        chatBubblesSolidIcon,
+        chatBubblesUntitledIcon,
+        checkVerifiedOutline,
+        checkVerifiedSolid,
+        commentUntitledIcon,
+        commentsOff,
+        dateTimeCalender,
+        dmPlaneUntitledIconOrginal,
+        dmPlaneUntitledIconOutlined,
+        dmPlaneUntitledIcon,
+        flag03,
+        groupMultiPeople,
+        groupMultiPeopleSolid,
+        heartUntitledIcon,
+        homeUntitledIcon,
+        homeSolidUntitledIcon,
+        logOut01,
+        manProfile,
+        manProfileOutline,
+        messageChatCircleAdd,
+        messageChatCircleSolid,
+        messageChatCircle,
+        messageCircle02,
+        messageCommentsLines,
+        messageSmilePlus,
+        messageSmile,
+        messageTextCircle02OriginalSolid,
+        messageTextCircle02Original,
+        messageTextCircle02,
+        plusAddUntitledIcon,
+        refreshArrows,
+        riltopiaAdminLogo,
+        settings01,
+        shareArrowWideOutline,
+        shareArrowWide,
+        shareClassicUntitledIcon,
+        shieldTickUntitledIcon,
+        sortByAgeSolid,
+        sortByAge,
+        sortByDefaultClockSolid,
+        sortByDefaultClock,
+        sortByDefaultSolid,
+        sortByDefault,
+        sortByLocationSolid,
+        sortByLocation,
+        sortByTopicSolid,
+        sortByTopic,
+        trash03,
+        userCircleOutline,
+        userCircleSolid,
+        wisdomMultiLightStar,
+        wisdomLightStar
+      ];
 }
 
 class Assets {
   Assets._();
 
+  static const AssetGenImage defaultIcon =
+      AssetGenImage('assets/Default-Icon.png');
+  static const $AssetsFontsGen fonts = $AssetsFontsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const AssetGenImage messagesIcon =
+      AssetGenImage('assets/messages_icon.png');
+  static const $AssetsRivGen riv = $AssetsRivGen();
   static const $AssetsSvgGen svg = $AssetsSvgGen();
+  static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();
+
+  /// List of all assets
+  List<AssetGenImage> get values => [defaultIcon, messagesIcon];
 }
 
 class AssetGenImage {
@@ -246,6 +777,17 @@ class AssetGenImage {
     );
   }
 
+  ImageProvider provider({
+    AssetBundle? bundle,
+    String? package,
+  }) {
+    return AssetImage(
+      _assetName,
+      bundle: bundle,
+      package: package,
+    );
+  }
+
   String get path => _assetName;
 
   String get keyName => _assetName;
@@ -267,13 +809,14 @@ class SvgGenImage {
     AlignmentGeometry alignment = Alignment.center,
     bool allowDrawingOutsideViewBox = false,
     WidgetBuilder? placeholderBuilder,
-    Color? color,
-    BlendMode colorBlendMode = BlendMode.srcIn,
     String? semanticsLabel,
     bool excludeFromSemantics = false,
+    SvgTheme theme = const SvgTheme(),
+    ColorFilter? colorFilter,
     Clip clipBehavior = Clip.hardEdge,
-    bool cacheColorFilter = false,
-    SvgTheme? theme,
+    @deprecated Color? color,
+    @deprecated BlendMode colorBlendMode = BlendMode.srcIn,
+    @deprecated bool cacheColorFilter = false,
   }) {
     return SvgPicture.asset(
       _assetName,
@@ -287,15 +830,17 @@ class SvgGenImage {
       alignment: alignment,
       allowDrawingOutsideViewBox: allowDrawingOutsideViewBox,
       placeholderBuilder: placeholderBuilder,
-      color: color,
-      colorBlendMode: colorBlendMode,
       semanticsLabel: semanticsLabel,
       excludeFromSemantics: excludeFromSemantics,
+      theme: theme,
+      color: color,
+      colorBlendMode: colorBlendMode,
       clipBehavior: clipBehavior,
       cacheColorFilter: cacheColorFilter,
-      theme: theme,
     );
   }
 
   String get path => _assetName;
+
+  String get keyName => _assetName;
 }

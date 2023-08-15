@@ -1,4 +1,3 @@
-import 'package:example/common/themes/app_colors.dart';
 import 'package:example/common/themes/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,27 +43,45 @@ extension StringX on String {
 
   // My:
   Text toText(
-          {Color color = AppColors.white,
+          {Color color = Colors.white,
           double? fontSize,
+          TextAlign? textAlign,
+          TextStyle? style,
+          bool medium = false,
+          int maxLines = 2,
           bool bold = false,
-          bool softWrap = false
-          }) =>
+          bool underline = false,
+          bool softWrap = false}) =>
+      // Text(this,
       Text(this,
           softWrap: softWrap,
-          maxLines: 2,
+          maxLines: maxLines,
+          textAlign: textAlign ?? (isHebrew ? TextAlign.right : TextAlign.left),
+          textDirection: isHebrew ? TextDirection.rtl : TextDirection.ltr,
           overflow: TextOverflow.ellipsis,
-          style: bold
-              ? AppStyles.text18PxBold
-                  .copyWith(color: color, fontSize: fontSize ?? 18.sp,
-              height: 1) // line spacing
-              : AppStyles.text18PxRegular
-                  .copyWith(color: color, fontSize: fontSize ?? 18.sp,
-              height: 1)); // line spacing
-
-  Text get testText => Text(
-        this,
-        style: AppStyles.text18PxSemiBold.white,
-      );
+          style: style ??
+              (bold || (medium && isHebrew)
+                  ? AppStyles.text14PxBold.copyWith(
+                      color: color,
+                      fontSize: fontSize ?? 14.sp,
+                      decoration: underline ? TextDecoration.underline : null
+                      // height: 1
+                      ) // line spacing
+                  : medium
+                      ? AppStyles.text14PxMedium.copyWith(
+                          color: color,
+                          fontSize: fontSize ?? 14.sp,
+                          decoration:
+                              underline ? TextDecoration.underline : null
+                          // height: 1
+                          )
+                      : AppStyles.text14PxRegular.copyWith(
+                          color: color,
+                          fontSize: fontSize ?? 14.sp,
+                          decoration:
+                              underline ? TextDecoration.underline : null
+                          // height: 1
+                          ))); // line spacing
 
   bool get isHebrew {
     var heb = [
@@ -92,12 +109,26 @@ extension StringX on String {
       'ת',
       'ם',
       'ך',
-      'ץ',
+      'ץ'
     ];
+
+    // if (heb.any((item) => contains(item))) {
+    //   // Lists have at least one common element
+    //   return true;
+    // } else {
+    //   // Lists DON'T have any common element
+    //   return false;
+    // }
+
+    // OLD VERSION
+    // ----------
     // actually needs to be map.
     for (var l in heb) {
-      if (contains(l)) return true;
+      if (contains(l)) {
+        return true;
+      }
     }
+    // print('START:  return false;()');
     return false;
   }
 }

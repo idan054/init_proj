@@ -1,22 +1,19 @@
+import 'package:flutter/material.dart';
 import 'package:entry/entry.dart';
 import 'package:example/common/extensions/extensions.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../themes/app_colors.dart';
-
-var appearDuration = kDebugMode ? 750 : 250;
+var appearDuration = 650;
+// var appearDuration = 1550;
 
 extension IconDataX on IconData {
-  Icon icon({Color color = AppColors.white, double size = 20}) => Icon(
+  Icon icon({Color color = Colors.white, double size = 20}) => Icon(
         this,
         color: color,
         size: size,
       );
 
-  FaIcon iconAwesome({Color color = AppColors.white, double size = 20}) =>
-      FaIcon(
+  FaIcon iconAwesome({Color color = Colors.white, double size = 20}) => FaIcon(
         this,
         color: color,
         size: size,
@@ -25,20 +22,31 @@ extension IconDataX on IconData {
 
 extension WidgetX on Widget {
   // My extension:
-  InkWell onTap(GestureTapCallback? onTap, {double radius = 99}) => InkWell(
-    // overlayColor: MaterialStateProperty.all(Colors.yellow),
-    //   splashColor: Colors.yellow,
-    //   focusColor: Colors.yellow,
-    //   highlightColor: Colors.yellow,
-    //   hoverColor: Colors.yellow,
-      borderRadius: BorderRadius.circular(radius), onTap: onTap, child: this);
+  Widget onTap(GestureTapCallback? onTap,
+          {double radius = 99, bool onLongPress = false, Color? tapColor}) =>
+      Theme(
+        data: ThemeData(canvasColor: Colors.transparent),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+              overlayColor:
+                  tapColor != null ? MaterialStateProperty.all(tapColor) : null,
+              //   splashColor: Colors.yellow,
+              //   focusColor: Colors.yellow,
+              //   highlightColor: Colors.yellow,
+              //   hoverColor: Colors.yellow,
+              borderRadius: BorderRadius.circular(radius),
+              onTap: onLongPress ? null : onTap,
+              onLongPress: onLongPress ? onTap : null,
+              child: this),
+        ),
+      );
+
+  Container get testContainer => Container(color: Colors.white, child: this);
 
   Directionality isHebrewDirectionality(String text) => Directionality(
       textDirection: text.isHebrew ? TextDirection.rtl : TextDirection.ltr,
       child: this);
-
-  Container get testContainer =>
-      Container(color: AppColors.testGreen, child: this);
 
   Directionality get rtl =>
       Directionality(textDirection: TextDirection.rtl, child: this);
@@ -46,8 +54,26 @@ extension WidgetX on Widget {
   Directionality get ltr =>
       Directionality(textDirection: TextDirection.ltr, child: this);
 
-  ClipRRect get rounded =>
-      ClipRRect(borderRadius: BorderRadius.circular(99), child: this);
+  ClipRRect get roundedFull =>
+      ClipRRect(borderRadius: BorderRadius.circular(999), child: this);
+
+  ClipRRect roundedOnly({
+    required double bottomLeft,
+    required double topLeft,
+    required double topRight,
+    required double bottomRight,
+  }) =>
+      ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(bottomLeft),
+            topLeft: Radius.circular(topLeft),
+            topRight: Radius.circular(topRight),
+            bottomRight: Radius.circular(bottomRight),
+          ),
+          child: this);
+
+  ClipRRect rounded({double? radius}) =>
+      ClipRRect(borderRadius: BorderRadius.circular(radius ?? 99), child: this);
 
   Entry get appearAll => Entry.all(
         duration: Duration(milliseconds: appearDuration),
@@ -100,6 +126,11 @@ extension WidgetX on Widget {
 
   Center get center => Center(child: this);
 
+  Widget surround(double value) => CircleAvatar(
+        backgroundColor: Colors.green,
+        child: this,
+      );
+
   Padding pad(double value) => Padding(
         padding: EdgeInsets.all(value),
         child: this,
@@ -125,11 +156,33 @@ extension WidgetX on Widget {
         child: this,
       );
 
-  SizedBox sizedBox(double w, double h) => SizedBox(
-        width: w,
-        height: h,
+  SizedBox sizedBox(
+    double? width,
+    double? height,
+  ) =>
+      SizedBox(
+        width: width,
+        height: height,
         child: this,
       );
+
+  SizedBox advancedSizedBox(
+    context, {
+    double? width,
+    double? height,
+    bool maxWidth = false,
+    bool maxHeight = false,
+    double wRatio = 1.0,
+    double hRatio = 1.0,
+  }) {
+    double maxHeightSize = MediaQuery.of(context).size.height;
+    double maxWidthSize = MediaQuery.of(context).size.width;
+    return SizedBox(
+      width: width ?? (maxWidth ? maxWidthSize * wRatio : null),
+      height: height ?? (maxHeight ? maxHeightSize * hRatio : null),
+      child: this,
+    );
+  }
 
   Widget offset(double x, double y) => Transform.translate(
         offset: Offset(x, y),
@@ -152,4 +205,7 @@ extension WidgetX on Widget {
         scale: scale,
         child: this,
       );
+
+  Padding get customRowPadding =>
+      Padding(padding: const EdgeInsets.only(top: 15, bottom: 12), child: this);
 }

@@ -20,14 +20,20 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserModel {
+  String? get uid => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
-  String? get uid => throw _privateConstructorUsedError;
+  String? get bio => throw _privateConstructorUsedError;
+  String? get fcm => throw _privateConstructorUsedError;
   int? get age => throw _privateConstructorUsedError;
   String? get photoUrl => throw _privateConstructorUsedError;
+  int get unreadCounter => throw _privateConstructorUsedError;
+  int get unreadNotificationCounter => throw _privateConstructorUsedError;
   GenderTypes? get gender => throw _privateConstructorUsedError;
-  @DateTimeStampConv()
-  DateTime? get birthday => throw _privateConstructorUsedError;
+  UserTypes? get userType => throw _privateConstructorUsedError;
+  List<String> get tags => throw _privateConstructorUsedError;
+  List<String> get blockedUsers => throw _privateConstructorUsedError;
+  bool get isOnline => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,13 +47,20 @@ abstract class $UserModelCopyWith<$Res> {
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
   $Res call(
-      {String? name,
+      {String? uid,
+      String? name,
       String? email,
-      String? uid,
+      String? bio,
+      String? fcm,
       int? age,
       String? photoUrl,
+      int unreadCounter,
+      int unreadNotificationCounter,
       GenderTypes? gender,
-      @DateTimeStampConv() DateTime? birthday});
+      UserTypes? userType,
+      List<String> tags,
+      List<String> blockedUsers,
+      bool isOnline});
 }
 
 /// @nodoc
@@ -63,15 +76,26 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? uid = freezed,
     Object? name = freezed,
     Object? email = freezed,
-    Object? uid = freezed,
+    Object? bio = freezed,
+    Object? fcm = freezed,
     Object? age = freezed,
     Object? photoUrl = freezed,
+    Object? unreadCounter = null,
+    Object? unreadNotificationCounter = null,
     Object? gender = freezed,
-    Object? birthday = freezed,
+    Object? userType = freezed,
+    Object? tags = null,
+    Object? blockedUsers = null,
+    Object? isOnline = null,
   }) {
     return _then(_value.copyWith(
+      uid: freezed == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -80,9 +104,13 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
-      uid: freezed == uid
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
+      bio: freezed == bio
+          ? _value.bio
+          : bio // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fcm: freezed == fcm
+          ? _value.fcm
+          : fcm // ignore: cast_nullable_to_non_nullable
               as String?,
       age: freezed == age
           ? _value.age
@@ -92,14 +120,34 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      unreadCounter: null == unreadCounter
+          ? _value.unreadCounter
+          : unreadCounter // ignore: cast_nullable_to_non_nullable
+              as int,
+      unreadNotificationCounter: null == unreadNotificationCounter
+          ? _value.unreadNotificationCounter
+          : unreadNotificationCounter // ignore: cast_nullable_to_non_nullable
+              as int,
       gender: freezed == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as GenderTypes?,
-      birthday: freezed == birthday
-          ? _value.birthday
-          : birthday // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      userType: freezed == userType
+          ? _value.userType
+          : userType // ignore: cast_nullable_to_non_nullable
+              as UserTypes?,
+      tags: null == tags
+          ? _value.tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      blockedUsers: null == blockedUsers
+          ? _value.blockedUsers
+          : blockedUsers // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      isOnline: null == isOnline
+          ? _value.isOnline
+          : isOnline // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -112,13 +160,20 @@ abstract class _$$_UserModelCopyWith<$Res> implements $UserModelCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {String? name,
+      {String? uid,
+      String? name,
       String? email,
-      String? uid,
+      String? bio,
+      String? fcm,
       int? age,
       String? photoUrl,
+      int unreadCounter,
+      int unreadNotificationCounter,
       GenderTypes? gender,
-      @DateTimeStampConv() DateTime? birthday});
+      UserTypes? userType,
+      List<String> tags,
+      List<String> blockedUsers,
+      bool isOnline});
 }
 
 /// @nodoc
@@ -132,15 +187,26 @@ class __$$_UserModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? uid = freezed,
     Object? name = freezed,
     Object? email = freezed,
-    Object? uid = freezed,
+    Object? bio = freezed,
+    Object? fcm = freezed,
     Object? age = freezed,
     Object? photoUrl = freezed,
+    Object? unreadCounter = null,
+    Object? unreadNotificationCounter = null,
     Object? gender = freezed,
-    Object? birthday = freezed,
+    Object? userType = freezed,
+    Object? tags = null,
+    Object? blockedUsers = null,
+    Object? isOnline = null,
   }) {
     return _then(_$_UserModel(
+      uid: freezed == uid
+          ? _value.uid
+          : uid // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: freezed == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -149,9 +215,13 @@ class __$$_UserModelCopyWithImpl<$Res>
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
               as String?,
-      uid: freezed == uid
-          ? _value.uid
-          : uid // ignore: cast_nullable_to_non_nullable
+      bio: freezed == bio
+          ? _value.bio
+          : bio // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fcm: freezed == fcm
+          ? _value.fcm
+          : fcm // ignore: cast_nullable_to_non_nullable
               as String?,
       age: freezed == age
           ? _value.age
@@ -161,14 +231,34 @@ class __$$_UserModelCopyWithImpl<$Res>
           ? _value.photoUrl
           : photoUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      unreadCounter: null == unreadCounter
+          ? _value.unreadCounter
+          : unreadCounter // ignore: cast_nullable_to_non_nullable
+              as int,
+      unreadNotificationCounter: null == unreadNotificationCounter
+          ? _value.unreadNotificationCounter
+          : unreadNotificationCounter // ignore: cast_nullable_to_non_nullable
+              as int,
       gender: freezed == gender
           ? _value.gender
           : gender // ignore: cast_nullable_to_non_nullable
               as GenderTypes?,
-      birthday: freezed == birthday
-          ? _value.birthday
-          : birthday // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      userType: freezed == userType
+          ? _value.userType
+          : userType // ignore: cast_nullable_to_non_nullable
+              as UserTypes?,
+      tags: null == tags
+          ? _value._tags
+          : tags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      blockedUsers: null == blockedUsers
+          ? _value._blockedUsers
+          : blockedUsers // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      isOnline: null == isOnline
+          ? _value.isOnline
+          : isOnline // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -178,36 +268,76 @@ class __$$_UserModelCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$_UserModel implements _UserModel {
   const _$_UserModel(
-      {this.name,
+      {this.uid,
+      this.name,
       this.email,
-      this.uid,
+      this.bio,
+      this.fcm,
       this.age,
       this.photoUrl,
+      this.unreadCounter = 0,
+      this.unreadNotificationCounter = 0,
       this.gender,
-      @DateTimeStampConv() this.birthday});
+      this.userType = UserTypes.normal,
+      final List<String> tags = const [],
+      final List<String> blockedUsers = const [],
+      this.isOnline = false})
+      : _tags = tags,
+        _blockedUsers = blockedUsers;
 
   factory _$_UserModel.fromJson(Map<String, dynamic> json) =>
       _$$_UserModelFromJson(json);
 
   @override
+  final String? uid;
+  @override
   final String? name;
   @override
   final String? email;
   @override
-  final String? uid;
+  final String? bio;
+  @override
+  final String? fcm;
   @override
   final int? age;
   @override
   final String? photoUrl;
   @override
+  @JsonKey()
+  final int unreadCounter;
+  @override
+  @JsonKey()
+  final int unreadNotificationCounter;
+  @override
   final GenderTypes? gender;
   @override
-  @DateTimeStampConv()
-  final DateTime? birthday;
+  @JsonKey()
+  final UserTypes? userType;
+  final List<String> _tags;
+  @override
+  @JsonKey()
+  List<String> get tags {
+    if (_tags is EqualUnmodifiableListView) return _tags;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_tags);
+  }
+
+  final List<String> _blockedUsers;
+  @override
+  @JsonKey()
+  List<String> get blockedUsers {
+    if (_blockedUsers is EqualUnmodifiableListView) return _blockedUsers;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_blockedUsers);
+  }
+
+  @override
+  @JsonKey()
+  final bool isOnline;
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email, uid: $uid, age: $age, photoUrl: $photoUrl, gender: $gender, birthday: $birthday)';
+    return 'UserModel(uid: $uid, name: $name, email: $email, bio: $bio, fcm: $fcm, age: $age, photoUrl: $photoUrl, unreadCounter: $unreadCounter, unreadNotificationCounter: $unreadNotificationCounter, gender: $gender, userType: $userType, tags: $tags, blockedUsers: $blockedUsers, isOnline: $isOnline)';
   }
 
   @override
@@ -215,21 +345,47 @@ class _$_UserModel implements _UserModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_UserModel &&
+            (identical(other.uid, uid) || other.uid == uid) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.uid, uid) || other.uid == uid) &&
+            (identical(other.bio, bio) || other.bio == bio) &&
+            (identical(other.fcm, fcm) || other.fcm == fcm) &&
             (identical(other.age, age) || other.age == age) &&
             (identical(other.photoUrl, photoUrl) ||
                 other.photoUrl == photoUrl) &&
+            (identical(other.unreadCounter, unreadCounter) ||
+                other.unreadCounter == unreadCounter) &&
+            (identical(other.unreadNotificationCounter,
+                    unreadNotificationCounter) ||
+                other.unreadNotificationCounter == unreadNotificationCounter) &&
             (identical(other.gender, gender) || other.gender == gender) &&
-            (identical(other.birthday, birthday) ||
-                other.birthday == birthday));
+            (identical(other.userType, userType) ||
+                other.userType == userType) &&
+            const DeepCollectionEquality().equals(other._tags, _tags) &&
+            const DeepCollectionEquality()
+                .equals(other._blockedUsers, _blockedUsers) &&
+            (identical(other.isOnline, isOnline) ||
+                other.isOnline == isOnline));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, name, email, uid, age, photoUrl, gender, birthday);
+      runtimeType,
+      uid,
+      name,
+      email,
+      bio,
+      fcm,
+      age,
+      photoUrl,
+      unreadCounter,
+      unreadNotificationCounter,
+      gender,
+      userType,
+      const DeepCollectionEquality().hash(_tags),
+      const DeepCollectionEquality().hash(_blockedUsers),
+      isOnline);
 
   @JsonKey(ignore: true)
   @override
@@ -247,32 +403,52 @@ class _$_UserModel implements _UserModel {
 
 abstract class _UserModel implements UserModel {
   const factory _UserModel(
-      {final String? name,
+      {final String? uid,
+      final String? name,
       final String? email,
-      final String? uid,
+      final String? bio,
+      final String? fcm,
       final int? age,
       final String? photoUrl,
+      final int unreadCounter,
+      final int unreadNotificationCounter,
       final GenderTypes? gender,
-      @DateTimeStampConv() final DateTime? birthday}) = _$_UserModel;
+      final UserTypes? userType,
+      final List<String> tags,
+      final List<String> blockedUsers,
+      final bool isOnline}) = _$_UserModel;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$_UserModel.fromJson;
 
   @override
+  String? get uid;
+  @override
   String? get name;
   @override
   String? get email;
   @override
-  String? get uid;
+  String? get bio;
+  @override
+  String? get fcm;
   @override
   int? get age;
   @override
   String? get photoUrl;
   @override
+  int get unreadCounter;
+  @override
+  int get unreadNotificationCounter;
+  @override
   GenderTypes? get gender;
   @override
-  @DateTimeStampConv()
-  DateTime? get birthday;
+  UserTypes? get userType;
+  @override
+  List<String> get tags;
+  @override
+  List<String> get blockedUsers;
+  @override
+  bool get isOnline;
   @override
   @JsonKey(ignore: true)
   _$$_UserModelCopyWith<_$_UserModel> get copyWith =>

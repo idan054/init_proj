@@ -1,66 +1,134 @@
-import 'package:auto_route/auto_route.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io' show Platform;
 import 'package:example/common/extensions/color_printer.dart';
-import 'package:example/common/extensions/extensions.dart';
-import 'package:example/common/routes/app_router.gr.dart';
+import 'package:example/common/service/Database/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
-import '../../models/user/user_model.dart';
-import '../Database/firebase_database.dart' as click;
-import '../Database/firebase_database.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+import '../Database/firebase_db.dart' as click;
+import '../Database/firebase_db.dart';
+import 'notifications_services.dart';
 
 class AuthService {
   /// streamUsers() Available At [click.Database] // <<---
-  static final auth = FirebaseAuth.instance;
-  static final authUser = FirebaseAuth.instance.currentUser;
+  static var auth = FirebaseAuth.instance;
+  static User? authUser = auth.currentUser;
 
   /// Google LOGIN
-  static Future signInWithGoogle(BuildContext context) async {
-    print('START: signInWithGoogle()');
-    // if (_auth.currentUser != null && kDebugMode) {
-    //   return context.router.replace(const CreateUserRoute());
-    // }
+  static Future signInWith(BuildContext context,
+      {required bool autoSignIn, bool applePopup = false}) async {
+    print('START: signInWith()');
 
-    User? googleUser;
-    if (authUser?.uid == null) googleUser = await googleAuthAction;
+    // Go to LoginRoute() When Err in autoSignIn
+    if (autoSignIn && authUser?.email == null) {
+      await FirebaseAuth.instance.signOut();
+      // context.router.replace(const LoginRoute());
+      return;
+    }
 
-    //~ Check if User exist:
-    var userEmail = authUser?.uid == null ? googleUser!.email : authUser!.email;
-    print('userEmail ${userEmail}');
-    var userData = await Database.docData('users/$userEmail');
-    // print('userData $userData');
-    if (userData == null ||
-        userData['gender'] == null ||
-        userData['age'] == null ||
-        userData['birthday'] == null) {
+    // On LoginRoute()
+    if (!autoSignIn) {
+      authUser = null;
+      await FirebaseAuth.instance.signOut();
+      if (!applePopup) await GoogleSignIn().signOut();
 
-      //~ New User:
-      var user = context.uniProvider.currUser.copyWith(
-        uid: googleUser!.uid,
-        email: googleUser.email,
-        name: googleUser.displayName,
-        photoUrl: googleUser.photoURL,
-      );
-      context.uniProvider.updateUser(user);
-      context.router.replace(const CreateUserRoute());
+      await (applePopup
+          ? _appleAuthPopup()
+          : _googleAuthPopup()); // set authUser
+      if (authUser?.email == null) return; // When popup canceled
+    }
+
+    printWhite('authUser!.email ${authUser!.email}');
+    var userData = await Database.docData('users/${authUser!.email}');
+    final List<dynamic> userTags = userData?['tags'] ?? [];
+    if (userData == null || userTags.isEmpty) {
+      printYellow('START: handleNewUser');
+      _handleNewUser(context);
     } else {
-      //~ Exist User:
-      var currUser = UserModel.fromJson(userData);
-      context.uniProvider.updateUser(currUser);
-      context.router.replace(DashboardRoute());
+      printYellow('START: handleExistUser()');
+      _handleExistUser(context, userData);
     }
   }
 
-  static Future<User?> get googleAuthAction async {
-    final googleUser = await GoogleSignIn().signIn();
+  static void _handleExistUser(
+      BuildContext context, Map<String, dynamic> userData) async {
+    // var currUser = UserModel.fromJson(userData);
+    // context.uniProvider.currUserUpdate(currUser);
+
+    String? fcm = await FirebaseMessaging.instance.getToken();
+    if (userData['fcm'] != fcm) {
+      PushNotificationService.updateFcmToken(context, fcm);
+    }
+
+    // context.router.replace(DashboardRoute());
+  }
+
+  static void _handleNewUser(BuildContext context) async {
+    // String? fcm = await FirebaseMessaging.instance.getToken();
+    // var user = context.uniProvider.currUser.copyWith(
+    //   name: authUser?.displayName,
+    //   uid: authUser!.uid,
+    //   email: authUser!.email,
+    //   fcm: fcm,
+    // );
+    // context.uniProvider.currUserUpdate(user);
+    // context.router.replace(const OnBoardingRoute());
+    // Data will upload to server when sign up Done,
+  }
+
+  static Future<User?> _googleAuthPopup() async {
+    print('START: _googleAuthPopup()');
+    final googleProvider = await GoogleSignIn(
+            clientId: Platform.isIOS
+                ? DefaultFirebaseOptions.currentPlatform.iosClientId
+                : DefaultFirebaseOptions.currentPlatform.androidClientId)
+        .signIn();
+    if (googleProvider == null) return null;
 
     // Sign in & Create user on firebase console
-    final googleAuth = await googleUser!.authentication;
+    final googleAuth = await googleProvider.authentication;
     await auth.signInWithCredential(GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken, idToken: googleAuth.idToken));
 
-    return auth.currentUser;
+    print('googleProvider.authHeaders ${await googleProvider.authHeaders}');
+
+    authUser = auth.currentUser;
+    return authUser;
+  }
+
+  /// Apple LOGIN
+  static Future<User?> _appleAuthPopup() async {
+    print('START: _appleAuthPopup()');
+
+    final appleProvider = await SignInWithApple.getAppleIDCredential(scopes: [
+      AppleIDAuthorizationScopes.email,
+      AppleIDAuthorizationScopes.fullName,
+    ]);
+
+    print('appleProvider ${appleProvider.email}');
+    print('appleProvider ${appleProvider.familyName}');
+    print('appleProvider ${appleProvider.givenName}');
+    print('appleProvider ${appleProvider.userIdentifier}');
+
+    final credential = OAuthProvider('apple.com')
+        .setScopes(['email', 'fullName']).credential(
+            idToken: appleProvider.identityToken,
+            accessToken: appleProvider.authorizationCode);
+    await auth.signInWithCredential(credential);
+
+    authUser = auth.currentUser;
+    if (authUser != null && authUser!.email == null) {
+      var mail =
+          appleProvider.email ?? '${authUser!.uid.substring(0, 10)}@apple.com';
+      var name = appleProvider.givenName ?? appleProvider.familyName;
+      authUser!.updateEmail(mail);
+      if (authUser?.displayName == null) authUser!.updateDisplayName(name);
+    }
+
+    return authUser;
   }
 }
 

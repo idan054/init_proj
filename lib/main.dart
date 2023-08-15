@@ -1,36 +1,32 @@
-
 import 'package:example/common/extensions/color_printer.dart';
 import 'package:example/common/routes/app_router.gr.dart';
-import 'package:example/screens/main_ui/splash_screen.dart' as click;
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'common/models/universalModel.dart';
+import 'common/service/Auth/notifications_services.dart';
 import 'common/service/Database/firebase_options.dart';
+import 'common/service/life_cycle.dart';
 
 /// Add More Pre-Actions At [click.SplashScreen]
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
   printWhite('START main()!');
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  final dbDir = await getApplicationDocumentsDirectory();
-  Hive.init(dbDir.path);
+  PushNotificationService.setupNotifications(_handleNotificationReceived);
+  FirebaseMessaging.onBackgroundMessage(_handleNotificationReceived);
 
   runApp(
     MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => UniProvider()),
-          // Provider.value(value: StreamModel().serverClient),
-          // FutureProvider<List<Activity>?>.value(
-          //     value: StreamModel().getFeedActivities(), initialData: const []),
-        ],
-        // builder:(context, child) =>
-        child: const App()),
+      providers: [
+        ChangeNotifierProvider(create: (_) => UniProvider()),
+      ],
+      child: const App(),
+    ),
   );
 }
 
@@ -42,45 +38,36 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   final _router = AppRouter(); // Add screens AT app_router.dart
+  FirebaseAnalyticsObserver observer =
+      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance);
 
   @override
   Widget build(BuildContext context) {
     print('BUILD: App.dart');
 
     try {
-      return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.dark.copyWith(
-          // systemNavigationBarColor: AppColors.whiteColor,
-          systemNavigationBarIconBrightness: Brightness.dark,
-          statusBarIconBrightness: Brightness.dark,
-          statusBarColor: Colors.transparent,
-        ),
-        child: ScreenUtilInit(
-          designSize: const Size(390, 844),
-          minTextAdapt: true,
-          builder: (_, __) => MaterialApp.router(
-            routerDelegate: _router.delegate(),
-            routeInformationParser: _router.defaultRouteParser(),
-            title: 'Example',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-                // colorSchemeSeed: AppColors.primaryColor,
-                // scaffoldBackgroundColor: AppColors.primaryColor,
-                ),
-            builder: (context, child) {
-              return Directionality(
-                textDirection: TextDirection.ltr,
-                child: Builder(
-                  builder: (context) => child!,
-                ),
-              );
-            },
+      return LifeCycleManager(
+        child: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.dark.copyWith(
+            systemNavigationBarColor: Colors.white,
+            systemNavigationBarIconBrightness: Brightness.dark,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarColor: Colors.transparent,
+          ),
+          child: ScreenUtilInit(
+            designSize: const Size(390, 844),
+            minTextAdapt: true,
+            builder: (_, __) => MaterialApp.router(
+              debugShowCheckedModeBanner: false,
+              theme: ThemeData(colorSchemeSeed: Colors.white),
+              routerDelegate:
+                  _router.delegate(navigatorObservers: () => [observer]),
+              routeInformationParser: _router.defaultRouteParser(),
+              builder: (context, child) => Builder(
+                builder: (context) => child!,
+              ),
+            ),
           ),
         ),
       );
@@ -90,3 +77,6 @@ class _AppState extends State<App> {
     }
   }
 }
+
+Future<void> _handleNotificationReceived(RemoteMessage message) async =>
+    print("Handling a background message: ${message.toMap()}");

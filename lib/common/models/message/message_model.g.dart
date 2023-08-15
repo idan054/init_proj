@@ -13,8 +13,9 @@ _$_MessageModel _$$_MessageModelFromJson(Map<String, dynamic> json) =>
       fromId: json['fromId'] as String?,
       toId: json['toId'] as String?,
       createdAt: json['createdAt'] as String?,
-      timestamp:
-          const DateTimeStampConv().fromJson(json['timestamp'] as Timestamp?),
+      isRead: json['isRead'] as bool? ?? false,
+      metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
+      isPostComment: json['isPostComment'] as bool? ?? false,
       read: json['read'] as bool?,
     );
 
@@ -25,6 +26,8 @@ Map<String, dynamic> _$$_MessageModelToJson(_$_MessageModel instance) =>
       'fromId': instance.fromId,
       'toId': instance.toId,
       'createdAt': instance.createdAt,
-      'timestamp': const DateTimeStampConv().toJson(instance.timestamp),
+      'isRead': instance.isRead,
+      'metadata': instance.metadata,
+      'isPostComment': instance.isPostComment,
       'read': instance.read,
     };

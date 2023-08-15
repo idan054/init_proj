@@ -7,29 +7,54 @@ part of 'user_model.dart';
 // **************************************************************************
 
 _$_UserModel _$$_UserModelFromJson(Map<String, dynamic> json) => _$_UserModel(
+      uid: json['uid'] as String?,
       name: json['name'] as String?,
       email: json['email'] as String?,
-      uid: json['uid'] as String?,
+      bio: json['bio'] as String?,
+      fcm: json['fcm'] as String?,
       age: json['age'] as int?,
       photoUrl: json['photoUrl'] as String?,
+      unreadCounter: json['unreadCounter'] as int? ?? 0,
+      unreadNotificationCounter: json['unreadNotificationCounter'] as int? ?? 0,
       gender: $enumDecodeNullable(_$GenderTypesEnumMap, json['gender']),
-      birthday:
-          const DateTimeStampConv().fromJson(json['birthday'] as Timestamp?),
+      userType: $enumDecodeNullable(_$UserTypesEnumMap, json['userType']) ??
+          UserTypes.normal,
+      tags:
+          (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              const [],
+      blockedUsers: (json['blockedUsers'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList() ??
+          const [],
+      isOnline: json['isOnline'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$_UserModelToJson(_$_UserModel instance) =>
     <String, dynamic>{
+      'uid': instance.uid,
       'name': instance.name,
       'email': instance.email,
-      'uid': instance.uid,
+      'bio': instance.bio,
+      'fcm': instance.fcm,
       'age': instance.age,
       'photoUrl': instance.photoUrl,
+      'unreadCounter': instance.unreadCounter,
+      'unreadNotificationCounter': instance.unreadNotificationCounter,
       'gender': _$GenderTypesEnumMap[instance.gender],
-      'birthday': const DateTimeStampConv().toJson(instance.birthday),
+      'userType': _$UserTypesEnumMap[instance.userType],
+      'tags': instance.tags,
+      'blockedUsers': instance.blockedUsers,
+      'isOnline': instance.isOnline,
     };
 
 const _$GenderTypesEnumMap = {
-  GenderTypes.boy: 'boy',
-  GenderTypes.girl: 'girl',
-  GenderTypes.lgbt: 'lgbt',
+  GenderTypes.male: 'male',
+  GenderTypes.female: 'female',
+  GenderTypes.other: 'other',
+};
+
+const _$UserTypesEnumMap = {
+  UserTypes.normal: 'normal',
+  UserTypes.admin: 'admin',
+  UserTypes.blocked: 'blocked',
 };
